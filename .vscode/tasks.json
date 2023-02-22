@@ -1,0 +1,27 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "detail": "npm run dev",
+      "label": "Next (dev)",
+      "group": {
+        "kind": "build",
+        "isDefault": true,
+      },
+      "icon": {
+        "color": "terminal.ansiBlue",
+        "id": "rocket",
+      },
+      "isBackground": true,
+      "type": "npm",
+      "script": "dev",
+      "presentation": {
+        "clear": true,
+        "panel": "dedicated",
+        "reveal": "never",
+        "showReuseMessage": false,
+      },
+      "problemMatcher": [],
+    },
+  ],
+}
