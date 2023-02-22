@@ -24,3 +24,19 @@ export const login = async (input: LoginInput) => {
 
   throw { message: data, status: res.status };
 };
+
+export const logout = async (bearerToken: string) => {
+  const res = await fetch('https://traewelling.de/api/v1/auth/logout', {
+    headers: {
+      Authorization: bearerToken,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  });
+
+  if (res.status === 200) {
+    return true;
+  }
+
+  throw { message: await res.json(), status: res.status };
+};
