@@ -1,5 +1,37 @@
 import { HAFASTrip } from '../hafasTypes';
-import { TransportType } from '../types';
+import { Station, TransportType } from '../types';
+
+type AutocompleteInput = {
+  query: string;
+};
+
+export const autocomplete = async (
+  input: AutocompleteInput,
+  bearerToken: string
+) => {
+  const url = new URL(
+    `https://traewelling.de/api/v1/trains/station/autocomplete/${input.query
+      .trim()
+      .replaceAll(/\/|%2F/g, '%20')}`
+  );
+
+  const res = await fetch(url, {
+    headers: {
+      Authorization: bearerToken,
+    },
+    method: 'GET',
+  });
+
+  const data = await res.json();
+
+  if (res.status === 200) {
+    const { data: stations } = data;
+
+    return stations as Pick<Station, 'ibnr' | 'name' | 'rilIdentifer'>[];
+  }
+
+  throw { message: data, status: res.status };
+};
 
 type DeparturesInput = {
   name: string;
@@ -14,7 +46,7 @@ export const departures = async (
   const url = new URL(
     `https://traewelling.de/api/v1/trains/station/${input.name
       .trim()
-      .replaceAll(/\//g, ' ')}/departures`
+      .replaceAll(/\/|%2F/g, '%20')}/departures`
   );
 
   if (!!input.travelType) {
