@@ -1,3 +1,5 @@
+import { TraewellingUser } from '../types';
+
 type LoginInput = {
   login: string;
   password: string;
@@ -58,6 +60,23 @@ export const refresh = async (bearerToken: string) => {
     } = data;
 
     return { expiresAt, token };
+  }
+
+  throw { message: await data, status: res.status };
+};
+
+export const user = async (bearerToken: string) => {
+  const res = await fetch('https://traewelling.de/api/v1/auth/user', {
+    headers: {
+      Authorization: bearerToken,
+    },
+    method: 'GET',
+  });
+
+  const data = await res.json();
+
+  if (res.status === 200) {
+    return data.data as TraewellingUser;
   }
 
   throw { message: await data, status: res.status };
