@@ -136,6 +136,27 @@ export const departures = async (
   throw { message: data, status: res.status };
 };
 
+export const history = async (bearerToken: string) => {
+  const url = new URL('https://traewelling.de/api/v1/trains/station/history');
+
+  const res = await fetch(url, {
+    headers: {
+      Authorization: bearerToken,
+    },
+    method: 'GET',
+  });
+
+  const data = await res.json();
+
+  if (res.status === 200) {
+    const { data: stations } = data;
+
+    return stations as Station[];
+  }
+
+  throw { message: data, status: res.status };
+};
+
 type TripInput = {
   hafasTripId: string;
   lineName: string;
