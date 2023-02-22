@@ -1,0 +1,72 @@
+@import '@/styles/index';
+
+.base {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.input {
+  border: 1px solid var(--slate7);
+  border-radius: 0.375rem;
+  padding: 0.375rem 0.5rem;
+
+  &:hover {
+    border-color: var(--slate8);
+  }
+
+  &:focus-within {
+    box-shadow: 0 0 0 2px #FFF, 0 0 0 4px var(--sky7);
+    outline: none;
+  }
+}
+
+.suggestions {
+  border: 1px solid var(--slate7);
+  border-radius: 0.375rem;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li:not(:first-child) > .suggestion {
+    border-top: 1px solid var(--slate7);
+  }
+
+  li:first-child > .suggestion {
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+  }
+
+  li:last-child > .suggestion {
+    border-bottom-left-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+  }
+}
+
+.suggestion {
+  appearance: none;
+  background: none;
+  border: none;
+  color: var(--sky12);
+  padding: 0.75rem 0.5rem;
+  text-align: left;
+  width: 100%;
+
+  &:hover {
+    background-color: var(--sky4);
+  }
+
+  &:focus {
+    background-color: var(--sky5);
+  }
+
+  mark {
+    background-color: var(--sky6);
+    border-radius: 0.25rem;
+    color: var(--sky12);
+    // padding-inline: 0.25rem;
+  }
+}

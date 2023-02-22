@@ -6,7 +6,7 @@ export type Station = {
   latitude: number;
   longitude: number;
   name: string;
-  rilIdentifer: string | null;
+  rilIdentifier: string | null;
 };
 
 export type Stop = {

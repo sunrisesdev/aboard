@@ -1,8 +1,9 @@
+import StationSearch from '@/components/StationSearch/StationSearch';
 import { signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { AuthGuard } from '../components/AuthGuard/AuthGuard';
 
-const ProtectedPage = () => {
+const DashboardPage = () => {
   const { data: session } = useSession();
 
   return (
@@ -12,11 +13,13 @@ const ProtectedPage = () => {
       </Head>
 
       <AuthGuard>
-        <div>Hallo {session?.traewelling.token}!</div>
+        <div>Hallo {session?.user?.name}!</div>
         <button onClick={() => signOut()}>Abmelden</button>
+
+        <StationSearch />
       </AuthGuard>
     </>
   );
 };
 
-export default ProtectedPage;
+export default DashboardPage;

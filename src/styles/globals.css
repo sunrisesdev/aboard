@@ -1,0 +1,7 @@
+@import '@radix-ui/colors/sky.css';
+@import '@radix-ui/colors/slate.css';
+
+body {
+  font-size: 16px;
+  line-height: 1.5;
+}

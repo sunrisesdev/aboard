@@ -5,6 +5,11 @@ type AutocompleteInput = {
   query: string;
 };
 
+export type AutocompleteResponse = Pick<
+  Station,
+  'ibnr' | 'name' | 'rilIdentifier'
+>[];
+
 export const autocomplete = async (
   input: AutocompleteInput,
   bearerToken: string
@@ -27,7 +32,7 @@ export const autocomplete = async (
   if (res.status === 200) {
     const { data: stations } = data;
 
-    return stations as Pick<Station, 'ibnr' | 'name' | 'rilIdentifer'>[];
+    return stations as AutocompleteResponse;
   }
 
   throw { message: data, status: res.status };
