@@ -157,6 +157,35 @@ export const history = async (bearerToken: string) => {
   throw { message: data, status: res.status };
 };
 
+type NearbyInput = {
+  latitude: string;
+  longitude: string;
+};
+
+export const nearby = async (input: NearbyInput, bearerToken: string) => {
+  const url = new URL('https://traewelling.de/api/v1/trains/station/nearby');
+
+  url.searchParams.append('latitude', input.latitude);
+  url.searchParams.append('longitude', input.longitude);
+
+  const res = await fetch(url, {
+    headers: {
+      Authorization: bearerToken,
+    },
+    method: 'GET',
+  });
+
+  const data = await res.json();
+
+  if (res.status === 200) {
+    const { data: stations } = data;
+
+    return stations as Station;
+  }
+
+  throw { message: data, status: res.status };
+};
+
 type TripInput = {
   hafasTripId: string;
   lineName: string;
