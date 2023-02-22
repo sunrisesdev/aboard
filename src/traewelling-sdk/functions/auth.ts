@@ -1,4 +1,4 @@
-import { TraewellingUser } from '../types';
+import { User } from '../types';
 
 type LoginInput = {
   login: string;
@@ -76,7 +76,7 @@ export const user = async (bearerToken: string) => {
   const data = await res.json();
 
   if (res.status === 200) {
-    return data.data as TraewellingUser;
+    return data.data as User;
   }
 
   throw { message: await data, status: res.status };
