@@ -33,6 +33,50 @@ export const autocomplete = async (
   throw { message: data, status: res.status };
 };
 
+type CheckinInput = {
+  arrival: string;
+  body: string | null;
+  business: 0 | 1 | 2;
+  chainPost: boolean | null;
+  departure: string;
+  destination: number;
+  eventId: number | null;
+  force: boolean | null;
+  ibnr: boolean | null;
+  lineName: string;
+  start: number;
+  toot: boolean | null;
+  tripId: string;
+  tweet: boolean | null;
+  visibility: 0 | 1 | 2 | 3 | 4;
+};
+
+export const checkin = async (input: CheckinInput, bearerToken: string) => {
+  const res = await fetch('https://traewelling.de/api/v1/trains/checkin', {
+    body: JSON.stringify(input),
+    headers: {
+      Authorization: bearerToken,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  });
+
+  const data = await res.json();
+
+  if (res.status === 201) {
+    const { alsoOnThisConnection, points, status } = data;
+
+    return {
+      // TODO: Types
+      alsoOnThisConnection: alsoOnThisConnection as any[],
+      points,
+      status,
+    };
+  }
+
+  throw { message: data, status: res.status };
+};
+
 type DeparturesInput = {
   name: string;
   travelType?: TransportType;
