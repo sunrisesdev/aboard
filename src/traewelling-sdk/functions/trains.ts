@@ -1,5 +1,5 @@
 import { HAFASTrip } from '../hafasTypes';
-import { Station, TransportType } from '../types';
+import { Station, TransportType, Trip } from '../types';
 
 type AutocompleteInput = {
   query: string;
@@ -131,6 +131,35 @@ export const departures = async (
       },
       trips: trips as HAFASTrip[],
     };
+  }
+
+  throw { message: data, status: res.status };
+};
+
+type TripInput = {
+  hafasTripId: string;
+  lineName: string;
+  start: string;
+};
+
+export const trip = async (input: TripInput, bearerToken: string) => {
+  const url = new URL('https://traewelling.de/api/v1/trains/trip/');
+
+  url.searchParams.append('hafasTripId', input.hafasTripId);
+  url.searchParams.append('lineName', input.lineName);
+  url.searchParams.append('start', input.start);
+
+  const res = await fetch(url, {
+    headers: {
+      Authorization: bearerToken,
+    },
+    method: 'GET',
+  });
+
+  const data = await res.json();
+
+  if (res.status === 200) {
+    return data.data as Trip;
   }
 
   throw { message: data, status: res.status };
