@@ -2,6 +2,19 @@
 @import '@radix-ui/colors/sky.css';
 @import '@radix-ui/colors/slate.css';
 
+:root {
+  --color-bus: #A3007C;
+  --color-ferry: #284B63;
+  --color-national: #CC0605;
+  --color-nationalExpress: #CC0605;
+  --color-regional: #CC0605;
+  --color-regionalExp: #CC0605;
+  --color-suburban: #008D4F;
+  --color-subway: #0065AE;
+  --color-taxi: #AF8000;
+  --color-tram: #0065AE;
+}
+
 *, *::after, *::before {
   box-sizing: border-box;
   margin: 0;

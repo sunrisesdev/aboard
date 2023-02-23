@@ -88,6 +88,25 @@ type DeparturesInput = {
   when?: string;
 };
 
+export type DeparturesResponse = {
+  meta: {
+    station: {
+      ibnr: number;
+      id: number;
+      latitude: string;
+      longitude: string;
+      name: string;
+      rilIdentifier: string | null;
+    };
+    times: {
+      next: string;
+      now: string;
+      prev: string;
+    };
+  } | null;
+  trips: HAFASTrip[];
+};
+
 export const departures = async (
   input: DeparturesInput,
   bearerToken: string
@@ -119,23 +138,9 @@ export const departures = async (
     const { data: trips, meta } = data;
 
     return {
-      meta: meta as {
-        station: {
-          ibnr: number;
-          id: number;
-          latitude: string;
-          longitude: string;
-          name: string;
-          rilIdentifier: string | null;
-        };
-        times: {
-          next: string;
-          now: string;
-          prev: string;
-        };
-      },
-      trips: trips as HAFASTrip[],
-    };
+      meta,
+      trips,
+    } as DeparturesResponse;
   }
 
   throw { message: data, status: res.status };

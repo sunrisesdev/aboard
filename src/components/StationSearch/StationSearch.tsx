@@ -1,7 +1,5 @@
-import { sourceSans3 } from '@/styles/fonts';
 import { AutocompleteResponse } from '@/traewelling-sdk/functions/trains';
 import { debounce } from '@/utils/debounce';
-import classNames from 'classnames';
 import { useSession } from 'next-auth/react';
 import { ChangeEvent, useState } from 'react';
 import { MdOutlineShareLocation } from 'react-icons/md';
@@ -56,7 +54,7 @@ const StationSearch = ({ onStationSelect }: StationSearchProps) => {
   };
 
   return (
-    <div className={classNames(styles.base, sourceSans3.className)}>
+    <div className={styles.base}>
       <div className={styles.header}>
         <input
           className={styles.input}

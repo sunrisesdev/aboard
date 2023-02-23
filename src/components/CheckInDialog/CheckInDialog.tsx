@@ -1,10 +1,13 @@
+import { sourceSans3 } from '@/styles/fonts';
 import { Station } from '@/traewelling-sdk/types';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';
+import classNames from 'classnames';
 import { useState } from 'react';
 import { MdArrowBack, MdArrowForward, MdCheck } from 'react-icons/md';
 import Button from '../Button/Button';
 import StationSearch from '../StationSearch/StationSearch';
+import TripSelector from '../TripSelector/TripSelector';
 import styles from './CheckInDialog.module.scss';
 import { CheckInDialogProps } from './types';
 
@@ -24,12 +27,14 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
       <Dialog.Portal>
         <Dialog.Overlay className={styles.overlay} />
 
-        <Dialog.Content className={styles.base}>
+        <Dialog.Content
+          className={classNames(styles.base, sourceSans3.className)}
+        >
           <header className={styles.header}>
             <Dialog.Title>Check-In</Dialog.Title>
-            <Dialog.Description>
+            {/* <Dialog.Description>
               An welcher Station fährst du los?
-            </Dialog.Description>
+            </Dialog.Description> */}
           </header>
 
           <Tabs.Root
@@ -42,12 +47,9 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
             </Tabs.Content>
 
             <Tabs.Content className={styles.tab} value="trip">
-              <header className={styles.header}>
-                <Dialog.Title>Check-In</Dialog.Title>
-                <Dialog.Description>Verbindung auswählen</Dialog.Description>
-              </header>
-
-              <p>Hi!</p>
+              {!!selectedStation && step === 1 && (
+                <TripSelector stationName={selectedStation.name} />
+              )}
             </Tabs.Content>
           </Tabs.Root>
 
