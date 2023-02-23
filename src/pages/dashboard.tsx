@@ -1,10 +1,12 @@
-import StationSearch from '@/components/StationSearch/StationSearch';
+import CheckInDialog from '@/components/CheckInDialog/CheckInDialog';
 import { signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
+import { useState } from 'react';
 import { AuthGuard } from '../components/AuthGuard/AuthGuard';
 
 const DashboardPage = () => {
   const { data: session } = useSession();
+  const [checkInOpen, setCheckInOpen] = useState(false);
 
   return (
     <>
@@ -16,7 +18,9 @@ const DashboardPage = () => {
         <div>Hallo {session?.user?.name}!</div>
         <button onClick={() => signOut()}>Abmelden</button>
 
-        <StationSearch />
+        <button onClick={() => setCheckInOpen(true)}>Check-In</button>
+
+        <CheckInDialog isOpen={checkInOpen} onIsOpenChange={setCheckInOpen} />
       </AuthGuard>
     </>
   );

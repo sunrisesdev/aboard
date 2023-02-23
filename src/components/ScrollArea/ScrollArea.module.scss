@@ -1,0 +1,45 @@
+.base {
+  overflow: hidden;
+  --scrollbar-size: 0.625rem;
+}
+
+.scrollbar {
+  background-color: var(--blackA6);
+  display: flex;
+  padding: 2px;
+  touch-action: none;
+  transition: background-color 0.16s ease-out;
+  user-select: none;
+}
+
+.scrollbar:hover {
+  background-color: var(--blackA8);
+}
+
+.scrollbar[data-orientation='vertical'] {
+  width: var(--scrollbar-size);
+}
+
+.thumb {
+  background-color: var(--slate10);
+  border-radius: var(--scrollbar-size);
+  flex: 1;
+  position: relative;
+}
+
+.thumb::before {
+  content: '';
+  height: 100%;
+  left: 50%;
+  min-height: 44px;
+  min-width: 44px;
+  position: absolute;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  width: 100%;
+}
+
+.viewport {
+  height: 100%;
+  width: 100%;
+}

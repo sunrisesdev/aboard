@@ -1,5 +1,12 @@
+@import '@radix-ui/colors/blackA.css';
 @import '@radix-ui/colors/sky.css';
 @import '@radix-ui/colors/slate.css';
+
+*, *::after, *::before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
   font-size: 16px;

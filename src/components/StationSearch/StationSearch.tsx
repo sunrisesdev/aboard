@@ -4,8 +4,12 @@ import { debounce } from '@/utils/debounce';
 import classNames from 'classnames';
 import { useSession } from 'next-auth/react';
 import { ChangeEvent, useState } from 'react';
+import { MdOutlineShareLocation } from 'react-icons/md';
 import useSWR from 'swr';
+import Button from '../Button/Button';
+import ScrollArea from '../ScrollArea/ScrollArea';
 import styles from './StationSearch.module.scss';
+import { StationSearchProps, StationSuggestionProps } from './types';
 
 const fetcher = async (
   query: string,
@@ -28,7 +32,7 @@ const fetcher = async (
   return await response.json();
 };
 
-const StationSearch = () => {
+const StationSearch = ({ onStationSelect }: StationSearchProps) => {
   const { data: session } = useSession();
   const [inputValue, setInputValue] = useState('');
   const [query, setQuery] = useState('');
@@ -53,41 +57,44 @@ const StationSearch = () => {
 
   return (
     <div className={classNames(styles.base, sourceSans3.className)}>
-      <input
-        className={styles.input}
-        onChange={handleQueryChange}
-        value={inputValue}
-      />
+      <div className={styles.header}>
+        <input
+          className={styles.input}
+          onChange={handleQueryChange}
+          value={inputValue}
+        />
 
-      {suggestions && suggestions.length > 0 && (
-        <ul className={styles.suggestions}>
-          {suggestions.map((suggestion) => (
-            <li key={suggestion.ibnr}>
-              <StationSuggestion
-                ibnr={suggestion.ibnr}
-                name={suggestion.name}
-                query={query}
-                rilIdentifier={suggestion.rilIdentifier}
-              />
-            </li>
-          ))}
-        </ul>
-      )}
+        <Button>
+          <MdOutlineShareLocation size={22} />
+        </Button>
+      </div>
+
+      <ScrollArea className={styles.scrollArea}>
+        {suggestions && suggestions.length > 0 && (
+          <ul className={styles.suggestions}>
+            {suggestions.map((suggestion) => (
+              <li key={suggestion.ibnr}>
+                <StationSuggestion
+                  name={suggestion.name}
+                  onClick={() => onStationSelect(suggestion)}
+                  query={query}
+                  rilIdentifier={suggestion.rilIdentifier}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+      </ScrollArea>
     </div>
   );
 };
 
 const StationSuggestion = ({
-  ibnr,
   name,
+  onClick,
   query,
   rilIdentifier,
-}: {
-  ibnr: number;
-  name: string;
-  query: string;
-  rilIdentifier: string | null;
-}) => {
+}: StationSuggestionProps) => {
   const escapedQuery = query.replaceAll(/[\|\.\(\)\/\?\*\+\$\^\\]/gi, '');
   const queryPattern = new RegExp(
     `(${escapedQuery.trim().split(' ').join('|')})`,
@@ -102,6 +109,7 @@ const StationSuggestion = ({
       dangerouslySetInnerHTML={{
         __html: extendedName.replaceAll(queryPattern, '<mark>$1</mark>'),
       }}
+      onClick={onClick}
     />
   );
 };
