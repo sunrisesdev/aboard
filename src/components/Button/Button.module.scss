@@ -15,6 +15,7 @@
   font-weight: 500;
   height: 2.3125rem;
   padding: 0 1rem;
+  user-select: none;
 
   &:active {
     background-color: var(--button-active);

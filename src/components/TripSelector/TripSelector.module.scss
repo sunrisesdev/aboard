@@ -36,6 +36,7 @@
   padding-right: 0.75rem;
   position: relative;
   text-align: left;
+  user-select: none;
   width: calc(100% - 2rem);
 
   @media screen and (min-width: 600px) {
