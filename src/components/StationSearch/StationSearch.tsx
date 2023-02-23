@@ -13,8 +13,22 @@ const fetcher = async (
   query: string,
   token?: string
 ): Promise<AutocompleteResponse> => {
-  if (!query.trim() || !token || query.length < 2) {
+  if (!token || (query.trim().length > 0 && query.trim().length < 2)) {
     return [];
+  }
+
+  if (!query.trim()) {
+    const response = await fetch('/api/stations/history', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    return await response.json();
   }
 
   const response = await fetch(`/api/stations/autocomplete?query=${query}`, {
