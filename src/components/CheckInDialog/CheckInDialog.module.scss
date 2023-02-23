@@ -61,6 +61,10 @@
   padding: 1rem 1rem 0;
 }
 
+.tab {
+  display: contents;
+}
+
 .footer {
   border-top: 1px solid var(--slate6);
   padding: 0.5rem 1rem 1rem;
@@ -88,6 +92,7 @@
 
 .overlay {
   animation: overlayShow 0.25s ease;
+  backdrop-filter: blur(0.5rem);
   background-color: var(--blackA9);
   inset: 0;
   position: fixed;

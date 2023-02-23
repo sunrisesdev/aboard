@@ -107,7 +107,9 @@ const StationSuggestion = ({
     <button
       className={styles.suggestion}
       dangerouslySetInnerHTML={{
-        __html: extendedName.replaceAll(queryPattern, '<mark>$1</mark>'),
+        __html: extendedName
+          .replaceAll(queryPattern, '<mark>$1</mark>')
+          .replaceAll(/\s/g, '&nbsp;'),
       }}
       onClick={onClick}
     />
