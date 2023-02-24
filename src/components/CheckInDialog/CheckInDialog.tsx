@@ -5,7 +5,12 @@ import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';
 import classNames from 'classnames';
 import { useState } from 'react';
-import { MdArrowBack, MdArrowForward, MdCheck } from 'react-icons/md';
+import {
+  MdArrowBack,
+  MdArrowForward,
+  MdCheck,
+  MdDirections,
+} from 'react-icons/md';
 import Button from '../Button/Button';
 import LineIndicator from '../LineIndicator/LineIndicator';
 import StationSearch from '../StationSearch/StationSearch';
@@ -105,10 +110,11 @@ const CheckInSummary = ({
   selectedStation,
   selectedTrip,
 }: CheckInSummaryProps) => {
-  const from =
-    selectedTrip && selectedTrip.station.name !== selectedStation?.name
-      ? selectedTrip.station.name
-      : selectedStation?.name;
+  const deviatingFrom =
+    selectedTrip && selectedTrip.station.name !== selectedStation?.name;
+  const from = deviatingFrom
+    ? selectedTrip.station.name
+    : selectedStation?.name;
 
   if (!from) {
     return <div />;
@@ -125,6 +131,16 @@ const CheckInSummary = ({
     <div className={styles.summary}>
       <div className={styles.stop}>
         <span>{from}</span>
+
+        {deviatingFrom && (
+          <MdDirections
+            size={20}
+            style={{
+              color: 'var(--amber9)',
+            }}
+          />
+        )}
+
         {selectedTrip && (
           <span className={styles.time}>
             {departureTime}
