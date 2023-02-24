@@ -125,7 +125,7 @@ const Trip = ({
       <div className={styles.direction}>
         <div className={styles.destination}>{destination}</div>
         {selectedStationName !== stationName && (
-          <div className={styles.divertingStation}>ab {stationName}</div>
+          <div className={styles.deviatingStation}>ab {stationName}</div>
         )}
       </div>
 
