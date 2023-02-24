@@ -11,7 +11,7 @@ const DashboardPage = () => {
   return (
     <>
       <Head>
-        <title>enroute.social</title>
+        <title>abroad.at</title>
       </Head>
 
       <AuthGuard>

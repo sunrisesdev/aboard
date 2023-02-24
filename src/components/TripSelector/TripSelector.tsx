@@ -17,11 +17,14 @@ const fetcher = async (
     return { meta: null, trips: [] };
   }
 
-  const response = await fetch(`/api/stations/${stationName}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await fetch(
+    `/api/stations/${stationName.replace('/', '%20')}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
   if (!response.ok) {
     return { meta: null, trips: [] };
