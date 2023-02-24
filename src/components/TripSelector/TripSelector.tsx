@@ -1,13 +1,25 @@
-import { inter } from '@/styles/fonts';
 import { DeparturesResponse } from '@/traewelling-sdk/functions/trains';
 import classNames from 'classnames';
 import { useSession } from 'next-auth/react';
+import { ReactNode } from 'react';
+import { MdTrain } from 'react-icons/md';
 import useSWR from 'swr';
+import LineIndicator from '../LineIndicator/LineIndicator';
+import ProductIcon from '../ProductIcon/ProductIcon';
+import { ProductIconProps, ProductIconVariant } from '../ProductIcon/types';
 import ScrollArea from '../ScrollArea/ScrollArea';
 import styles from './TripSelector.module.scss';
 import { TripProps, TripSelectorProps } from './types';
 
-const HIDDEN_PRODUCT_NAMES = ['Bus', 'STR'];
+const SPECIAL_PRODUCT_ICONS: Record<
+  ProductIconVariant,
+  (props: ProductIconProps) => ReactNode
+> = {
+  bus: ProductIcon.Bus,
+  suburban: ProductIcon.Suburban,
+  subway: ProductIcon.Subway,
+  tram: ProductIcon.Tram,
+};
 
 const fetcher = async (
   stationName: string,
@@ -33,7 +45,7 @@ const fetcher = async (
   return await response.json();
 };
 
-const TripSelector = ({ stationName }: TripSelectorProps) => {
+const TripSelector = ({ onTripSelect, stationName }: TripSelectorProps) => {
   const { data: session } = useSession();
   const { data: departures } = useSWR(
     ['/api/stations/', stationName, session?.traewelling.token],
@@ -52,6 +64,7 @@ const TripSelector = ({ stationName }: TripSelectorProps) => {
                   departureAt={trip.when}
                   destination={trip.direction ?? trip.destination.name}
                   lineName={trip.line.name}
+                  onClick={() => onTripSelect(trip)}
                   plannedDepartureAt={trip.plannedWhen}
                   product={trip.line.product}
                   productName={trip.line.productName}
@@ -73,6 +86,7 @@ const Trip = ({
   departureAt,
   destination,
   lineName,
+  onClick,
   plannedDepartureAt,
   product,
   productName,
@@ -83,22 +97,29 @@ const Trip = ({
   const departureTime = new Date(
     departureAt ?? plannedDepartureAt
   ).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-  const lineIndicator = !HIDDEN_PRODUCT_NAMES.includes(productName)
-    ? lineName
-    : lineName.replace(productName, '').trim();
+  const plannedDepartureTime = new Date(plannedDepartureAt).toLocaleTimeString(
+    [],
+    { hour: '2-digit', minute: '2-digit' }
+  );
 
   return (
-    <button className={styles.trip}>
+    <button className={styles.trip} onClick={onClick}>
       <div className={classNames(styles.product, styles[product])} />
 
       <div className={styles.line}>
-        <div
-          className={classNames(styles.lineIndicator, inter.className)}
-          style={{ backgroundColor: `var(--color-${product})` }}
-        >
-          {lineIndicator}
-        </div>
+        {product in SPECIAL_PRODUCT_ICONS ? (
+          SPECIAL_PRODUCT_ICONS[product as ProductIconVariant]({
+            className: styles.productIcon,
+          })
+        ) : (
+          <MdTrain className={styles.productIcon} size={20} />
+        )}
+
+        <LineIndicator
+          lineName={lineName}
+          product={product}
+          productName={productName}
+        />
       </div>
 
       <div className={styles.direction}>
@@ -108,7 +129,12 @@ const Trip = ({
         )}
       </div>
 
-      <div>{departureTime}</div>
+      <div className={styles.time}>
+        <div className={classNames({ [styles.isDelayed]: delay > 0 })}>
+          {plannedDepartureTime}
+        </div>
+        {delay > 0 && <div>{departureTime}</div>}
+      </div>
     </button>
   );
 };

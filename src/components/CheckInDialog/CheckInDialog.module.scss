@@ -80,20 +80,69 @@
   }
 }
 
-.station {
-  margin-bottom: 0.5rem;
-
-  label {
-    color: var(--slate12);
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-}
-
 .overlay {
   animation: overlayShow 0.25s ease;
   backdrop-filter: blur(0.5rem);
   background-color: var(--blackA9);
   inset: 0;
   position: fixed;
+}
+
+.summary {
+  color: var(--slate12);
+  margin-bottom: 0.5rem;
+  position: relative;
+
+  &::before {
+    background-color: var(--sky11);
+    content: "";
+    display: block;
+    height: calc(100% - 1.5rem);
+    left: 0.3rem;
+    position: absolute;
+    top: 0.75rem;
+    width: 0.125rem;
+    z-index: -1;
+  }
+
+  .stop {
+    align-items: center;
+    display: flex;
+    font-weight: 600;
+    gap: 0.5rem;
+
+    .time {
+      color: var(--slate11);
+      font-weight: 400;
+      margin-left: 0.25rem;
+    }
+
+    &::before {
+      background-color: var(--sky11);
+      border: 0.125rem solid #FFF;
+      border-radius: 9999rem;
+      content: "";
+      display: block;
+      height: 0.75rem;
+      width: 0.75rem;
+    }
+  }
+
+  .via {
+    align-items: center;
+    display: flex;
+    gap: 0.5rem;
+    margin-left: -0.5rem;
+    padding: 0.5rem 0;
+
+    .lineIndicator {
+      border: 0.125rem solid #FFF;
+      height: 1.5rem;
+    }
+
+    .direction {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+  }
 }

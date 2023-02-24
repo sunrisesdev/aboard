@@ -1,4 +1,5 @@
 import { sourceSans3 } from '@/styles/fonts';
+import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
 import { Station } from '@/traewelling-sdk/types';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';
@@ -6,10 +7,11 @@ import classNames from 'classnames';
 import { useState } from 'react';
 import { MdArrowBack, MdArrowForward, MdCheck } from 'react-icons/md';
 import Button from '../Button/Button';
+import LineIndicator from '../LineIndicator/LineIndicator';
 import StationSearch from '../StationSearch/StationSearch';
 import TripSelector from '../TripSelector/TripSelector';
 import styles from './CheckInDialog.module.scss';
-import { CheckInDialogProps } from './types';
+import { CheckInDialogProps, CheckInSummaryProps } from './types';
 
 const steps = ['origin', 'trip', 'destination', 'status'];
 
@@ -17,10 +19,14 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
   const [step, setStep] = useState(0);
   const [selectedStation, setSelectedStation] =
     useState<Pick<Station, 'name' | 'rilIdentifier'>>();
+  const [selectedTrip, setSelectedTrip] = useState<HAFASTrip>();
 
-  const stationName = `${selectedStation?.name}${
-    !selectedStation?.rilIdentifier ? '' : ` (${selectedStation.rilIdentifier})`
-  }`;
+  const handleStationSelect = (
+    station: Pick<Station, 'name' | 'rilIdentifier'>
+  ) => {
+    setSelectedStation(station);
+    setSelectedTrip(undefined);
+  };
 
   return (
     <Dialog.Root onOpenChange={onIsOpenChange} open={isOpen}>
@@ -43,23 +49,24 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
             value={steps[step]}
           >
             <Tabs.Content className={styles.tab} value="origin">
-              <StationSearch onStationSelect={setSelectedStation} />
+              <StationSearch onStationSelect={handleStationSelect} />
             </Tabs.Content>
 
             <Tabs.Content className={styles.tab} value="trip">
               {!!selectedStation && step === 1 && (
-                <TripSelector stationName={selectedStation.name} />
+                <TripSelector
+                  onTripSelect={setSelectedTrip}
+                  stationName={selectedStation.name}
+                />
               )}
             </Tabs.Content>
           </Tabs.Root>
 
           <footer className={styles.footer}>
-            {selectedStation && (
-              <div className={styles.station}>
-                <label>Ausgewählte Station</label>
-                <div>{stationName}</div>
-              </div>
-            )}
+            <CheckInSummary
+              selectedStation={selectedStation}
+              selectedTrip={selectedTrip}
+            />
 
             <nav className={styles.nav}>
               {step > 0 && (
@@ -91,6 +98,63 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
+  );
+};
+
+const CheckInSummary = ({
+  selectedStation,
+  selectedTrip,
+}: CheckInSummaryProps) => {
+  const from =
+    selectedTrip && selectedTrip.station.name !== selectedStation?.name
+      ? selectedTrip.station.name
+      : selectedStation?.name;
+
+  if (!from) {
+    return <div />;
+  }
+
+  const departureTime =
+    selectedTrip &&
+    new Date(selectedTrip.plannedWhen).toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+  return (
+    <div className={styles.summary}>
+      <div className={styles.stop}>
+        <span>{from}</span>
+        {selectedTrip && (
+          <span className={styles.time}>
+            {departureTime}
+            {selectedTrip.delay > 0 && (
+              <span className={styles.delay}>+{selectedTrip.delay / 60}</span>
+            )}
+          </span>
+        )}
+      </div>
+
+      {selectedTrip && (
+        <div className={styles.via}>
+          <LineIndicator
+            className={styles.lineIndicator}
+            lineName={selectedTrip.line.name}
+            product={selectedTrip.line.product}
+            productName={selectedTrip.line.productName}
+          />
+
+          <div className={styles.direction}>
+            {selectedTrip.direction ?? selectedTrip.destination.name}
+          </div>
+        </div>
+      )}
+
+      {/* <div className={styles.stop}>
+        <span>{from}</span>
+        <span className={styles.time}>15:22</span>
+      </div> */}
+    </div>
   );
 };
 
