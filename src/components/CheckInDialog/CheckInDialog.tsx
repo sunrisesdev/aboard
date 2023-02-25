@@ -142,12 +142,37 @@ const CheckInSummary = ({
     return <div />;
   }
 
-  const departureTime =
-    selectedTrip &&
-    new Date(selectedTrip.plannedWhen).toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  const departure = selectedTrip && new Date(selectedTrip.plannedWhen);
+  const arrival =
+    (!!selectedDestination?.arrivalPlanned &&
+      new Date(selectedDestination.arrivalPlanned)) ||
+    undefined;
+
+  const departureTime = departure?.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  const arrivalTime = arrival?.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  const arrivalDelay =
+    arrival &&
+    !!selectedDestination?.arrival &&
+    Math.floor(
+      Math.abs(
+        arrival.getTime() - new Date(selectedDestination.arrival).getTime()
+      ) /
+        1000 /
+        60
+    );
+
+  const duration =
+    !arrival || !departure
+      ? undefined
+      : Math.abs(arrival.getTime() - departure.getTime()) / 1000 / 60;
 
   return (
     <div className={styles.summary}>
@@ -157,7 +182,7 @@ const CheckInSummary = ({
 
           {selectedTrip && (
             <span className={styles.time}>
-              {departureTime}
+              ab {departureTime}
               {selectedTrip.delay > 0 && (
                 <span className={styles.delay}>+{selectedTrip.delay / 60}</span>
               )}
@@ -192,6 +217,10 @@ const CheckInSummary = ({
           <div className={styles.direction}>
             {selectedTrip.direction ?? selectedTrip.destination.name}
           </div>
+
+          {typeof duration !== 'undefined' && (
+            <div>{Math.floor(duration)} Minuten</div>
+          )}
         </div>
       )}
 
@@ -199,6 +228,15 @@ const CheckInSummary = ({
         <div className={styles.stop}>
           <div className={styles.station}>
             <span>{selectedDestination.name}</span>
+
+            {arrivalTime && (
+              <span className={styles.time}>
+                an {arrivalTime}
+                {(arrivalDelay ?? 0) > 0 && (
+                  <span className={styles.delay}>+{arrivalDelay}</span>
+                )}
+              </span>
+            )}
           </div>
         </div>
       )}
