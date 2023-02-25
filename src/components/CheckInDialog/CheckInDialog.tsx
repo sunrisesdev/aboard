@@ -171,7 +171,7 @@ const CheckInSummary = ({
 
   return (
     <div className={styles.summary}>
-      <div className={styles.stop}>
+      <div className={styles.from}>
         <div className={styles.station}>
           <span>{from}</span>
 
@@ -216,7 +216,7 @@ const CheckInSummary = ({
       )}
 
       {selectedDestination && (
-        <div className={styles.stop}>
+        <div className={styles.to}>
           <div className={styles.station}>
             <span>{selectedDestination.name}</span>
 

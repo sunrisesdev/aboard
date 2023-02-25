@@ -105,7 +105,7 @@
     z-index: -1;
   }
 
-  .stop {
+  .from, .to {
     display: flex;
     flex-direction: column;
     font-weight: 600;
@@ -176,5 +176,14 @@
       font-size: 0.875rem;
       font-weight: 500;
     }
+  }
+
+  .to  .station {
+      align-items: flex-end;
+
+      &::before {
+        margin-bottom: 0.35rem;
+        margin-top: 0;
+      }
   }
 }
