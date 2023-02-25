@@ -17,7 +17,7 @@ export const Login = () => {
   return (
     <>
       <Head>
-        <title>Anmelden &mdash; abroad.at</title>
+        <title>Anmelden &mdash; aboard.at</title>
       </Head>
 
       <div>

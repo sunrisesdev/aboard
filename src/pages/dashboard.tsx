@@ -11,7 +11,7 @@ const DashboardPage = () => {
   return (
     <>
       <Head>
-        <title>abroad.at</title>
+        <title>aboard.at</title>
       </Head>
 
       <AuthGuard>
