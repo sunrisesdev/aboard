@@ -1,8 +1,10 @@
+import { inter } from '@/styles/fonts';
 import { DeparturesResponse } from '@/traewelling-sdk/functions/trains';
 import classNames from 'classnames';
 import { useSession } from 'next-auth/react';
 import { ReactNode } from 'react';
 import { MdTrain } from 'react-icons/md';
+import { TbRouteOff } from 'react-icons/tb';
 import useSWR from 'swr';
 import LineIndicator from '../LineIndicator/LineIndicator';
 import ProductIcon from '../ProductIcon/ProductIcon';
@@ -103,7 +105,11 @@ const Trip = ({
   );
 
   return (
-    <button className={styles.trip} onClick={onClick}>
+    <button
+      className={styles.trip}
+      disabled={departureAt === null}
+      onClick={onClick}
+    >
       <div className={classNames(styles.product, styles[product])} />
 
       <div className={styles.line}>
@@ -135,6 +141,13 @@ const Trip = ({
         </div>
         {delay > 0 && <div>{departureTime}</div>}
       </div>
+
+      {departureAt === null && (
+        <aside className={classNames(styles.cancelledNote, inter.className)}>
+          <TbRouteOff />
+          <span>Fällt aus</span>
+        </aside>
+      )}
     </button>
   );
 };

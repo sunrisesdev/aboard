@@ -106,10 +106,28 @@
   }
 
   .stop {
-    align-items: center;
     display: flex;
+    flex-direction: column;
     font-weight: 600;
-    gap: 0.5rem;
+    gap: 0.25rem;
+
+    .station {
+      align-items: flex-start;
+      display: flex;
+      gap: 0.5rem;
+
+      &::before {
+        background-color: var(--sky11);
+        border: 0.125rem solid #FFF;
+        border-radius: 9999rem;
+        content: "";
+        display: block;
+        flex-shrink: 0;
+        height: 0.75rem;
+        margin-top: 0.35rem;
+        width: 0.75rem;
+      }
+    }
 
     .time {
       color: var(--slate11);
@@ -117,15 +135,22 @@
       margin-left: 0.25rem;
     }
 
-    &::before {
-      background-color: var(--sky11);
-      border: 0.125rem solid #FFF;
-      border-radius: 9999rem;
-      content: "";
-      display: block;
-      flex-shrink: 0;
-      height: 0.75rem;
-      width: 0.75rem;
+    .details {
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding-left: 1.25rem;
+    }
+
+    .deviatingStation {
+      align-items: center;
+      color: var(--amber9);
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    em {
+      font-style: normal;
+      transform: skewX(-6deg);
     }
   }
 
@@ -134,7 +159,7 @@
     display: flex;
     gap: 0.5rem;
     margin-left: -0.5rem;
-    padding: 0.5rem 0;
+    padding: 0.75rem 0;
 
     .lineIndicator {
       border: 0.125rem solid #FFF;

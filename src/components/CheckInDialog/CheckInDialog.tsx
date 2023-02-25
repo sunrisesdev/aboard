@@ -6,10 +6,10 @@ import * as Tabs from '@radix-ui/react-tabs';
 import classNames from 'classnames';
 import { useState } from 'react';
 import {
+  MdAltRoute,
   MdArrowBack,
   MdArrowForward,
   MdCheck,
-  MdDirections,
 } from 'react-icons/md';
 import Button from '../Button/Button';
 import LineIndicator from '../LineIndicator/LineIndicator';
@@ -130,25 +130,32 @@ const CheckInSummary = ({
   return (
     <div className={styles.summary}>
       <div className={styles.stop}>
-        <span>{from}</span>
+        <div className={styles.station}>
+          <span>{from}</span>
 
-        {deviatingFrom && (
-          <MdDirections
-            size={20}
-            style={{
-              color: 'var(--amber9)',
-            }}
-          />
-        )}
+          {selectedTrip && (
+            <span className={styles.time}>
+              {departureTime}
+              {selectedTrip.delay > 0 && (
+                <span className={styles.delay}>+{selectedTrip.delay / 60}</span>
+              )}
+            </span>
+          )}
+        </div>
 
-        {selectedTrip && (
-          <span className={styles.time}>
-            {departureTime}
-            {selectedTrip.delay > 0 && (
-              <span className={styles.delay}>+{selectedTrip.delay / 60}</span>
-            )}
-          </span>
-        )}
+        <div className={styles.details}>
+          {deviatingFrom && (
+            <div className={styles.deviatingStation}>
+              <MdAltRoute
+                size={20}
+                style={{
+                  color: 'var(--amber9)',
+                }}
+              />
+              <em>Abweichende Abfahrt von einer Station in der Nähe</em>
+            </div>
+          )}
+        </div>
       </div>
 
       {selectedTrip && (
