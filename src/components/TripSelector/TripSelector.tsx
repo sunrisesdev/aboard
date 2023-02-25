@@ -60,7 +60,9 @@ const TripSelector = ({ onTripSelect, stationName }: TripSelectorProps) => {
         {departures?.trips && departures.trips.length > 0 && (
           <ul className={styles.trips}>
             {departures.trips.map((trip) => (
-              <li key={`${trip.tripId}@${trip.station.ibnr}`}>
+              <li
+                key={`${trip.tripId}@${trip.station.ibnr}@${trip.plannedWhen}`}
+              >
                 <Trip
                   delay={trip.delay}
                   departureAt={trip.when}
