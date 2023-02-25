@@ -169,11 +169,6 @@ const CheckInSummary = ({
         60
     );
 
-  const duration =
-    !arrival || !departure
-      ? undefined
-      : Math.abs(arrival.getTime() - departure.getTime()) / 1000 / 60;
-
   return (
     <div className={styles.summary}>
       <div className={styles.stop}>
@@ -217,10 +212,6 @@ const CheckInSummary = ({
           <div className={styles.direction}>
             {selectedTrip.direction ?? selectedTrip.destination.name}
           </div>
-
-          {typeof duration !== 'undefined' && (
-            <div>{Math.floor(duration)} Minuten</div>
-          )}
         </div>
       )}
 

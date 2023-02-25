@@ -162,6 +162,11 @@
     margin-left: -0.5rem;
     padding: 0.75rem 0;
 
+    & > div:first-of-type {
+      align-items: center;
+      display: flex;
+    }
+
     .lineIndicator {
       border: 0.125rem solid #FFF;
       height: 1.5rem;
