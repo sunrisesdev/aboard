@@ -40,6 +40,14 @@
   user-select: none;
   width: calc(100% - 2rem);
 
+  &:active {
+    background-color: var(--slate5);
+  }
+
+  &:hover {
+    background-color: var(--slate4);
+  }
+
   @media screen and (min-width: 600px) {
     padding-right: 1rem;
   }

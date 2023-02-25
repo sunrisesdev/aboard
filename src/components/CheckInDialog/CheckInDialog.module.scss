@@ -123,6 +123,7 @@
       border-radius: 9999rem;
       content: "";
       display: block;
+      flex-shrink: 0;
       height: 0.75rem;
       width: 0.75rem;
     }
