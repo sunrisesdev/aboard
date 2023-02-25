@@ -15,6 +15,7 @@ import Button from '../Button/Button';
 import DestinationSelector from '../DestinationSelector/DestinationSelector';
 import LineIndicator from '../LineIndicator/LineIndicator';
 import StationSearch from '../StationSearch/StationSearch';
+import StatusCreator from '../StatusCreator/StatusCreator';
 import TripSelector from '../TripSelector/TripSelector';
 import styles from './CheckInDialog.module.scss';
 import { CheckInDialogProps, CheckInSummaryProps } from './types';
@@ -27,6 +28,12 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
     useState<Pick<Station, 'name' | 'rilIdentifier'>>();
   const [selectedTrip, setSelectedTrip] = useState<HAFASTrip>();
   const [selectedDestination, setSelectedDestination] = useState<Stop>();
+  const [statusMessage, setStatusMessage] = useState<string>('');
+
+  const canContinue =
+    (step === 0 && !!selectedStation) ||
+    (step === 1 && !!selectedTrip) ||
+    (step === 2 && !!selectedDestination);
 
   const handleStationSelect = (
     station: Pick<Station, 'name' | 'rilIdentifier'>
@@ -49,23 +56,30 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
         <Dialog.Content
           className={classNames(styles.base, sourceSans3.className)}
         >
-          <header className={styles.header}>
-            <Dialog.Title>Check-In</Dialog.Title>
-            {/* <Dialog.Description>
-              An welcher Station fährst du los?
-            </Dialog.Description> */}
-          </header>
-
           <Tabs.Root
             className={styles.tab}
             onValueChange={(value) => setStep(steps.indexOf(value))}
             value={steps[step]}
           >
             <Tabs.Content className={styles.tab} value="origin">
+              <header className={styles.header}>
+                <Dialog.Title>Check-In</Dialog.Title>
+                {/* <Dialog.Description>
+                  An welcher Station fährst du los?
+                </Dialog.Description> */}
+              </header>
+
               <StationSearch onStationSelect={handleStationSelect} />
             </Tabs.Content>
 
             <Tabs.Content className={styles.tab} value="trip">
+              <header className={styles.header}>
+                <Dialog.Title>Check-In</Dialog.Title>
+                {/* <Dialog.Description>
+                  An welcher Station fährst du los?
+                </Dialog.Description> */}
+              </header>
+
               {!!selectedStation && step === 1 && (
                 <TripSelector
                   onTripSelect={handleTripSelect}
@@ -75,6 +89,13 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
             </Tabs.Content>
 
             <Tabs.Content className={styles.tab} value="destination">
+              <header className={styles.header}>
+                <Dialog.Title>Check-In</Dialog.Title>
+                {/* <Dialog.Description>
+                  An welcher Station fährst du los?
+                </Dialog.Description> */}
+              </header>
+
               {!!selectedTrip && step === 2 && (
                 <DestinationSelector
                   hafasTripId={selectedTrip.tripId}
@@ -82,6 +103,22 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
                   onDestinationSelect={setSelectedDestination}
                   plannedDeparture={selectedTrip.plannedWhen}
                   start={selectedTrip.station.id.toString()}
+                />
+              )}
+            </Tabs.Content>
+
+            <Tabs.Content className={styles.tab} value="status">
+              <header className={styles.header}>
+                <Dialog.Title>Check-In</Dialog.Title>
+                {/* <Dialog.Description>
+                  An welcher Station fährst du los?
+                </Dialog.Description> */}
+              </header>
+
+              {step === 3 && (
+                <StatusCreator
+                  message={statusMessage}
+                  onMessageChange={setStatusMessage}
                 />
               )}
             </Tabs.Content>
@@ -104,7 +141,7 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
 
               {step < 3 && (
                 <Button
-                  disabled={!selectedStation}
+                  disabled={!canContinue}
                   onClick={() => setStep((step) => step + 1)}
                   variant="primary"
                 >
@@ -114,7 +151,7 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
               )}
 
               {step === 3 && (
-                <Button disabled={!selectedStation} variant="primary">
+                <Button variant="primary">
                   <span>Einchecken</span>
                   <MdCheck size={18} style={{ marginLeft: '0.25rem' }} />
                 </Button>
