@@ -1,5 +1,5 @@
 import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
-import { Station } from '@/traewelling-sdk/types';
+import { Station, Stop } from '@/traewelling-sdk/types';
 
 export type CheckInDialogProps = {
   isOpen: boolean;
@@ -7,6 +7,7 @@ export type CheckInDialogProps = {
 };
 
 export type CheckInSummaryProps = {
-  selectedStation?: Pick<Station, 'name' | 'rilIdentifier'>;
+  selectedDeparture?: Pick<Station, 'name' | 'rilIdentifier'>;
+  selectedDestination?: Stop;
   selectedTrip?: HAFASTrip;
 };

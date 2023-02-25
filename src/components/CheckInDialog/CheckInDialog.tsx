@@ -1,6 +1,6 @@
 import { sourceSans3 } from '@/styles/fonts';
 import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
-import { Station } from '@/traewelling-sdk/types';
+import { Station, Stop } from '@/traewelling-sdk/types';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';
 import classNames from 'classnames';
@@ -12,6 +12,7 @@ import {
   MdCheck,
 } from 'react-icons/md';
 import Button from '../Button/Button';
+import DestinationSelector from '../DestinationSelector/DestinationSelector';
 import LineIndicator from '../LineIndicator/LineIndicator';
 import StationSearch from '../StationSearch/StationSearch';
 import TripSelector from '../TripSelector/TripSelector';
@@ -25,12 +26,19 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
   const [selectedStation, setSelectedStation] =
     useState<Pick<Station, 'name' | 'rilIdentifier'>>();
   const [selectedTrip, setSelectedTrip] = useState<HAFASTrip>();
+  const [selectedDestination, setSelectedDestination] = useState<Stop>();
 
   const handleStationSelect = (
     station: Pick<Station, 'name' | 'rilIdentifier'>
   ) => {
     setSelectedStation(station);
     setSelectedTrip(undefined);
+    setSelectedDestination(undefined);
+  };
+
+  const handleTripSelect = (trip: HAFASTrip) => {
+    setSelectedTrip(trip);
+    setSelectedDestination(undefined);
   };
 
   return (
@@ -60,8 +68,20 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
             <Tabs.Content className={styles.tab} value="trip">
               {!!selectedStation && step === 1 && (
                 <TripSelector
-                  onTripSelect={setSelectedTrip}
+                  onTripSelect={handleTripSelect}
                   stationName={selectedStation.name}
+                />
+              )}
+            </Tabs.Content>
+
+            <Tabs.Content className={styles.tab} value="destination">
+              {!!selectedTrip && step === 2 && (
+                <DestinationSelector
+                  hafasTripId={selectedTrip.tripId}
+                  lineName={selectedTrip.line.name}
+                  onDestinationSelect={setSelectedDestination}
+                  plannedDeparture={selectedTrip.plannedWhen}
+                  start={selectedTrip.station.id.toString()}
                 />
               )}
             </Tabs.Content>
@@ -69,7 +89,8 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
 
           <footer className={styles.footer}>
             <CheckInSummary
-              selectedStation={selectedStation}
+              selectedDeparture={selectedStation}
+              selectedDestination={selectedDestination}
               selectedTrip={selectedTrip}
             />
 
@@ -107,14 +128,15 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
 };
 
 const CheckInSummary = ({
-  selectedStation,
+  selectedDeparture,
+  selectedDestination,
   selectedTrip,
 }: CheckInSummaryProps) => {
   const deviatingFrom =
-    selectedTrip && selectedTrip.station.name !== selectedStation?.name;
+    selectedTrip && selectedTrip.station.name !== selectedDeparture?.name;
   const from = deviatingFrom
     ? selectedTrip.station.name
-    : selectedStation?.name;
+    : selectedDeparture?.name;
 
   if (!from) {
     return <div />;
@@ -143,8 +165,8 @@ const CheckInSummary = ({
           )}
         </div>
 
-        <div className={styles.details}>
-          {deviatingFrom && (
+        {deviatingFrom && (
+          <div className={styles.details}>
             <div className={styles.deviatingStation}>
               <MdAltRoute
                 size={20}
@@ -154,8 +176,8 @@ const CheckInSummary = ({
               />
               <em>Abweichende Abfahrt von einer Station in der Nähe</em>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {selectedTrip && (
@@ -173,10 +195,13 @@ const CheckInSummary = ({
         </div>
       )}
 
-      {/* <div className={styles.stop}>
-        <span>{from}</span>
-        <span className={styles.time}>15:22</span>
-      </div> */}
+      {selectedDestination && (
+        <div className={styles.stop}>
+          <div className={styles.station}>
+            <span>{selectedDestination.name}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

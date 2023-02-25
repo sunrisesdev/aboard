@@ -202,6 +202,8 @@ type TripInput = {
   start: string;
 };
 
+export type TripResponse = Trip;
+
 export const trip = async (input: TripInput, bearerToken: string) => {
   const url = new URL('https://traewelling.de/api/v1/trains/trip/');
 
@@ -219,7 +221,7 @@ export const trip = async (input: TripInput, bearerToken: string) => {
   const data = await res.json();
 
   if (res.status === 200) {
-    return data.data as Trip;
+    return data.data as TripResponse;
   }
 
   throw { message: data, status: res.status };
