@@ -1,9 +1,11 @@
 import { sourceSans3 } from '@/styles/fonts';
+import { CheckinInput } from '@/traewelling-sdk/functions/trains';
 import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
 import { Station, Stop } from '@/traewelling-sdk/types';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';
 import classNames from 'classnames';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import {
   MdAltRoute,
@@ -20,22 +22,81 @@ import TripSelector from '../TripSelector/TripSelector';
 import styles from './CheckInDialog.module.scss';
 import { CheckInDialogProps, CheckInSummaryProps } from './types';
 
+const checkIn = async (status: CheckinInput, token?: string) => {
+  if (!token) {
+    return;
+  }
+
+  const response = await fetch('/api/stations/checkin', {
+    body: JSON.stringify(status),
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  });
+
+  if (!response.ok) {
+    return;
+  }
+
+  return await response.json();
+};
+
 const steps = ['origin', 'trip', 'destination', 'status'];
 
 const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
+  const { data: session } = useSession();
   const [step, setStep] = useState(0);
   const [selectedStation, setSelectedStation] =
     useState<Pick<Station, 'name' | 'rilIdentifier'>>();
   const [selectedTrip, setSelectedTrip] = useState<HAFASTrip>();
   const [selectedDestination, setSelectedDestination] = useState<Stop>();
   const [statusMessage, setStatusMessage] = useState<string>('');
+  const [travelType, setTravelType] = useState(0);
 
   const canContinue =
     (step === 0 && !!selectedStation) ||
     (step === 1 && !!selectedTrip) ||
     (step === 2 && !!selectedDestination);
 
-  const handleCheckInClick = async () => {};
+  const handleCheckInClick = async () => {
+    try {
+      await checkIn(
+        {
+          arrival: selectedDestination!.arrival!,
+          body: statusMessage,
+          business: travelType,
+          departure: selectedTrip!.when!,
+          destination: selectedDestination!.evaIdentifier,
+          ibnr: true,
+          lineName: selectedTrip!.line.name,
+          start: selectedTrip!.station.ibnr,
+          tripId: selectedTrip!.tripId,
+          visibility: 2, // TODO: Allow selection
+        },
+        session?.traewelling.token
+      );
+
+      setStep(0);
+
+      if (selectedDestination) {
+        setSelectedStation({
+          name: selectedDestination.name,
+          rilIdentifier: selectedDestination.rilIdentifier,
+        });
+      } else {
+        setSelectedStation(undefined);
+      }
+
+      setSelectedDestination(undefined);
+      setSelectedTrip(undefined);
+
+      onIsOpenChange(false);
+    } catch {
+      // TODO: Do something
+    }
+  };
 
   const handleStationSelect = (
     station: Pick<Station, 'name' | 'rilIdentifier'>
@@ -118,6 +179,8 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
                 <StatusCreator
                   message={statusMessage}
                   onMessageChange={setStatusMessage}
+                  onTravelTypeChange={setTravelType}
+                  travelType={travelType}
                 />
               )}
             </Tabs.Content>

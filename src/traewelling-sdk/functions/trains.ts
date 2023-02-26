@@ -38,22 +38,22 @@ export const autocomplete = async (
   throw { message: data, status: res.status };
 };
 
-type CheckinInput = {
+export type CheckinInput = {
   arrival: string;
-  body: string | null;
-  business: 0 | 1 | 2;
-  chainPost: boolean | null;
+  body?: string;
+  business: number; // 0 | 1 | 2
+  chainPost?: boolean;
   departure: string;
   destination: number;
-  eventId: number | null;
-  force: boolean | null;
-  ibnr: boolean | null;
+  eventId?: number;
+  force?: boolean;
+  ibnr?: boolean;
   lineName: string;
   start: number;
-  toot: boolean | null;
+  toot?: boolean;
   tripId: string;
-  tweet: boolean | null;
-  visibility: 0 | 1 | 2 | 3 | 4;
+  tweet?: boolean;
+  visibility: number; // 0 | 1 | 2 | 3 | 4
 };
 
 export const checkin = async (input: CheckinInput, bearerToken: string) => {

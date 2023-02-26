@@ -10,7 +10,14 @@ import ScrollArea from '../ScrollArea/ScrollArea';
 import styles from './StatusCreator.module.scss';
 import { StatusCreatorProps } from './types';
 
-const StatusCreator = ({ message, onMessageChange }: StatusCreatorProps) => {
+const TRAVEL_TYPES = ['private', 'business', 'commute'];
+
+const StatusCreator = ({
+  message,
+  onMessageChange,
+  onTravelTypeChange,
+  travelType,
+}: StatusCreatorProps) => {
   const isDesktop = useIsDesktop();
 
   return (
@@ -41,8 +48,11 @@ const StatusCreator = ({ message, onMessageChange }: StatusCreatorProps) => {
 
             <RadioGroup.Root
               className={styles.radioGroup}
-              defaultValue="private"
               id="travelType"
+              onValueChange={(value) =>
+                onTravelTypeChange(TRAVEL_TYPES.indexOf(value))
+              }
+              value={TRAVEL_TYPES[travelType]}
             >
               <RadioGroup.Item className={styles.radioItem} value="private">
                 <span>Privat</span>
