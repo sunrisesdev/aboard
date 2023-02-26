@@ -35,6 +35,8 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
     (step === 1 && !!selectedTrip) ||
     (step === 2 && !!selectedDestination);
 
+  const handleCheckInClick = async () => {};
+
   const handleStationSelect = (
     station: Pick<Station, 'name' | 'rilIdentifier'>
   ) => {
@@ -64,9 +66,9 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
             <Tabs.Content className={styles.tab} value="origin">
               <header className={styles.header}>
                 <Dialog.Title>Check-In</Dialog.Title>
-                {/* <Dialog.Description>
-                  An welcher Station fährst du los?
-                </Dialog.Description> */}
+                <Dialog.Description>
+                  An welcher Station steigst du ein?
+                </Dialog.Description>
               </header>
 
               <StationSearch onStationSelect={handleStationSelect} />
@@ -75,9 +77,9 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
             <Tabs.Content className={styles.tab} value="trip">
               <header className={styles.header}>
                 <Dialog.Title>Check-In</Dialog.Title>
-                {/* <Dialog.Description>
-                  An welcher Station fährst du los?
-                </Dialog.Description> */}
+                <Dialog.Description>
+                  Welche Verbindung nutzt du?
+                </Dialog.Description>
               </header>
 
               {!!selectedStation && step === 1 && (
@@ -91,9 +93,9 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
             <Tabs.Content className={styles.tab} value="destination">
               <header className={styles.header}>
                 <Dialog.Title>Check-In</Dialog.Title>
-                {/* <Dialog.Description>
-                  An welcher Station fährst du los?
-                </Dialog.Description> */}
+                <Dialog.Description>
+                  An welcher Station steigst du aus?
+                </Dialog.Description>
               </header>
 
               {!!selectedTrip && step === 2 && (
@@ -110,9 +112,6 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
             <Tabs.Content className={styles.tab} value="status">
               <header className={styles.header}>
                 <Dialog.Title>Check-In</Dialog.Title>
-                {/* <Dialog.Description>
-                  An welcher Station fährst du los?
-                </Dialog.Description> */}
               </header>
 
               {step === 3 && (
@@ -151,7 +150,7 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
               )}
 
               {step === 3 && (
-                <Button variant="primary">
+                <Button onClick={handleCheckInClick} variant="primary">
                   <span>Einchecken</span>
                   <MdCheck size={18} style={{ marginLeft: '0.25rem' }} />
                 </Button>
@@ -207,7 +206,14 @@ const CheckInSummary = ({
     );
 
   return (
-    <div className={styles.summary}>
+    <div
+      className={styles.summary}
+      style={
+        {
+          '--color-product': `var(--color-${selectedTrip?.line.product}`,
+        } as any
+      }
+    >
       <div className={styles.from}>
         <div className={styles.station}>
           <span>{from}</span>
