@@ -5,12 +5,27 @@
   flex-direction: column;
   max-height: 100%;
   overflow: hidden;
-  padding: 1rem;
+  padding: 1rem 0;
+}
+
+.scrollArea {
+  height: 100%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0;
+  max-height: 100%;
+  overflow: scroll;
+  padding: 0 1rem;
 }
 
 .textarea {
   border: 1px solid var(--slate7);
   border-radius: 0.375rem;
+  flex-shrink: 0;
   line-height: 1.5;
   padding: 0.375rem 0.5rem;
   width: 100%;
@@ -25,8 +40,68 @@
   }
 }
 
+.label {
+  align-items: center;
+  display: flex;
+  font-weight: 500;
+}
+
 .characterLimit {
   font-size: 0.875rem;
-  font-weight: 500;
   margin-left: auto;
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  @media screen and (min-width: 600px) {
+    flex-direction: row;
+  }
+}
+
+.radioItem {
+  appearance: none;
+  background-color: var(--slate3);
+  border: none;
+  border-radius: 0.375rem;
+  color: var(--sky12);
+  cursor: pointer;
+  display: flex;
+  font-weight: 500;
+  gap: 0.5rem;
+  overflow: hidden;
+  padding: 0.75rem;
+  position: relative;
+  width: 100%;
+
+  &:hover {
+    background-color: var(--slate4);
+  }
+
+  &[data-state="checked"] {
+    background-color: var(--sky4);
+    color: var(--sky11);
+  }
+
+  .iconSkew {
+    position: absolute;
+    right: 0.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .iconA {
+    color: var(--blackA6);
+    transform: scaleX(-1);
+  }
+
+  .iconB {
+    color: var(--sky11);
+  }
+
+  @media screen and (min-width: 600px) {
+    padding: 0.625rem 0.75rem;
+  }
 }

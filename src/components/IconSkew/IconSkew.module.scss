@@ -1,0 +1,13 @@
+.base {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  display: contents;
+}

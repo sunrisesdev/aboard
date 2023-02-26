@@ -82,7 +82,7 @@ const Tram = ({ className }: ProductIconProps) => {
         http://www.vbb.de/de/article/ueber-uns/media-service/produktsignets/3306.html
       </desc>
 
-      <g fill-rule="evenodd">
+      <g fillRule="evenodd">
         <path fill="#D9222A" d="M.04 99.87H99.5V.41H.04z" />
         <path
           fill="#fff"
