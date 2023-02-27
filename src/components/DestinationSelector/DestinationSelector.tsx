@@ -61,6 +61,10 @@ const DestinationSelector = ({
       typeof startingAt === 'undefined' ? 0 : startingAt + 1
     ) ?? [];
 
+  if (stops.length === 1) {
+    onDestinationSelect(stops[0]);
+  }
+
   return (
     <div className={styles.base}>
       <ScrollArea className={styles.scrollArea}>
