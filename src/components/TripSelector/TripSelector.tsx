@@ -10,6 +10,7 @@ import LineIndicator from '../LineIndicator/LineIndicator';
 import ProductIcon from '../ProductIcon/ProductIcon';
 import { ProductIconProps, ProductIconVariant } from '../ProductIcon/types';
 import ScrollArea from '../ScrollArea/ScrollArea';
+import Shimmer from '../Shimmer/Shimmer';
 import styles from './TripSelector.module.scss';
 import { TripProps, TripSelectorProps } from './types';
 
@@ -49,7 +50,7 @@ const fetcher = async (
 
 const TripSelector = ({ onTripSelect, stationName }: TripSelectorProps) => {
   const { data: session } = useSession();
-  const { data: departures } = useSWR(
+  const { data: departures, isLoading } = useSWR(
     ['/api/stations/', stationName, session?.traewelling.token],
     ([_, stationName, token]) => fetcher(stationName, token)
   );
@@ -80,8 +81,60 @@ const TripSelector = ({ onTripSelect, stationName }: TripSelectorProps) => {
             ))}
           </ul>
         )}
+
+        {isLoading && (
+          <ul className={styles.trips}>
+            <li>
+              <TripSkeleton />
+            </li>
+            <li>
+              <TripSkeleton />
+            </li>
+            <li>
+              <TripSkeleton />
+            </li>
+            <li>
+              <TripSkeleton />
+            </li>
+            <li>
+              <TripSkeleton />
+            </li>
+          </ul>
+        )}
       </ScrollArea>
     </div>
+  );
+};
+
+const TripSkeleton = () => {
+  const width = Math.random() * (85 - 50) + 50;
+
+  return (
+    <button className={classNames(styles.trip, styles.isSkeleton)}>
+      <div className={styles.product} />
+
+      <div className={styles.line}>
+        <Shimmer
+          height="1.25rem"
+          style={{ borderRadius: '9999rem' }}
+          width="1.25rem"
+        />
+
+        <Shimmer
+          height="1.25rem"
+          style={{ borderRadius: '9999rem' }}
+          width="1.75rem"
+        />
+      </div>
+
+      <div className={styles.direction}>
+        <Shimmer height="1.125rem" width={`${width}%`} />
+      </div>
+
+      <div className={styles.time}>
+        <Shimmer width="2rem" />
+      </div>
+    </button>
   );
 };
 

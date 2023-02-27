@@ -1,11 +1,13 @@
 import { AutocompleteResponse } from '@/traewelling-sdk/functions/trains';
 import { debounce } from '@/utils/debounce';
+import classNames from 'classnames';
 import { useSession } from 'next-auth/react';
 import { ChangeEvent, useState } from 'react';
 import { MdOutlineShareLocation } from 'react-icons/md';
 import useSWR from 'swr';
 import Button from '../Button/Button';
 import ScrollArea from '../ScrollArea/ScrollArea';
+import Shimmer from '../Shimmer/Shimmer';
 import styles from './StationSearch.module.scss';
 import { StationSearchProps, StationSuggestionProps } from './types';
 
@@ -48,7 +50,7 @@ const StationSearch = ({ onStationSelect }: StationSearchProps) => {
   const { data: session } = useSession();
   const [inputValue, setInputValue] = useState('');
   const [query, setQuery] = useState('');
-  const { data: suggestions } = useSWR(
+  const { data: suggestions, isLoading } = useSWR(
     ['/api/stations/autocomplete', query, session?.traewelling.token],
     ([_, query, token]) => fetcher(query, token)
   );
@@ -96,8 +98,38 @@ const StationSearch = ({ onStationSelect }: StationSearchProps) => {
             ))}
           </ul>
         )}
+
+        {isLoading && (
+          <ul className={styles.suggestions}>
+            <li>
+              <StationSkeleton />
+            </li>
+            <li>
+              <StationSkeleton />
+            </li>
+            <li>
+              <StationSkeleton />
+            </li>
+            <li>
+              <StationSkeleton />
+            </li>
+            <li>
+              <StationSkeleton />
+            </li>
+          </ul>
+        )}
       </ScrollArea>
     </div>
+  );
+};
+
+const StationSkeleton = () => {
+  const width = Math.random() * (85 - 50) + 50;
+
+  return (
+    <button className={classNames(styles.suggestion, styles.isSkeleton)}>
+      <Shimmer width={`${width}%`} />
+    </button>
   );
 };
 

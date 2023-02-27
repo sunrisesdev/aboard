@@ -80,6 +80,10 @@
     background-color: var(--slate4);
   }
 
+  &.isSkeleton {
+    pointer-events: none;
+  }
+
   mark {
     background-color: var(--sky6);
     border-radius: 0.25rem;

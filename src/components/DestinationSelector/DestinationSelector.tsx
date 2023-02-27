@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { TbRouteOff } from 'react-icons/tb';
 import useSWR from 'swr';
 import ScrollArea from '../ScrollArea/ScrollArea';
+import Shimmer from '../Shimmer/Shimmer';
 import styles from './DestinationSelector.module.scss';
 import { DestinationSelectorProps, StationProps } from './types';
 
@@ -45,7 +46,7 @@ const DestinationSelector = ({
   start,
 }: DestinationSelectorProps) => {
   const { data: session } = useSession();
-  const { data: trip } = useSWR(
+  const { data: trip, isLoading } = useSWR(
     ['/api/trips', hafasTripId, lineName, start, session?.traewelling.token],
     ([_, hafasTripId, lineName, start, token]) =>
       fetcher(hafasTripId, lineName, start, token)
@@ -83,8 +84,44 @@ const DestinationSelector = ({
             ))}
           </ul>
         )}
+
+        {isLoading && (
+          <ul className={styles.stations}>
+            <li>
+              <StationSkeleton />
+            </li>
+            <li>
+              <StationSkeleton />
+            </li>
+            <li>
+              <StationSkeleton />
+            </li>
+            <li>
+              <StationSkeleton />
+            </li>
+            <li>
+              <StationSkeleton />
+            </li>
+          </ul>
+        )}
       </ScrollArea>
     </div>
+  );
+};
+
+const StationSkeleton = () => {
+  const width = Math.random() * (85 - 50) + 50;
+
+  return (
+    <button className={classNames(styles.station, styles.isSkeleton)}>
+      <div className={styles.name}>
+        <Shimmer width={`${width}%`} />
+      </div>
+
+      <div className={styles.time}>
+        <Shimmer width="2rem" />
+      </div>
+    </button>
   );
 };
 

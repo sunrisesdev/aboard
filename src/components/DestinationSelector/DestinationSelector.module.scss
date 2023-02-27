@@ -77,6 +77,10 @@
       text-decoration: line-through;
     }
   }
+
+  &.isSkeleton {
+    pointer-events: none;
+  }
 }
 
 .name {
