@@ -1,6 +1,7 @@
 import { inter } from '@/styles/fonts';
 import { TripResponse } from '@/traewelling-sdk/functions/trains';
 import classNames from 'classnames';
+import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { TbRouteOff } from 'react-icons/tb';
 import useSWR from 'swr';
@@ -13,8 +14,10 @@ const fetcher = async (
   hafasTripId: string,
   lineName: string,
   start: string,
-  token?: string
+  session?: Session | null
 ): Promise<TripResponse | undefined> => {
+  const token = session?.user.accessToken;
+
   if (!hafasTripId || !lineName || !start.trim() || !token) {
     return;
   }
@@ -47,9 +50,9 @@ const DestinationSelector = ({
 }: DestinationSelectorProps) => {
   const { data: session } = useSession();
   const { data: trip, isLoading } = useSWR(
-    ['/api/trips', hafasTripId, lineName, start, session?.traewelling.token],
-    ([_, hafasTripId, lineName, start, token]) =>
-      fetcher(hafasTripId, lineName, start, token)
+    ['/api/trips', hafasTripId, lineName, start, session],
+    ([_, hafasTripId, lineName, start, session]) =>
+      fetcher(hafasTripId, lineName, start, session)
   );
 
   const startingAt = trip?.stopovers.findIndex(

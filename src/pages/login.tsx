@@ -1,6 +1,5 @@
-import { signIn } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
-import { useState } from 'react';
 
 // export const getServerSideProps = async () => {
 //   const providers = await getProviders();
@@ -11,34 +10,20 @@ import { useState } from 'react';
 // };
 
 export const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
+  const { data } = useSession();
   return (
     <>
       <Head>
         <title>Anmelden &mdash; aboard.at</title>
       </Head>
 
+      <pre>{JSON.stringify(data, null, 2)}</pre>
       <div>
-        <input
-          onChange={(event) => setUsername(event.target.value)}
-          placeholder="Benutzername"
-          value={username}
-        />
-
-        <input
-          onChange={(event) => setPassword(event.target.value)}
-          placeholder="Password"
-          type="password"
-          value={password}
-        />
-
-        <button
-          onClick={() => signIn('traewelling', { login: username, password })}
-        >
+        <button onClick={() => signIn('traewelling')}>
           Anmelden mit Traewelling
         </button>
+
+        <button onClick={() => signOut()}>Abmelden</button>
       </div>
     </>
   );

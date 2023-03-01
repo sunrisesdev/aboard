@@ -4,6 +4,7 @@ import {
 } from '@/traewelling-sdk/functions/trains';
 import { debounce } from '@/utils/debounce';
 import classNames from 'classnames';
+import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { CgSpinnerTwoAlt } from 'react-icons/cg';
@@ -21,8 +22,10 @@ import { StationSearchProps, StationSuggestionProps } from './types';
 
 const fetcher = async (
   query: string,
-  token?: string
+  session?: Session | null
 ): Promise<AutocompleteResponse> => {
+  const token = session?.user.accessToken;
+
   if (!token || (query.trim().length > 0 && query.trim().length < 2)) {
     return [];
   }
@@ -62,8 +65,8 @@ const StationSearch = ({ onStationSelect }: StationSearchProps) => {
   >('unknown');
   const [query, setQuery] = useState('');
   const { data: suggestions, isLoading } = useSWR(
-    ['/api/stations/autocomplete', query, session?.traewelling.token],
-    ([_, query, token]) => fetcher(query, token)
+    ['/api/stations/autocomplete', query, session],
+    ([_, query, session]) => fetcher(query, session)
   );
 
   // TODO: Improve sorting
@@ -90,7 +93,7 @@ const StationSearch = ({ onStationSelect }: StationSearchProps) => {
           `/api/stations/nearby?latitude=${coords.latitude}&longitude=${coords.longitude}`,
           {
             headers: {
-              Authorization: `Bearer ${session.traewelling.token}`,
+              Authorization: `Bearer ${session.user.accessToken}`,
             },
           }
         );
