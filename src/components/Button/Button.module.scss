@@ -30,10 +30,24 @@
     pointer-events: none;
   }
 
+  &.error {
+    --button-active: var(--crimson6);
+    --button-base: var(--crimson4);
+    --button-color: var(--crimson11);
+    --button-hover: var(--crimson5);
+  }
+
   &.primary {
     --button-active: var(--sky6);
     --button-base: var(--sky4);
     --button-color: var(--sky11);
     --button-hover: var(--sky5);
+  }
+
+  &.success {
+    --button-active: var(--green6);
+    --button-base: var(--green4);
+    --button-color: var(--green11);
+    --button-hover: var(--green5);
   }
 }

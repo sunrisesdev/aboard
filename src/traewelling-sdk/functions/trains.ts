@@ -172,6 +172,8 @@ type NearbyInput = {
   longitude: string;
 };
 
+export type NearbyResponse = Station;
+
 export const nearby = async (input: NearbyInput, bearerToken: string) => {
   const url = new URL('https://traewelling.de/api/v1/trains/station/nearby');
 
