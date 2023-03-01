@@ -93,7 +93,7 @@ const StationSearch = ({ onStationSelect }: StationSearchProps) => {
           `/api/stations/nearby?latitude=${coords.latitude}&longitude=${coords.longitude}`,
           {
             headers: {
-              Authorization: `Bearer ${session.traewelling.token}`,
+              Authorization: `Bearer ${session.user.accessToken}`,
             },
           }
         );
