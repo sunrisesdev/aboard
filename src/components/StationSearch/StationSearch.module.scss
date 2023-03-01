@@ -1,5 +1,14 @@
 @import '@/styles/index';
 
+@keyframes spinning {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .base {
   display: flex;
   flex-direction: column;
@@ -28,6 +37,10 @@
     box-shadow: 0 0 0 2px #FFF, 0 0 0 4px var(--sky7);
     outline: none;
   }
+}
+
+.isLoading {
+  animation: spinning 2s linear infinite;
 }
 
 .scrollArea {

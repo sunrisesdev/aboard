@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-type ButtonVariant = 'primary';
+type ButtonVariant = 'error' | 'primary' | 'success';
 
 export type ButtonProps = {
   children: ReactNode;
