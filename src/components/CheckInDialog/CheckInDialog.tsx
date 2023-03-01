@@ -5,6 +5,7 @@ import { Station, Stop } from '@/traewelling-sdk/types';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';
 import classNames from 'classnames';
+import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import {
@@ -22,7 +23,9 @@ import TripSelector from '../TripSelector/TripSelector';
 import styles from './CheckInDialog.module.scss';
 import { CheckInDialogProps, CheckInSummaryProps } from './types';
 
-const checkIn = async (status: CheckinInput, token?: string) => {
+const checkIn = async (status: CheckinInput, session?: Session | null) => {
+  const token = session?.user.accessToken;
+
   if (!token) {
     return;
   }
@@ -75,7 +78,7 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
           tripId: selectedTrip!.tripId,
           visibility: 2, // TODO: Allow selection
         },
-        session?.traewelling.token
+        session
       );
 
       setStep(0);

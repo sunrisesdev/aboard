@@ -2,23 +2,29 @@ import 'next-auth';
 
 declare module 'next-auth' {
   interface Session {
-    traewelling: {
-      expiresAt: string;
-      token: string;
+    user: {
+      accessToken: string;
+      refreshToken: string;
     };
   }
 
   interface User {
-    traewellingSession: {
-      expiresAt: string;
-      token: string;
-    };
+    id: string;
+    name: string;
+    username: string;
+    email: string;
+    image: string;
+    privateProfile: boolean;
+    preventIndex: boolean;
+    language: string;
+    defaultStatusVisibility: number;
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    trwlExpiresAt: string;
-    trwlToken: string;
+    accessToken: string;
+    refreshToken: string;
+    username: string;
   }
 }

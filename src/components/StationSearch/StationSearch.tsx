@@ -1,6 +1,7 @@
 import { AutocompleteResponse } from '@/traewelling-sdk/functions/trains';
 import { debounce } from '@/utils/debounce';
 import classNames from 'classnames';
+import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { ChangeEvent, useState } from 'react';
 import { MdOutlineShareLocation } from 'react-icons/md';
@@ -13,8 +14,10 @@ import { StationSearchProps, StationSuggestionProps } from './types';
 
 const fetcher = async (
   query: string,
-  token?: string
+  session?: Session | null
 ): Promise<AutocompleteResponse> => {
+  const token = session?.user.accessToken;
+
   if (!token || (query.trim().length > 0 && query.trim().length < 2)) {
     return [];
   }
@@ -51,8 +54,8 @@ const StationSearch = ({ onStationSelect }: StationSearchProps) => {
   const [inputValue, setInputValue] = useState('');
   const [query, setQuery] = useState('');
   const { data: suggestions, isLoading } = useSWR(
-    ['/api/stations/autocomplete', query, session?.traewelling.token],
-    ([_, query, token]) => fetcher(query, token)
+    ['/api/stations/autocomplete', query, session],
+    ([_, query, session]) => fetcher(query, session)
   );
 
   // TODO: Improve sorting

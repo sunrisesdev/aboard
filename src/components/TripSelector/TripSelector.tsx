@@ -1,6 +1,7 @@
 import { inter } from '@/styles/fonts';
 import { DeparturesResponse } from '@/traewelling-sdk/functions/trains';
 import classNames from 'classnames';
+import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { ReactNode } from 'react';
 import { MdTrain } from 'react-icons/md';
@@ -26,8 +27,10 @@ const SPECIAL_PRODUCT_ICONS: Record<
 
 const fetcher = async (
   stationName: string,
-  token?: string
+  session?: Session | null
 ): Promise<DeparturesResponse> => {
+  const token = session?.user.accessToken;
+
   if (!stationName.trim() || !token) {
     return { meta: null, trips: [] };
   }
@@ -51,8 +54,8 @@ const fetcher = async (
 const TripSelector = ({ onTripSelect, stationName }: TripSelectorProps) => {
   const { data: session } = useSession();
   const { data: departures, isLoading } = useSWR(
-    ['/api/stations/', stationName, session?.traewelling.token],
-    ([_, stationName, token]) => fetcher(stationName, token)
+    ['/api/stations/', stationName, session],
+    ([_, stationName, session]) => fetcher(stationName, session)
   );
 
   return (
