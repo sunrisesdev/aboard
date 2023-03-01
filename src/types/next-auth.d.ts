@@ -5,6 +5,8 @@ declare module 'next-auth' {
     user: {
       accessToken: string;
       refreshToken: string;
+      username: string;
+      name: string;
     };
   }
 
@@ -26,5 +28,6 @@ declare module 'next-auth/jwt' {
     accessToken: string;
     refreshToken: string;
     username: string;
+    displayName: string;
   }
 }

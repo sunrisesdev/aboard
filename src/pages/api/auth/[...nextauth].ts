@@ -5,6 +5,7 @@ export default NextAuth({
     jwt: async ({ token, account, profile, user }) => {
       if (user) {
         token.username = user.username;
+        token.displayName = user.name;
       }
 
       token.accessToken = account?.access_token || token.accessToken;
@@ -15,6 +16,9 @@ export default NextAuth({
     session: async ({ session, token }) => {
       session.user.accessToken = token.accessToken;
       session.user.refreshToken = token.refreshToken;
+      session.user.username = token.username;
+      session.user.name = token.displayName;
+
       return session;
     },
   },
