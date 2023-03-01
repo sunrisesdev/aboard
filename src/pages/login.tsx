@@ -2,7 +2,7 @@ import Button from '@/components/Button/Button';
 import { signIn } from 'next-auth/react';
 import Head from 'next/head';
 import Image from 'next/image';
-import SunrisesWordmark from '../../public/sunrises-wordmark.png';
+import SunrisesWordmark from '../../public/sunrises-wordmark.svg';
 
 export const Login = () => {
   return (
