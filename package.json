@@ -1,5 +1,14 @@
 {
   "name": "aboard",
+  "author": {
+    "email": "info@sunrises.dev",
+    "name": "Sunrises",
+    "url": "https://sunrises.dev"
+  },
+  "maintainers": [
+    "Fabian K. <fabian@neoskop.de>",
+    "Noel B. <noel@neoskop.de>"
+  ],
   "version": "0.1.0",
   "private": true,
   "scripts": {
