@@ -1,29 +1,30 @@
-import { signIn, signOut, useSession } from 'next-auth/react';
+import Button from '@/components/Button/Button';
+import { signIn } from 'next-auth/react';
 import Head from 'next/head';
-
-// export const getServerSideProps = async () => {
-//   const providers = await getProviders();
-
-//   return {
-//     props: { providers: providers ?? [] },
-//   };
-// };
+import Image from 'next/image';
+import SunrisesWordmark from '../../public/sunrises-wordmark.png';
 
 export const Login = () => {
-  const { data } = useSession();
   return (
     <>
       <Head>
         <title>Anmelden &mdash; aboard.at</title>
       </Head>
 
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-      <div>
-        <button onClick={() => signIn('traewelling')}>
+      <div
+        style={{
+          alignItems: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          margin: '2rem auto',
+        }}
+      >
+        <h1 style={{ margin: '0' }}>Welcome aboard!</h1>
+        <Button onClick={() => signIn('traewelling')}>
           Anmelden mit Traewelling
-        </button>
-
-        <button onClick={() => signOut()}>Abmelden</button>
+        </Button>
+        <Image alt="Sunrises Logo" height={32} src={SunrisesWordmark} />
       </div>
     </>
   );
