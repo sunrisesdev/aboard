@@ -5,7 +5,7 @@
 
   @media screen and (min-width: 900px) {
     display: grid;
-    grid-template-columns: 60% 40%;
+    grid-template-columns: 1fr min(50%, 600px);
   }
 }
 
@@ -32,7 +32,7 @@
   width: 100%;
 
   @media screen and (min-width: 900px) {
-    padding: 4rem;
+    padding: 2rem;
   }
 }
 
@@ -86,7 +86,7 @@
 }
 
 .brand {
-  align-items: center;
+  align-self: flex-start;
   display: flex;
   flex-direction: column;
   gap: 0.5ch;
@@ -106,7 +106,6 @@
   font-size: 0.875rem;
   font-weight: 500;
   gap: 0.5rem;
-  margin-top: auto;
   width: 100%;
 
   span {
