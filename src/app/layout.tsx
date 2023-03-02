@@ -1,0 +1,37 @@
+import Providers from '@/components/Providers/Providers';
+import { sourceSans3 } from '@/styles/fonts';
+import '@/styles/globals.css';
+import { Session } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
+import 'normalize.css';
+import { authOptions } from '../pages/api/auth/[...nextauth]';
+
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const session = await getServerSession<any, Session>(authOptions);
+
+  return (
+    <html lang="de">
+      <head />
+      <body className={sourceSans3.className}>
+        <Providers session={session}>{children}</Providers>
+      </body>
+    </html>
+  );
+}
+
+export const metadata = {
+  title: 'aboard.at',
+  description:
+    'Aboard is an alternative webclient for Träwelling focused on mobile UX.',
+  viewport: 'width=device-width, initial-scale=1',
+  icons: [
+    {
+      rel: 'icon',
+      url: '/favicon.ico',
+    },
+  ],
+};

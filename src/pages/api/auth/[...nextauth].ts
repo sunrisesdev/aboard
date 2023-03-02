@@ -1,8 +1,8 @@
-import NextAuth from 'next-auth';
+import NextAuth, { AuthOptions } from 'next-auth';
 
-export default NextAuth({
+export const authOptions: AuthOptions = {
   callbacks: {
-    jwt: async ({ token, account, profile, user }) => {
+    jwt: async ({ token, account, user }) => {
       if (user) {
         token.username = user.username;
         token.displayName = user.name;
@@ -56,4 +56,9 @@ export default NextAuth({
   session: {
     maxAge: 365 * 24 * 60 * 60,
   },
-});
+  pages: {
+    signIn: '/login',
+  },
+};
+
+export default NextAuth(authOptions);
