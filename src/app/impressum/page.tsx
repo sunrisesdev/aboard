@@ -3,5 +3,5 @@ export default function Page() {
 }
 
 export const metadata = {
-  title: 'Datenschutz - aboard.at',
+  title: 'Impressum - aboard.at',
 };
