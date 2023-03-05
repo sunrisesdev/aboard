@@ -77,7 +77,8 @@
 .origin {
   margin-inline: 1rem;
   padding-bottom: 1rem;
-  padding-left: 2rem;
+  // padding-left: 2rem;
+  padding-left: 1.625rem;
   position: relative;
 
   &::after {
@@ -87,7 +88,8 @@
     content: '';
     display: block;
     height: 6px;
-    left: 0.8125rem;
+    // left: 0.8125rem;
+    left: 2px;
     position: absolute;
     top: 0.5625rem;
     width: 6px;
@@ -98,7 +100,8 @@
     content: '';
     display: block;
     height: calc(100% - 0.5625rem);
-    left: 0.9375rem;
+    // left: 0.9375rem;
+    left: 4px;
     position: absolute;
     top: 0.5625rem;
     width: 2px;
@@ -141,8 +144,9 @@
     background-color: var(--accent-color);
     content: '';
     display: block;
-    height: 4rem;
-    left: 1.9375rem;
+    height: 2.5rem;
+    // left: 1.9375rem;
+    left: 1.25rem;
     position: absolute;
     top: 0;
     width: 2px;
@@ -162,7 +166,8 @@
   cursor: pointer;
   display: flex;
   height: 3rem;
-  padding-left: 3rem;
+  // padding-left: 3rem;
+  padding-left: 2.625rem;
   padding-right: 1rem;
   position: relative;
   text-align: left;
@@ -184,7 +189,8 @@
     content: '';
     display: block;
     height: 6px;
-    left: 1.8125rem;
+    // left: 1.8125rem;
+    left: 1.125rem;
     position: absolute;
     top: 1.25rem;
     width: 6px;
@@ -195,7 +201,8 @@
     content: '';
     display: block;
     height: 100%;
-    left: 1.9375rem;
+    // left: 1.9375rem;
+    left: 1.25rem;
     position: absolute;
     top: 0;
     width: 2px;
@@ -209,7 +216,7 @@
     }
 
     &::before {
-      background: none;
+      background-color: #FFF;
       border-left: 2px dotted var(--accent-color);
     }
 

@@ -54,6 +54,7 @@
   list-style: none;
   margin: 0;
   max-height: 100%;
+  overflow: hidden;
   padding-block: 1rem;
 }
 
@@ -180,6 +181,7 @@
 .line {
   align-items: center;
   display: flex;
+  flex-shrink: 0;
   gap: 0.25rem;
   min-width: 4.5rem;
   padding: 0 0.5rem;

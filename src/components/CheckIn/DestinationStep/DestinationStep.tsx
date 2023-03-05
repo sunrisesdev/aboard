@@ -2,6 +2,7 @@
 
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
+import Shimmer from '@/components/Shimmer/Shimmer';
 import { useStops } from '@/hooks/useStops/useStops';
 import { inter } from '@/styles/fonts';
 import classNames from 'classnames';
@@ -72,7 +73,9 @@ const DestinationStep = () => {
             <span className={styles.time}>
               ab {departureTime}
               {trip && trip.delay > 0 && (
-                <span className={styles.delay}>+{trip.delay / 60}</span>
+                <span className={styles.delay}>
+                  &nbsp;<sup>+{trip.delay / 60}</sup>
+                </span>
               )}
             </span>
           </div>
@@ -103,25 +106,41 @@ const DestinationStep = () => {
           {isLoading && (
             <ul className={styles.stopList}>
               <li>
-                <div />
+                <StopSkeleton />
               </li>
               <li>
-                <div />
+                <StopSkeleton />
               </li>
               <li>
-                <div />
+                <StopSkeleton />
               </li>
               <li>
-                <div />
+                <StopSkeleton />
               </li>
               <li>
-                <div />
+                <StopSkeleton />
               </li>
             </ul>
           )}
         </ScrollArea>
       </div>
     </main>
+  );
+};
+
+const StopSkeleton = () => {
+  const width = Math.random() * (85 - 50) + 50;
+
+  return (
+    <button className={classNames(styles.stop, styles.isSkeleton)}>
+      <div className={styles.name}>
+        <Shimmer width={`${width}%`} />
+      </div>
+
+      <div className={styles.time}>
+        <Shimmer width="2rem" />
+      </div>
+    </button>
   );
 };
 
