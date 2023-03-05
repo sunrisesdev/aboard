@@ -18,12 +18,12 @@
   &::after {
     background-image: linear-gradient(to top, #FFF, #FFF0);
     bottom: 0;
-    opacity: var(--bottom-fog-opacity);
+    opacity: var(--bottom-fog-opacity, 0);
   }
 
   &::before {
     background-image: linear-gradient(to bottom, #FFF, #FFF0);
-    opacity: var(--top-fog-opacity);
+    opacity: var(--top-fog-opacity, 0);
     top: 0;
   }
 

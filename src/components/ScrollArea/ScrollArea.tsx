@@ -40,16 +40,13 @@ const ScrollArea = ({
     });
 
     const handleScroll = () => {
-      if (viewport.scrollTop === 0) {
+      if (viewport.scrollTop <= 0) {
         root.style.setProperty('--top-fog-opacity', '0');
       } else if (root.style.getPropertyValue('--top-fog-opacity') !== '1') {
         root.style.setProperty('--top-fog-opacity', '1');
       }
 
-      if (
-        viewport.clientHeight + viewport.scrollTop ===
-        viewport.scrollHeight
-      ) {
+      if (viewport.clientHeight + viewport.scrollTop >= viewport.scrollHeight) {
         root.style.setProperty('--bottom-fog-opacity', '0');
       } else if (root.style.getPropertyValue('--bottom-fog-opacity') !== '1') {
         root.style.setProperty('--bottom-fog-opacity', '1');
