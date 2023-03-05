@@ -1,0 +1,10 @@
+.base {
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+
+  &.isOpen {
+    background-color: #FFF;
+    height: 100vh;
+  }
+}

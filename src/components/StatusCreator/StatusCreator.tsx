@@ -1,4 +1,4 @@
-import useIsDesktop from '@/hooks/useIsDesktop/useIsDesktop';
+import { useIsDesktop } from '@/hooks/useIsDesktop/useIsDesktop';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 import {
   MdOutlineBeachAccess,

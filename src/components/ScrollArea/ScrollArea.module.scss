@@ -4,7 +4,7 @@
 }
 
 .scrollbar {
-  background-color: var(--blackA6);
+  // background-color: var(--blackA6);
   display: flex;
   padding: 2px;
   touch-action: none;
@@ -13,7 +13,7 @@
 }
 
 .scrollbar:hover {
-  background-color: var(--blackA8);
+  // background-color: var(--blackA8);
 }
 
 .scrollbar[data-orientation='vertical'] {

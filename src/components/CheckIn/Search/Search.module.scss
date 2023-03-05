@@ -1,0 +1,46 @@
+.base {
+  background-color: #FFF;
+  border-radius: 0.375rem;
+  box-shadow: rgba(99, 99, 99, 0.2) 0 0.125rem 0.5rem 0; // CSS Scan #6
+  display: flex;
+  height: 2.75rem;
+}
+
+.input {
+  border: none;
+  flex-grow: 1;
+  outline: none;
+  padding-inline: 1rem;
+}
+
+.leftAddon,
+.rightAddon {
+  align-items: center;
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  padding-inline: 1rem;
+  position: relative;
+}
+
+.leftAddon::after,
+.rightAddon::before {
+  background-color: var(--slate4);
+  content: "";
+  display: block;
+  height: 1.5rem;
+  position: absolute;
+  width: 1px;
+}
+
+.leftAddon::after {
+  right: 0;
+}
+
+.rightAddon::before {
+  left: 0;
+}
