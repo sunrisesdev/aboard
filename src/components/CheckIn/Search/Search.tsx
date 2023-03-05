@@ -1,18 +1,15 @@
+import { NearbyResponse } from '@/traewelling-sdk/functions/trains';
 import { debounce } from '@/utils/debounce';
-import {
-  ChangeEventHandler,
-  MouseEventHandler,
-  useContext,
-  useState,
-} from 'react';
+import { useSession } from 'next-auth/react';
+import { ChangeEventHandler, MouseEventHandler, useContext } from 'react';
 import { MdArrowBack, MdMyLocation, MdSearch } from 'react-icons/md';
 import { CheckInContext } from '../CheckIn.context';
 import styles from './Search.module.scss';
 
 const Search = () => {
-  const { goBack, isOpen, query, setIsOpen, setQuery } =
+  const { data: session } = useSession();
+  const { goBack, isOpen, setIsOpen, setOrigin, setQuery } =
     useContext(CheckInContext);
-  const [value, setValue] = useState('');
 
   const handleBackClick: MouseEventHandler<HTMLButtonElement> = (event) => {
     if (!isOpen) {
@@ -28,9 +25,39 @@ const Search = () => {
   };
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = ({ target }) => {
-    setValue(target.value);
-
     debounce(() => setQuery(target.value), 500)();
+  };
+
+  const handleNearbyClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+    if (isOpen) {
+      event.stopPropagation();
+    }
+
+    if (!session) {
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(async ({ coords }) => {
+      const response = await fetch(
+        `/api/stations/nearby?latitude=${coords.latitude}&longitude=${coords.longitude}`,
+        {
+          headers: {
+            Authorization: `Bearer ${session.user.accessToken}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        return;
+      }
+
+      const station = (await response.json()) as NearbyResponse;
+      setOrigin({
+        ibnr: station.ibnr,
+        name: station.name,
+        rilIdentifier: station.rilIdentifier,
+      });
+    });
   };
 
   return (
@@ -45,7 +72,7 @@ const Search = () => {
         placeholder="Wo bist du?"
       />
 
-      <button className={styles.rightAddon}>
+      <button className={styles.rightAddon} onClick={handleNearbyClick}>
         <MdMyLocation size={20} />
       </button>
     </div>
