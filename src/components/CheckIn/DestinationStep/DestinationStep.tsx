@@ -39,7 +39,7 @@ const DestinationStep = () => {
     >
       <header className={styles.header}>
         <button className={styles.backButton} onClick={goBack}>
-          <div className="arrow">
+          <div className={styles.arrow}>
             <MdArrowBack size={20} />
           </div>
           {trip && (

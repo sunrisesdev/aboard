@@ -13,7 +13,12 @@
   color: #FFF;
 }
 
-.backButton {
+.buttons {
+  display: flex;
+}
+
+.backButton,
+.confirmButton {
   align-items: flex-start;
   appearance: none;
   background: none;
@@ -28,11 +33,18 @@
 
   .arrow {
     flex-shrink: 0;
+    padding-right: 3rem;
   }
 
   span {
     text-align: left;
   }
+}
+
+.confirmButton {
+  flex-shrink: 0;
+  padding-left: 3rem;
+  width: auto;
 }
 
 .lineName {
@@ -74,10 +86,10 @@
   }
 }
 
+.destination,
 .origin {
   margin-inline: 1rem;
   padding-bottom: 1rem;
-  // padding-left: 2rem;
   padding-left: 1.625rem;
   position: relative;
 
@@ -88,10 +100,8 @@
     content: '';
     display: block;
     height: 6px;
-    // left: 0.8125rem;
     left: 2px;
     position: absolute;
-    top: 0.5625rem;
     width: 6px;
   }
 
@@ -100,10 +110,8 @@
     content: '';
     display: block;
     height: calc(100% - 0.5625rem);
-    // left: 0.9375rem;
     left: 4px;
     position: absolute;
-    top: 0.5625rem;
     width: 2px;
   }
 
@@ -121,6 +129,28 @@
   }
 }
 
+.origin {
+  &::after,
+  &::before {
+    top: 0.5625rem;
+  }
+}
+
+.destination {
+  margin-bottom: 1rem;
+  padding-bottom: 0;
+
+  &::after,
+  &::before {
+    top: 0.5625rem;
+  }
+
+  &::before {
+    height: 0.5625rem;
+    top: 0;
+  }
+}
+
 .sheet {
   background-color: #FFF;
   border-radius: 1rem 1rem 0 0;
@@ -132,130 +162,89 @@
   height: 100%;
 }
 
-.stopList {
+.content {
   display: flex;
   flex-direction: column;
-  list-style: none;
+  gap: 1rem;
   margin: 0;
   max-height: 100%;
-  padding-top: 1rem;
+  padding: 1rem;
+}
 
-  &::before {
-    background-color: var(--accent-color);
-    content: '';
-    display: block;
-    height: 2.5rem;
-    // left: 1.9375rem;
-    left: 1.25rem;
-    position: absolute;
-    top: 0;
-    width: 2px;
+.textarea {
+  border: 1px solid var(--slate7);
+  border-radius: 0.375rem;
+  flex-shrink: 0;
+  line-height: 1.5;
+  max-height: 12rem;
+  min-height: 4rem;
+  padding: 0.375rem 0.5rem;
+  resize: vertical;
+  width: 100%;
+
+  &:hover {
+    border-color: var(--slate8);
   }
 
-  li:last-of-type .stop::before {
-    height: calc(100% - 1.25rem);
+  &:focus-within {
+    box-shadow: 0 0 0 2px #FFF, 0 0 0 4px var(--sky7);
+    outline: none;
   }
 }
 
-.stop {
-  appearance: none;
+.label {
   align-items: center;
-  background: none;
+  display: flex;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.characterLimit {
+  font-size: 0.875rem;
+  margin-left: auto;
+}
+
+.radioGroup {
+  display: flex;
+  // flex-direction: column;
+  gap: 0.5rem;
+
+  @media screen and (min-width: 600px) {
+    flex-direction: row;
+  }
+}
+
+.radioItem {
+  align-items: center;
+  appearance: none;
+  background-color: var(--slate3);
   border: none;
-  color: var(--slate12);
+  border-radius: 0.375rem;
+  color: var(--sky12);
   cursor: pointer;
   display: flex;
-  height: 3rem;
-  // padding-left: 3rem;
-  padding-left: 2.625rem;
-  padding-right: 1rem;
+  font-weight: 500;
+  gap: 0.5rem;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0.75rem;
   position: relative;
-  text-align: left;
-  user-select: none;
   width: 100%;
-
-  &:active {
-    background-color: var(--slate5);
-  }
 
   &:hover {
     background-color: var(--slate4);
   }
 
-  &::after {
-    background-color: #FFF;
-    border-radius: 50%;
-    box-shadow: 0 0 0 2px var(--accent-color);
-    content: '';
-    display: block;
-    height: 6px;
-    // left: 1.8125rem;
-    left: 1.125rem;
-    position: absolute;
-    top: 1.25rem;
-    width: 6px;
+  &[data-state="checked"] {
+    background-color: var(--sky4);
+    color: var(--sky11);
   }
 
-  &::before {
-    background-color: var(--accent-color);
-    content: '';
-    display: block;
-    height: 100%;
-    // left: 1.9375rem;
-    left: 1.25rem;
-    position: absolute;
-    top: 0;
-    width: 2px;
+  span {
+    margin-left: auto;
   }
 
-  &:disabled, &[disabled] {
-    pointer-events: none;
-
-    &::after {
-      opacity: 0;
-    }
-
-    &::before {
-      background-color: #FFF;
-      border-left: 2px dotted var(--accent-color);
-    }
-
-    .name, .time {
-      color: var(--crimson11);
-      text-decoration: line-through;
-    }
-  }
-
-  &.isSkeleton {
-    pointer-events: none;
-  }
-
-  .name {
-    flex-grow: 1;
-  }
-
-  .time {
-    align-items: flex-end;
-    display: flex;
-    flex-direction: column;
-    font-size: 0.875rem;
-    font-weight: 500;
-    padding-left: 0.5rem;
-
-    .isDelayed {
-      color: var(--sky11);
-      font-weight: 400;
-      text-decoration: line-through;
-    }
-  }
-
-  .cancelledNote {
-    align-items: center;
-    color: var(--crimson11);
-    display: flex;
-    font-size: 0.75rem;
-    font-weight: 600;
-    gap: 0.25rem;
-    text-transform: uppercase;
+  @media screen and (min-width: 600px) {
+    padding: 0.625rem 0.75rem;
   }
 }
