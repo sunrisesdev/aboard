@@ -1,5 +1,5 @@
 import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
-import { Station } from '@/traewelling-sdk/types';
+import { Station, Stop } from '@/traewelling-sdk/types';
 import { useState } from 'react';
 import { CheckInContext } from './CheckIn.context';
 import DestinationStep from './DestinationStep/DestinationStep';
@@ -11,6 +11,7 @@ import { CheckInContextValue, CheckInStep } from './types';
 const STEPS: CheckInStep[] = ['origin', 'trip', 'destination', 'final'];
 
 const CheckIn = () => {
+  const [destination, setDestination] = useState<Stop>();
   const [isOpen, setIsOpen] = useState(false);
   const [origin, setOrigin] =
     useState<Pick<Station, 'ibnr' | 'name' | 'rilIdentifier'>>();
@@ -30,14 +31,23 @@ const CheckIn = () => {
   };
 
   const contextValue: CheckInContextValue = {
+    destination,
     goBack,
     isOpen,
     origin,
     query,
+    setDestination: (value) => {
+      setDestination(value);
+
+      if (!!value) {
+        setStep('final');
+      }
+    },
     setIsOpen,
     setOrigin: (value) => {
       setOrigin(value);
       setTrip(undefined);
+      setDestination(undefined);
 
       if (!!value) {
         setStep('trip');
@@ -46,6 +56,7 @@ const CheckIn = () => {
     setQuery,
     setTrip: (value) => {
       setTrip(value);
+      setDestination(undefined);
 
       if (!!value) {
         setStep('destination');

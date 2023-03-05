@@ -15,7 +15,7 @@ import styles from './DestinationStep.module.scss';
 import { StopProps } from './types';
 
 const DestinationStep = () => {
-  const { goBack, origin, trip } = useContext(CheckInContext);
+  const { goBack, origin, setDestination, trip } = useContext(CheckInContext);
   const { isLoading, stops } = useStops(
     trip?.tripId ?? '',
     trip?.line.name ?? '',
@@ -96,7 +96,7 @@ const DestinationStep = () => {
                       (!stop.arrival && stop.isDepartureDelayed)
                     }
                     name={stop.name}
-                    onClick={() => void 0}
+                    onClick={() => setDestination(stop)}
                     plannedArrivalAt={
                       stop.arrivalPlanned ?? stop.departurePlanned
                     }

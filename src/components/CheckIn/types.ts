@@ -1,11 +1,13 @@
 import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
-import { Station } from '@/traewelling-sdk/types';
+import { Station, Stop } from '@/traewelling-sdk/types';
 
 export type CheckInContextValue = {
+  destination: Stop | undefined;
   goBack: () => void;
   isOpen: boolean;
   origin: Pick<Station, 'ibnr' | 'name' | 'rilIdentifier'> | undefined;
   query: string;
+  setDestination: (value: Stop | undefined) => void;
   setIsOpen: (value: boolean) => void;
   setOrigin: (
     value: Pick<Station, 'ibnr' | 'name' | 'rilIdentifier'> | undefined
