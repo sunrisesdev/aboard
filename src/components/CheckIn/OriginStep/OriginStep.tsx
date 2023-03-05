@@ -23,17 +23,35 @@ const OriginStep = () => {
 
       {isOpen && (
         <ScrollArea className={styles.scrollArea}>
-          {query.length > 0 && (
+          <div className={styles.scrollContent}>
+            {query.length > 0 && (
+              <section className={styles.container}>
+                <div className={styles.title}>Suchergebnisse</div>
+                {stations && stations.length > 0 && (
+                  <ul className={styles.stationList}>
+                    {stations.map((station) => (
+                      <li key={station.ibnr}>
+                        <Station
+                          name={station.name}
+                          onClick={() => void 0}
+                          query={query}
+                          rilIdentifier={station.rilIdentifier}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            )}
             <section className={styles.container}>
-              <div>Suchergebnisse</div>
-              {stations && stations.length > 0 && (
+              <div className={styles.title}>Letzte Stationen</div>
+              {recentStations && recentStations.length > 0 && (
                 <ul className={styles.stationList}>
-                  {stations.map((station) => (
+                  {recentStations.map((station) => (
                     <li key={station.ibnr}>
                       <Station
                         name={station.name}
                         onClick={() => void 0}
-                        query={query}
                         rilIdentifier={station.rilIdentifier}
                       />
                     </li>
@@ -41,24 +59,7 @@ const OriginStep = () => {
                 </ul>
               )}
             </section>
-          )}
-
-          <section className={styles.container}>
-            <div>Letzte Stationen</div>
-            {recentStations && recentStations.length > 0 && (
-              <ul className={styles.stationList}>
-                {recentStations.map((station) => (
-                  <li key={station.ibnr}>
-                    <Station
-                      name={station.name}
-                      onClick={() => void 0}
-                      rilIdentifier={station.rilIdentifier}
-                    />
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
+          </div>
         </ScrollArea>
       )}
     </main>
