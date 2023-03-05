@@ -20,7 +20,7 @@ const LineIndicator = ({
       className={classNames(styles.base, inter.className, className)}
       style={{ backgroundColor: `var(--color-${product})` }}
     >
-      {displayName}
+      {displayName || productName}
     </div>
   );
 };
