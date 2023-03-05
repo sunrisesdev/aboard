@@ -1,22 +1,39 @@
 'use client';
 
+import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
-import { useDepartures } from '@/hooks/useDepartures/useDepartures';
+import { useStops } from '@/hooks/useStops/useStops';
+import { inter } from '@/styles/fonts';
+import classNames from 'classnames';
 import { useContext } from 'react';
-import { MdArrowBack } from 'react-icons/md';
+import { MdArrowBack, MdMergeType } from 'react-icons/md';
+import { TbRouteOff } from 'react-icons/tb';
 import { CheckInContext } from '../CheckIn.context';
 import { PRODUCT_ICONS } from '../consts';
 import styles from './DestinationStep.module.scss';
+import { StopProps } from './types';
 
 const DestinationStep = () => {
   const { goBack, origin, trip } = useContext(CheckInContext);
-  const { departures, isLoading } = useDepartures(origin?.name ?? '');
+  const { isLoading, stops } = useStops(
+    trip?.tripId ?? '',
+    trip?.line.name ?? '',
+    trip?.plannedWhen ?? '',
+    trip?.station.id.toString() ?? ''
+  );
+
+  const departure = trip && new Date(trip.plannedWhen);
+
+  const departureTime = departure?.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
   return (
     <main
       className={styles.base}
       style={{
-        ['--background-color' as any]: `var(--color-${trip?.line.product})`,
+        ['--accent-color' as any]: `var(--color-${trip?.line.product})`,
       }}
     >
       <header className={styles.header}>
@@ -24,21 +41,60 @@ const DestinationStep = () => {
           <div className="arrow">
             <MdArrowBack size={20} />
           </div>
-          {trip &&
-            PRODUCT_ICONS[trip.line.product]({ className: styles.productIcon })}
-          <span>{origin?.name}</span>
+          {trip && (
+            <div className={styles.lineName}>
+              {PRODUCT_ICONS[trip.line.product]({
+                className: styles.productIcon,
+              })}
+              <LineIndicator
+                className={styles.lineIndicator}
+                lineName={trip.line.name}
+                product={trip.line.product}
+                productName={trip.line.productName}
+              />
+            </div>
+          )}
+          <div style={{ width: '1.25rem' }} />
         </button>
+
+        <div className={styles.direction}>{trip?.direction}</div>
+
+        {trip?.station.name !== origin?.name && (
+          <div className={styles.deviationNotice}>
+            <MdMergeType size={18} />
+            <span>Abweichende Abfahrt von einer Station in der Nähe</span>
+          </div>
+        )}
+
+        <div className={styles.origin}>
+          <div className={styles.station}>
+            <div>{trip?.station.name}</div>
+            <span className={styles.time}>
+              ab {departureTime}
+              {trip && trip.delay > 0 && (
+                <span className={styles.delay}>+{trip.delay / 60}</span>
+              )}
+            </span>
+          </div>
+        </div>
       </header>
 
       <div className={styles.sheet}>
         <ScrollArea className={styles.scrollArea}>
-          {departures?.trips && departures.trips.length > 0 && (
+          {stops && stops.length > 0 && (
             <ul className={styles.stopList}>
-              {departures.trips.map((trip) => (
-                <li
-                  key={`${trip.tripId}@${trip.station.ibnr}@${trip.plannedWhen}`}
-                >
-                  <div />
+              {stops.map((stop, index) => (
+                <li key={index}>
+                  <Stop
+                    arrivalAt={stop.arrival ?? stop.departure}
+                    isCancelled={stop.cancelled}
+                    isDelayed={stop.isArrivalDelayed || stop.isDepartureDelayed}
+                    name={stop.name}
+                    onClick={() => void 0}
+                    plannedArrivalAt={
+                      stop.arrivalPlanned ?? stop.departurePlanned
+                    }
+                  />
                 </li>
               ))}
             </ul>
@@ -66,6 +122,48 @@ const DestinationStep = () => {
         </ScrollArea>
       </div>
     </main>
+  );
+};
+
+const Stop = ({
+  arrivalAt,
+  isCancelled,
+  isDelayed,
+  name,
+  onClick,
+  plannedArrivalAt,
+}: StopProps) => {
+  const arrivalTime =
+    arrivalAt &&
+    new Date(arrivalAt).toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  const plannedArrivalTime =
+    plannedArrivalAt &&
+    new Date(plannedArrivalAt).toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+  return (
+    <button className={styles.stop} disabled={isCancelled} onClick={onClick}>
+      <div className={styles.name}>{name}</div>
+
+      {!isCancelled ? (
+        <div className={styles.time}>
+          <div className={classNames({ [styles.isDelayed]: isDelayed })}>
+            {plannedArrivalTime}
+          </div>
+          {isDelayed && <div>{arrivalTime}</div>}
+        </div>
+      ) : (
+        <aside className={classNames(styles.cancelledNote, inter.className)}>
+          <TbRouteOff />
+          <span>Halt entfällt</span>
+        </aside>
+      )}
+    </button>
   );
 };
 
