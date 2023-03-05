@@ -91,7 +91,10 @@ const DestinationStep = () => {
                   <Stop
                     arrivalAt={stop.arrival ?? stop.departure}
                     isCancelled={stop.cancelled}
-                    isDelayed={stop.isArrivalDelayed || stop.isDepartureDelayed}
+                    isDelayed={
+                      stop.isArrivalDelayed ||
+                      (!stop.arrival && stop.isDepartureDelayed)
+                    }
                     name={stop.name}
                     onClick={() => void 0}
                     plannedArrivalAt={
