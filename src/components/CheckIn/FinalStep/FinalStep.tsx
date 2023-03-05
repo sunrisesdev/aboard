@@ -34,6 +34,7 @@ const FinalStep = () => {
   const {
     checkIn,
     destination,
+    error,
     goBack,
     message,
     origin,
@@ -223,6 +224,8 @@ const FinalStep = () => {
                 </RadioGroup.Item>
               </RadioGroup.Root>
             </section>
+
+            {!!error && <article className={styles.error}>{error}</article>}
           </div>
         </ScrollArea>
       </div>

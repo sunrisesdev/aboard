@@ -248,3 +248,11 @@
     padding: 0.625rem 0.75rem;
   }
 }
+
+.error {
+  background-color: var(--crimson3);
+  border-radius: 0.375rem;
+  color: var(--crimson11);
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+}
