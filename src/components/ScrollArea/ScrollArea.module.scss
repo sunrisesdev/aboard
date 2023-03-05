@@ -1,10 +1,40 @@
 .base {
   overflow: hidden;
+  position: relative;
   --scrollbar-size: 0.625rem;
+
+  &::after,
+  &::before {
+    display: block;
+    height: 3rem;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    transition: opacity 0.2s linear;
+    z-index: 999999;
+  }
+
+  &::after {
+    background-image: linear-gradient(to top, #FFF, #FFF0);
+    bottom: 0;
+    opacity: var(--bottom-fog-opacity, 1);
+  }
+
+  &::before {
+    background-image: linear-gradient(to bottom, #FFF, #FFF0);
+    opacity: var(--top-fog-opacity, 0);
+    top: 0;
+  }
+
+  &.hasFog::after,
+  &.hasFog::before {
+    content: '';
+  }
 }
 
 .scrollbar {
-  background-color: var(--blackA6);
+  // background-color: var(--blackA6);
   display: flex;
   padding: 2px;
   touch-action: none;
@@ -12,9 +42,9 @@
   user-select: none;
 }
 
-.scrollbar:hover {
-  background-color: var(--blackA8);
-}
+// .scrollbar:hover {
+//   background-color: var(--blackA8);
+// }
 
 .scrollbar[data-orientation='vertical'] {
   width: var(--scrollbar-size);

@@ -1,6 +1,7 @@
 'use client';
 
 import Button from '@/components/Button/Button';
+import CheckIn from '@/components/CheckIn/CheckIn';
 import CheckInDialog from '@/components/CheckInDialog/CheckInDialog';
 import { signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
@@ -15,6 +16,8 @@ const DashboardHome = () => {
       <Button onClick={() => signOut()}>Abmelden</Button>
       <Button onClick={() => setCheckInOpen(true)}>Check-In</Button>
       <CheckInDialog isOpen={checkInOpen} onIsOpenChange={setCheckInOpen} />
+
+      <CheckIn />
     </main>
   );
 };

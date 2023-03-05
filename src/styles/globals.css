@@ -1,4 +1,6 @@
 @import '@radix-ui/colors/blackA.css';
+@import '@radix-ui/colors/whiteA.css';
+
 @import '@radix-ui/colors/amber.css';
 @import '@radix-ui/colors/crimson.css';
 @import '@radix-ui/colors/green.css';
@@ -8,10 +10,10 @@
 :root {
   --color-bus: #A3007C;
   --color-ferry: #284B63;
-  --color-national: #CC0605;
-  --color-nationalExpress: #CC0605;
-  --color-regional: #CC0605;
-  --color-regionalExp: #CC0605;
+  --color-national: #2B2D42; /* #CC0605 */
+  --color-nationalExpress: #2B2D42;
+  --color-regional: #2B2D42;
+  --color-regionalExp: #2B2D42;
   --color-suburban: #006F35;
   --color-subway: #0065AE;
   --color-taxi: #AF8000;

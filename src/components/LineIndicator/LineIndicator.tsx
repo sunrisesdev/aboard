@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import styles from './LineIndicator.module.scss';
 import { LineIndicatorProps } from './types';
 
-const HIDDEN_PRODUCT_NAMES = ['Bus', 'STR'];
+const HIDDEN_PRODUCT_NAMES = ['Bus', 'STB', 'STR'];
 
 const LineIndicator = ({
   className,
@@ -20,7 +20,7 @@ const LineIndicator = ({
       className={classNames(styles.base, inter.className, className)}
       style={{ backgroundColor: `var(--color-${product})` }}
     >
-      {displayName}
+      {displayName || productName}
     </div>
   );
 };
