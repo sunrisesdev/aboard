@@ -1,6 +1,7 @@
 'use client';
 
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
+import Shimmer from '@/components/Shimmer/Shimmer';
 import { useRecentStations } from '@/hooks/useRecentStations/useRecentStations';
 import { useStationSearch } from '@/hooks/useStationSearch/useStationSearch';
 import classNames from 'classnames';
@@ -11,9 +12,10 @@ import styles from './OriginStep.module.scss';
 import { StationProps } from './types';
 
 const OriginStep = () => {
-  const { isOpen, query } = useContext(CheckInContext);
-  const { recentStations } = useRecentStations();
-  const { stations } = useStationSearch(query);
+  const { isOpen, query, setOrigin } = useContext(CheckInContext);
+  const { isLoading: isLoadingRecentStations, recentStations } =
+    useRecentStations();
+  const { isLoading: isLoadingStations, stations } = useStationSearch(query);
 
   return (
     <main className={classNames(styles.base, { [styles.isOpen]: isOpen })}>
@@ -33,7 +35,7 @@ const OriginStep = () => {
                       <li key={station.ibnr}>
                         <Station
                           name={station.name}
-                          onClick={() => void 0}
+                          onClick={() => setOrigin(station)}
                           query={query}
                           rilIdentifier={station.rilIdentifier}
                         />
@@ -41,8 +43,29 @@ const OriginStep = () => {
                     ))}
                   </ul>
                 )}
+
+                {isLoadingStations && (
+                  <ul className={styles.stationList}>
+                    <li>
+                      <StationSkeleton />
+                    </li>
+                    <li>
+                      <StationSkeleton />
+                    </li>
+                    <li>
+                      <StationSkeleton />
+                    </li>
+                    <li>
+                      <StationSkeleton />
+                    </li>
+                    <li>
+                      <StationSkeleton />
+                    </li>
+                  </ul>
+                )}
               </section>
             )}
+
             <section className={styles.container}>
               <div className={styles.title}>Letzte Stationen</div>
               {recentStations && recentStations.length > 0 && (
@@ -51,11 +74,31 @@ const OriginStep = () => {
                     <li key={station.ibnr}>
                       <Station
                         name={station.name}
-                        onClick={() => void 0}
+                        onClick={() => setOrigin(station)}
                         rilIdentifier={station.rilIdentifier}
                       />
                     </li>
                   ))}
+                </ul>
+              )}
+
+              {isLoadingRecentStations && (
+                <ul className={styles.stationList}>
+                  <li>
+                    <StationSkeleton />
+                  </li>
+                  <li>
+                    <StationSkeleton />
+                  </li>
+                  <li>
+                    <StationSkeleton />
+                  </li>
+                  <li>
+                    <StationSkeleton />
+                  </li>
+                  <li>
+                    <StationSkeleton />
+                  </li>
                 </ul>
               )}
             </section>
@@ -63,6 +106,16 @@ const OriginStep = () => {
         </ScrollArea>
       )}
     </main>
+  );
+};
+
+const StationSkeleton = () => {
+  const width = Math.random() * (85 - 50) + 50;
+
+  return (
+    <button className={classNames(styles.station, styles.isSkeleton)}>
+      <Shimmer width={`${width}%`} />
+    </button>
   );
 };
 

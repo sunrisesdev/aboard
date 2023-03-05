@@ -1,3 +1,4 @@
+import { Station } from '@/traewelling-sdk/types';
 import { useState } from 'react';
 import { CheckInContext } from './CheckIn.context';
 import OriginStep from './OriginStep/OriginStep';
@@ -8,6 +9,8 @@ const STEPS: CheckInStep[] = ['origin', 'trip', 'destination', 'final'];
 
 const CheckIn = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [origin, setOrigin] =
+    useState<Pick<Station, 'ibnr' | 'name' | 'rilIdentifier'>>();
   const [query, setQuery] = useState('');
   const [step, setStep] = useState<CheckInStep>('origin');
 
@@ -25,8 +28,16 @@ const CheckIn = () => {
   const contextValue: CheckInContextValue = {
     goBack,
     isOpen,
+    origin,
     query,
     setIsOpen,
+    setOrigin: (value) => {
+      setOrigin(value);
+
+      if (!!value) {
+        setStep('trip');
+      }
+    },
     setQuery,
     step,
   };
