@@ -1,0 +1,61 @@
+@import '@/styles/index';
+
+.base {
+  background-color: var(--background-color, --sky11);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.header {
+  color: #FFF;
+}
+
+.backButton {
+  align-items: flex-start;
+  appearance: none;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  font-size: 1.125rem;
+  font-weight: 500;
+  gap: 1rem;
+  padding: 1.75rem 1rem 1rem;
+
+  .arrow {
+    flex-shrink: 0;
+  }
+
+  span {
+    text-align: left;
+  }
+}
+
+.productIcon {
+  height: 1.25rem;
+}
+
+.sheet {
+  background-color: #FFF;
+  border-radius: 1rem 1rem 0 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.scrollArea {
+  height: 100%;
+}
+
+.stopList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  max-height: 100%;
+  padding-block: 1rem;
+}
