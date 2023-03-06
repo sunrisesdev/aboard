@@ -1,6 +1,6 @@
 import { inter } from '@/styles/fonts';
 import { TripResponse } from '@/traewelling-sdk/functions/trains';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { TbRouteOff } from 'react-icons/tb';
@@ -120,7 +120,7 @@ const StationSkeleton = () => {
   const width = Math.random() * (85 - 50) + 50;
 
   return (
-    <button className={classNames(styles.station, styles.isSkeleton)}>
+    <button className={clsx(styles.station, styles.isSkeleton)}>
       <div className={styles.name}>
         <Shimmer width={`${width}%`} />
       </div>
@@ -159,13 +159,13 @@ const Station = ({
 
       {!isCancelled ? (
         <div className={styles.time}>
-          <div className={classNames({ [styles.isDelayed]: isDelayed })}>
+          <div className={clsx({ [styles.isDelayed]: isDelayed })}>
             {plannedArrivalTime}
           </div>
           {isDelayed && <div>{arrivalTime}</div>}
         </div>
       ) : (
-        <aside className={classNames(styles.cancelledNote, inter.className)}>
+        <aside className={clsx(styles.cancelledNote, inter.className)}>
           <TbRouteOff />
           <span>Halt entfällt</span>
         </aside>

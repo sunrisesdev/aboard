@@ -5,7 +5,7 @@ import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
 import { useDepartures } from '@/hooks/useDepartures/useDepartures';
 import { inter } from '@/styles/fonts';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useContext } from 'react';
 import { MdArrowBack } from 'react-icons/md';
 import { TbRouteOff } from 'react-icons/tb';
@@ -84,7 +84,7 @@ const TripSkeleton = () => {
   const width = Math.random() * (85 - 50) + 50;
 
   return (
-    <button className={classNames(styles.trip, styles.isSkeleton)}>
+    <button className={clsx(styles.trip, styles.isSkeleton)}>
       <div className={styles.product} />
 
       <div className={styles.line}>
@@ -139,7 +139,7 @@ const Trip = ({
       disabled={departureAt === null}
       onClick={onClick}
     >
-      <div className={classNames(styles.product, styles[product])} />
+      <div className={clsx(styles.product, styles[product])} />
 
       <div className={styles.line}>
         {PRODUCT_ICONS[product]({
@@ -161,14 +161,14 @@ const Trip = ({
       </div>
 
       <div className={styles.time}>
-        <div className={classNames({ [styles.isDelayed]: delay > 0 })}>
+        <div className={clsx({ [styles.isDelayed]: delay > 0 })}>
           {plannedDepartureTime}
         </div>
         {delay > 0 && <div>{departureTime}</div>}
       </div>
 
       {departureAt === null && (
-        <aside className={classNames(styles.cancelledNote, inter.className)}>
+        <aside className={clsx(styles.cancelledNote, inter.className)}>
           <TbRouteOff />
           <span>Fällt aus</span>
         </aside>

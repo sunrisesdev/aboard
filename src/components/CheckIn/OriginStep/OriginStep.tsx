@@ -4,7 +4,7 @@ import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
 import { useRecentStations } from '@/hooks/useRecentStations/useRecentStations';
 import { useStationSearch } from '@/hooks/useStationSearch/useStationSearch';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useContext } from 'react';
 import { CheckInContext } from '../CheckIn.context';
 import Search from '../Search/Search';
@@ -18,7 +18,7 @@ const OriginStep = () => {
   const { isLoading: isLoadingStations, stations } = useStationSearch(query);
 
   return (
-    <main className={classNames(styles.base, { [styles.isOpen]: isOpen })}>
+    <main className={clsx(styles.base, { [styles.isOpen]: isOpen })}>
       <section className={styles.container}>
         <Search />
       </section>
@@ -113,7 +113,7 @@ const StationSkeleton = () => {
   const width = Math.random() * (85 - 50) + 50;
 
   return (
-    <button className={classNames(styles.station, styles.isSkeleton)}>
+    <button className={clsx(styles.station, styles.isSkeleton)}>
       <Shimmer width={`${width}%`} />
     </button>
   );

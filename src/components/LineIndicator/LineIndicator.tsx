@@ -1,5 +1,5 @@
 import { inter } from '@/styles/fonts';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import styles from './LineIndicator.module.scss';
 import { LineIndicatorProps } from './types';
 
@@ -17,7 +17,7 @@ const LineIndicator = ({
 
   return (
     <div
-      className={classNames(styles.base, inter.className, className)}
+      className={clsx(styles.base, inter.className, className)}
       style={{ backgroundColor: `var(--color-${product})` }}
     >
       {displayName || productName}

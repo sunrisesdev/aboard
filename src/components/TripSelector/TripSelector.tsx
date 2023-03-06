@@ -1,6 +1,6 @@
 import { inter } from '@/styles/fonts';
 import { DeparturesResponse } from '@/traewelling-sdk/functions/trains';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { ReactNode } from 'react';
@@ -113,7 +113,7 @@ const TripSkeleton = () => {
   const width = Math.random() * (85 - 50) + 50;
 
   return (
-    <button className={classNames(styles.trip, styles.isSkeleton)}>
+    <button className={clsx(styles.trip, styles.isSkeleton)}>
       <div className={styles.product} />
 
       <div className={styles.line}>
@@ -168,7 +168,7 @@ const Trip = ({
       disabled={departureAt === null}
       onClick={onClick}
     >
-      <div className={classNames(styles.product, styles[product])} />
+      <div className={clsx(styles.product, styles[product])} />
 
       <div className={styles.line}>
         {product in SPECIAL_PRODUCT_ICONS ? (
@@ -194,14 +194,14 @@ const Trip = ({
       </div>
 
       <div className={styles.time}>
-        <div className={classNames({ [styles.isDelayed]: delay > 0 })}>
+        <div className={clsx({ [styles.isDelayed]: delay > 0 })}>
           {plannedDepartureTime}
         </div>
         {delay > 0 && <div>{departureTime}</div>}
       </div>
 
       {departureAt === null && (
-        <aside className={classNames(styles.cancelledNote, inter.className)}>
+        <aside className={clsx(styles.cancelledNote, inter.className)}>
           <TbRouteOff />
           <span>Fällt aus</span>
         </aside>

@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Children } from 'react';
 import styles from './IconSkew.module.scss';
 import { IconSkewProps } from './types';
@@ -15,7 +15,7 @@ const IconSkew = ({ children, className, gap, size }: IconSkewProps) => {
   ));
 
   return (
-    <div className={classNames(styles.base, className)} style={{ gap }}>
+    <div className={clsx(styles.base, className)} style={{ gap }}>
       {items}
     </div>
   );

@@ -1,5 +1,5 @@
 import * as RadixScrollArea from '@radix-ui/react-scroll-area';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 import styles from './ScrollArea.module.scss';
 import { ScrollAreaProps } from './types';
@@ -67,7 +67,7 @@ const ScrollArea = ({
 
   return (
     <RadixScrollArea.Root
-      className={classNames(styles.base, className, {
+      className={clsx(styles.base, className, {
         [styles.hasFog]: contentHeight > viewportHeight && !noFog,
       })}
       ref={rootRef}

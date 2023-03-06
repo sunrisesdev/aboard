@@ -5,7 +5,7 @@ import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
 import { useStops } from '@/hooks/useStops/useStops';
 import { inter } from '@/styles/fonts';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useContext } from 'react';
 import { MdArrowBack, MdMergeType } from 'react-icons/md';
 import { TbRouteOff } from 'react-icons/tb';
@@ -135,7 +135,7 @@ const StopSkeleton = () => {
   const width = Math.random() * (85 - 50) + 50;
 
   return (
-    <button className={classNames(styles.stop, styles.isSkeleton)}>
+    <button className={clsx(styles.stop, styles.isSkeleton)}>
       <div className={styles.name}>
         <Shimmer width={`${width}%`} />
       </div>
@@ -174,13 +174,13 @@ const Stop = ({
 
       {!isCancelled ? (
         <div className={styles.time}>
-          <div className={classNames({ [styles.isDelayed]: isDelayed })}>
+          <div className={clsx({ [styles.isDelayed]: isDelayed })}>
             {plannedArrivalTime}
           </div>
           {isDelayed && <div>{arrivalTime}</div>}
         </div>
       ) : (
-        <aside className={classNames(styles.cancelledNote, inter.className)}>
+        <aside className={clsx(styles.cancelledNote, inter.className)}>
           <TbRouteOff />
           <span>Halt entfällt</span>
         </aside>
