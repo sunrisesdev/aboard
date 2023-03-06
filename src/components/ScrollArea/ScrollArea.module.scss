@@ -23,6 +23,7 @@
 
   &::before {
     background-image: linear-gradient(to bottom, #FFF, #FFF0);
+    border-radius: var(--top-fog-border-radius, 0) var(--top-fog-border-radius, 0) 0 0;
     opacity: var(--top-fog-opacity, 0);
     top: 0;
   }

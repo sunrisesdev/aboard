@@ -144,7 +144,7 @@ const FinalStep = () => {
       </header>
 
       <div className={styles.sheet}>
-        <ScrollArea className={styles.scrollArea}>
+        <ScrollArea className={styles.scrollArea} topFogBorderRadius="1rem">
           <div className={styles.content}>
             <section>
               <label className={styles.label} htmlFor="message">

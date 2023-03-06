@@ -8,6 +8,7 @@ const ScrollArea = ({
   children,
   className,
   noFog = false,
+  topFogBorderRadius,
 }: ScrollAreaProps) => {
   const [contentHeight, setContentHeight] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
@@ -70,6 +71,7 @@ const ScrollArea = ({
         [styles.hasFog]: contentHeight > viewportHeight && !noFog,
       })}
       ref={rootRef}
+      style={{ ['--top-fog-border-radius' as any]: topFogBorderRadius }}
     >
       <RadixScrollArea.Viewport
         className={styles.viewport}

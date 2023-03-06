@@ -83,7 +83,7 @@ const DestinationStep = () => {
       </header>
 
       <div className={styles.sheet}>
-        <ScrollArea className={styles.scrollArea}>
+        <ScrollArea className={styles.scrollArea} topFogBorderRadius="1rem">
           {stops && stops.length > 0 && (
             <ul className={styles.stopList}>
               {stops.map((stop, index) => (
