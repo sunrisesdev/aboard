@@ -1,3 +1,4 @@
+import { useCurrentStatus } from '@/hooks/useCurrentStatus/useCurrentStatus';
 import { CheckinInput } from '@/traewelling-sdk/functions/trains';
 import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
 import { Station, Stop } from '@/traewelling-sdk/types';
@@ -51,14 +52,16 @@ const CheckIn = () => {
   const [trip, setTrip] = useState<HAFASTrip>();
   const [visibility, setVisibility] = useState(0);
 
+  const { mutate, status } = useCurrentStatus();
+
   const checkIn = async () => {
     try {
       await post(
         {
-          arrival: destination!.arrival!,
+          arrival: destination!.arrivalPlanned!,
           body: message,
           business: travelType,
-          departure: trip!.when!,
+          departure: trip!.plannedWhen!,
           destination: destination!.evaIdentifier,
           ibnr: true,
           lineName: trip!.line.name,
@@ -85,6 +88,8 @@ const CheckIn = () => {
       setTrip(undefined);
 
       setIsOpen(false);
+
+      setTimeout(async () => await mutate(), 500);
     } catch (ex) {
       // TODO: Do something better
       setError(JSON.stringify(ex, null, 2));
@@ -153,6 +158,8 @@ const CheckIn = () => {
         {step === 'trip' && <TripStep />}
         {step === 'destination' && <DestinationStep />}
         {step === 'final' && <FinalStep />}
+
+        {JSON.stringify(status)}
       </Panel>
     </CheckInContext.Provider>
   );
