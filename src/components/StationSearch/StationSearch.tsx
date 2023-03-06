@@ -3,7 +3,7 @@ import {
   NearbyResponse,
 } from '@/traewelling-sdk/functions/trains';
 import { debounce } from '@/utils/debounce';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { ChangeEvent, useEffect, useState } from 'react';
@@ -196,7 +196,7 @@ const StationSkeleton = () => {
   const width = Math.random() * (85 - 50) + 50;
 
   return (
-    <button className={classNames(styles.suggestion, styles.isSkeleton)}>
+    <button className={clsx(styles.suggestion, styles.isSkeleton)}>
       <Shimmer width={`${width}%`} />
     </button>
   );

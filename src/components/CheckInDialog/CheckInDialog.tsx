@@ -4,7 +4,7 @@ import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
 import { Station, Stop } from '@/traewelling-sdk/types';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
@@ -119,9 +119,7 @@ const CheckInDialog = ({ isOpen, onIsOpenChange }: CheckInDialogProps) => {
       <Dialog.Portal>
         <Dialog.Overlay className={styles.overlay} />
 
-        <Dialog.Content
-          className={classNames(styles.base, sourceSans3.className)}
-        >
+        <Dialog.Content className={clsx(styles.base, sourceSans3.className)}>
           <Tabs.Root
             className={styles.tab}
             onValueChange={(value) => setStep(steps.indexOf(value))}
