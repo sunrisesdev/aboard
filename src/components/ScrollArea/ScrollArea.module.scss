@@ -72,5 +72,6 @@
 
 .viewport {
   height: 100%;
+  overscroll-behavior: contain;
   width: 100%;
 }

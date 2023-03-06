@@ -144,9 +144,10 @@
     background-color: var(--accent-color);
     content: '';
     display: block;
-    height: 2.5rem;
+    height: calc(2.5rem + ((var(--stop-count, 1) - 1) * 3rem));
     // left: 1.9375rem;
     left: 1.25rem;
+    max-height: 50%;
     position: absolute;
     top: 0;
     width: 2px;
