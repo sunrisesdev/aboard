@@ -30,7 +30,7 @@ const TripStep = () => {
       </header>
 
       <div className={styles.sheet}>
-        <ScrollArea className={styles.scrollArea}>
+        <ScrollArea className={styles.scrollArea} topFogBorderRadius="1rem">
           {departures?.trips && departures.trips.length > 0 && (
             <ul className={styles.tripList}>
               {departures.trips.map((trip) => (
