@@ -14,6 +14,7 @@ const Panel = ({ children }: PanelProps) => {
         isOpen && styles.isOpen,
         !!currentStatus && styles.hasCurrentStatus
       )}
+      id="fff"
     >
       {children}
     </div>

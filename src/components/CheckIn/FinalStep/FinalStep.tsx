@@ -3,7 +3,7 @@
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import * as RadioGroup from '@radix-ui/react-radio-group';
-import { useContext } from 'react';
+import { useContext, useLayoutEffect } from 'react';
 import {
   MdArrowBack,
   MdCheck,
@@ -72,13 +72,19 @@ const FinalStep = () => {
     minute: '2-digit',
   });
 
+  useLayoutEffect(() => {
+    document.body.style.setProperty(
+      '--accent-color',
+      `var(--color-${trip?.line.product})`
+    );
+
+    return () => {
+      document.body.style.removeProperty('--accent-color');
+    };
+  });
+
   return (
-    <main
-      className={styles.base}
-      style={{
-        ['--accent-color' as any]: `var(--color-${trip?.line.product})`,
-      }}
-    >
+    <main className={styles.base}>
       <header className={styles.header}>
         <div className={styles.buttons}>
           <button className={styles.backButton} onClick={goBack}>

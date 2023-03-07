@@ -6,7 +6,7 @@ import Shimmer from '@/components/Shimmer/Shimmer';
 import { useStops } from '@/hooks/useStops/useStops';
 import { inter } from '@/styles/fonts';
 import clsx from 'clsx';
-import { useContext } from 'react';
+import { useContext, useLayoutEffect } from 'react';
 import { MdArrowBack, MdMergeType } from 'react-icons/md';
 import { TbRouteOff } from 'react-icons/tb';
 import { CheckInContext } from '../CheckIn.context';
@@ -30,13 +30,19 @@ const DestinationStep = () => {
     minute: '2-digit',
   });
 
+  useLayoutEffect(() => {
+    document.body.style.setProperty(
+      '--accent-color',
+      `var(--color-${trip?.line.product})`
+    );
+
+    return () => {
+      document.body.style.removeProperty('--accent-color');
+    };
+  });
+
   return (
-    <main
-      className={styles.base}
-      style={{
-        ['--accent-color' as any]: `var(--color-${trip?.line.product})`,
-      }}
-    >
+    <main className={styles.base}>
       <header className={styles.header}>
         <button className={styles.backButton} onClick={goBack}>
           <div className={styles.arrow}>
