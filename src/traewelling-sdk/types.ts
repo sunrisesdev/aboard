@@ -9,6 +9,22 @@ export type Station = {
   rilIdentifier: string | null;
 };
 
+export type Status = {
+  body: string;
+  business: number;
+  createdAt: string;
+  event: any; // TODO: Add type
+  id: string;
+  liked: boolean;
+  likes: number;
+  preventIndex: boolean;
+  train: Train;
+  type: string;
+  user: number;
+  username: string;
+  visibility: number;
+};
+
 export type Stop = {
   arrival: string | null;
   arrivalPlanned: string | null;
@@ -28,6 +44,20 @@ export type Stop = {
   name: string;
   platform: string | null;
   rilIdentifier: string | null;
+};
+
+export type Train = {
+  category: HAFASProductType;
+  destination: Stop;
+  distance: number;
+  duration: number;
+  hafasId: string;
+  lineName: string;
+  number: string;
+  origin: Stop;
+  points: number;
+  speed: number;
+  trip: number;
 };
 
 export type TransportType =

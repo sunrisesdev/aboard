@@ -5,10 +5,16 @@ import styles from './Panel.module.scss';
 import { PanelProps } from './types';
 
 const Panel = ({ children }: PanelProps) => {
-  const { isOpen } = useContext(CheckInContext);
+  const { currentStatus, isOpen } = useContext(CheckInContext);
 
   return (
-    <div className={clsx(styles.base, { [styles.isOpen]: isOpen })}>
+    <div
+      className={clsx(
+        styles.base,
+        isOpen && styles.isOpen,
+        !!currentStatus && styles.hasCurrentStatus
+      )}
+    >
       {children}
     </div>
   );

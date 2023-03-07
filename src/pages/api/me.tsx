@@ -16,9 +16,7 @@ export default async function handler(
   }
 
   try {
-    const data = await TraewellingSdk.user.activeStatus(
-      req.headers.authorization
-    );
+    const data = await TraewellingSdk.auth.user(req.headers.authorization);
     return res.status(200).json(data);
   } catch (error: any) {
     res.status(error?.status ?? 500).json(error?.message ?? {});

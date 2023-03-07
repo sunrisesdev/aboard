@@ -1,5 +1,6 @@
 import { NearbyResponse } from '@/traewelling-sdk/functions/trains';
 import { debounce } from '@/utils/debounce';
+import clsx from 'clsx';
 import { useSession } from 'next-auth/react';
 import { ChangeEventHandler, MouseEventHandler, useContext } from 'react';
 import { MdArrowBack, MdMyLocation, MdSearch } from 'react-icons/md';
@@ -61,7 +62,10 @@ const Search = () => {
   };
 
   return (
-    <div className={styles.base} onClick={handleBaseClick}>
+    <div
+      className={clsx(styles.base, !isOpen && styles.isAttached)}
+      onClick={handleBaseClick}
+    >
       <button className={styles.leftAddon} onClick={handleBackClick}>
         {isOpen ? <MdArrowBack size={20} /> : <MdSearch size={20} />}
       </button>

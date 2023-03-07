@@ -1,3 +1,4 @@
+import { useCurrentStatus } from '@/hooks/useCurrentStatus/useCurrentStatus';
 import { CheckinInput } from '@/traewelling-sdk/functions/trains';
 import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
 import { Station, Stop } from '@/traewelling-sdk/types';
@@ -5,6 +6,8 @@ import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { CheckInContext } from './CheckIn.context';
+import styles from './CheckIn.module.scss';
+import CurrentStatus from './CurrentStatus/CurrentStatus';
 import DestinationStep from './DestinationStep/DestinationStep';
 import FinalStep from './FinalStep/FinalStep';
 import OriginStep from './OriginStep/OriginStep';
@@ -51,14 +54,16 @@ const CheckIn = () => {
   const [trip, setTrip] = useState<HAFASTrip>();
   const [visibility, setVisibility] = useState(0);
 
+  const { mutate, status } = useCurrentStatus();
+
   const checkIn = async () => {
     try {
       await post(
         {
-          arrival: destination!.arrival!,
+          arrival: destination!.arrivalPlanned!,
           body: message,
           business: travelType,
-          departure: trip!.when!,
+          departure: trip!.plannedWhen!,
           destination: destination!.evaIdentifier,
           ibnr: true,
           lineName: trip!.line.name,
@@ -85,6 +90,8 @@ const CheckIn = () => {
       setTrip(undefined);
 
       setIsOpen(false);
+
+      setTimeout(async () => await mutate(), 500);
     } catch (ex) {
       // TODO: Do something better
       setError(JSON.stringify(ex, null, 2));
@@ -104,6 +111,7 @@ const CheckIn = () => {
 
   const contextValue: CheckInContextValue = {
     checkIn,
+    currentStatus: status,
     destination,
     error,
     goBack,
@@ -148,12 +156,21 @@ const CheckIn = () => {
 
   return (
     <CheckInContext.Provider value={contextValue}>
-      <Panel>
-        {step === 'origin' && <OriginStep />}
-        {step === 'trip' && <TripStep />}
-        {step === 'destination' && <DestinationStep />}
-        {step === 'final' && <FinalStep />}
-      </Panel>
+      <div
+        className={styles.base}
+        style={{
+          ['--current-status-color' as any]: `var(--color-${status?.train.category})`,
+        }}
+      >
+        <Panel>
+          {step === 'origin' && <OriginStep />}
+          {step === 'trip' && <TripStep />}
+          {step === 'destination' && <DestinationStep />}
+          {step === 'final' && <FinalStep />}
+
+          {!isOpen && !!status && <CurrentStatus />}
+        </Panel>
+      </div>
     </CheckInContext.Provider>
   );
 };
