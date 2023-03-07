@@ -24,7 +24,7 @@
   font-size: 1.125rem;
   font-weight: 600;
   gap: 1rem;
-  padding: 1.75rem 1rem 1rem;
+  padding: calc(1.75rem + env(safe-area-inset-top)) 1rem 1rem;
   width: 100%;
 
   .arrow {
