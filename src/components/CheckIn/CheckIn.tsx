@@ -6,6 +6,8 @@ import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { CheckInContext } from './CheckIn.context';
+import styles from './CheckIn.module.scss';
+import CurrentStatus from './CurrentStatus/CurrentStatus';
 import DestinationStep from './DestinationStep/DestinationStep';
 import FinalStep from './FinalStep/FinalStep';
 import OriginStep from './OriginStep/OriginStep';
@@ -109,6 +111,7 @@ const CheckIn = () => {
 
   const contextValue: CheckInContextValue = {
     checkIn,
+    currentStatus: status,
     destination,
     error,
     goBack,
@@ -153,14 +156,21 @@ const CheckIn = () => {
 
   return (
     <CheckInContext.Provider value={contextValue}>
-      <Panel>
-        {step === 'origin' && <OriginStep />}
-        {step === 'trip' && <TripStep />}
-        {step === 'destination' && <DestinationStep />}
-        {step === 'final' && <FinalStep />}
+      <div
+        className={styles.base}
+        style={{
+          ['--current-status-color' as any]: `var(--color-${status?.train.category})`,
+        }}
+      >
+        <Panel>
+          {step === 'origin' && <OriginStep />}
+          {step === 'trip' && <TripStep />}
+          {step === 'destination' && <DestinationStep />}
+          {step === 'final' && <FinalStep />}
 
-        {JSON.stringify(status)}
-      </Panel>
+          {!isOpen && !!status && <CurrentStatus />}
+        </Panel>
+      </div>
     </CheckInContext.Provider>
   );
 };

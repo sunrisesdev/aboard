@@ -1,8 +1,9 @@
 import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
-import { Station, Stop } from '@/traewelling-sdk/types';
+import { Station, Status, Stop } from '@/traewelling-sdk/types';
 
 export type CheckInContextValue = {
   checkIn: () => void;
+  currentStatus: Status | null | undefined;
   destination: Stop | undefined;
   error: string | undefined; // TODO: Temporary solution
   goBack: () => void;

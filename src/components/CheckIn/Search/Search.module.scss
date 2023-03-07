@@ -5,6 +5,10 @@
   color: var(--slate12);
   display: flex;
   height: 2.75rem;
+
+  &.isAttached {
+    margin-top: -2.375rem;
+  }
 }
 
 .input {

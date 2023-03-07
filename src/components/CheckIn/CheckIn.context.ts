@@ -3,6 +3,7 @@ import { CheckInContextValue } from './types';
 
 export const CheckInContext = createContext<CheckInContextValue>({
   checkIn: () => void 0,
+  currentStatus: undefined,
   destination: undefined,
   error: undefined,
   goBack: () => void 0,
