@@ -34,4 +34,9 @@ export const metadata = {
       url: '/favicon.ico',
     },
   ],
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Aboard',
+  },
 };

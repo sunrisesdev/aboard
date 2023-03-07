@@ -8,6 +8,11 @@
     background-color: #FFF;
     border-radius: 0;
     height: 100vh;
+    top: 0;
+
+    @supports (height: 100dvh) {
+      height: 100dvh;
+    }
   }
 
   &.hasCurrentStatus:not(.isOpen) {
