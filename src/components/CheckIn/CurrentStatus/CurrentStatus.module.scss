@@ -87,6 +87,12 @@
     width: 2px;
     z-index: -1;
   }
+
+  div {
+    align-items: center;
+    display: flex;
+    gap: 0.25rem;
+  }
 }
 
 .lineIndicator {

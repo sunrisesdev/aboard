@@ -2,6 +2,7 @@
 
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
+import { parseSchedule } from '@/utils/parseSchedule';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 import { useContext, useLayoutEffect } from 'react';
 import {
@@ -46,30 +47,15 @@ const FinalStep = () => {
     visibility,
   } = useContext(CheckInContext);
 
-  const arrival =
-    (!!destination?.arrivalPlanned && new Date(destination.arrivalPlanned)) ||
-    undefined;
-
-  const arrivalTime = arrival?.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
+  const arrivalSchedule = parseSchedule({
+    actual: destination?.arrival,
+    planned: destination?.arrivalPlanned!,
   });
 
-  const arrivalDelay =
-    (arrival &&
-      !!destination?.arrival &&
-      Math.floor(
-        Math.abs(arrival.getTime() - new Date(destination.arrival).getTime()) /
-          1000 /
-          60
-      )) ||
-    0;
-
-  const departure = trip && new Date(trip.plannedWhen);
-
-  const departureTime = departure?.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
+  const departureSchedule = parseSchedule({
+    actual: trip?.when,
+    delay: trip?.delay,
+    planned: trip?.plannedWhen!,
   });
 
   useLayoutEffect(() => {
@@ -124,10 +110,10 @@ const FinalStep = () => {
           <div className={styles.station}>
             <div>{trip?.station.name}</div>
             <span className={styles.time}>
-              ab {departureTime}
-              {trip && trip.delay > 0 && (
+              ab {departureSchedule.planned}
+              {!departureSchedule.isOnTime && (
                 <span className={styles.delay}>
-                  &nbsp;<sup>+{trip.delay / 60}</sup>
+                  &nbsp;<sup>+{departureSchedule.delayInMinutes}</sup>
                 </span>
               )}
             </span>
@@ -138,10 +124,10 @@ const FinalStep = () => {
           <div className={styles.station}>
             <div>{destination?.name}</div>
             <span className={styles.time}>
-              an {arrivalTime}
-              {arrivalDelay > 0 && (
+              an {arrivalSchedule.planned}
+              {!arrivalSchedule.isOnTime && (
                 <span className={styles.delay}>
-                  &nbsp;<sup>+{arrivalDelay}</sup>
+                  &nbsp;<sup>+{arrivalSchedule.delayInMinutes}</sup>
                 </span>
               )}
             </span>

@@ -5,6 +5,7 @@ import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
 import { useStops } from '@/hooks/useStops/useStops';
 import { inter } from '@/styles/fonts';
+import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
 import { useContext, useLayoutEffect } from 'react';
 import { MdArrowBack, MdMergeType } from 'react-icons/md';
@@ -23,11 +24,10 @@ const DestinationStep = () => {
     trip?.station.id.toString() ?? ''
   );
 
-  const departure = trip && new Date(trip.plannedWhen);
-
-  const departureTime = departure?.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
+  const schedule = parseSchedule({
+    actual: trip?.when,
+    delay: trip?.delay,
+    planned: trip?.plannedWhen!,
   });
 
   useLayoutEffect(() => {
@@ -77,10 +77,10 @@ const DestinationStep = () => {
           <div className={styles.station}>
             <div>{trip?.station.name}</div>
             <span className={styles.time}>
-              ab {departureTime}
-              {trip && trip.delay > 0 && (
+              ab {schedule.planned}
+              {!schedule.isOnTime && (
                 <span className={styles.delay}>
-                  &nbsp;<sup>+{trip.delay / 60}</sup>
+                  &nbsp;<sup>+{schedule.delayInMinutes}</sup>
                 </span>
               )}
             </span>
@@ -164,18 +164,10 @@ const Stop = ({
   onClick,
   plannedArrivalAt,
 }: StopProps) => {
-  const arrivalTime =
-    arrivalAt &&
-    new Date(arrivalAt).toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  const plannedArrivalTime =
-    plannedArrivalAt &&
-    new Date(plannedArrivalAt).toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  const schedule = parseSchedule({
+    actual: arrivalAt,
+    planned: plannedArrivalAt!,
+  });
 
   return (
     <button className={styles.stop} disabled={isCancelled} onClick={onClick}>
@@ -184,9 +176,9 @@ const Stop = ({
       {!isCancelled ? (
         <div className={styles.time}>
           <div className={clsx({ [styles.isDelayed]: isDelayed })}>
-            {plannedArrivalTime}
+            {schedule.planned}
           </div>
-          {isDelayed && <div>{arrivalTime}</div>}
+          {isDelayed && <div>{schedule.actual}</div>}
         </div>
       ) : (
         <aside className={clsx(styles.cancelledNote, inter.className)}>
