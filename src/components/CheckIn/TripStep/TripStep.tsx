@@ -5,6 +5,7 @@ import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
 import { useDepartures } from '@/hooks/useDepartures/useDepartures';
 import { inter } from '@/styles/fonts';
+import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
 import { useContext, useLayoutEffect } from 'react';
 import { MdArrowBack } from 'react-icons/md';
@@ -133,13 +134,11 @@ const Trip = ({
   stationName,
   tripNumber,
 }: TripProps) => {
-  const departureTime = new Date(
-    departureAt ?? plannedDepartureAt
-  ).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  const plannedDepartureTime = new Date(plannedDepartureAt).toLocaleTimeString(
-    [],
-    { hour: '2-digit', minute: '2-digit' }
-  );
+  const schedule = parseSchedule({
+    actual: departureAt,
+    delay,
+    planned: plannedDepartureAt,
+  });
 
   return (
     <button
@@ -169,10 +168,10 @@ const Trip = ({
       </div>
 
       <div className={styles.time}>
-        <div className={clsx({ [styles.isDelayed]: delay > 0 })}>
-          {plannedDepartureTime}
+        <div className={clsx({ [styles.isDelayed]: !schedule.isOnTime })}>
+          {schedule.planned}
         </div>
-        {delay > 0 && <div>{departureTime}</div>}
+        {!schedule.isOnTime && <div>{schedule.actual}</div>}
       </div>
 
       {departureAt === null && (
