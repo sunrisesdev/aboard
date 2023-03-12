@@ -1,4 +1,5 @@
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
+import { parseSchedule } from '@/utils/parseSchedule';
 import { useContext } from 'react';
 import { MdOutlineToken } from 'react-icons/md';
 import { TbRoute } from 'react-icons/tb';
@@ -12,51 +13,15 @@ const CurrentStatus = () => {
     return null;
   }
 
-  const arrival =
-    (!!currentStatus.train.destination.arrivalPlanned &&
-      new Date(currentStatus.train.destination.arrivalPlanned)) ||
-    undefined;
-
-  const arrivalTime = arrival?.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
+  const arrivalSchedule = parseSchedule({
+    actual: currentStatus.train.destination.arrival,
+    planned: currentStatus.train.destination.arrivalPlanned!,
   });
 
-  const arrivalDelay =
-    (arrival &&
-      !!currentStatus.train.destination.arrival &&
-      Math.floor(
-        Math.abs(
-          arrival.getTime() -
-            new Date(currentStatus.train.destination.arrival).getTime()
-        ) /
-          1000 /
-          60
-      )) ||
-    0;
-
-  const departure =
-    (!!currentStatus.train.origin.departurePlanned &&
-      new Date(currentStatus.train.origin.departurePlanned)) ||
-    undefined;
-
-  const departureTime = departure?.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
+  const departureSchedule = parseSchedule({
+    actual: currentStatus.train.origin.departure,
+    planned: currentStatus.train.origin.departurePlanned!,
   });
-
-  const departureDelay =
-    (departure &&
-      !!currentStatus.train.origin.departure &&
-      Math.floor(
-        Math.abs(
-          departure.getTime() -
-            new Date(currentStatus.train.origin.departure).getTime()
-        ) /
-          1000 /
-          60
-      )) ||
-    0;
 
   return (
     <section className={styles.base}>
@@ -64,10 +29,10 @@ const CurrentStatus = () => {
         <div className={styles.station}>
           <span>{currentStatus.train.origin.name}</span>
           <span className={styles.time}>
-            ab {departureTime}
-            {departureDelay > 0 && (
+            ab {departureSchedule.planned}
+            {!departureSchedule.isOnTime && (
               <span className={styles.delay}>
-                &nbsp;<sup>+{departureDelay}</sup>
+                &nbsp;<sup>+{departureSchedule.delayInMinutes}</sup>
               </span>
             )}
           </span>
@@ -97,10 +62,10 @@ const CurrentStatus = () => {
         <div className={styles.station}>
           <span>{currentStatus.train.destination.name}</span>
           <span className={styles.time}>
-            an {arrivalTime}
-            {arrivalDelay > 0 && (
+            an {arrivalSchedule.planned}
+            {!arrivalSchedule.isOnTime && (
               <span className={styles.delay}>
-                &nbsp;<sup>+{arrivalDelay}</sup>
+                &nbsp;<sup>+{arrivalSchedule.delayInMinutes}</sup>
               </span>
             )}
           </span>
