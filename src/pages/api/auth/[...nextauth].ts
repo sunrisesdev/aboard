@@ -30,7 +30,21 @@ export const authOptions: AuthOptions = {
       type: 'oauth',
       authorization: {
         url: 'https://traewelling.de/oauth/authorize',
-        params: { scope: '' },
+        params: {
+          scope: [
+            'read-statuses',
+            'read-notifications',
+            'write-statuses',
+            'write-likes',
+            'write-notifications',
+            'write-follows',
+            'write-blocks',
+            'read-settings',
+            'read-settings-profile',
+            'read-settings-followers',
+            'write-followers',
+          ].join(' '),
+        },
       },
       userinfo: 'https://traewelling.de/api/v1/auth/user',
       profileUrl: 'https://traewelling.de/api/v1/auth/user',
