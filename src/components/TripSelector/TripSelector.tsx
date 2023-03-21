@@ -36,7 +36,7 @@ const fetcher = async (
   }
 
   const response = await fetch(
-    `/api/stations/${stationName.replace('/', '%20')}`,
+    `/traewelling/stations/${stationName.replace('/', '%20')}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -54,7 +54,7 @@ const fetcher = async (
 const TripSelector = ({ onTripSelect, stationName }: TripSelectorProps) => {
   const { data: session } = useSession();
   const { data: departures, isLoading } = useSWR(
-    ['/api/stations/', stationName, session],
+    ['/traewelling/stations/', stationName, session],
     ([_, stationName, session]) => fetcher(stationName, session)
   );
 
