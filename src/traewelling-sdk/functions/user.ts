@@ -1,11 +1,15 @@
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { getServerSession } from 'next-auth';
 import { Status } from '../types';
 
-export const activeStatus = async (bearerToken: string) => {
+export const activeStatus = async () => {
+  const session = await getServerSession(authOptions);
+
   const res = await fetch(
     'https://traewelling.de/api/v1/user/statuses/active',
     {
       headers: {
-        Authorization: bearerToken,
+        Authorization: `Bearer ${session?.user.accessToken}`,
       },
       method: 'GET',
     }

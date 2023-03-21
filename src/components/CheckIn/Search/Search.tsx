@@ -1,7 +1,6 @@
 import { NearbyResponse } from '@/traewelling-sdk/functions/trains';
 import { debounce } from '@/utils/debounce';
 import clsx from 'clsx';
-import { useSession } from 'next-auth/react';
 import {
   ChangeEventHandler,
   MouseEventHandler,
@@ -14,7 +13,6 @@ import { CheckInContext } from '../CheckIn.context';
 import styles from './Search.module.scss';
 
 const Search = () => {
-  const { data: session } = useSession();
   const { goBack, isOpen, setIsOpen, setOrigin, setQuery } =
     useContext(CheckInContext);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -47,18 +45,9 @@ const Search = () => {
       event.stopPropagation();
     }
 
-    if (!session) {
-      return;
-    }
-
     navigator.geolocation.getCurrentPosition(async ({ coords }) => {
       const response = await fetch(
-        `/traewelling/stations/nearby?latitude=${coords.latitude}&longitude=${coords.longitude}`,
-        {
-          headers: {
-            Authorization: `Bearer ${session.user.accessToken}`,
-          },
-        }
+        `/traewelling/stations/nearby?latitude=${coords.latitude}&longitude=${coords.longitude}`
       );
 
       if (!response.ok) {

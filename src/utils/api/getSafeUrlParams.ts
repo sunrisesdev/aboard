@@ -8,7 +8,7 @@ type GetSafeURLParamsOptions<
   TOptional extends string
 > = {
   url: string;
-  requiredParams: TRequired[];
+  requiredParams?: TRequired[];
   optionalParams?: TOptional[];
 };
 
@@ -26,7 +26,7 @@ const getSafeURLParams = <TRequired extends string, TOptional extends string>({
   const { searchParams } = new URL(url);
   const allParams = Object.fromEntries(searchParams);
 
-  const safeParams = requiredParams.reduce((acc, param) => {
+  const safeParams = requiredParams?.reduce((acc, param) => {
     if (allParams[param]) {
       acc[param] = allParams[param];
     }
@@ -41,11 +41,11 @@ const getSafeURLParams = <TRequired extends string, TOptional extends string>({
     return acc;
   }, {} as Record<string, string>);
 
-  const missingParams = requiredParams.filter(
-    (param) => !Object.keys(safeParams).includes(param)
-  );
+  const missingParams = requiredParams?.filter(
+    (param) => safeParams && !Object.keys(safeParams).includes(param)
+  ) || [];
 
-  if (missingParams.length > 0) {
+  if ( missingParams.length > 0) {
     throw new Error(`Missing required params: ${missingParams.join(', ')}`);
   }
 

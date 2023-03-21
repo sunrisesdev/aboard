@@ -5,7 +5,6 @@ import {
 import { debounce } from '@/utils/debounce';
 import clsx from 'clsx';
 import { Session } from 'next-auth';
-import { useSession } from 'next-auth/react';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { CgSpinnerTwoAlt } from 'react-icons/cg';
 import {
@@ -61,15 +60,14 @@ const fetcher = async (
 };
 
 const StationSearch = ({ onStationSelect }: StationSearchProps) => {
-  const { data: session } = useSession();
   const [inputValue, setInputValue] = useState('');
   const [locationStatus, setLocationStatus] = useState<
     'unknown' | 'loading' | 'success' | 'error'
   >('unknown');
   const [query, setQuery] = useState('');
   const { data: suggestions, isLoading } = useSWR(
-    ['/traewelling/stations/autocomplete', query, session],
-    ([_, query, session]) => fetcher(query, session)
+    ['/traewelling/stations/autocomplete', query],
+    ([_, query]) => fetcher(query)
   );
 
   // TODO: Improve sorting
@@ -84,21 +82,12 @@ const StationSearch = ({ onStationSelect }: StationSearchProps) => {
   }, [locationStatus]);
 
   const handleNearbyClick = () => {
-    if (!session) {
-      return;
-    }
-
     setLocationStatus('loading');
 
     navigator.geolocation.getCurrentPosition(
       async ({ coords }) => {
         const response = await fetch(
-          `/traewelling/stations/nearby?latitude=${coords.latitude}&longitude=${coords.longitude}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session.user.accessToken}`,
-            },
-          }
+          `/traewelling/stations/nearby?latitude=${coords.latitude}&longitude=${coords.longitude}`
         );
 
         if (!response.ok) {
