@@ -2,7 +2,13 @@ import { NearbyResponse } from '@/traewelling-sdk/functions/trains';
 import { debounce } from '@/utils/debounce';
 import clsx from 'clsx';
 import { useSession } from 'next-auth/react';
-import { ChangeEventHandler, MouseEventHandler, useContext } from 'react';
+import {
+  ChangeEventHandler,
+  MouseEventHandler,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react';
 import { MdArrowBack, MdMyLocation, MdSearch } from 'react-icons/md';
 import { CheckInContext } from '../CheckIn.context';
 import styles from './Search.module.scss';
@@ -11,6 +17,13 @@ const Search = () => {
   const { data: session } = useSession();
   const { goBack, isOpen, setIsOpen, setOrigin, setQuery } =
     useContext(CheckInContext);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      inputRef.current?.focus();
+    }
+  }, [isOpen]);
 
   const handleBackClick: MouseEventHandler<HTMLButtonElement> = (event) => {
     if (!isOpen) {
@@ -74,6 +87,7 @@ const Search = () => {
         className={styles.input}
         onChange={handleChange}
         placeholder="Wo bist du?"
+        ref={inputRef}
       />
 
       <button className={styles.rightAddon} onClick={handleNearbyClick}>
