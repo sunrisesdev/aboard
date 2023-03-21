@@ -1,16 +1,20 @@
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { getServerSession } from 'next-auth';
 import { Status } from '../types';
 
 type SingleInput = {
   id: string;
 };
 
-export const single = async (input: SingleInput, bearerToken?: string) => {
+export const single = async (input: SingleInput) => {
+  const session = await getServerSession(authOptions);
+
   const headers = {
-    Authorization: bearerToken!,
+    Authorization: session?.user.accessToken!,
   };
 
   const res = await fetch(`https://traewelling.de/api/v1/status/${input.id}`, {
-    headers: !bearerToken ? undefined : headers,
+    headers: !session ? undefined : headers,
     method: 'GET',
   });
 
