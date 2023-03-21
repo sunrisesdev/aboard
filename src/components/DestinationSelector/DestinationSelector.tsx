@@ -23,7 +23,7 @@ const fetcher = async (
   }
 
   const response = await fetch(
-    `/api/trips?hafasTripId=${hafasTripId}&lineName=${lineName}&start=${start.replace(
+    `/traewelling/trips?hafasTripId=${hafasTripId}&lineName=${lineName}&start=${start.replace(
       '/',
       '%20'
     )}`,
@@ -50,7 +50,7 @@ const DestinationSelector = ({
 }: DestinationSelectorProps) => {
   const { data: session } = useSession();
   const { data: trip, isLoading } = useSWR(
-    ['/api/trips', hafasTripId, lineName, start, session],
+    ['/traewelling/trips', hafasTripId, lineName, start, session],
     ([_, hafasTripId, lineName, start, session]) =>
       fetcher(hafasTripId, lineName, start, session)
   );

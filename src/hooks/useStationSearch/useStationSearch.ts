@@ -1,25 +1,16 @@
 import { AutocompleteResponse } from '@/traewelling-sdk/functions/trains';
 import { Station } from '@/traewelling-sdk/types';
 import levenshtein from 'js-levenshtein';
-import { Session } from 'next-auth';
-import { useSession } from 'next-auth/react';
 import useSWR from 'swr';
 
-const fetcher = async (
-  query: string,
-  session?: Session | null
-): Promise<AutocompleteResponse> => {
-  const token = session?.user.accessToken;
-
-  if (!token || !query || query.trim().length < 2) {
+const fetcher = async (query: string): Promise<AutocompleteResponse> => {
+  if (!query || query.trim().length < 2) {
     return [];
   }
 
-  const response = await fetch(`/api/stations/autocomplete?query=${query}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await fetch(
+    `/traewelling/stations/autocomplete?query=${query}`
+  );
 
   if (!response.ok) {
     return [];
@@ -42,10 +33,9 @@ const getMatchDetails = (
 };
 
 export const useStationSearch = (query: string) => {
-  const { data: session } = useSession();
   const { data, isLoading } = useSWR(
-    ['/api/stations/autocomplete', query, session],
-    ([_, query, session]) => fetcher(query, session)
+    ['/traewelling/stations/autocomplete', query],
+    ([_, query]) => fetcher(query)
   );
 
   const escapedQuery = query.replaceAll(/[\|\.\(\)\/\?\*\+\$\^\\]/gi, '');

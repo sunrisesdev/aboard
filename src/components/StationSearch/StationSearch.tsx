@@ -31,7 +31,7 @@ const fetcher = async (
   }
 
   if (!query.trim()) {
-    const response = await fetch('/api/stations/history', {
+    const response = await fetch('/traewelling/stations/history', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -44,11 +44,14 @@ const fetcher = async (
     return await response.json();
   }
 
-  const response = await fetch(`/api/stations/autocomplete?query=${query}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await fetch(
+    `/traewelling/stations/autocomplete?query=${query}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
   if (!response.ok) {
     return [];
@@ -65,7 +68,7 @@ const StationSearch = ({ onStationSelect }: StationSearchProps) => {
   >('unknown');
   const [query, setQuery] = useState('');
   const { data: suggestions, isLoading } = useSWR(
-    ['/api/stations/autocomplete', query, session],
+    ['/traewelling/stations/autocomplete', query, session],
     ([_, query, session]) => fetcher(query, session)
   );
 
@@ -90,7 +93,7 @@ const StationSearch = ({ onStationSelect }: StationSearchProps) => {
     navigator.geolocation.getCurrentPosition(
       async ({ coords }) => {
         const response = await fetch(
-          `/api/stations/nearby?latitude=${coords.latitude}&longitude=${coords.longitude}`,
+          `/traewelling/stations/nearby?latitude=${coords.latitude}&longitude=${coords.longitude}`,
           {
             headers: {
               Authorization: `Bearer ${session.user.accessToken}`,

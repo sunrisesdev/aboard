@@ -1,25 +1,13 @@
 import { DeparturesResponse } from '@/traewelling-sdk/functions/trains';
-import { Session } from 'next-auth';
-import { useSession } from 'next-auth/react';
 import useSWR from 'swr';
 
-const fetcher = async (
-  stationName: string,
-  session?: Session | null
-): Promise<DeparturesResponse> => {
-  const token = session?.user.accessToken;
-
-  if (!stationName.trim() || !token) {
+const fetcher = async (stationName: string): Promise<DeparturesResponse> => {
+  if (!stationName.trim()) {
     return { meta: null, trips: [] };
   }
 
   const response = await fetch(
-    `/api/stations/${stationName.replace('/', '%20')}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    `/traewelling/stations/${stationName.replace('/', '%20')}`
   );
 
   if (!response.ok) {
@@ -30,10 +18,9 @@ const fetcher = async (
 };
 
 export const useDepartures = (stationName: string) => {
-  const { data: session } = useSession();
   const { data, isLoading } = useSWR(
-    ['/api/stations/', stationName, session],
-    ([_, stationName, session]) => fetcher(stationName, session)
+    ['/traewelling/stations/', stationName],
+    ([_, stationName]) => fetcher(stationName)
   );
 
   return {

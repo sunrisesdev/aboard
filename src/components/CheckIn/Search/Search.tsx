@@ -53,7 +53,7 @@ const Search = () => {
 
     navigator.geolocation.getCurrentPosition(async ({ coords }) => {
       const response = await fetch(
-        `/api/stations/nearby?latitude=${coords.latitude}&longitude=${coords.longitude}`,
+        `/traewelling/stations/nearby?latitude=${coords.latitude}&longitude=${coords.longitude}`,
         {
           headers: {
             Authorization: `Bearer ${session.user.accessToken}`,
