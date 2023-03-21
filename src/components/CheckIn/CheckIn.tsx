@@ -25,7 +25,7 @@ const post = async (status: CheckinInput, session?: Session | null) => {
     return;
   }
 
-  const response = await fetch('/api/stations/checkin', {
+  const response = await fetch('/traewelling/stations/checkin', {
     body: JSON.stringify(status),
     headers: {
       Authorization: `Bearer ${token}`,

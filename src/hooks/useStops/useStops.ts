@@ -1,30 +1,20 @@
 import { TripResponse } from '@/traewelling-sdk/functions/trains';
-import { Session } from 'next-auth';
-import { useSession } from 'next-auth/react';
 import useSWR from 'swr';
 
 const fetcher = async (
   hafasTripId: string,
   lineName: string,
-  start: string,
-  session?: Session | null
+  start: string
 ): Promise<TripResponse | undefined> => {
-  const token = session?.user.accessToken;
-
-  if (!hafasTripId || !lineName || !start.trim() || !token) {
+  if (!hafasTripId || !lineName || !start.trim()) {
     return;
   }
 
   const response = await fetch(
-    `/api/trips?hafasTripId=${hafasTripId}&lineName=${lineName}&start=${start.replace(
+    `/traewelling/trips?hafasTripId=${hafasTripId}&lineName=${lineName}&start=${start.replace(
       '/',
       '%20'
-    )}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    )}`
   );
 
   if (!response.ok) {
@@ -40,11 +30,9 @@ export const useStops = (
   plannedDeparture: string,
   start: string
 ) => {
-  const { data: session } = useSession();
   const { data, isLoading } = useSWR(
-    ['/api/trips', hafasTripId, lineName, start, session],
-    ([_, hafasTripId, lineName, start, session]) =>
-      fetcher(hafasTripId, lineName, start, session)
+    ['/traewelling/trips', hafasTripId, lineName, start],
+    ([_, hafasTripId, lineName, start]) => fetcher(hafasTripId, lineName, start)
   );
 
   const startingAt = data?.stopovers.findIndex(
