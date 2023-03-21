@@ -14,7 +14,7 @@ const fetcher = async (): Promise<Status | null> => {
 export const useCurrentStatus = () => {
   const { data, isLoading, mutate } = useSWR(
     ['/traewelling/statuses/current'],
-    ([]) => fetcher()
+    () => fetcher()
   );
 
   return {

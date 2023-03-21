@@ -3,11 +3,12 @@
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
+import useAccentColor from '@/hooks/useAccentColor/useAccentColor';
 import { useDepartures } from '@/hooks/useDepartures/useDepartures';
 import { inter } from '@/styles/fonts';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
-import { useContext, useLayoutEffect } from 'react';
+import { useContext } from 'react';
 import { MdArrowBack } from 'react-icons/md';
 import { TbRouteOff } from 'react-icons/tb';
 import { CheckInContext } from '../CheckIn.context';
@@ -19,13 +20,7 @@ const TripStep = () => {
   const { goBack, origin, setTrip } = useContext(CheckInContext);
   const { departures, isLoading } = useDepartures(origin?.name ?? '');
 
-  useLayoutEffect(() => {
-    document.body.style.setProperty('--accent-color', 'var(--sky11)');
-
-    return () => {
-      document.body.style.removeProperty('--accent-color');
-    };
-  });
+  useAccentColor('var(--sky11)');
 
   return (
     <main className={styles.base}>

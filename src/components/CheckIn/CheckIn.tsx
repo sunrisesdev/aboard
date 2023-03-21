@@ -4,6 +4,7 @@ import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
 import { Station, Stop } from '@/traewelling-sdk/types';
 import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { useState } from 'react';
 import { CheckInContext } from './CheckIn.context';
 import styles from './CheckIn.module.scss';
@@ -168,7 +169,11 @@ const CheckIn = () => {
           {step === 'destination' && <DestinationStep />}
           {step === 'final' && <FinalStep />}
 
-          {!isOpen && !!status && <CurrentStatus />}
+          {!isOpen && !!status && (
+            <Link className={styles.statusLink} href={`/status/${status.id}`}>
+              <CurrentStatus />
+            </Link>
+          )}
         </Panel>
       </div>
     </CheckInContext.Provider>
