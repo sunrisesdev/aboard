@@ -36,6 +36,16 @@ export async function GET(
       });
     }
 
+    if (
+      !(context.params.station ?? '').trim() ||
+      (!!transportType && !ALLOWED_TRANSPORT_TYPES.includes(transportType))
+    ) {
+      return createErrorResponse({
+        error: 'Invalid parameters',
+        statusCode: 400,
+      });
+    }
+
     const data = await TraewellingSdk.trains.departures(
       {
         name: context.params.station,
