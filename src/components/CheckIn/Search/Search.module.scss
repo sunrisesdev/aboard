@@ -8,6 +8,10 @@
 
   &.isAttached {
     margin-top: -2.375rem;
+
+    .input {
+      pointer-events: none;
+    }
   }
 }
 
