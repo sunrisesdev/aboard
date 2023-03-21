@@ -1,10 +1,10 @@
 'use client';
 
-import { useCurrentStatus } from '@/hooks/useCurrentStatus/useCurrentStatus';
+import { useStatus } from '@/hooks/useStatus/useStatus';
 import { StatusDetailsProps } from './types';
 
 const StatusDetails = ({ id }: StatusDetailsProps) => {
-  const { status } = useCurrentStatus();
+  const { status } = useStatus(id);
 
   return (
     <div>
