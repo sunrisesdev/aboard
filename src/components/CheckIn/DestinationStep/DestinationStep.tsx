@@ -3,11 +3,12 @@
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
+import useAccentColor from '@/hooks/useAccentColor/useAccentColor';
 import { useStops } from '@/hooks/useStops/useStops';
 import { inter } from '@/styles/fonts';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
-import { useContext, useLayoutEffect } from 'react';
+import { useContext } from 'react';
 import { MdArrowBack, MdMergeType } from 'react-icons/md';
 import { TbRouteOff } from 'react-icons/tb';
 import { CheckInContext } from '../CheckIn.context';
@@ -30,16 +31,7 @@ const DestinationStep = () => {
     planned: trip?.plannedWhen!,
   });
 
-  useLayoutEffect(() => {
-    document.body.style.setProperty(
-      '--accent-color',
-      `var(--color-${trip?.line.product})`
-    );
-
-    return () => {
-      document.body.style.removeProperty('--accent-color');
-    };
-  });
+  useAccentColor(`var(--color-${trip?.line.product})`);
 
   return (
     <main className={styles.base}>

@@ -2,9 +2,10 @@
 
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
+import useAccentColor from '@/hooks/useAccentColor/useAccentColor';
 import { parseSchedule } from '@/utils/parseSchedule';
 import * as RadioGroup from '@radix-ui/react-radio-group';
-import { useContext, useLayoutEffect } from 'react';
+import { useContext } from 'react';
 import {
   MdArrowBack,
   MdCheck,
@@ -58,16 +59,7 @@ const FinalStep = () => {
     planned: trip?.plannedWhen!,
   });
 
-  useLayoutEffect(() => {
-    document.body.style.setProperty(
-      '--accent-color',
-      `var(--color-${trip?.line.product})`
-    );
-
-    return () => {
-      document.body.style.removeProperty('--accent-color');
-    };
-  });
+  useAccentColor(`var(--color-${trip?.line.product})`);
 
   return (
     <main className={styles.base}>
