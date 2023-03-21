@@ -20,14 +20,11 @@ export async function GET(request: Request) {
         statusCode: 401,
       });
     }
-    const data = await TraewellingSdk.trains.trip(
-      {
-        hafasTripId,
-        lineName,
-        start,
-      },
-      `Bearer ${session.user.accessToken}`
-    );
+    const data = await TraewellingSdk.trains.trip({
+      hafasTripId,
+      lineName,
+      start,
+    });
 
     return createResponse({
       body: data,

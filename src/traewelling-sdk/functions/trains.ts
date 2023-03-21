@@ -1,3 +1,5 @@
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { getServerSession } from 'next-auth';
 import { HAFASTrip } from '../hafasTypes';
 import { Station, TransportType, Trip } from '../types';
 
@@ -10,10 +12,9 @@ export type AutocompleteResponse = Pick<
   'ibnr' | 'name' | 'rilIdentifier'
 >[];
 
-export const autocomplete = async (
-  input: AutocompleteInput,
-  bearerToken: string
-) => {
+export const autocomplete = async (input: AutocompleteInput) => {
+  const session = await getServerSession(authOptions);
+
   const url = new URL(
     `https://traewelling.de/api/v1/trains/station/autocomplete/${input.query
       .trim()
@@ -22,7 +23,7 @@ export const autocomplete = async (
 
   const res = await fetch(url, {
     headers: {
-      Authorization: bearerToken,
+      Authorization: `Bearer ${session?.user.accessToken}`,
     },
     method: 'GET',
   });
@@ -56,11 +57,13 @@ export type CheckinInput = {
   visibility: number; // 0 | 1 | 2 | 3 | 4
 };
 
-export const checkin = async (input: CheckinInput, bearerToken: string) => {
+export const checkin = async (input: CheckinInput) => {
+  const session = await getServerSession(authOptions);
+
   const res = await fetch('https://traewelling.de/api/v1/trains/checkin', {
     body: JSON.stringify(input),
     headers: {
-      Authorization: bearerToken,
+      Authorization: `Bearer ${session?.user.accessToken}`,
       'Content-Type': 'application/json',
     },
     method: 'POST',
@@ -107,10 +110,9 @@ export type DeparturesResponse = {
   trips: HAFASTrip[];
 };
 
-export const departures = async (
-  input: DeparturesInput,
-  bearerToken: string
-) => {
+export const departures = async (input: DeparturesInput) => {
+  const session = await getServerSession(authOptions);
+
   const url = new URL(
     `https://traewelling.de/api/v1/trains/station/${input.name
       .trim()
@@ -127,7 +129,7 @@ export const departures = async (
 
   const res = await fetch(url, {
     headers: {
-      Authorization: bearerToken,
+      Authorization: `Bearer ${session?.user.accessToken}`,
     },
     method: 'GET',
   });
@@ -146,12 +148,14 @@ export const departures = async (
   throw { message: data, status: res.status };
 };
 
-export const history = async (bearerToken: string) => {
+export const history = async () => {
+  const session = await getServerSession(authOptions);
+
   const url = new URL('https://traewelling.de/api/v1/trains/station/history');
 
   const res = await fetch(url, {
     headers: {
-      Authorization: bearerToken,
+      Authorization: `Bearer ${session?.user.accessToken}`,
     },
     method: 'GET',
   });
@@ -174,7 +178,9 @@ type NearbyInput = {
 
 export type NearbyResponse = Station;
 
-export const nearby = async (input: NearbyInput, bearerToken: string) => {
+export const nearby = async (input: NearbyInput) => {
+  const session = await getServerSession(authOptions);
+
   const url = new URL('https://traewelling.de/api/v1/trains/station/nearby');
 
   url.searchParams.append('latitude', input.latitude);
@@ -182,7 +188,7 @@ export const nearby = async (input: NearbyInput, bearerToken: string) => {
 
   const res = await fetch(url, {
     headers: {
-      Authorization: bearerToken,
+      Authorization: `Bearer ${session?.user.accessToken}`,
     },
     method: 'GET',
   });
@@ -206,7 +212,9 @@ type TripInput = {
 
 export type TripResponse = Trip;
 
-export const trip = async (input: TripInput, bearerToken: string) => {
+export const trip = async (input: TripInput) => {
+  const session = await getServerSession(authOptions);
+
   const url = new URL('https://traewelling.de/api/v1/trains/trip/');
 
   url.searchParams.append('hafasTripId', input.hafasTripId);
@@ -215,7 +223,7 @@ export const trip = async (input: TripInput, bearerToken: string) => {
 
   const res = await fetch(url, {
     headers: {
-      Authorization: bearerToken,
+      Authorization: `Bearer ${session?.user.accessToken}`,
     },
     method: 'GET',
   });

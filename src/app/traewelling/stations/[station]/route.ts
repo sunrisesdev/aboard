@@ -46,14 +46,11 @@ export async function GET(
       });
     }
 
-    const data = await TraewellingSdk.trains.departures(
-      {
-        name: context.params.station,
-        travelType: transportType as TransportType,
-        when: from,
-      },
-      `Bearer ${session.user.accessToken}`
-    );
+    const data = await TraewellingSdk.trains.departures({
+      name: context.params.station,
+      travelType: transportType as TransportType,
+      when: from,
+    });
     return createResponse({
       body: data,
     });
