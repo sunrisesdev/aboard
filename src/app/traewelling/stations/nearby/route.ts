@@ -20,13 +20,10 @@ export async function GET(request: Request) {
       });
     }
 
-    const data = await TraewellingSdk.trains.nearby(
-      {
-        latitude,
-        longitude,
-      },
-      `Bearer ${session.user.accessToken}`
-    );
+    const data = await TraewellingSdk.trains.nearby({
+      latitude,
+      longitude,
+    });
     return createResponse({
       body: data,
     });

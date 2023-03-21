@@ -21,10 +21,7 @@ export async function GET(request: Request) {
       });
     }
 
-    const data = await TraewellingSdk.trains.autocomplete(
-      { query },
-      `Bearer ${session.user.accessToken}`
-    );
+    const data = await TraewellingSdk.trains.autocomplete({ query });
     return createResponse({
       body: data,
     });

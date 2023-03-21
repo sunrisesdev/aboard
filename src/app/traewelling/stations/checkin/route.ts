@@ -25,10 +25,7 @@ export async function POST(request: Request) {
       });
     }
 
-    const data = await TraewellingSdk.trains.checkin(
-      body,
-      `Bearer ${session.user.accessToken}`
-    );
+    const data = await TraewellingSdk.trains.checkin(body);
     return createResponse({
       body: data,
     });

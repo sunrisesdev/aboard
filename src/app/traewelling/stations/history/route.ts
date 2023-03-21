@@ -15,9 +15,7 @@ export async function GET(request: Request) {
       });
     }
 
-    const data = await TraewellingSdk.trains.history(
-      `Bearer ${session.user.accessToken}`
-    );
+    const data = await TraewellingSdk.trains.history();
     return createResponse({
       body: data,
     });
