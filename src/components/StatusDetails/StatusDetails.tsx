@@ -68,7 +68,7 @@ const StatusDetails = ({ id }: StatusDetailsProps) => {
     return <div>Status nicht gefunden</div>;
   }
 
-  const destination = stops.at(-1);
+  const destination = allStops.at(-1);
 
   const currentStop = findCurrentStop(stops, status.train.destination);
   const showCurrentStop =
