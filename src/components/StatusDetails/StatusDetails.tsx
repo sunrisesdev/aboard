@@ -201,7 +201,7 @@ const CurrentStop = ({
     <>
       {!withoutStationName && <span>{currentStop?.name}</span>}
       <span className={styles.time}>
-        {remaining === 0 ? 'jetzt' : `in ${Math.abs(remaining)} Min.`}
+        {remaining <= 0 ? 'jetzt' : `in ${Math.abs(remaining)} Min.`}
       </span>
     </>
   );
