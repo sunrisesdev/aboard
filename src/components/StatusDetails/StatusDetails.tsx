@@ -7,7 +7,7 @@ import { Stop } from '@/traewelling-sdk/types';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
 import { useEffect, useMemo, useState } from 'react';
-import { MdCommit, MdOutlineToken } from 'react-icons/md';
+import { MdCommit, MdOutlineTimer, MdOutlineToken } from 'react-icons/md';
 import { TbRoute } from 'react-icons/tb';
 import LineIndicator from '../LineIndicator/LineIndicator';
 import styles from './StatusDetails.module.scss';
@@ -44,12 +44,19 @@ const getMinutesUntil = (target: Date) => {
 
 const StatusDetails = ({ id }: StatusDetailsProps) => {
   const { status } = useStatus(id);
-  const { stops } = useStops(
+  const { stops: allStops } = useStops(
     status?.train.hafasId ?? '',
     status?.train.lineName ?? '',
     status?.train.origin.departurePlanned ?? '',
     status?.train.origin.id.toString() ?? ''
   );
+
+  const destinationAt = allStops.findIndex(
+    (stop) =>
+      stop.id === status?.train.destination.id &&
+      stop.departureReal === status.train.destination.departureReal
+  );
+  const stops = allStops.slice(0, destinationAt);
 
   useAccentColor(`var(--color-${status?.train.category})`);
 
@@ -66,6 +73,13 @@ const StatusDetails = ({ id }: StatusDetailsProps) => {
   const currentStop = findCurrentStop(stops, status.train.destination);
   const showCurrentStop =
     !!currentStop && currentStop.name !== status.train.destination.name;
+
+  const timeInMin =
+    (new Date(status.train.destination.arrivalReal!).getTime() -
+      new Date(status.train.origin.departureReal!).getTime()) /
+    1000 /
+    60;
+  const duration = `${Math.floor(timeInMin / 60)} Std. ${timeInMin % 60} Min.`;
 
   const arrivalSchedule = parseSchedule({
     actual: status.train.destination.arrival,
@@ -140,6 +154,10 @@ const StatusDetails = ({ id }: StatusDetailsProps) => {
       <div className={styles.sheet}>
         <ul className={styles.stats}>
           <li>
+            <MdOutlineTimer size={20} />
+            <span>{duration}</span>
+          </li>
+          <li>
             <TbRoute size={20} />
             <span>{Math.ceil(status.train.distance / 1000)} km</span>
           </li>
@@ -149,7 +167,7 @@ const StatusDetails = ({ id }: StatusDetailsProps) => {
           </li>
           <li>
             <MdCommit size={20} />
-            <span>{stops.length - 1} Stationen</span>
+            <span>{stops.length + 1} Stationen</span>
           </li>
         </ul>
       </div>
