@@ -97,6 +97,6 @@
 
 .lineIndicator {
   background-color: #FFF !important;
-  color: var(--current-status-color);
+  color: var(--current-status-color) !important;
   font-weight: 500;
 }
