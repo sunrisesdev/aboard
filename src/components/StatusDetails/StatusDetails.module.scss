@@ -1,5 +1,23 @@
 @import '@/styles/index';
 
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 2px rgba(#FFF, 0.5), 0 0 0 2px rgba(#FFF, 0.5);
+  }
+
+  50% {
+    box-shadow: 0 0 0 2px rgba(#FFF, 0.5), 0 0 0 6px rgba(#FFF, 0);
+  }
+
+  75% {
+    box-shadow: 0 0 0 2px rgba(#FFF, 0.5), 0 0 0 0 rgba(#FFF, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 2px rgba(#FFF, 0.5);
+  }
+}
+
 .base {
   background-color: var(--accent-color, --sky11);
   display: flex;
@@ -40,7 +58,7 @@
     background-color: #FFF;
     content: '';
     display: block;
-    height: calc(100% - 0.75rem);
+    height: calc(100% + 0.25rem);
     left: 4px;
     position: absolute;
     width: 2px;
@@ -61,24 +79,23 @@
 }
 
 .origin {
-  padding-bottom: 2rem;
+  padding-bottom: 1rem;
 
   &::after,
   &::before {
     top: 0.5625rem;
   }
 
-  &.isTight {
-    padding-bottom: 1rem;
+  &.hasHalfLine::before {
+    height: calc(100% - 0.5625rem);
   }
 }
 
 .upcoming {
   color: rgba(#FFF, 0.5);
-  margin-top: -1rem;
-  padding-bottom: 1rem;
 
   &::after {
+    animation: pulse 2s ease infinite;
     background-color: #FFF;
     box-shadow: 0 0 0 2px rgba(#FFF, 0.5);
     top: 0.5625rem;
@@ -87,8 +104,8 @@
   &::before {
     background: none;
     border-left: 2px dotted rgba(#FFF, 0.5);
-    height: calc(100% - 0.8rem);
-    top: 1.0625rem;
+    height: calc(100% + 0.25rem);
+    top: 1.125rem;
   }
 
   .station {
@@ -99,19 +116,41 @@
 .destination {
   margin-bottom: 1rem;
   padding-bottom: 0;
+  padding-top: 1rem;
 
   &::after {
-    top: 0.5625rem;
+    top: 1.5625rem;
   }
 
   &::before {
     content: none;
   }
 
-  &.withLine::before {
+  &.isNext::after {
+    animation: pulse 2s ease infinite;
+    background-color: #FFF;
+    box-shadow: 0 0 0 2px rgba(#FFF, 0.5);
+  }
+
+  &.isNext::before {
+    background: none;
+    border-left: 2px dotted rgba(#FFF, 0.5);
     content: '';
-    height: 0.75rem;
-    top: -0.25rem;
+    height: 1.25rem;
+    top: 0.125rem;
+  }
+
+  &.hasHalfLine::before {
+    content: '';
+    height: 1rem;
+    top: 0.75rem;
+  }
+
+  .remaining {
+    color: rgba(#FFF, 0.5);
+    margin-left: auto;
+    margin-right: -0.25rem;
+    transform: skewX(-6deg);
   }
 }
 

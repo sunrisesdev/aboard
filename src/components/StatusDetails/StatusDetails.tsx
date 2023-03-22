@@ -13,7 +13,7 @@ import LineIndicator from '../LineIndicator/LineIndicator';
 import styles from './StatusDetails.module.scss';
 import { CurrentStopProps, StatusDetailsProps } from './types';
 
-const findCurrentStop = (stops: Stop[], destination: Stop) => {
+const findCurrentStop = (stops: Stop[]) => {
   const now = Date.now();
 
   for (const stop of stops) {
@@ -21,14 +21,7 @@ const findCurrentStop = (stops: Stop[], destination: Stop) => {
       continue;
     }
 
-    const departure = new Date(stop.departureReal!).getTime();
-
-    if (
-      stop.id === destination.id &&
-      stop.departureReal === destination.departureReal
-    ) {
-      return;
-    }
+    const departure = new Date(stop.departure!).getTime();
 
     if (now > departure) {
       continue;
@@ -54,9 +47,9 @@ const StatusDetails = ({ id }: StatusDetailsProps) => {
   const destinationAt = allStops.findIndex(
     (stop) =>
       stop.id === status?.train.destination.id &&
-      stop.departureReal === status.train.destination.departureReal
+      stop.departure === status.train.destination.departure
   );
-  const stops = allStops.slice(0, destinationAt);
+  const stops = allStops.slice(0, destinationAt + 1);
 
   useAccentColor(`var(--color-${status?.train.category})`);
 
@@ -70,13 +63,15 @@ const StatusDetails = ({ id }: StatusDetailsProps) => {
 
   const destination = allStops.at(-1);
 
-  const currentStop = findCurrentStop(stops, status.train.destination);
-  const showCurrentStop =
-    !!currentStop && currentStop.name !== status.train.destination.name;
+  const currentStop = findCurrentStop(stops);
+  const isFinalStop =
+    !!currentStop &&
+    currentStop.id === status?.train.destination.id &&
+    currentStop.departure === status.train.destination.departure;
 
   const timeInMin =
-    (new Date(status.train.destination.arrivalReal!).getTime() -
-      new Date(status.train.origin.departureReal!).getTime()) /
+    (new Date(status.train.destination.arrival!).getTime() -
+      new Date(status.train.origin.departure!).getTime()) /
     1000 /
     60;
   const duration = `${Math.floor(timeInMin / 60)} Std. ${timeInMin % 60} Min.`;
@@ -104,9 +99,7 @@ const StatusDetails = ({ id }: StatusDetailsProps) => {
           <span>{destination?.name}</span>
         </div>
 
-        <div
-          className={clsx(styles.origin, !showCurrentStop && styles.isTight)}
-        >
+        <div className={clsx(styles.origin, isFinalStop && styles.hasHalfLine)}>
           <div className={styles.station}>
             <span>{status.train.origin.name}</span>
             <span className={styles.time}>
@@ -120,13 +113,10 @@ const StatusDetails = ({ id }: StatusDetailsProps) => {
           </div>
         </div>
 
-        {showCurrentStop && currentStop && (
+        {currentStop && !isFinalStop && (
           <div className={styles.upcoming}>
             <div className={styles.station}>
-              <CurrentStop
-                destination={status.train.destination}
-                stops={stops}
-              />
+              <CurrentStop stops={stops} />
             </div>
           </div>
         )}
@@ -134,11 +124,17 @@ const StatusDetails = ({ id }: StatusDetailsProps) => {
         <div
           className={clsx(
             styles.destination,
-            !showCurrentStop && styles.withLine
+            isFinalStop && styles.isNext,
+            !currentStop && styles.hasHalfLine
           )}
         >
           <div className={styles.station}>
-            <span>{status.train.destination.name}</span>
+            <span>{status.train.destination.name}</span>{' '}
+            {isFinalStop && (
+              <span className={styles.remaining}>
+                <CurrentStop stops={stops} withoutStationName />
+              </span>
+            )}
             <span className={styles.time}>
               an {arrivalSchedule.planned}
               {!arrivalSchedule.isOnTime && (
@@ -175,13 +171,16 @@ const StatusDetails = ({ id }: StatusDetailsProps) => {
   );
 };
 
-const CurrentStop = ({ destination, stops }: CurrentStopProps) => {
+const CurrentStop = ({
+  stops,
+  withoutStationName = false,
+}: CurrentStopProps) => {
   const [currentStop, setCurrentStop] = useState<Stop | undefined>(
-    findCurrentStop(stops, destination)
+    findCurrentStop(stops)
   );
   const arrival = useMemo(
-    () => new Date(currentStop?.arrivalReal!),
-    [currentStop?.arrivalReal]
+    () => new Date(currentStop?.arrival!),
+    [currentStop?.arrival]
   );
   const [remaining, setRemaining] = useState(getMinutesUntil(arrival));
 
@@ -191,16 +190,16 @@ const CurrentStop = ({ destination, stops }: CurrentStopProps) => {
       setRemaining(minutes);
 
       if (minutes < 0) {
-        setCurrentStop(findCurrentStop(stops, destination));
+        setCurrentStop(findCurrentStop(stops));
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [arrival, destination, stops]);
+  }, [arrival, stops]);
 
   return (
     <>
-      <span>{currentStop?.name}</span>
+      {!withoutStationName && <span>{currentStop?.name}</span>}
       <span className={styles.time}>
         {remaining === 0 ? 'jetzt' : `in ${Math.abs(remaining)} Min.`}
       </span>

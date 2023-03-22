@@ -1,8 +1,8 @@
 import { Stop } from '@/traewelling-sdk/types';
 
 export type CurrentStopProps = {
-  destination: Stop;
   stops: Stop[];
+  withoutStationName?: boolean;
 };
 
 export type StatusDetailsProps = {
