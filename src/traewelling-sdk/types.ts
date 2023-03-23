@@ -23,6 +23,7 @@ export type Status = {
   user: number;
   username: string;
   visibility: number;
+  profilePicture: string;
 };
 
 export type Stop = {
