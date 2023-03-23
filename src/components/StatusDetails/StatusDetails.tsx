@@ -11,6 +11,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { MdCommit, MdOutlineTimer, MdOutlineToken } from 'react-icons/md';
 import { TbRoute } from 'react-icons/tb';
 import LineIndicator from '../LineIndicator/LineIndicator';
+import Route from '../Route/Route';
 import styles from './StatusDetails.module.scss';
 import { CurrentStopProps, StatusDetailsProps } from './types';
 
@@ -100,52 +101,43 @@ const StatusDetails = ({ id }: StatusDetailsProps) => {
           <span>{destination?.name}</span>
         </div>
 
-        <div className={clsx(styles.origin, isFinalStop && styles.hasHalfLine)}>
-          <div className={styles.station}>
-            <span>{status.train.origin.name}</span>
-            <span className={styles.time}>
-              ab {departureSchedule.planned}
-              {!departureSchedule.isOnTime && (
-                <span className={styles.delay}>
-                  &nbsp;<sup>+{departureSchedule.delayInMinutes}</sup>
-                </span>
-              )}
-            </span>
-          </div>
-        </div>
+        <section className={styles.route}>
+          <Route>
+            <Route.Entry
+              lineSlot={
+                <Route.Line variant={isFinalStop ? 'hybrid' : 'default'} />
+              }
+            >
+              <div className={styles.station}>
+                <span>{status.train.origin.name}</span>
+                <Route.Time schedule={departureSchedule} type="departure" />
+              </div>
+            </Route.Entry>
 
-        {currentStop && !isFinalStop && (
-          <div className={styles.upcoming}>
-            <div className={styles.station}>
-              <CurrentStop stops={stops} />
-            </div>
-          </div>
-        )}
-
-        <div
-          className={clsx(
-            styles.destination,
-            isFinalStop && styles.isNext,
-            !currentStop && styles.hasHalfLine
-          )}
-        >
-          <div className={styles.station}>
-            <span>{status.train.destination.name}</span>{' '}
-            {isFinalStop && (
-              <span className={styles.remaining}>
-                <CurrentStop stops={stops} withoutStationName />
-              </span>
+            {currentStop && !isFinalStop && (
+              <Route.Entry
+                lineSlot={<Route.Line variant="partial" />}
+                stopIndicatorVariant="pulsating"
+              >
+                <div className={clsx(styles.station, styles.upcoming)}>
+                  <CurrentStop stops={stops} />
+                </div>
+              </Route.Entry>
             )}
-            <span className={styles.time}>
-              an {arrivalSchedule.planned}
-              {!arrivalSchedule.isOnTime && (
-                <span className={styles.delay}>
-                  &nbsp;<sup>+{arrivalSchedule.delayInMinutes}</sup>
-                </span>
-              )}
-            </span>
-          </div>
-        </div>
+
+            <Route.Entry>
+              <div className={styles.station}>
+                <span>{status.train.destination.name}</span>
+                {isFinalStop && (
+                  <span className={clsx(styles.extraTime, styles.upcoming)}>
+                    <CurrentStop stops={stops} withoutStationName />
+                  </span>
+                )}
+                <Route.Time schedule={arrivalSchedule} type="arrival" />
+              </div>
+            </Route.Entry>
+          </Route>
+        </section>
       </header>
 
       <div className={styles.sheet}>
