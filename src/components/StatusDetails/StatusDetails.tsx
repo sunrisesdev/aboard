@@ -159,7 +159,9 @@ const StatusDetails = ({ id }: StatusDetailsProps) => {
 
           <div>
             <div className={styles.username}>{status.username}</div>
-            <div className={styles.body}>{status.body}</div>
+            {!!status.body.trim() && (
+              <div className={styles.body}>{status.body}</div>
+            )}
           </div>
         </article>
 
