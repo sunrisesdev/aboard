@@ -99,3 +99,22 @@ export type User = {
   twitterUrl: string | null;
   username: string;
 };
+
+export type PublicUser = {
+  id: number;
+  displayName: string;
+  username: string;
+  profilePicture: string;
+  trainDistance: number;
+  trainDuration: number;
+  trainSpeed: number;
+  points: number;
+  twitterUrl: string | null;
+  mastodonUrl: string | null;
+  privateProfile: boolean;
+  preventIndex: boolean;
+  userInvisibleToMe: boolean;
+  muted: boolean;
+  following: boolean;
+  followPending: boolean;
+};
