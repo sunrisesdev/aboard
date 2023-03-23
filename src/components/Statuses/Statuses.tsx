@@ -1,5 +1,6 @@
 import { useDashboard } from '@/hooks/useDashboard/useDashboard';
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './Statuses.module.scss';
 
 const Statuses = () => {
@@ -23,7 +24,7 @@ const Statuses = () => {
               }}
             >
               <div>
-                <div>{username}</div>
+                <Link href={`/${username}`}>{username}</Link>
                 <div>{train.lineName}</div>
 
                 <div>{body}</div>
@@ -36,7 +37,6 @@ const Statuses = () => {
                 <div>
                   <Image
                     src={profilePicture}
-                    loader={({ src }) => src}
                     width={32}
                     height={32}
                     unoptimized
