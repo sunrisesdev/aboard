@@ -60,7 +60,7 @@
 
 .lineIndicator {
   background-color: #FFF !important;
-  color: var(--accent-color);
+  color: var(--accent-color) !important;
 }
 
 .direction {
@@ -140,8 +140,7 @@
   margin-bottom: 1rem;
   padding-bottom: 0;
 
-  &::after,
-  &::before {
+  &::after {
     top: 0.5625rem;
   }
 
