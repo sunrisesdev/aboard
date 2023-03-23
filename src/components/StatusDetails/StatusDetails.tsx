@@ -6,6 +6,7 @@ import { useStops } from '@/hooks/useStops/useStops';
 import { Stop } from '@/traewelling-sdk/types';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
+import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { MdCommit, MdOutlineTimer, MdOutlineToken } from 'react-icons/md';
 import { TbRoute } from 'react-icons/tb';
@@ -148,6 +149,20 @@ const StatusDetails = ({ id }: StatusDetailsProps) => {
       </header>
 
       <div className={styles.sheet}>
+        <article className={styles.message}>
+          <Image
+            alt="Avatar"
+            height={42}
+            src={(status as any).profilePicture}
+            width={42}
+          />
+
+          <div>
+            <div className={styles.username}>{status.username}</div>
+            <div className={styles.body}>{status.body}</div>
+          </div>
+        </article>
+
         <ul className={styles.stats}>
           <li>
             <MdOutlineTimer size={20} />
@@ -155,7 +170,11 @@ const StatusDetails = ({ id }: StatusDetailsProps) => {
           </li>
           <li>
             <TbRoute size={20} />
-            <span>{Math.ceil(status.train.distance / 1000)} km</span>
+            {status.train.distance >= 1000 ? (
+              <span>{Math.ceil(status.train.distance / 1000)} km</span>
+            ) : (
+              <span>{status.train.distance} m</span>
+            )}
           </li>
           <li>
             <MdOutlineToken size={20} />

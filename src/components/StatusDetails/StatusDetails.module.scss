@@ -87,6 +87,7 @@
   }
 
   &.hasHalfLine::before {
+    border-radius: 1rem;
     height: calc(100% - 0.5625rem);
   }
 }
@@ -175,6 +176,44 @@
   border-radius: 1rem 1rem 0 0;
   height: 100%;
   overflow: hidden;
+}
+
+.creator {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 1rem 0;
+}
+
+.message {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 1rem 0;
+
+  img {
+    border-radius: 50%;
+  }
+}
+
+.username {
+  font-weight: 600;
+}
+
+.body {
+  line-height: 1.625;
+  position: relative;
+
+  &::before {
+    color: var(--accent-color);
+    content: '”';
+    font-size: 3rem;
+    font-weight: 600;
+    left: -0.125rem;
+    line-height: 0;
+    margin-right: 0.125rem;
+    position: relative;
+    top: 1.25rem;
+  }
 }
 
 .stats {
