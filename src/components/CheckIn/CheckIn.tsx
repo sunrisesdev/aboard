@@ -6,6 +6,7 @@ import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
+import LockBodyScroll from '../LockBodyScroll/LockBodyScroll';
 import { CheckInContext } from './CheckIn.context';
 import styles from './CheckIn.module.scss';
 import CurrentStatus from './CurrentStatus/CurrentStatus';
@@ -168,6 +169,7 @@ const CheckIn = () => {
           {step === 'trip' && <TripStep />}
           {step === 'destination' && <DestinationStep />}
           {step === 'final' && <FinalStep />}
+          {isOpen && <LockBodyScroll />}
 
           {!isOpen && !!status && (
             <Link className={styles.statusLink} href={`/status/${status.id}`}>
