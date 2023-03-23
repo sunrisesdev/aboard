@@ -1,3 +1,5 @@
+'use client';
+
 import useLockBodyScroll from '@/hooks/useLockBodyScroll/useLockBodyScroll';
 import { Fragment } from 'react';
 

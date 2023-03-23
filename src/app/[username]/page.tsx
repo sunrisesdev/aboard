@@ -1,4 +1,5 @@
 import { TraewellingSdk } from '@/traewelling-sdk';
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 async function getUserProfileData(username: string) {
@@ -11,6 +12,16 @@ async function getUserStatuses(username: string) {
   const statuses = await TraewellingSdk.user.getStatuses(username);
 
   return statuses;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { username: string };
+}): Promise<Metadata> {
+  const userData = await getUserProfileData(params.username);
+
+  return { title: `${userData?.displayName} - aboard.at` };
 }
 
 export default async function Page({
