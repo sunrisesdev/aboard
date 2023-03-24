@@ -1,10 +1,27 @@
 import StatusDetails from '@/components/StatusDetails/StatusDetails';
+import { TraewellingSdk } from '@/traewelling-sdk';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { StatusPageProps } from './types';
 
-export default function Page({ params }: StatusPageProps) {
-  return (
-    <main>
-      <StatusDetails id={params.id} />
-    </main>
-  );
+function getStatusData(id: string) {
+  return TraewellingSdk.status.single({ id });
+}
+
+export async function generateMetadata({
+  params,
+}: StatusPageProps): Promise<Metadata> {
+  const status = await getStatusData(params.id);
+
+  return {
+    title: `${status?.username} reist nach ${status?.train.destination.name} - aboard.at`,
+  };
+}
+
+export default async function Page({ params }: StatusPageProps) {
+  const status = await getStatusData(params.id);
+
+  if (!status) notFound();
+
+  return <StatusDetails status={status} />;
 }
