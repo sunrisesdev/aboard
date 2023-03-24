@@ -16,6 +16,9 @@ export const single = async (input: SingleInput) => {
   const res = await fetch(`https://traewelling.de/api/v1/status/${input.id}`, {
     headers: !session ? undefined : headers,
     method: 'GET',
+    next: {
+      revalidate: 60 * 1000,
+    },
   });
 
   const data = await res.json();
@@ -39,6 +42,9 @@ export const dashboard = async () => {
   const res = await fetch('https://traewelling.de/api/v1/statuses', {
     headers: !session ? undefined : headers,
     method: 'GET',
+    next: {
+      revalidate: 60 * 1000,
+    },
   });
 
   const data = await res.json();
