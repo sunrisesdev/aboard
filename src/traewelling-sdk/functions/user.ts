@@ -12,6 +12,7 @@ export const activeStatus = async () => {
         Authorization: `Bearer ${session?.user.accessToken}`,
       },
       method: 'GET',
+      cache: 'no-store',
     }
   );
 
@@ -27,8 +28,13 @@ export const activeStatus = async () => {
 };
 
 export const get = async (username: string) => {
+  const session = await getServerSession(authOptions);
+  const headers = {
+    Authorization: `Bearer ${session?.user.accessToken!}`,
+  };
   const res = await fetch(`https://traewelling.de/api/v1/user/${username}`, {
     method: 'GET',
+    headers: !session ? undefined : headers,
   });
 
   const data = await res.json();
@@ -43,10 +49,15 @@ export const get = async (username: string) => {
 };
 
 export const getStatuses = async (username: string) => {
+  const session = await getServerSession(authOptions);
+  const headers = {
+    Authorization: `Bearer ${session?.user.accessToken!}`,
+  };
   const res = await fetch(
     `https://traewelling.de/api/v1/user/${username}/statuses`,
     {
       method: 'GET',
+      headers: !session ? undefined : headers,
     }
   );
 
