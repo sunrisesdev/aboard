@@ -1,6 +1,5 @@
 'use client';
 
-import useAccentColor from '@/hooks/useAccentColor/useAccentColor';
 import { useStops } from '@/hooks/useStops/useStops';
 import { Stop } from '@/traewelling-sdk/types';
 import { parseSchedule } from '@/utils/parseSchedule';
@@ -51,8 +50,6 @@ const StatusDetails = ({ status }: StatusDetailsProps) => {
   );
   const stops = allStops.slice(0, destinationAt + 1);
 
-  useAccentColor(`var(--color-${status?.train.category})`);
-
   if (status === undefined) {
     return <div>Lade...</div>;
   }
@@ -61,7 +58,7 @@ const StatusDetails = ({ status }: StatusDetailsProps) => {
     return <div>Status nicht gefunden</div>;
   }
 
-  const destination = allStops.at(-1);
+  const destination = status.train.destination;
 
   const currentStop = findCurrentStop(stops);
   const isFinalStop =
@@ -87,7 +84,7 @@ const StatusDetails = ({ status }: StatusDetailsProps) => {
   });
 
   return (
-    <main className={styles.base}>
+    <div className={styles.base}>
       <header className={styles.header}>
         <div className={styles.direction}>
           <LineIndicator
@@ -96,7 +93,7 @@ const StatusDetails = ({ status }: StatusDetailsProps) => {
             product={status.train.category}
             productName=""
           />
-          <span>{destination?.name}</span>
+          <span>{destination.name}</span>
         </div>
 
         <section className={styles.route}>
@@ -178,7 +175,7 @@ const StatusDetails = ({ status }: StatusDetailsProps) => {
           </li>
         </ul>
       </div>
-    </main>
+    </div>
   );
 };
 

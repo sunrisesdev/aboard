@@ -3,7 +3,7 @@
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
-import useAccentColor from '@/hooks/useAccentColor/useAccentColor';
+import AccentColorProvider from '@/contexts/AccentColor/AccentColor.context';
 import { useDepartures } from '@/hooks/useDepartures/useDepartures';
 import { inter } from '@/styles/fonts';
 import { parseSchedule } from '@/utils/parseSchedule';
@@ -20,67 +20,67 @@ const TripStep = () => {
   const { goBack, origin, setTrip } = useContext(CheckInContext);
   const { departures, isLoading } = useDepartures(origin?.name ?? '');
 
-  useAccentColor('var(--sky11)');
-
   return (
-    <main className={styles.base}>
-      <header className={styles.header}>
-        <button className={styles.backButton} onClick={goBack}>
-          <div className={styles.arrow}>
-            <MdArrowBack size={20} />
-          </div>
-          <span>{origin?.name}</span>
-        </button>
-      </header>
+    <AccentColorProvider color="var(--sky11)">
+      <div className={styles.base}>
+        <header className={styles.header}>
+          <button className={styles.backButton} onClick={goBack}>
+            <div className={styles.arrow}>
+              <MdArrowBack size={20} />
+            </div>
+            <span>{origin?.name}</span>
+          </button>
+        </header>
 
-      <div className={styles.sheet}>
-        <ScrollArea className={styles.scrollArea} topFogBorderRadius="1rem">
-          {departures?.trips && departures.trips.length > 0 && (
-            <ul className={styles.tripList}>
-              {departures.trips.map((trip) => (
-                <li
-                  key={`${trip.tripId}@${trip.station.ibnr}@${trip.plannedWhen}`}
-                >
-                  <Trip
-                    delay={trip.delay}
-                    departureAt={trip.when}
-                    destination={trip.direction ?? trip.destination.name}
-                    lineName={trip.line.name}
-                    onClick={() => setTrip(trip)}
-                    plannedDepartureAt={trip.plannedWhen}
-                    product={trip.line.product}
-                    productName={trip.line.productName}
-                    selectedStationName={origin?.name ?? ''}
-                    stationName={trip.station.name}
-                    tripNumber={trip.line.fahrtNr}
-                  />
+        <div className={styles.sheet}>
+          <ScrollArea className={styles.scrollArea} topFogBorderRadius="1rem">
+            {departures?.trips && departures.trips.length > 0 && (
+              <ul className={styles.tripList}>
+                {departures.trips.map((trip) => (
+                  <li
+                    key={`${trip.tripId}@${trip.station.ibnr}@${trip.plannedWhen}`}
+                  >
+                    <Trip
+                      delay={trip.delay}
+                      departureAt={trip.when}
+                      destination={trip.direction ?? trip.destination.name}
+                      lineName={trip.line.name}
+                      onClick={() => setTrip(trip)}
+                      plannedDepartureAt={trip.plannedWhen}
+                      product={trip.line.product}
+                      productName={trip.line.productName}
+                      selectedStationName={origin?.name ?? ''}
+                      stationName={trip.station.name}
+                      tripNumber={trip.line.fahrtNr}
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {isLoading && (
+              <ul className={styles.tripList}>
+                <li>
+                  <TripSkeleton />
                 </li>
-              ))}
-            </ul>
-          )}
-
-          {isLoading && (
-            <ul className={styles.tripList}>
-              <li>
-                <TripSkeleton />
-              </li>
-              <li>
-                <TripSkeleton />
-              </li>
-              <li>
-                <TripSkeleton />
-              </li>
-              <li>
-                <TripSkeleton />
-              </li>
-              <li>
-                <TripSkeleton />
-              </li>
-            </ul>
-          )}
-        </ScrollArea>
+                <li>
+                  <TripSkeleton />
+                </li>
+                <li>
+                  <TripSkeleton />
+                </li>
+                <li>
+                  <TripSkeleton />
+                </li>
+                <li>
+                  <TripSkeleton />
+                </li>
+              </ul>
+            )}
+          </ScrollArea>
+        </div>
       </div>
-    </main>
+    </AccentColorProvider>
   );
 };
 

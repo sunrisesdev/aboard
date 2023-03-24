@@ -1,4 +1,6 @@
 import StatusDetails from '@/components/StatusDetails/StatusDetails';
+import AccentColorProvider from '@/contexts/AccentColor/AccentColor.context';
+import AccentColorLayout from '@/contexts/AccentColor/AccentColorLayout';
 import { TraewellingSdk } from '@/traewelling-sdk';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -23,5 +25,9 @@ export default async function Page({ params }: StatusPageProps) {
 
   if (!status) notFound();
 
-  return <StatusDetails status={status} />;
+  return (
+    <AccentColorProvider color={`var(--color-${status?.train.category})`}>
+      <StatusDetails status={status} />
+    </AccentColorProvider>
+  );
 }
