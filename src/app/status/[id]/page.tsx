@@ -4,10 +4,8 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { StatusPageProps } from './types';
 
-async function getStatusData(id: string) {
-  const status = await TraewellingSdk.status.single({ id });
-
-  return status;
+function getStatusData(id: string) {
+  return TraewellingSdk.status.single({ id });
 }
 
 export async function generateMetadata({
