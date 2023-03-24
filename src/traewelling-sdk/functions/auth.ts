@@ -10,6 +10,9 @@ export const user = async () => {
       Authorization: `Bearer ${session?.user.accessToken}`,
     },
     method: 'GET',
+    next: {
+      revalidate: 5 * 60 * 1000,
+    },
   });
 
   const data = await res.json();

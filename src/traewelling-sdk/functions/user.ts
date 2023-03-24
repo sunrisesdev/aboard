@@ -35,6 +35,9 @@ export const get = async (username: string) => {
   const res = await fetch(`https://traewelling.de/api/v1/user/${username}`, {
     method: 'GET',
     headers: !session ? undefined : headers,
+    next: {
+      revalidate: 5 * 60 * 1000,
+    },
   });
 
   const data = await res.json();
@@ -58,6 +61,9 @@ export const getStatuses = async (username: string) => {
     {
       method: 'GET',
       headers: !session ? undefined : headers,
+      next: {
+        revalidate: 60 * 1000,
+      },
     }
   );
 
