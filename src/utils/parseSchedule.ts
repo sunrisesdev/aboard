@@ -4,6 +4,8 @@ type ParseScheduleOptions = {
   planned: string;
 };
 
+export type Schedule = ReturnType<typeof parseSchedule>;
+
 export const parseSchedule = ({
   actual,
   delay,
