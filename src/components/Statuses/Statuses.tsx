@@ -16,36 +16,37 @@ const Statuses = () => {
       {statuses.map(
         ({ id, username, profilePicture, body, likes, liked, type, train }) => {
           return (
-            <div
-              key={id}
-              className={styles.status}
-              style={{
-                ['--current-status-color' as any]: `var(--color-${train.category})`,
-              }}
-            >
-              <div>
-                <Link href={`/${username}`}>{username}</Link>
-                <div>{train.lineName}</div>
-
-                <div>{body}</div>
-                <div>{likes}</div>
-                <div>{liked && '❤️'} </div>
-              </div>
-              <hr className={styles.hr} />
-
-              <div>
+            <Link key={id} href={`/status/${id}`}>
+              <div
+                className={styles.status}
+                style={{
+                  ['--current-status-color' as any]: `var(--color-${train.category})`,
+                }}
+              >
                 <div>
-                  <Image
-                    src={profilePicture}
-                    width={32}
-                    height={32}
-                    unoptimized
-                    className={styles.profilePicture}
-                    alt={`Profilbild von ${username}`}
-                  />
+                  <Link href={`/${username}`}>{username}</Link>
+                  <div>{train.lineName}</div>
+
+                  <div>{body}</div>
+                  <div>{likes}</div>
+                  <div>{liked && '❤️'} </div>
+                </div>
+                <hr className={styles.hr} />
+
+                <div>
+                  <div>
+                    <Image
+                      src={profilePicture}
+                      width={32}
+                      height={32}
+                      unoptimized
+                      className={styles.profilePicture}
+                      alt={`Profilbild von ${username}`}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           );
         }
       )}

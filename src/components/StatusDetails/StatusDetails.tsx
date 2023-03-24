@@ -1,7 +1,6 @@
 'use client';
 
 import useAccentColor from '@/hooks/useAccentColor/useAccentColor';
-import { useStatus } from '@/hooks/useStatus/useStatus';
 import { useStops } from '@/hooks/useStops/useStops';
 import { Stop } from '@/traewelling-sdk/types';
 import { parseSchedule } from '@/utils/parseSchedule';
@@ -37,8 +36,7 @@ const getMinutesUntil = (target: Date) => {
   return Math.ceil((target.getTime() - Date.now()) / 1000 / 60);
 };
 
-const StatusDetails = ({ id }: StatusDetailsProps) => {
-  const { status } = useStatus(id);
+const StatusDetails = ({ status }: StatusDetailsProps) => {
   const { stops: allStops } = useStops(
     status?.train.hafasId ?? '',
     status?.train.lineName ?? '',

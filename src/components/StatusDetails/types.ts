@@ -1,4 +1,4 @@
-import { Stop } from '@/traewelling-sdk/types';
+import { Status, Stop } from '@/traewelling-sdk/types';
 
 export type CurrentStopProps = {
   stops: Stop[];
@@ -6,5 +6,5 @@ export type CurrentStopProps = {
 };
 
 export type StatusDetailsProps = {
-  id: string;
+  status: Status;
 };
