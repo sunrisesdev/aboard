@@ -36,7 +36,7 @@ export const get = async (username: string) => {
     method: 'GET',
     headers: !session ? undefined : headers,
     next: {
-      revalidate: 5 * 60 * 1000,
+      revalidate: 5 * 60,
     },
   });
 
@@ -62,7 +62,7 @@ export const getStatuses = async (username: string) => {
       method: 'GET',
       headers: !session ? undefined : headers,
       next: {
-        revalidate: 60 * 1000,
+        revalidate: 60,
       },
     }
   );
