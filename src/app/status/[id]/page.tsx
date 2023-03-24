@@ -14,7 +14,7 @@ export async function generateMetadata({
   const status = await getStatusData(params.id);
 
   return {
-    title: `${status?.username}'s Reise nach ${status?.train.destination.name}  - aboard.at`,
+    title: `${status?.username} reist nach ${status?.train.destination.name} - aboard.at`,
   };
 }
 
