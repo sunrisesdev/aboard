@@ -1,4 +1,5 @@
 import { useCurrentStatus } from '@/hooks/useCurrentStatus/useCurrentStatus';
+import useUmami from '@/hooks/useUmami/useUmami';
 import { CheckinInput } from '@/traewelling-sdk/functions/trains';
 import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
 import { Station, Stop } from '@/traewelling-sdk/types';
@@ -56,6 +57,8 @@ const CheckIn = () => {
   const [trip, setTrip] = useState<HAFASTrip>();
   const [visibility, setVisibility] = useState(0);
 
+  const { trackEvent } = useUmami();
+
   const { mutate, status } = useCurrentStatus();
 
   const checkIn = async () => {
@@ -93,9 +96,12 @@ const CheckIn = () => {
 
       setIsOpen(false);
 
+      trackEvent('checkin', { type: 'click', status: 'success' });
+
       setTimeout(async () => await mutate(), 500);
     } catch (ex) {
       // TODO: Do something better
+      trackEvent('checkin', { type: 'click', status: 'error' });
       setError(JSON.stringify(ex, null, 2));
     }
   };

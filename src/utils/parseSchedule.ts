@@ -23,7 +23,7 @@ export const parseSchedule = ({
     actualValue = actualDate.getTime();
     delayInMinutes = (actualValue - plannedValue) / 1000 / 60;
   } else if (delay !== undefined && delay !== null) {
-    actualValue = plannedValue + delay * 1000;
+    actualValue = plannedValue + delay;
     actualDate = new Date(actualValue);
     delayInMinutes = delay / 60;
   } else {

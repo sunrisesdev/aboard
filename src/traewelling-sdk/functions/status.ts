@@ -17,7 +17,7 @@ export const single = async (input: SingleInput) => {
     headers: !session ? undefined : headers,
     method: 'GET',
     next: {
-      revalidate: 60 * 1000,
+      revalidate: 60,
     },
   });
 
@@ -43,7 +43,7 @@ export const dashboard = async () => {
     headers: !session ? undefined : headers,
     method: 'GET',
     next: {
-      revalidate: 60 * 1000,
+      revalidate: 60,
     },
   });
 

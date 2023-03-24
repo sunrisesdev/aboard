@@ -21,6 +21,14 @@ const nextConfig = {
       },
     ];
   },
+  rewrites: async () => {
+    return [
+      {
+        source: '/tracking/:path*',
+        destination: 'https://umami.cloudron.nbank.dev/:path*',
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

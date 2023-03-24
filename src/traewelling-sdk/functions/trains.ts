@@ -132,7 +132,7 @@ export const departures = async (input: DeparturesInput) => {
       Authorization: `Bearer ${session?.user.accessToken}`,
     },
     next: {
-      revalidate: 60 * 1000,
+      revalidate: 60,
     },
     method: 'GET',
   });
@@ -162,7 +162,7 @@ export const history = async () => {
     },
     method: 'GET',
     next: {
-      revalidate: 60 * 1000,
+      revalidate: 60,
     },
   });
 
@@ -233,7 +233,7 @@ export const trip = async (input: TripInput) => {
     },
     method: 'GET',
     next: {
-      revalidate: 60 * 1000,
+      revalidate: 60,
     },
   });
 
