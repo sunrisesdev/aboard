@@ -1,4 +1,5 @@
 import Providers from '@/components/Providers/Providers';
+import UmamiScript from '@/scripts/UmamiScript/UmamiScript';
 import { sourceSans3 } from '@/styles/fonts';
 import '@/styles/globals.css';
 import { Session } from 'next-auth';
@@ -18,6 +19,7 @@ export default async function RootLayout({
       <head />
       <body className={sourceSans3.className}>
         <Providers session={session}>{children}</Providers>
+        <UmamiScript />
       </body>
     </html>
   );
