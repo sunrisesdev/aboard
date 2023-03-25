@@ -2,6 +2,17 @@ import { Theme } from '@/components/ThemeProvider/types';
 import { HAFASProductType } from '@/traewelling-sdk/hafasTypes';
 
 export const CUSTOM_LINE_THEMES: Record<string, Theme | undefined> = {
+  // Hannover, S-Bahn
+  '4-tdhs-1': { accent: '#836CAA', accentRGB: '131, 108, 170' },
+  '4-tdhs-2': { accent: '#007A3C', accentRGB: '0, 122, 60' },
+  '4-tdhs-3': { accent: '#CB68A6', accentRGB: '203, 104, 166' },
+  '4-tdhs-4': { accent: '#9A2A47', accentRGB: '154, 42, 71' },
+  '4-tdhs-5': { accent: '#F18700', accentRGB: '241, 135, 0' },
+  '4-tdhs-6': { accent: '#004F9E', accentRGB: '0, 79, 158' },
+  '4-tdhs-7': { accent: '#AFCA26', accentRGB: '175, 202, 38' },
+  '4-tdhs-8': { accent: '#009AD9', accentRGB: '0, 154, 217' },
+  '4-tdhs-21': { accent: '#007A3C', accentRGB: '0, 122, 60' },
+  '4-tdhs-51': { accent: '#F18700', accentRGB: '241, 135, 0' },
   // Hannover, Stadtbahn
   '8-webuet-1': { accent: '#FF2E3E', accentRGB: '255, 46, 62' },
   '8-webuet-2': { accent: '#FF2E3E', accentRGB: '255, 46, 62' },
