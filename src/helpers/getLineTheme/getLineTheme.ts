@@ -1,7 +1,7 @@
+import { Theme } from '@/components/ThemeProvider/types';
 import { HAFASProductType } from '@/traewelling-sdk/hafasTypes';
 import { getContrastColor } from '../getContrastColor';
 import { CUSTOM_LINE_THEMES, PRODUCT_THEMES } from './consts';
-import { Theme } from './types';
 
 export const getLineTheme = (
   id: string,
