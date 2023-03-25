@@ -1,3 +1,4 @@
+import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import { useCurrentStatus } from '@/hooks/useCurrentStatus/useCurrentStatus';
 import useUmami from '@/hooks/useUmami/useUmami';
 import { CheckinInput } from '@/traewelling-sdk/functions/trains';
@@ -7,6 +8,7 @@ import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
+import Accent from '../Accent/Accent';
 import LockBodyScroll from '../LockBodyScroll/LockBodyScroll';
 import { CheckInContext } from './CheckIn.context';
 import styles from './CheckIn.module.scss';
@@ -162,27 +164,28 @@ const CheckIn = () => {
     visibility,
   };
 
+  const theme = !status
+    ? undefined
+    : getLineTheme(status.train.number, status.train.category);
+
   return (
     <CheckInContext.Provider value={contextValue}>
-      <div
-        className={styles.base}
-        style={{
-          ['--current-status-color' as any]: `var(--color-${status?.train.category})`,
-        }}
-      >
-        <Panel>
-          {step === 'origin' && <OriginStep />}
-          {step === 'trip' && <TripStep />}
-          {step === 'destination' && <DestinationStep />}
-          {step === 'final' && <FinalStep />}
-          {isOpen && <LockBodyScroll />}
+      <div className={styles.base}>
+        <Accent theme={theme}>
+          <Panel>
+            {step === 'origin' && <OriginStep />}
+            {step === 'trip' && <TripStep />}
+            {step === 'destination' && <DestinationStep />}
+            {step === 'final' && <FinalStep />}
+            {isOpen && <LockBodyScroll />}
 
-          {!isOpen && !!status && (
-            <Link className={styles.statusLink} href={`/status/${status.id}`}>
-              <CurrentStatus />
-            </Link>
-          )}
-        </Panel>
+            {!isOpen && !!status && (
+              <Link className={styles.statusLink} href={`/status/${status.id}`}>
+                <CurrentStatus />
+              </Link>
+            )}
+          </Panel>
+        </Accent>
       </div>
     </CheckInContext.Provider>
   );

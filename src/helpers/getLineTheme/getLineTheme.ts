@@ -6,17 +6,19 @@ import { LineTheme } from './types';
 export const getLineTheme = (
   id: string,
   productType: HAFASProductType
-): LineTheme => {
+): Required<LineTheme> => {
   const theme = LINE_COLORS[id];
 
   if (!theme) {
     return PRODUCT_COLORS[productType];
   }
 
-  const values = theme.mainRGB.split(',').map((v) => +v.trim());
+  const values = theme.colorRGB.split(',').map((v) => +v.trim());
+  const contrast = getContrastColor(values[0], values[1], values[2]);
 
   return {
-    contrast: getContrastColor(values[0], values[1], values[2]),
+    contrast,
+    contrastRGB: contrast === '#000000' ? '0, 0, 0' : '255, 255, 255',
     ...theme,
   };
 };

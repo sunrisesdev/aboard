@@ -1,5 +1,6 @@
 export type LineTheme = {
-  main: string;
-  mainRGB: `${number}, ${number}, ${number}`;
+  color: string;
+  colorRGB: `${number}, ${number}, ${number}`;
   contrast?: string;
+  contrastRGB?: `${number}, ${number}, ${number}`;
 };

@@ -4,6 +4,7 @@ export type TripProps = {
   delay: number;
   departureAt: string | null;
   destination: string;
+  lineId: string;
   lineName: string;
   onClick: () => void;
   plannedDepartureAt: string;

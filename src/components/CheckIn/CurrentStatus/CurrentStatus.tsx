@@ -42,17 +42,19 @@ const CurrentStatus = () => {
       <div className={styles.meta}>
         <LineIndicator
           className={styles.lineIndicator}
+          isInverted
+          lineId={currentStatus.train.number}
           lineName={currentStatus.train.lineName}
           product={currentStatus.train.category}
           productName=""
         />
 
-        <div>
+        <div className={styles.metaText}>
           <TbRoute size={18} />
           <span>{Math.ceil(currentStatus.train.distance / 1000)} km</span>
         </div>
 
-        <div>
+        <div className={styles.metaText}>
           <MdOutlineToken size={18} />
           <span>{currentStatus.train.points}</span>
         </div>

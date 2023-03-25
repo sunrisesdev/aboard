@@ -1,5 +1,6 @@
 'use client';
 
+import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useStops } from '@/hooks/useStops/useStops';
 import { Stop } from '@/traewelling-sdk/types';
@@ -58,7 +59,8 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
     setNextStop(getNextStop(stops));
   }, [stops]);
 
-  useAppTheme(`var(--color-${status.train.category})`);
+  const theme = getLineTheme(status.train.number, status.train.category);
+  useAppTheme(theme.color);
 
   const isDestinationNext =
     !!nextStop &&
@@ -83,12 +85,13 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
   });
 
   return (
-    <Accent color={`var(--color-${status.train.category})`}>
+    <Accent theme={theme}>
       <main className={styles.base}>
         <header className={styles.header}>
           <div className={styles.direction}>
             <LineIndicator
-              className={styles.lineIndicator}
+              isInverted
+              lineId={status.train.number}
               lineName={status.train.lineName}
               product={status.train.category}
               productName=""

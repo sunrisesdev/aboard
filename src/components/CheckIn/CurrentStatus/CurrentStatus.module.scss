@@ -1,5 +1,5 @@
 .base {
-  color: #FFF;
+  color: var(--contrast, #FFF);
 }
 
 .destination,
@@ -9,9 +9,9 @@
   position: relative;
 
   &::after {
-    background-color: var(--current-status-color);
+    background-color: var(--accent, var(--sky11));
     border-radius: 50%;
-    box-shadow: 0 0 0 2px #FFF;
+    box-shadow: 0 0 0 2px var(--contrast, #FFF);
     content: '';
     display: block;
     height: 6px;
@@ -21,7 +21,7 @@
   }
 
   &::before {
-    background-color: #FFF;
+    background-color: var(--contrast, #FFF);
     content: '';
     display: block;
     height: calc(100% - 0.5625rem);
@@ -68,7 +68,7 @@
 
 .meta {
   align-items: center;
-  color: rgba(#FFF, 0.8);
+  color: rgba(var(--contrast-rgb, 255, 255, 255), 0.5);
   display: flex;
   font-size: 0.875rem;
   font-weight: 600;
@@ -77,7 +77,7 @@
   position: relative;
 
   &::before {
-    background-color: #FFF;
+    background-color: var(--contrast, #FFF);
     content: '';
     display: block;
     height: calc(100%);
@@ -96,7 +96,5 @@
 }
 
 .lineIndicator {
-  background-color: #FFF !important;
-  color: var(--current-status-color) !important;
   font-weight: 500;
 }
