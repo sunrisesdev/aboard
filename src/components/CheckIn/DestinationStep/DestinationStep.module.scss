@@ -1,7 +1,7 @@
 @import '@/styles/index';
 
 .base {
-  background-color: var(--accent-color, --sky11);
+  background-color: var(--accent, --sky11);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -48,7 +48,7 @@
 
 .lineIndicator {
   background-color: #FFF !important;
-  color: var(--accent-color);
+  color: var(--accent) !important;
 }
 
 .direction {
@@ -82,7 +82,7 @@
   position: relative;
 
   &::after {
-    background-color: var(--accent-color);
+    background-color: var(--accent);
     border-radius: 50%;
     box-shadow: 0 0 0 2px #FFF;
     content: '';
@@ -141,7 +141,7 @@
   padding-top: 1rem;
 
   &::before {
-    background-color: var(--accent-color);
+    background-color: var(--accent);
     content: '';
     display: block;
     height: calc(2.5rem + ((var(--stop-count, 1) - 1) * 3rem));
@@ -186,7 +186,7 @@
   &::after {
     background-color: #FFF;
     border-radius: 50%;
-    box-shadow: 0 0 0 2px var(--accent-color);
+    box-shadow: 0 0 0 2px var(--accent);
     content: '';
     display: block;
     height: 6px;
@@ -198,7 +198,7 @@
   }
 
   &::before {
-    background-color: var(--accent-color);
+    background-color: var(--accent);
     content: '';
     display: block;
     height: 100%;
@@ -218,7 +218,7 @@
 
     &::before {
       background-color: #FFF;
-      border-left: 2px dotted var(--accent-color);
+      border-left: 2px dotted var(--accent);
     }
 
     .name, .time {

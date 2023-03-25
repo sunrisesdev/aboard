@@ -3,7 +3,7 @@
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
-import useAccentColor from '@/hooks/useAccentColor/useAccentColor';
+import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useDepartures } from '@/hooks/useDepartures/useDepartures';
 import { inter } from '@/styles/fonts';
 import { parseSchedule } from '@/utils/parseSchedule';
@@ -20,7 +20,7 @@ const TripStep = () => {
   const { goBack, origin, setTrip } = useContext(CheckInContext);
   const { departures, isLoading } = useDepartures(origin?.name ?? '');
 
-  useAccentColor('var(--sky11)');
+  useAppTheme('var(--sky11)');
 
   return (
     <main className={styles.base}>

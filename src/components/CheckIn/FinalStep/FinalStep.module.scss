@@ -1,7 +1,7 @@
 @import '@/styles/index';
 
 .base {
-  background-color: var(--accent-color, --sky11);
+  background-color: var(--accent, --sky11);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -60,7 +60,7 @@
 
 .lineIndicator {
   background-color: #FFF !important;
-  color: var(--accent-color) !important;
+  color: var(--accent) !important;
 }
 
 .direction {
@@ -94,7 +94,7 @@
   position: relative;
 
   &::after {
-    background-color: var(--accent-color);
+    background-color: var(--accent);
     border-radius: 50%;
     box-shadow: 0 0 0 2px #FFF;
     content: '';

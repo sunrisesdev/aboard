@@ -19,7 +19,7 @@
 }
 
 .base {
-  background-color: var(--accent-color, --sky11);
+  background-color: var(--accent, --sky11);
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -73,7 +73,7 @@
 
 .lineIndicator {
   background-color: #FFF !important;
-  color: var(--accent-color, var(--sky11)) !important;
+  color: var(--accent, var(--sky11)) !important;
   font-weight: 500;
 }
 
@@ -110,7 +110,7 @@
   position: relative;
 
   &::before {
-    color: var(--accent-color);
+    color: var(--accent);
     content: '”';
     font-size: 3rem;
     font-weight: 600;

@@ -27,7 +27,7 @@
 }
 
 body {
-  background-color: var(--accent-color, var(--sky11));
+  background-color: var(--app-theme);
   font-size: 16px;
   line-height: 1.5;
 }

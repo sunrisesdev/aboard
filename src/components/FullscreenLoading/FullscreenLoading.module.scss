@@ -1,14 +1,14 @@
 .base {
+  align-items: center;
+  background-color: #FFF;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
   position: fixed;
   top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  background-color: var(--sky4);
   z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 // create spin animation
@@ -19,10 +19,10 @@
 }
 
 .spinner {
-  width: 4rem;
-  height: 4rem;
-  border-radius: 50%;
-  border: 0.25rem solid var(--sky11);
-  border-top-color: transparent;
   animation: spin 1s linear infinite;
+  border-radius: 50%;
+  border-top-color: transparent;
+  border: 0.25rem solid var(--sky11);
+  height: 4rem;
+  width: 4rem;
 }
