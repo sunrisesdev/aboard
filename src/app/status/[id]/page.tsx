@@ -1,4 +1,5 @@
 import StatusDetails from '@/components/StatusDetails/StatusDetails';
+import { getStopsAfter } from '@/helpers/getStopsAfter';
 import { TraewellingSdk } from '@/traewelling-sdk';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -6,6 +7,10 @@ import { StatusPageProps } from './types';
 
 function getStatusData(id: string) {
   return TraewellingSdk.status.single({ id });
+}
+
+function getStops(hafasTripId: string, lineName: string, start: string) {
+  return TraewellingSdk.trains.trip({ hafasTripId, lineName, start });
 }
 
 export async function generateMetadata({
@@ -23,5 +28,17 @@ export default async function Page({ params }: StatusPageProps) {
 
   if (!status) notFound();
 
-  return <StatusDetails status={status} />;
+  const { stopovers } = await getStops(
+    status.train.hafasId,
+    status.train.lineName,
+    status.train.origin.id.toString()
+  );
+
+  const stops = getStopsAfter(
+    status.train.origin.departurePlanned ?? '',
+    status.train.origin.id.toString(),
+    stopovers
+  );
+
+  return <StatusDetails status={status} stops={stops} />;
 }

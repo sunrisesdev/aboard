@@ -73,7 +73,7 @@
 
 .lineIndicator {
   background-color: #FFF !important;
-  color: var(--accent-color) !important;
+  color: var(--accent-color, var(--sky11)) !important;
   font-weight: 500;
 }
 
