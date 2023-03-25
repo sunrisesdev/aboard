@@ -1,3 +1,4 @@
+import { getStopsAfter } from '@/helpers/getStopsAfter';
 import { TripResponse } from '@/traewelling-sdk/functions/trains';
 import useSWR from 'swr';
 
@@ -35,15 +36,7 @@ export const useStops = (
     ([_, hafasTripId, lineName, start]) => fetcher(hafasTripId, lineName, start)
   );
 
-  const startingAt = data?.stopovers.findIndex(
-    ({ departurePlanned, id }) =>
-      plannedDeparture === departurePlanned && start === id.toString()
-  );
-
-  const stops =
-    data?.stopovers.slice(
-      typeof startingAt === 'undefined' ? 0 : startingAt + 1
-    ) ?? [];
+  const stops = data && getStopsAfter(plannedDeparture, start, data.stopovers);
 
   return {
     isLoading,

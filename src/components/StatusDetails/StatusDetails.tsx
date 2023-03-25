@@ -36,22 +36,22 @@ const getNextStop = (stops: Stop[]) => {
   }
 };
 
-const StatusDetails = ({ status }: StatusDetailsProps) => {
+const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
   const [nextStop, setNextStop] = useState<Stop>();
   const { stops: allStops } = useStops(
-    status.train.hafasId ?? '',
-    status.train.lineName ?? '',
+    status.train.hafasId,
+    status.train.lineName,
     status.train.origin.departurePlanned ?? '',
-    status.train.origin.id.toString() ?? ''
+    status.train.origin.id.toString()
   );
 
-  const direction = allStops.at(-1)?.name;
-  const destinationAt = allStops.findIndex(
+  const direction = (allStops ?? initialStops).at(-1)?.name;
+  const destinationAt = (allStops ?? initialStops).findIndex(
     (stop) =>
       stop.id === status.train.destination.id &&
       stop.departure === status.train.destination.departure
   );
-  const stops = allStops.slice(0, destinationAt + 1);
+  const stops = (allStops ?? initialStops).slice(0, destinationAt + 1);
 
   useEffect(() => {
     setNextStop(getNextStop(stops));
