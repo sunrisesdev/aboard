@@ -1,6 +1,6 @@
 'use client';
 
-import useAccentColor from '@/hooks/useAccentColor/useAccentColor';
+import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useStops } from '@/hooks/useStops/useStops';
 import { Stop } from '@/traewelling-sdk/types';
 import { parseSchedule } from '@/utils/parseSchedule';
@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { MdCommit, MdOutlineTimer, MdOutlineToken } from 'react-icons/md';
 import { TbRoute } from 'react-icons/tb';
+import Accent from '../Accent/Accent';
 import LineIndicator from '../LineIndicator/LineIndicator';
 import Route from '../Route/Route';
 import styles from './StatusDetails.module.scss';
@@ -57,7 +58,7 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
     setNextStop(getNextStop(stops));
   }, [stops]);
 
-  useAccentColor(`var(--color-${status.train.category})`);
+  useAppTheme(`var(--color-${status.train.category})`);
 
   const isDestinationNext =
     !!nextStop &&
@@ -82,109 +83,111 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
   });
 
   return (
-    <main className={styles.base}>
-      <header className={styles.header}>
-        <div className={styles.direction}>
-          <LineIndicator
-            className={styles.lineIndicator}
-            lineName={status.train.lineName}
-            product={status.train.category}
-            productName=""
-          />
-          <span>{direction}</span>
-        </div>
+    <Accent color={`var(--color-${status.train.category})`}>
+      <main className={styles.base}>
+        <header className={styles.header}>
+          <div className={styles.direction}>
+            <LineIndicator
+              className={styles.lineIndicator}
+              lineName={status.train.lineName}
+              product={status.train.category}
+              productName=""
+            />
+            <span>{direction}</span>
+          </div>
 
-        <section className={styles.route}>
-          <Route>
-            <Route.Entry
-              lineSlot={
-                <Route.Line
-                  variant={isDestinationNext ? 'hybrid' : 'default'}
-                />
-              }
-            >
-              <div className={styles.station}>
-                <span>{status.train.origin.name}</span>
-                <Route.Time schedule={departureSchedule} type="departure" />
-              </div>
-            </Route.Entry>
-
-            {nextStop && !isDestinationNext && (
+          <section className={styles.route}>
+            <Route>
               <Route.Entry
-                lineSlot={<Route.Line variant="partial" />}
-                stopIndicatorVariant="pulsating"
-              >
-                <div className={clsx(styles.station, styles.upcoming)}>
-                  <span>{nextStop.name}</span>
-                  <NextStopCountdown
-                    nextStop={nextStop}
-                    setNextStop={setNextStop}
-                    stops={stops}
+                lineSlot={
+                  <Route.Line
+                    variant={isDestinationNext ? 'hybrid' : 'default'}
                   />
+                }
+              >
+                <div className={styles.station}>
+                  <span>{status.train.origin.name}</span>
+                  <Route.Time schedule={departureSchedule} type="departure" />
                 </div>
               </Route.Entry>
-            )}
 
-            <Route.Entry>
-              <div className={styles.station}>
-                <span>{status.train.destination.name}</span>
-                {isDestinationNext && (
-                  <span className={clsx(styles.extraTime, styles.upcoming)}>
+              {nextStop && !isDestinationNext && (
+                <Route.Entry
+                  lineSlot={<Route.Line variant="partial" />}
+                  stopIndicatorVariant="pulsating"
+                >
+                  <div className={clsx(styles.station, styles.upcoming)}>
+                    <span>{nextStop.name}</span>
                     <NextStopCountdown
                       nextStop={nextStop}
                       setNextStop={setNextStop}
                       stops={stops}
                     />
-                  </span>
-                )}
-                <Route.Time schedule={arrivalSchedule} type="arrival" />
-              </div>
-            </Route.Entry>
-          </Route>
-        </section>
-      </header>
+                  </div>
+                </Route.Entry>
+              )}
 
-      <div className={styles.sheet}>
-        <article className={styles.message}>
-          <Image
-            alt="Avatar"
-            height={42}
-            src={(status as any).profilePicture}
-            width={42}
-          />
+              <Route.Entry>
+                <div className={styles.station}>
+                  <span>{status.train.destination.name}</span>
+                  {isDestinationNext && (
+                    <span className={clsx(styles.extraTime, styles.upcoming)}>
+                      <NextStopCountdown
+                        nextStop={nextStop}
+                        setNextStop={setNextStop}
+                        stops={stops}
+                      />
+                    </span>
+                  )}
+                  <Route.Time schedule={arrivalSchedule} type="arrival" />
+                </div>
+              </Route.Entry>
+            </Route>
+          </section>
+        </header>
 
-          <div>
-            <div className={styles.username}>{status.username}</div>
-            {!!status.body.trim() && (
-              <div className={styles.body}>{status.body}</div>
-            )}
-          </div>
-        </article>
+        <div className={styles.sheet}>
+          <article className={styles.message}>
+            <Image
+              alt="Avatar"
+              height={42}
+              src={(status as any).profilePicture}
+              width={42}
+            />
 
-        <ul className={styles.stats}>
-          <li>
-            <MdOutlineTimer size={20} />
-            <span>{duration}</span>
-          </li>
-          <li>
-            <TbRoute size={20} />
-            {status.train.distance >= 1000 ? (
-              <span>{Math.ceil(status.train.distance / 1000)} km</span>
-            ) : (
-              <span>{status.train.distance} m</span>
-            )}
-          </li>
-          <li>
-            <MdOutlineToken size={20} />
-            <span>{status.train.points} Punkte</span>
-          </li>
-          <li>
-            <MdCommit size={20} />
-            <span>{stops.length + 1} Stationen</span>
-          </li>
-        </ul>
-      </div>
-    </main>
+            <div>
+              <div className={styles.username}>{status.username}</div>
+              {!!status.body.trim() && (
+                <div className={styles.body}>{status.body}</div>
+              )}
+            </div>
+          </article>
+
+          <ul className={styles.stats}>
+            <li>
+              <MdOutlineTimer size={20} />
+              <span>{duration}</span>
+            </li>
+            <li>
+              <TbRoute size={20} />
+              {status.train.distance >= 1000 ? (
+                <span>{Math.ceil(status.train.distance / 1000)} km</span>
+              ) : (
+                <span>{status.train.distance} m</span>
+              )}
+            </li>
+            <li>
+              <MdOutlineToken size={20} />
+              <span>{status.train.points} Punkte</span>
+            </li>
+            <li>
+              <MdCommit size={20} />
+              <span>{stops.length + 1} Stationen</span>
+            </li>
+          </ul>
+        </div>
+      </main>
+    </Accent>
   );
 };
 
