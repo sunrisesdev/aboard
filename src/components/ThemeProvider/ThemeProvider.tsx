@@ -1,18 +1,18 @@
 import { CSSProperties } from 'react';
-import styles from './Accent.module.scss';
-import { AccentProps } from './types';
+import styles from './ThemeProvider.module.scss';
+import { ThemeProviderProps } from './types';
 
-const Accent = ({
+const ThemeProvider = ({
   children,
   color,
   colorRGB,
   contrast,
   contrastRGB,
   theme,
-}: AccentProps) => {
+}: ThemeProviderProps) => {
   const style = {
-    ['--accent']: color ?? theme?.color,
-    ['--accent-rgb']: colorRGB ?? theme?.colorRGB,
+    ['--accent']: color ?? theme?.accent,
+    ['--accent-rgb']: colorRGB ?? theme?.accentRGB,
     ['--contrast']: contrast ?? theme?.contrast,
     ['--contrast-rgb']: contrastRGB ?? theme?.contrastRGB,
   } as CSSProperties;
@@ -24,4 +24,4 @@ const Accent = ({
   );
 };
 
-export default Accent;
+export default ThemeProvider;

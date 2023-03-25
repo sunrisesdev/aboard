@@ -1,9 +1,9 @@
 'use client';
 
-import Accent from '@/components/Accent/Accent';
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
+import ThemeProvider from '@/components/ThemeProvider/ThemeProvider';
 import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useDepartures } from '@/hooks/useDepartures/useDepartures';
@@ -142,7 +142,7 @@ const Trip = ({
   const theme = getLineTheme(lineId, product);
 
   return (
-    <Accent theme={theme}>
+    <ThemeProvider theme={theme}>
       <button
         className={styles.trip}
         disabled={departureAt === null}
@@ -184,7 +184,7 @@ const Trip = ({
           </aside>
         )}
       </button>
-    </Accent>
+    </ThemeProvider>
   );
 };
 

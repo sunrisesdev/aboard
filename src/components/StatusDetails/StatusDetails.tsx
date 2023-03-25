@@ -10,9 +10,9 @@ import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { MdCommit, MdOutlineTimer, MdOutlineToken } from 'react-icons/md';
 import { TbRoute } from 'react-icons/tb';
-import Accent from '../Accent/Accent';
 import LineIndicator from '../LineIndicator/LineIndicator';
 import Route from '../Route/Route';
+import ThemeProvider from '../ThemeProvider/ThemeProvider';
 import styles from './StatusDetails.module.scss';
 import { NextStopCountdownProps, StatusDetailsProps } from './types';
 
@@ -60,7 +60,7 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
   }, [stops]);
 
   const theme = getLineTheme(status.train.number, status.train.category);
-  useAppTheme(theme.color);
+  useAppTheme(theme.accent);
 
   const isDestinationNext =
     !!nextStop &&
@@ -85,7 +85,7 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
   });
 
   return (
-    <Accent theme={theme}>
+    <ThemeProvider theme={theme}>
       <main className={styles.base}>
         <header className={styles.header}>
           <div className={styles.direction}>
@@ -190,7 +190,7 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
           </ul>
         </div>
       </main>
-    </Accent>
+    </ThemeProvider>
   );
 };
 

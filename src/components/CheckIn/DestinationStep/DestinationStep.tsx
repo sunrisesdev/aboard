@@ -1,9 +1,9 @@
 'use client';
 
-import Accent from '@/components/Accent/Accent';
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
+import ThemeProvider from '@/components/ThemeProvider/ThemeProvider';
 import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useStops } from '@/hooks/useStops/useStops';
@@ -35,10 +35,10 @@ const DestinationStep = () => {
 
   const theme = getLineTheme(trip!.line.id, trip!.line.product);
 
-  useAppTheme(theme.color);
+  useAppTheme(theme.accent);
 
   return (
-    <Accent theme={theme}>
+    <ThemeProvider theme={theme}>
       <main className={styles.base}>
         <header className={styles.header}>
           <button className={styles.backButton} onClick={goBack}>
@@ -135,7 +135,7 @@ const DestinationStep = () => {
           </ScrollArea>
         </div>
       </main>
-    </Accent>
+    </ThemeProvider>
   );
 };
 

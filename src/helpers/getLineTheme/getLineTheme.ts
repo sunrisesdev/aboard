@@ -1,19 +1,19 @@
 import { HAFASProductType } from '@/traewelling-sdk/hafasTypes';
 import { getContrastColor } from '../getContrastColor';
-import { LINE_COLORS, PRODUCT_COLORS } from './consts';
-import { LineTheme } from './types';
+import { CUSTOM_LINE_THEMES, PRODUCT_THEMES } from './consts';
+import { Theme } from './types';
 
 export const getLineTheme = (
   id: string,
   productType: HAFASProductType
-): Required<LineTheme> => {
-  const theme = LINE_COLORS[id];
+): Required<Theme> => {
+  const theme = CUSTOM_LINE_THEMES[id];
 
   if (!theme) {
-    return PRODUCT_COLORS[productType];
+    return PRODUCT_THEMES[productType];
   }
 
-  const values = theme.colorRGB.split(',').map((v) => +v.trim());
+  const values = theme.accentRGB.split(',').map((v) => +v.trim());
   const contrast = getContrastColor(values[0], values[1], values[2]);
 
   return {

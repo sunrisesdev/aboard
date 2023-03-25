@@ -8,8 +8,8 @@ import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
-import Accent from '../Accent/Accent';
 import LockBodyScroll from '../LockBodyScroll/LockBodyScroll';
+import ThemeProvider from '../ThemeProvider/ThemeProvider';
 import { CheckInContext } from './CheckIn.context';
 import styles from './CheckIn.module.scss';
 import CurrentStatus from './CurrentStatus/CurrentStatus';
@@ -171,7 +171,7 @@ const CheckIn = () => {
   return (
     <CheckInContext.Provider value={contextValue}>
       <div className={styles.base}>
-        <Accent theme={theme}>
+        <ThemeProvider theme={theme}>
           <Panel>
             {step === 'origin' && <OriginStep />}
             {step === 'trip' && <TripStep />}
@@ -185,7 +185,7 @@ const CheckIn = () => {
               </Link>
             )}
           </Panel>
-        </Accent>
+        </ThemeProvider>
       </div>
     </CheckInContext.Provider>
   );

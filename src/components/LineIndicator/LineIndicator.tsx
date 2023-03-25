@@ -1,7 +1,7 @@
 import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import { inter } from '@/styles/fonts';
 import clsx from 'clsx';
-import Accent from '../Accent/Accent';
+import ThemeProvider from '../ThemeProvider/ThemeProvider';
 import styles from './LineIndicator.module.scss';
 import { LineIndicatorProps } from './types';
 
@@ -22,7 +22,7 @@ const LineIndicator = ({
   const theme = getLineTheme(lineId, product);
 
   return (
-    <Accent theme={theme}>
+    <ThemeProvider theme={theme}>
       <div
         className={clsx(
           styles.base,
@@ -33,7 +33,7 @@ const LineIndicator = ({
       >
         {displayName || productName}
       </div>
-    </Accent>
+    </ThemeProvider>
   );
 };
 
