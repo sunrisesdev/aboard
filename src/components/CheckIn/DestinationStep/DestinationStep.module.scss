@@ -10,7 +10,7 @@
 }
 
 .header {
-  color: #FFF;
+  color: var(--contrast, #FFF);
 }
 
 .backButton {
@@ -46,11 +46,6 @@
   height: 1.5rem;
 }
 
-.lineIndicator {
-  background-color: #FFF !important;
-  color: var(--accent) !important;
-}
-
 .direction {
   font-size: 1.25rem;
   font-weight: 600;
@@ -84,7 +79,7 @@
   &::after {
     background-color: var(--accent);
     border-radius: 50%;
-    box-shadow: 0 0 0 2px #FFF;
+    box-shadow: 0 0 0 2px var(--contrast, #FFF);
     content: '';
     display: block;
     height: 6px;
@@ -96,7 +91,7 @@
   }
 
   &::before {
-    background-color: #FFF;
+    background-color: var(--contrast, #FFF);
     content: '';
     display: block;
     height: calc(100% - 0.5625rem);

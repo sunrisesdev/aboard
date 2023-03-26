@@ -1,5 +1,6 @@
 'use client';
 
+import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useStops } from '@/hooks/useStops/useStops';
 import { Stop } from '@/traewelling-sdk/types';
@@ -9,9 +10,9 @@ import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { MdCommit, MdOutlineTimer, MdOutlineToken } from 'react-icons/md';
 import { TbRoute } from 'react-icons/tb';
-import Accent from '../Accent/Accent';
 import LineIndicator from '../LineIndicator/LineIndicator';
 import Route from '../Route/Route';
+import ThemeProvider from '../ThemeProvider/ThemeProvider';
 import styles from './StatusDetails.module.scss';
 import { NextStopCountdownProps, StatusDetailsProps } from './types';
 
@@ -58,7 +59,8 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
     setNextStop(getNextStop(stops));
   }, [stops]);
 
-  useAppTheme(`var(--color-${status.train.category})`);
+  const theme = getLineTheme(status.train.number, status.train.category);
+  useAppTheme(theme.accent);
 
   const isDestinationNext =
     !!nextStop &&
@@ -83,12 +85,13 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
   });
 
   return (
-    <Accent color={`var(--color-${status.train.category})`}>
+    <ThemeProvider theme={theme}>
       <main className={styles.base}>
         <header className={styles.header}>
           <div className={styles.direction}>
             <LineIndicator
-              className={styles.lineIndicator}
+              isInverted
+              lineId={status.train.number}
               lineName={status.train.lineName}
               product={status.train.category}
               productName=""
@@ -187,7 +190,7 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
           </ul>
         </div>
       </main>
-    </Accent>
+    </ThemeProvider>
   );
 };
 

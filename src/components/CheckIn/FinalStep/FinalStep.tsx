@@ -1,8 +1,9 @@
 'use client';
 
-import Accent from '@/components/Accent/Accent';
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
+import ThemeProvider from '@/components/ThemeProvider/ThemeProvider';
+import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { parseSchedule } from '@/utils/parseSchedule';
 import * as RadioGroup from '@radix-ui/react-radio-group';
@@ -60,10 +61,12 @@ const FinalStep = () => {
     planned: trip?.plannedWhen!,
   });
 
-  useAppTheme(`var(--color-${trip?.line.product})`);
+  const theme = getLineTheme(trip!.line.id, trip!.line.product);
+
+  useAppTheme(theme.accent);
 
   return (
-    <Accent color={`var(--color-${trip?.line.product})`}>
+    <ThemeProvider theme={theme}>
       <main className={styles.base}>
         <header className={styles.header}>
           <div className={styles.buttons}>
@@ -77,7 +80,8 @@ const FinalStep = () => {
                     className: styles.productIcon,
                   })}
                   <LineIndicator
-                    className={styles.lineIndicator}
+                    isInverted
+                    lineId={trip.line.id}
                     lineName={trip.line.name}
                     product={trip.line.product}
                     productName={trip.line.productName}
@@ -225,7 +229,7 @@ const FinalStep = () => {
           </ScrollArea>
         </div>
       </main>
-    </Accent>
+    </ThemeProvider>
   );
 };
 

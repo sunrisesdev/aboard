@@ -3,6 +3,8 @@
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
+import ThemeProvider from '@/components/ThemeProvider/ThemeProvider';
+import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useDepartures } from '@/hooks/useDepartures/useDepartures';
 import { inter } from '@/styles/fonts';
@@ -45,6 +47,7 @@ const TripStep = () => {
                     delay={trip.delay}
                     departureAt={trip.when}
                     destination={trip.direction ?? trip.destination.name}
+                    lineId={trip.line.id}
                     lineName={trip.line.name}
                     onClick={() => setTrip(trip)}
                     plannedDepartureAt={trip.plannedWhen}
@@ -120,6 +123,7 @@ const Trip = ({
   delay,
   departureAt,
   destination,
+  lineId,
   lineName,
   onClick,
   plannedDepartureAt,
@@ -135,47 +139,52 @@ const Trip = ({
     planned: plannedDepartureAt,
   });
 
+  const theme = getLineTheme(lineId, product);
+
   return (
-    <button
-      className={styles.trip}
-      disabled={departureAt === null}
-      onClick={onClick}
-    >
-      <div className={clsx(styles.product, styles[product])} />
+    <ThemeProvider theme={theme}>
+      <button
+        className={styles.trip}
+        disabled={departureAt === null}
+        onClick={onClick}
+      >
+        <div className={styles.product} />
 
-      <div className={styles.line}>
-        {PRODUCT_ICONS[product]({
-          className: styles.productIcon,
-        })}
+        <div className={styles.line}>
+          {PRODUCT_ICONS[product]({
+            className: styles.productIcon,
+          })}
 
-        <LineIndicator
-          lineName={lineName}
-          product={product}
-          productName={productName}
-        />
-      </div>
-
-      <div className={styles.direction}>
-        <div className={styles.destination}>{destination}</div>
-        {selectedStationName !== stationName && (
-          <div className={styles.deviatingStation}>ab {stationName}</div>
-        )}
-      </div>
-
-      <div className={styles.time}>
-        <div className={clsx({ [styles.isDelayed]: !schedule.isOnTime })}>
-          {schedule.planned}
+          <LineIndicator
+            lineId={lineId}
+            lineName={lineName}
+            product={product}
+            productName={productName}
+          />
         </div>
-        {!schedule.isOnTime && <div>{schedule.actual}</div>}
-      </div>
 
-      {departureAt === null && (
-        <aside className={clsx(styles.cancelledNote, inter.className)}>
-          <TbRouteOff />
-          <span>Fällt aus</span>
-        </aside>
-      )}
-    </button>
+        <div className={styles.direction}>
+          <div className={styles.destination}>{destination}</div>
+          {selectedStationName !== stationName && (
+            <div className={styles.deviatingStation}>ab {stationName}</div>
+          )}
+        </div>
+
+        <div className={styles.time}>
+          <div className={clsx({ [styles.isDelayed]: !schedule.isOnTime })}>
+            {schedule.planned}
+          </div>
+          {!schedule.isOnTime && <div>{schedule.actual}</div>}
+        </div>
+
+        {departureAt === null && (
+          <aside className={clsx(styles.cancelledNote, inter.className)}>
+            <TbRouteOff />
+            <span>Fällt aus</span>
+          </aside>
+        )}
+      </button>
+    </ThemeProvider>
   );
 };
 

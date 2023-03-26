@@ -1,9 +1,10 @@
 'use client';
 
-import Accent from '@/components/Accent/Accent';
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
+import ThemeProvider from '@/components/ThemeProvider/ThemeProvider';
+import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useStops } from '@/hooks/useStops/useStops';
 import { inter } from '@/styles/fonts';
@@ -32,10 +33,12 @@ const DestinationStep = () => {
     planned: trip?.plannedWhen!,
   });
 
-  useAppTheme(`var(--color-${trip?.line.product})`);
+  const theme = getLineTheme(trip!.line.id, trip!.line.product);
+
+  useAppTheme(theme.accent);
 
   return (
-    <Accent color={`var(--color-${trip?.line.product})`}>
+    <ThemeProvider theme={theme}>
       <main className={styles.base}>
         <header className={styles.header}>
           <button className={styles.backButton} onClick={goBack}>
@@ -48,7 +51,8 @@ const DestinationStep = () => {
                   className: styles.productIcon,
                 })}
                 <LineIndicator
-                  className={styles.lineIndicator}
+                  isInverted
+                  lineId={trip.line.id}
                   lineName={trip.line.name}
                   product={trip.line.product}
                   productName={trip.line.productName}
@@ -131,7 +135,7 @@ const DestinationStep = () => {
           </ScrollArea>
         </div>
       </main>
-    </Accent>
+    </ThemeProvider>
   );
 };
 
