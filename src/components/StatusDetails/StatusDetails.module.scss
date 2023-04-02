@@ -26,12 +26,16 @@
   appearance: none;
   background: none;
   border: none;
-  color: inherit;
+  color: var(--contrast, #FFF);
   cursor: pointer;
   display: flex;
   font-weight: 500;
   gap: 1rem;
   padding: calc(1.75rem + env(safe-area-inset-top)) 1rem 1rem;
+
+  &.editButton {
+    visibility: hidden; // TODO: The edit button has no function yet, but we need it for the layout
+  }
 }
 
 .date {

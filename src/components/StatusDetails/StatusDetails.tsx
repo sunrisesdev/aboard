@@ -9,6 +9,7 @@ import { formatTime } from '@/utils/formatTime';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import {
   MdArrowBack,
@@ -104,13 +105,15 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
       <main className={styles.base}>
         <header className={styles.header}>
           <nav className={styles.navigation}>
-            <button className={styles.button}>
-              <MdArrowBack size={20} />
-            </button>
+            <Link href="/dashboard">
+              <div className={styles.button}>
+                <MdArrowBack size={20} />
+              </div>
+            </Link>
 
             <div className={styles.date}>{checkInDate}</div>
 
-            <button className={styles.button}>
+            <button className={clsx(styles.button, styles.editButton)}>
               <MdEdit size={20} />
             </button>
           </nav>
