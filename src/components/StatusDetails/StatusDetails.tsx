@@ -4,12 +4,21 @@ import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useStops } from '@/hooks/useStops/useStops';
 import { Stop } from '@/traewelling-sdk/types';
+import { formatDate } from '@/utils/formatDate';
+import { formatTime } from '@/utils/formatTime';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
-import { MdCommit, MdOutlineTimer, MdOutlineToken } from 'react-icons/md';
+import {
+  MdArrowBack,
+  MdCommit,
+  MdEdit,
+  MdOutlineTimer,
+  MdOutlineToken,
+} from 'react-icons/md';
 import { TbRoute } from 'react-icons/tb';
+import { PRODUCT_ICONS } from '../CheckIn/consts';
 import LineIndicator from '../LineIndicator/LineIndicator';
 import Route from '../Route/Route';
 import ThemeProvider from '../ThemeProvider/ThemeProvider';
@@ -72,7 +81,10 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
       new Date(status.train.origin.departure!).getTime()) /
     1000 /
     60;
-  const duration = `${Math.floor(timeInMin / 60)} Std. ${timeInMin % 60} Min.`;
+  const duration =
+    timeInMin < 60
+      ? `${timeInMin % 60} Minuten`
+      : `${Math.floor(timeInMin / 60)} Std. ${timeInMin % 60} Min.`;
 
   const arrivalSchedule = parseSchedule({
     actual: status.train.destination.arrival,
@@ -84,18 +96,40 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
     planned: status.train.origin.departurePlanned!,
   });
 
+  const checkInDate = formatDate(new Date(status.createdAt));
+  const checkedInAt = formatTime(new Date(status.createdAt));
+
   return (
     <ThemeProvider theme={theme}>
       <main className={styles.base}>
         <header className={styles.header}>
-          <div className={styles.direction}>
-            <LineIndicator
-              isInverted
-              lineId={status.train.number}
-              lineName={status.train.lineName}
-              product={status.train.category}
-              productName=""
-            />
+          <nav className={styles.navigation}>
+            <button className={styles.button}>
+              <MdArrowBack size={20} />
+            </button>
+
+            <div className={styles.date}>{checkInDate}</div>
+
+            <button className={styles.button}>
+              <MdEdit size={20} />
+            </button>
+          </nav>
+
+          <div className={styles.train}>
+            <div className={styles.lineName}>
+              {PRODUCT_ICONS[status.train.category]({
+                className: styles.productIcon,
+              })}
+
+              <LineIndicator
+                isInverted
+                lineId={status.train.number}
+                lineName={status.train.lineName}
+                product={status.train.category}
+                productName=""
+              />
+            </div>
+
             <span>{direction}</span>
           </div>
 
@@ -150,42 +184,55 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
         </header>
 
         <div className={styles.sheet}>
-          <article className={styles.message}>
+          <div className={styles.creator}>
             <Image
-              alt="Avatar"
+              alt={`Avatar von ${status.username}`}
+              className={styles.avatar}
               height={42}
               src={(status as any).profilePicture}
               width={42}
             />
 
-            <div>
-              <div className={styles.username}>{status.username}</div>
-              {!!status.body.trim() && (
-                <div className={styles.body}>{status.body}</div>
-              )}
-            </div>
-          </article>
+            <div className={styles.username}>{status.username}</div>
+            <div className={styles.time}>{checkedInAt}</div>
+          </div>
+
+          {!!status.body.trim() && (
+            <article className={styles.body}>{status.body}</article>
+          )}
 
           <ul className={styles.stats}>
             <li>
-              <MdOutlineTimer size={20} />
-              <span>{duration}</span>
+              <div className={styles.key}>
+                <MdOutlineTimer className={styles.icon} size={16} />
+                <span>Fahrzeit</span>
+              </div>
+              <div className={styles.value}>{duration}</div>
             </li>
             <li>
-              <TbRoute size={20} />
-              {status.train.distance >= 1000 ? (
-                <span>{Math.ceil(status.train.distance / 1000)} km</span>
-              ) : (
-                <span>{status.train.distance} m</span>
-              )}
+              <div className={styles.key}>
+                <TbRoute className={styles.icon} size={16} />
+                <span>Entfernung</span>
+              </div>
+              <div className={styles.value}>
+                {status.train.distance >= 1000
+                  ? `${Math.ceil(status.train.distance / 1000)} km`
+                  : `${status.train.distance} m`}
+              </div>
             </li>
             <li>
-              <MdOutlineToken size={20} />
-              <span>{status.train.points} Punkte</span>
+              <div className={styles.key}>
+                <MdOutlineToken className={styles.icon} size={16} />
+                <span>Punkte</span>
+              </div>
+              <div className={styles.value}>{status.train.points} Punkte</div>
             </li>
             <li>
-              <MdCommit size={20} />
-              <span>{stops.length + 1} Stationen</span>
+              <div className={styles.key}>
+                <MdCommit className={styles.icon} size={16} />
+                <span>Stationen</span>
+              </div>
+              <div className={styles.value}>{stops.length + 1} Stationen</div>
             </li>
           </ul>
         </div>
