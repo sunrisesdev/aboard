@@ -11,7 +11,7 @@ export const user = async () => {
     },
     method: 'GET',
     next: {
-      revalidate: 5 * 60,
+      revalidate: 60,
     },
   });
 
