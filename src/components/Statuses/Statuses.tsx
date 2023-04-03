@@ -17,19 +17,19 @@ const Statuses = () => {
         ({ id, username, profilePicture, body, likes, liked, type, train }) => {
           return (
             <div
-              key={id} 
+              key={id}
               className={styles.status}
               style={{
                 ['--current-status-color' as any]: `var(--color-${train.category})`,
               }}
             >
               <div>
-                <Link href={`/${username}`}>{username}</Link>
+                <Link href={`/u/${username}`}>{username}</Link>
                 <div>{train.lineName}</div>
 
                 <div>{body}</div>
                 <div>{likes}</div>
-                <div>{liked && '❤️'} </div>
+                <div>{liked && '❤️'}</div>
                 <Link href={`/status/${id}`}>
                   <div>{id}</div>
                 </Link>
