@@ -1,3 +1,5 @@
+import { formatTime } from './formatTime';
+
 type ParseScheduleOptions = {
   actual?: string | null;
   delay?: number | null;
@@ -33,17 +35,11 @@ export const parseSchedule = ({
   }
 
   return {
-    actual: actualDate.toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    }),
+    actual: formatTime(actualDate),
     delayInMinutes,
     isDelayed: delayInMinutes > 0,
     isEarly: delayInMinutes < 0,
     isOnTime: delayInMinutes === 0,
-    planned: plannedDate.toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    }),
+    planned: formatTime(plannedDate),
   };
 };
