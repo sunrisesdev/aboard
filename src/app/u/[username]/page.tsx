@@ -1,3 +1,4 @@
+import Statuses from '@/components/Profile/Statuses/Statuses';
 import { TraewellingSdk } from '@/traewelling-sdk';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -39,7 +40,7 @@ export default async function Page({
       <h1>User</h1>
       <pre>{JSON.stringify(userData, null, 2)}</pre>
       <h1>Statuses</h1>
-      <pre>{JSON.stringify(statuses, null, 2)}</pre>
+      <Statuses username={params.username} />
     </div>
   );
 }
