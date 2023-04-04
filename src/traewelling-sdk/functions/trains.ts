@@ -131,9 +131,7 @@ export const departures = async (input: DeparturesInput) => {
     headers: {
       Authorization: `Bearer ${session?.user.accessToken}`,
     },
-    next: {
-      revalidate: 60,
-    },
+    cache: 'no-store',
     method: 'GET',
   });
 
@@ -161,9 +159,7 @@ export const history = async () => {
       Authorization: `Bearer ${session?.user.accessToken}`,
     },
     method: 'GET',
-    next: {
-      revalidate: 60,
-    },
+    cache: 'no-store',
   });
 
   const data = await res.json();
@@ -232,9 +228,7 @@ export const trip = async (input: TripInput) => {
       Authorization: `Bearer ${session?.user.accessToken}`,
     },
     method: 'GET',
-    next: {
-      revalidate: 60,
-    },
+    cache: 'no-store',
   });
 
   const data = await res.json();
