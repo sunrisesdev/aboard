@@ -235,7 +235,7 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
                 <MdCommit className={styles.icon} size={16} />
                 <span>Stationen</span>
               </div>
-              <div className={styles.value}>{stops.length + 1} Stationen</div>
+              <div className={styles.value}>{stops.length} Stationen</div>
             </li>
           </ul>
         </div>
