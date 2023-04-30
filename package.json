@@ -24,24 +24,25 @@
     "@radix-ui/react-scroll-area": "1.0.3",
     "@radix-ui/react-tabs": "1.0.3",
     "clsx": "1.2.1",
+    "framer-motion": "10.12.4",
     "js-levenshtein": "1.1.6",
-    "next": "13.2.4",
-    "next-auth": "4.20.1",
+    "next": "13.3.2",
+    "next-auth": "4.22.1",
     "normalize.css": "8.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "4.8.0",
-    "sass": "1.59.3",
-    "swr": "2.1.1",
-    "typescript": "5.0.2"
+    "sass": "1.62.1",
+    "swr": "2.1.5",
+    "typescript": "5.0.4"
   },
   "devDependencies": {
     "@types/js-levenshtein": "1.1.1",
-    "@types/node": "18.15.5",
-    "@types/react": "18.0.28",
-    "@types/react-dom": "18.0.11",
-    "eslint": "8.36.0",
-    "eslint-config-next": "13.2.4",
-    "prettier": "2.8.6"
+    "@types/node": "18.16.3",
+    "@types/react": "18.2.0",
+    "@types/react-dom": "18.2.1",
+    "eslint": "8.39.0",
+    "eslint-config-next": "13.3.2",
+    "prettier": "2.8.8"
   }
 }
