@@ -84,7 +84,7 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
     60;
   const duration =
     timeInMin < 60
-      ? `${timeInMin % 60} Minuten`
+      ? `${timeInMin % 60} Minute${timeInMin % 60 > 1 ? 'n' : ''}`
       : `${Math.floor(timeInMin / 60)} Std. ${timeInMin % 60} Min.`;
 
   const arrivalSchedule = parseSchedule({
@@ -228,14 +228,18 @@ const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
                 <MdOutlineToken className={styles.icon} size={16} />
                 <span>Punkte</span>
               </div>
-              <div className={styles.value}>{status.train.points} Punkte</div>
+              <div className={styles.value}>
+                {status.train.points} Punkt{status.train.points > 1 && 'e'}
+              </div>
             </li>
             <li>
               <div className={styles.key}>
                 <MdCommit className={styles.icon} size={16} />
                 <span>Stationen</span>
               </div>
-              <div className={styles.value}>{stops.length} Stationen</div>
+              <div className={styles.value}>
+                {stops.length} Station{stops.length > 1 && 'en'}
+              </div>
             </li>
           </ul>
         </div>
