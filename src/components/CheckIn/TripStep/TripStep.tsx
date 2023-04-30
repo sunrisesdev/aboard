@@ -1,5 +1,6 @@
 'use client';
 
+import FilterButton from '@/components/FilterButton/FilterButton';
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
@@ -8,9 +9,15 @@ import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useDepartures } from '@/hooks/useDepartures/useDepartures';
 import { inter } from '@/styles/fonts';
+import {
+  HAFASProductType,
+  HAFASStop,
+  HAFASTrip,
+} from '@/traewelling-sdk/hafasTypes';
+import { TransportType } from '@/traewelling-sdk/types';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
-import { useContext } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { MdArrowBack } from 'react-icons/md';
 import { TbRouteOff } from 'react-icons/tb';
 import { CheckInContext } from '../CheckIn.context';
@@ -18,21 +25,151 @@ import { PRODUCT_ICONS } from '../consts';
 import styles from './TripStep.module.scss';
 import { TripProps } from './types';
 
+const getServedProducts = (trips: HAFASTrip[]) => {
+  if (trips.length === 0) return [];
+
+  const stops = trips.reduce((stops, trip) => {
+    if (stops.some(({ id }) => id === trip.stop.id)) {
+      return stops;
+    }
+
+    return [...stops, trip.stop];
+  }, [] as HAFASStop[]);
+
+  const productSet = new Set<HAFASProductType>();
+
+  stops.forEach(({ products }) => {
+    Object.entries(products).forEach(([type, value]) => {
+      value && productSet.add(type as HAFASProductType);
+    });
+  });
+
+  productSet.delete('taxi');
+
+  return Array.from(productSet).sort((a, b) => a.localeCompare(b));
+};
+
 const TripStep = () => {
   const { goBack, origin, setTrip } = useContext(CheckInContext);
-  const { departures, isLoading } = useDepartures(origin?.name ?? '');
+
+  const [filter, setFilter] = useState<TransportType>();
+  const { departures, isLoading } = useDepartures(origin?.name ?? '', filter);
+
+  const productsFetched = useRef(false);
+  const [products, setProducts] = useState<HAFASProductType[]>([]);
 
   useAppTheme('var(--sky11)');
+
+  useEffect(() => {
+    if (productsFetched.current) return;
+
+    const newProducts = getServedProducts(departures?.trips ?? []);
+    if (newProducts.length > 0) {
+      setProducts(newProducts);
+      productsFetched.current = true;
+    }
+  }, [departures]);
+
+  const hasProduct = (product: HAFASProductType) => products.includes(product);
+
+  const handleOnFilterClick = (value: TransportType) => {
+    if (filter === value) {
+      setFilter(undefined);
+    } else {
+      setFilter(value);
+    }
+  };
 
   return (
     <main className={styles.base}>
       <header className={styles.header}>
-        <button className={styles.backButton} onClick={goBack}>
+        <button
+          className={clsx(
+            styles.backButton,
+            products.length > 1 && styles.noBottomPadding
+          )}
+          onClick={goBack}
+        >
           <div className={styles.arrow}>
             <MdArrowBack size={20} />
           </div>
           <span>{origin?.name}</span>
         </button>
+
+        {products.length > 1 && (
+          <section className={styles.filters}>
+            {(hasProduct('national') || hasProduct('nationalExpress')) && (
+              <FilterButton
+                className={styles.filterButton}
+                isActive={filter === 'express'}
+                onClick={handleOnFilterClick}
+                value="express"
+              >
+                Fernverkehr
+              </FilterButton>
+            )}
+            {(hasProduct('regional') || hasProduct('regionalExp')) && (
+              <FilterButton
+                className={styles.filterButton}
+                isActive={filter === 'regional'}
+                onClick={handleOnFilterClick}
+                value="regional"
+              >
+                Regionalverkehr
+              </FilterButton>
+            )}
+            {hasProduct('suburban') && (
+              <FilterButton
+                className={styles.filterButton}
+                isActive={filter === 'suburban'}
+                onClick={handleOnFilterClick}
+                value="suburban"
+              >
+                S-Bahnen
+              </FilterButton>
+            )}
+            {hasProduct('subway') && (
+              <FilterButton
+                className={styles.filterButton}
+                isActive={filter === 'subway'}
+                onClick={handleOnFilterClick}
+                value="subway"
+              >
+                U-Bahnen
+              </FilterButton>
+            )}
+            {hasProduct('tram') && (
+              <FilterButton
+                className={styles.filterButton}
+                isActive={filter === 'tram'}
+                onClick={handleOnFilterClick}
+                value="tram"
+              >
+                Straßenbahnen
+              </FilterButton>
+            )}
+            {hasProduct('bus') && (
+              <FilterButton
+                className={styles.filterButton}
+                isActive={filter === 'bus'}
+                onClick={handleOnFilterClick}
+                value="bus"
+              >
+                Busse
+              </FilterButton>
+            )}
+            {hasProduct('ferry') && (
+              <FilterButton
+                className={styles.filterButton}
+                isActive={filter === 'ferry'}
+                onClick={handleOnFilterClick}
+                value="ferry"
+              >
+                Fähren
+              </FilterButton>
+            )}
+          </section>
+        )}
       </header>
 
       <div className={styles.sheet}>

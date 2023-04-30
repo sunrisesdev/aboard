@@ -1,0 +1,26 @@
+@import '@/styles/index';
+
+.base {
+  align-items: center;
+  appearance: none;
+  background-color: var(--sky2);
+  border: none;
+  border-radius: 9999rem;
+  color: var(--sky11);
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  height: 2rem;
+  padding-inline: 0.75rem;
+  white-space: nowrap;
+
+  &:first-of-type {
+    margin-left: 1rem;
+  }
+
+  &.isActive {
+    background-color: var(--sky12);
+    color: #FFF;
+  }
+}

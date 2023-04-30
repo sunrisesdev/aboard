@@ -27,12 +27,36 @@
   padding: calc(1.75rem + env(safe-area-inset-top)) 1rem 1rem;
   width: 100%;
 
+  &.noBottomPadding {
+    padding-bottom: 0;
+  }
+
   .arrow {
     flex-shrink: 0;
   }
 
   span {
     text-align: left;
+  }
+}
+
+.filterButton:first-of-type {
+  margin-left: 1rem;
+}
+
+.filters {
+  display: flex;
+  gap: 0.25rem;
+  max-width: 100%;
+  overflow-x: scroll;
+  padding-block: 1rem;
+  scrollbar-width: none;
+  user-select: none;
+
+  &::after {
+    content: '';
+    display: block;
+    flex: 0 0 1rem;
   }
 }
 
