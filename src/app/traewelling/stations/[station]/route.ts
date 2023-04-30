@@ -26,6 +26,7 @@ export async function GET(
 
     const { transportType, from } = getSafeURLParams({
       url: request.url,
+      optionalParams: ['transportType', 'from'],
       requiredParams: [],
     });
 

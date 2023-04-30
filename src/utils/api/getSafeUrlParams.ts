@@ -41,11 +41,12 @@ const getSafeURLParams = <TRequired extends string, TOptional extends string>({
     return acc;
   }, {} as Record<string, string>);
 
-  const missingParams = requiredParams?.filter(
-    (param) => safeParams && !Object.keys(safeParams).includes(param)
-  ) || [];
+  const missingParams =
+    requiredParams?.filter(
+      (param) => safeParams && !Object.keys(safeParams).includes(param)
+    ) || [];
 
-  if ( missingParams.length > 0) {
+  if (missingParams.length > 0) {
     throw new Error(`Missing required params: ${missingParams.join(', ')}`);
   }
 
