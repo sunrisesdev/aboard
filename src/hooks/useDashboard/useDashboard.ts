@@ -2,7 +2,7 @@ import { Status } from '@/traewelling-sdk/types';
 import useSWR from 'swr';
 
 const fetcher = async (): Promise<Status[] | null> => {
-  const response = await fetch('/traewelling/statuses');
+  const response = await fetch('/traewelling/dashboard');
 
   if (!response.ok) {
     return null;
@@ -12,7 +12,7 @@ const fetcher = async (): Promise<Status[] | null> => {
 };
 
 export const useDashboard = () => {
-  const { data, isLoading } = useSWR(['/traewelling/statuses'], ([_]) =>
+  const { data, isLoading } = useSWR(['/traewelling/dashboard'], ([_]) =>
     fetcher()
   );
 
