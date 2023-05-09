@@ -48,7 +48,10 @@ const getNextStop = (stops: Stop[]) => {
   }
 };
 
-const StatusDetails = ({ status, stops: initialStops }: StatusDetailsProps) => {
+const StatusDetails = ({
+  status,
+  stops: initialStops = [],
+}: StatusDetailsProps) => {
   const [nextStop, setNextStop] = useState<Stop>();
   const { stops: allStops } = useStops(
     status.train.hafasId,

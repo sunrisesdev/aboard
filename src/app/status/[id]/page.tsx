@@ -11,7 +11,12 @@ function getStatusData(id: string) {
 
 function getStops(hafasTripId: string, lineName: string, start: string) {
   try {
-    return TraewellingSdk.trains.trip({ hafasTripId, lineName, start });
+    const response = TraewellingSdk.trains.trip({
+      hafasTripId,
+      lineName,
+      start,
+    });
+    return response;
   } catch (error) {
     console.error(error);
     return { stopovers: [] };

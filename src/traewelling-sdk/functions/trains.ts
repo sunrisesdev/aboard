@@ -217,6 +217,12 @@ export type TripResponse = Trip;
 export const trip = async (input: TripInput) => {
   const session = await getServerSession(authOptions);
 
+  if (!session) {
+    return {
+      stopovers: [],
+    };
+  }
+
   const url = new URL('https://traewelling.de/api/v1/trains/trip/');
 
   url.searchParams.append('hafasTripId', input.hafasTripId);
