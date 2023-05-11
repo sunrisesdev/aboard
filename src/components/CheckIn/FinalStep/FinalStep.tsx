@@ -3,6 +3,7 @@
 import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import ThemeProvider from '@/components/ThemeProvider/ThemeProvider';
+import { LiveCheckInContext } from '@/contexts/LiveCheckIn/LiveCheckIn.context';
 import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { parseSchedule } from '@/utils/parseSchedule';
@@ -10,6 +11,7 @@ import * as RadioGroup from '@radix-ui/react-radio-group';
 import { useContext } from 'react';
 import {
   MdArrowBack,
+  MdAutoMode,
   MdCheck,
   MdFilterListOff,
   MdFingerprint,
@@ -42,6 +44,7 @@ const FinalStep = () => {
     goBack,
     message,
     origin,
+    reset,
     setMessage,
     setTravelType,
     setVisibility,
@@ -49,6 +52,8 @@ const FinalStep = () => {
     trip,
     visibility,
   } = useContext(CheckInContext);
+
+  const { addCheckIn } = useContext(LiveCheckInContext);
 
   const arrivalSchedule = parseSchedule({
     actual: destination?.arrival,
@@ -60,6 +65,11 @@ const FinalStep = () => {
     delay: trip?.delay,
     planned: trip?.plannedWhen!,
   });
+
+  const handleLiveCheckInButtonClick = () => {
+    addCheckIn(trip!, destination!);
+    reset();
+  };
 
   const theme = getLineTheme(trip!.line.id, trip!.line.product);
 
@@ -131,11 +141,42 @@ const FinalStep = () => {
               </span>
             </div>
           </div>
+
+          <article className={styles.liveCheckinBanner}>
+            <MdAutoMode className={styles.watermark} size={80} />
+            <div>
+              <div className={styles.title}>Bist du länger unterwegs?</div>
+              <div className={styles.description}>
+                Plane deine Reise vor und Aboard checkt dich automatisch ein
+              </div>
+            </div>
+
+            <button onClick={handleLiveCheckInButtonClick}>
+              <MdAutoMode size={20} />
+              <span>Live Check-In</span>
+            </button>
+          </article>
         </header>
 
         <div className={styles.sheet}>
           <ScrollArea className={styles.scrollArea} topFogBorderRadius="1rem">
             <div className={styles.content}>
+              {/* <article className={styles.liveCheckinTeaser}>
+                <TbLivePhoto className={styles.watermark} size={96} />
+
+                <div className={styles.title}>Geht die Reise weiter?</div>
+
+                <div className={styles.description}>
+                  Verwende den Live Check-In und Aboard checkt automatisch
+                  rechtzeitig für dich ein.
+                </div>
+
+                <button>
+                  <TbLivePhoto size={20} />
+                  <span>Zu Live Check-In hinzufügen</span>
+                </button>
+              </article> */}
+
               <section>
                 <label className={styles.label} htmlFor="message">
                   <span>Status-Nachricht (optional)</span>

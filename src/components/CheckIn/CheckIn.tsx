@@ -1,3 +1,4 @@
+import { LiveCheckInContext } from '@/contexts/LiveCheckIn/LiveCheckIn.context';
 import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import { useCurrentStatus } from '@/hooks/useCurrentStatus/useCurrentStatus';
 import useUmami from '@/hooks/useUmami/useUmami';
@@ -7,7 +8,8 @@ import { Station, Stop } from '@/traewelling-sdk/types';
 import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import LiveCheckInSummary from '../LiveCheckInSummary/LiveCheckInSummary';
 import LockBodyScroll from '../LockBodyScroll/LockBodyScroll';
 import ThemeProvider from '../ThemeProvider/ThemeProvider';
 import { CheckInContext } from './CheckIn.context';
@@ -62,6 +64,8 @@ const CheckIn = () => {
   const { trackEvent } = useUmami();
 
   const { mutate, status } = useCurrentStatus();
+
+  const { journey } = useContext(LiveCheckInContext);
 
   const checkIn = async () => {
     try {
@@ -129,6 +133,15 @@ const CheckIn = () => {
     message,
     origin,
     query,
+    reset: () => {
+      setOrigin(undefined);
+      setTrip(undefined);
+      setDestination(undefined);
+
+      setStep('origin');
+
+      setIsOpen(false);
+    },
     setDestination: (value) => {
       setDestination(value);
 
@@ -165,7 +178,7 @@ const CheckIn = () => {
   };
 
   const theme = !status
-    ? undefined
+    ? { accent: '#000', accentRGB: '0, 0, 0' as const }
     : getLineTheme(status.train.number, status.train.category);
 
   return (
@@ -179,9 +192,15 @@ const CheckIn = () => {
             {step === 'final' && <FinalStep />}
             {isOpen && <LockBodyScroll />}
 
-            {!isOpen && !!status && (
+            {!isOpen && !!status && journey.length === 0 && (
               <Link className={styles.statusLink} href={`/status/${status.id}`}>
                 <CurrentStatus />
+              </Link>
+            )}
+
+            {!isOpen && journey.length > 0 && (
+              <Link className={styles.statusLink} href="/live">
+                <LiveCheckInSummary />
               </Link>
             )}
           </Panel>

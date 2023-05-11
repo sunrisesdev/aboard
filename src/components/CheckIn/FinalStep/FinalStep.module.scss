@@ -145,6 +145,114 @@
   }
 }
 
+.liveCheckinBanner {
+  align-items: center;
+  display: flex;
+  isolation: isolate;
+  justify-content: space-between;
+  padding: 1rem;
+  position: relative;
+
+  &::before {
+    border-top: 1.5px solid rgba(var(--contrast-rgb), 0.2);
+    content: '';
+    left: 1rem;
+    position: absolute;
+    top: 0;
+    width: calc(100% - 2rem);
+  }
+
+  button {
+    align-items: center;
+    appearance: none;
+    background-color: rgba(var(--contrast-rgb), 0.2);
+    border: none;
+    border-radius: 0.375rem;
+    color: var(--contrast);
+    cursor: pointer;
+    display: flex;
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-left: 1rem;
+    overflow: hidden;
+    padding: 0.75rem;
+  }
+
+  .description {
+    font-size: 0.85rem;
+  }
+
+  .title {
+    color: rgba(var(--contrast-rgb), 0.8);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .watermark {
+    left: 0;
+    opacity: 0.05;
+    position: absolute;
+    top: 50%;
+    transform: translate3d(-25%, -50%, 0) rotate(-157.5deg);
+    z-index: -1;
+  }
+}
+
+.liveCheckinTeaser {
+  align-items: center;
+  background-color: var(--slate2);
+  border-radius: 0.375rem;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 1rem;
+  position: relative;
+
+  button {
+    align-items: center;
+    appearance: none;
+    background-color: var(--sky11);
+    border: none;
+    border-radius: 0.375rem;
+    color: var(--sky3);
+    cursor: pointer;
+    display: flex;
+    font-weight: 500;
+    gap: 0.5rem;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0.75rem;
+    position: relative;
+    width: 100%;
+  }
+
+  .description {
+    text-align: center;
+  }
+
+  .title {
+    color: var(--sky11);
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin-top: 2rem;
+  }
+
+  .watermark {
+    color: var(--sky11);
+    left: 50%;
+    position: absolute;
+    top: 0;
+    transform: translate3d(-50%, -50%, 0);
+    z-index: -1;
+  }
+}
+
 .sheet {
   background-color: #FFF;
   border-radius: 1rem 1rem 0 0;

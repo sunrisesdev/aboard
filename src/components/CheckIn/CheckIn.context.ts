@@ -11,6 +11,7 @@ export const CheckInContext = createContext<CheckInContextValue>({
   message: '',
   origin: undefined,
   query: '',
+  reset: () => void 0,
   setDestination: () => void 0,
   setIsOpen: () => void 0,
   setMessage: () => void 0,

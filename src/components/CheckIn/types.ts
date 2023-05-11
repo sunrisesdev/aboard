@@ -11,6 +11,7 @@ export type CheckInContextValue = {
   message: string;
   origin: Pick<Station, 'ibnr' | 'name' | 'rilIdentifier'> | undefined;
   query: string;
+  reset: () => void;
   setDestination: (value: Stop | undefined) => void;
   setIsOpen: (value: boolean) => void;
   setMessage: (value: string) => void;

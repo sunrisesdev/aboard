@@ -1,4 +1,5 @@
 import Providers from '@/components/Providers/Providers';
+import LiveCheckInContextProvider from '@/contexts/LiveCheckIn/LiveCheckIn.context';
 import UmamiScript from '@/scripts/UmamiScript/UmamiScript';
 import { sourceSans3 } from '@/styles/fonts';
 import '@/styles/globals.css';
@@ -18,7 +19,9 @@ export default async function RootLayout({
     <html lang="de">
       <head />
       <body className={sourceSans3.className}>
-        <Providers session={session}>{children}</Providers>
+        <Providers session={session}>
+          <LiveCheckInContextProvider>{children}</LiveCheckInContextProvider>
+        </Providers>
         <UmamiScript />
       </body>
     </html>
