@@ -11,7 +11,7 @@ import clsx from 'clsx';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 import {
   MdArrowBack,
   MdCommit,
@@ -108,6 +108,7 @@ const StatusDetails = ({
 
   const checkInDate = formatDate(new Date(status.createdAt));
   const checkedInAt = formatTime(new Date(status.createdAt));
+  const [_isPending, startTransition] = useTransition();
 
   return (
     <ThemeProvider theme={theme}>
@@ -138,7 +139,7 @@ const StatusDetails = ({
                   styles.deleteButton,
                   user?.id !== status.user && styles.hidden
                 )}
-                onClick={() => deleteStatus(status.id)}
+                onClick={() => startTransition(() => deleteStatus(status.id))}
               >
                 <MdDeleteForever size={20} />
               </button>
