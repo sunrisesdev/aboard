@@ -1,5 +1,6 @@
 'use client';
 
+import { deleteStatus } from '@/app/_actions';
 import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useStops } from '@/hooks/useStops/useStops';
@@ -53,7 +54,6 @@ const getNextStop = (stops: Stop[]) => {
 const StatusDetails = ({
   status,
   stops: initialStops = [],
-  deleteStatus,
 }: StatusDetailsProps) => {
   const [nextStop, setNextStop] = useState<Stop>();
   const { data } = useSession();
