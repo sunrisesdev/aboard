@@ -139,7 +139,7 @@ const StatusDetails = ({
                   styles.deleteButton,
                   user?.id !== status.user && styles.hidden
                 )}
-                onClick={() => startTransition(() => deleteStatus(status.id))}
+                formAction={() => deleteStatus(status.id)}
               >
                 <MdDeleteForever size={20} />
               </button>
