@@ -6,6 +6,7 @@ export const authOptions: AuthOptions = {
       if (user) {
         token.username = user.username;
         token.displayName = user.name;
+        token.id = user.id as number;
       }
 
       token.accessToken = account?.access_token || token.accessToken;
@@ -18,6 +19,7 @@ export const authOptions: AuthOptions = {
       session.user.refreshToken = token.refreshToken;
       session.user.username = token.username;
       session.user.name = token.displayName;
+      session.user.id = token.id;
 
       return session;
     },

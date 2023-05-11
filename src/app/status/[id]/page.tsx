@@ -33,6 +33,12 @@ export async function generateMetadata({
   };
 }
 
+const deleteStatus = async (id: string) => {
+  'use server';
+
+  await TraewellingSdk.status.remove({ id });
+};
+
 export default async function Page({ params }: StatusPageProps) {
   const status = await getStatusData(params.id);
 
@@ -50,5 +56,9 @@ export default async function Page({ params }: StatusPageProps) {
     stopovers
   );
 
-  return <StatusDetails status={status} stops={stops} />;
+  return (
+    <StatusDetails status={status} stops={stops} deleteStatus={deleteStatus} />
+  );
 }
+
+export const revalidate = 60;

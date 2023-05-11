@@ -8,12 +8,14 @@ import { formatDate } from '@/utils/formatDate';
 import { formatTime } from '@/utils/formatTime';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import {
   MdArrowBack,
   MdCommit,
+  MdDeleteForever,
   MdEdit,
   MdOutlineTimer,
   MdOutlineToken,
@@ -51,14 +53,18 @@ const getNextStop = (stops: Stop[]) => {
 const StatusDetails = ({
   status,
   stops: initialStops = [],
+  deleteStatus,
 }: StatusDetailsProps) => {
   const [nextStop, setNextStop] = useState<Stop>();
+  const { data } = useSession();
+  const user = data?.user;
   const { stops: allStops } = useStops(
     status.train.hafasId,
     status.train.lineName,
     status.train.origin.departurePlanned ?? '',
     status.train.origin.id.toString()
   );
+  console.log(user);
 
   const direction = (allStops ?? initialStops).at(-1)?.name;
   const destinationAt = (allStops ?? initialStops).findIndex(
@@ -115,10 +121,28 @@ const StatusDetails = ({
             </Link>
 
             <div className={styles.date}>{checkInDate}</div>
+            <div className={clsx(styles.actions)}>
+              <button
+                className={clsx(
+                  styles.actionButton,
+                  styles.editButton,
+                  user?.id !== status.user && styles.hidden
+                )}
+              >
+                <MdEdit size={20} />
+              </button>
 
-            <button className={clsx(styles.button, styles.editButton)}>
-              <MdEdit size={20} />
-            </button>
+              <button
+                className={clsx(
+                  styles.actionButton,
+                  styles.deleteButton,
+                  user?.id !== status.user && styles.hidden
+                )}
+                onClick={() => deleteStatus(status.id)}
+              >
+                <MdDeleteForever size={20} />
+              </button>
+            </div>
           </nav>
 
           <div className={styles.train}>

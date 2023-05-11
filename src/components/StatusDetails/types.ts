@@ -9,4 +9,5 @@ export type NextStopCountdownProps = {
 export type StatusDetailsProps = {
   status: Status;
   stops?: Stop[];
+  deleteStatus: (id: string) => void;
 };
