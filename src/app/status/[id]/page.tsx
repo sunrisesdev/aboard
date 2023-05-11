@@ -52,3 +52,5 @@ export default async function Page({ params }: StatusPageProps) {
 
   return <StatusDetails status={status} stops={stops} />;
 }
+
+export const revalidate = 60;

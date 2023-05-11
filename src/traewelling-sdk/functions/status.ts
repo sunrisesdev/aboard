@@ -53,3 +53,24 @@ export const dashboard = async () => {
     return data.data as Status[];
   }
 };
+
+export const remove = async (input: SingleInput) => {
+  const session = await getServerSession(authOptions);
+
+  const res = await fetch(`https://traewelling.de/api/v1/status/${input.id}`, {
+    headers: {
+      Authorization: `Bearer ${session?.user.accessToken!}`,
+    },
+    method: 'DELETE',
+  });
+
+  const data = await res.json();
+
+  if (res.status === 200) {
+    return data.data as Status;
+  } else if ([403, 404].includes(res.status)) {
+    return null;
+  }
+
+  throw { message: await data, status: res.status };
+};
