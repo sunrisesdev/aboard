@@ -1,6 +1,5 @@
 'use client';
 
-import { deleteStatus } from '@/app/_actions';
 import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useStops } from '@/hooks/useStops/useStops';
@@ -139,7 +138,6 @@ const StatusDetails = ({
                   styles.deleteButton,
                   user?.id !== status.user && styles.hidden
                 )}
-                formAction={() => deleteStatus(status.id)}
               >
                 <MdDeleteForever size={20} />
               </button>
