@@ -2,7 +2,7 @@ import StatusDetails from '@/components/StatusDetails/StatusDetails';
 import { getStopsAfter } from '@/helpers/getStopsAfter';
 import { TraewellingSdk } from '@/traewelling-sdk';
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { StatusPageProps } from './types';
 
 function getStatusData(id: string) {
@@ -37,6 +37,8 @@ const deleteStatus = async (id: string) => {
   'use server';
 
   await TraewellingSdk.status.remove({ id });
+
+  redirect('/dashboard');
 };
 
 export default async function Page({ params }: StatusPageProps) {
