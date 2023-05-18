@@ -5,7 +5,8 @@ import LineIndicator from '../LineIndicator/LineIndicator';
 import styles from './LiveCheckInSummary.module.scss';
 
 const LiveCheckInSummary = () => {
-  const { journey } = useContext(LiveCheckInContext);
+  const { journey, nextCheckIn, remainingCheckIns, untilNextCheckIn } =
+    useContext(LiveCheckInContext);
 
   if (!journey.length) {
     return null;
@@ -24,9 +25,13 @@ const LiveCheckInSummary = () => {
         <MdArrowForward size={20} />
         <span>{journey.at(-1)?.destination.name}</span>
       </div>
-      <div className={styles.description}>
-        via <span>Allerweg, Hannover</span> und 1 weiteren
-      </div>
+      {remainingCheckIns.length > 1 && nextCheckIn && (
+        <div className={styles.description}>
+          via <span>{remainingCheckIns[1].trip.station.name}</span>
+          {remainingCheckIns.length > 2 &&
+            ` und ${remainingCheckIns.length - 2} weiteren`}
+        </div>
+      )}
 
       <footer className={styles.footer}>
         <div className={styles.upcoming}>
@@ -42,9 +47,12 @@ const LiveCheckInSummary = () => {
           </div>
         </div>
 
-        <div className={styles.time}>
-          59<span>MIN</span>
-        </div>
+        {untilNextCheckIn && (
+          <div className={styles.time}>
+            {Math.ceil(untilNextCheckIn / 1000 / 60)}
+            <span>MIN</span>
+          </div>
+        )}
       </footer>
     </section>
   );

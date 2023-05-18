@@ -9,6 +9,8 @@
 
   &.isAttached {
     margin-top: -2.375rem;
+    position: relative;
+    z-index: 9999;
 
     .input {
       pointer-events: none;
