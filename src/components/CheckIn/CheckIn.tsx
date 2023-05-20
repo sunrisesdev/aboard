@@ -47,6 +47,7 @@ const post = async (status: CheckinInput, session?: Session | null) => {
 
 const CheckIn = () => {
   const { data: session } = useSession();
+  const [departureTime, setDepartureTime] = useState<string>();
   const [destination, setDestination] = useState<Stop>();
   const [error, setError] = useState<string>();
   const [isOpen, setIsOpen] = useState(false);
@@ -82,17 +83,8 @@ const CheckIn = () => {
       );
 
       setStep('origin');
-
-      if (destination) {
-        setOrigin({
-          ibnr: destination.evaIdentifier,
-          name: destination.name,
-          rilIdentifier: destination.rilIdentifier,
-        });
-      } else {
-        setOrigin(undefined);
-      }
-
+      setOrigin(undefined);
+      setDepartureTime(undefined);
       setDestination(undefined);
       setTrip(undefined);
 
@@ -122,6 +114,7 @@ const CheckIn = () => {
   const contextValue: CheckInContextValue = {
     checkIn,
     currentStatus: status,
+    departureTime,
     destination,
     error,
     goBack,
@@ -129,6 +122,7 @@ const CheckIn = () => {
     message,
     origin,
     query,
+    setDepartureTime,
     setDestination: (value) => {
       setDestination(value);
 
@@ -140,6 +134,7 @@ const CheckIn = () => {
     setMessage,
     setOrigin: (value) => {
       setOrigin(value);
+      setDepartureTime(undefined);
       setTrip(undefined);
       setDestination(undefined);
 
