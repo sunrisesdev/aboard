@@ -18,7 +18,12 @@ import { TransportType } from '@/traewelling-sdk/types';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { MdArrowBack } from 'react-icons/md';
+import {
+  MdArrowBack,
+  MdClose,
+  MdKeyboardDoubleArrowLeft,
+  MdKeyboardDoubleArrowRight,
+} from 'react-icons/md';
 import { TbRouteOff } from 'react-icons/tb';
 import { CheckInContext } from '../CheckIn.context';
 import { PRODUCT_ICONS } from '../consts';
@@ -50,7 +55,8 @@ const getServedProducts = (trips: HAFASTrip[]) => {
 };
 
 const TripStep = () => {
-  const { departureTime, goBack, origin, setTrip } = useContext(CheckInContext);
+  const { departureTime, goBack, origin, setDepartureTime, setTrip } =
+    useContext(CheckInContext);
 
   const [filter, setFilter] = useState<TransportType>();
   const { departures, isLoading } = useDepartures(origin?.name ?? '', {
@@ -75,12 +81,28 @@ const TripStep = () => {
 
   const hasProduct = (product: HAFASProductType) => products.includes(product);
 
+  const handleOnEarlierClick = () => {
+    if (isLoading) {
+      return;
+    }
+
+    setDepartureTime(departures?.meta?.times.prev);
+  };
+
   const handleOnFilterClick = (value: TransportType) => {
     if (filter === value) {
       setFilter(undefined);
     } else {
       setFilter(value);
     }
+  };
+
+  const handleOnLaterClick = () => {
+    if (isLoading) {
+      return;
+    }
+
+    setDepartureTime(departures?.meta?.times.next);
   };
 
   return (
@@ -227,6 +249,37 @@ const TripStep = () => {
           )}
         </ScrollArea>
       </div>
+
+      <footer className={styles.footer}>
+        <button className={styles.timeButton} onClick={handleOnEarlierClick}>
+          <div className={styles.arrow}>
+            <MdKeyboardDoubleArrowLeft size={20} />
+          </div>
+          <span>Früher</span>
+        </button>
+
+        {typeof departureTime !== 'undefined' && (
+          <button
+            className={styles.resetTimeButton}
+            onClick={() => setDepartureTime(undefined)}
+          >
+            <span>
+              ab{' '}
+              {new Date(departureTime).toLocaleTimeString([], {
+                timeStyle: 'short',
+              })}
+            </span>
+            <MdClose size={16} />
+          </button>
+        )}
+
+        <button className={styles.timeButton} onClick={handleOnLaterClick}>
+          <span>Später</span>
+          <div className={styles.arrow}>
+            <MdKeyboardDoubleArrowRight size={20} />
+          </div>
+        </button>
+      </footer>
     </main>
   );
 };

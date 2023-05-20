@@ -9,6 +9,12 @@
   overflow: hidden;
 }
 
+.footer {
+  align-items: center;
+  display: flex;
+}
+
+.footer,
 .header {
   color: #FFF;
 }
@@ -60,15 +66,59 @@
   }
 }
 
+.resetTimeButton {
+  align-items: center;
+  appearance: none;
+  background-color: var(--sky12);
+  border: none;
+  border-radius: 9999rem;
+  box-shadow: none;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  flex-shrink: 0;
+  font-weight: 500;
+  gap: 0.375rem;
+  margin-inline: 1rem;
+  padding: 0.5rem 0.75rem;
+  user-select: none;
+}
+
 .sheet {
   background-color: #FFF;
-  border-radius: 1rem 1rem 0 0;
+  border-radius: 1rem;
   height: 100%;
   overflow: hidden;
 }
 
 .scrollArea {
   height: 100%;
+}
+
+.timeButton {
+  align-items: center;
+  appearance: none;
+  background: none;
+  border: none;
+  box-shadow: none;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  font-weight: 500;
+  line-height: 1.25;
+  gap: 0.5rem;
+  padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+  user-select: none;
+  width: 100%;
+
+  &:last-of-type {
+    justify-content: flex-end;
+  }
+
+  .arrow {
+    display: flex;
+    flex-shrink: 0;
+  }
 }
 
 .tripList {
