@@ -30,6 +30,7 @@ export async function generateMetadata({
 
   return {
     title: `${status?.username} reist nach ${status?.train.destination.name} - aboard.at`,
+    description: `Nutze aboard.at um ${status?.username} auf seiner Reise nach ${status?.train.destination.name} zu begleiten.`,
   };
 }
 
@@ -52,3 +53,5 @@ export default async function Page({ params }: StatusPageProps) {
 
   return <StatusDetails status={status} stops={stops} />;
 }
+
+export const revalidate = 60;

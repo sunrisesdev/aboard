@@ -7,11 +7,12 @@ declare module 'next-auth' {
       refreshToken: string;
       username: string;
       name: string;
+      id: number;
     };
   }
 
   interface User {
-    id: string;
+    id: number;
     name: string;
     username: string;
     email: string;
@@ -29,5 +30,6 @@ declare module 'next-auth/jwt' {
     refreshToken: string;
     username: string;
     displayName: string;
+    id: number;
   }
 }

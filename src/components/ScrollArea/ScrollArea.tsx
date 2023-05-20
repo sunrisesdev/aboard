@@ -5,6 +5,7 @@ import styles from './ScrollArea.module.scss';
 import { ScrollAreaProps } from './types';
 
 const ScrollArea = ({
+  bottomFogBorderRadius,
   children,
   className,
   noFog = false,
@@ -99,7 +100,10 @@ const ScrollArea = ({
         [styles.hasFog]: contentHeight > viewportHeight && !noFog,
       })}
       ref={rootRef}
-      style={{ ['--top-fog-border-radius' as any]: topFogBorderRadius }}
+      style={{
+        ['--bottom-fog-border-radius' as any]: bottomFogBorderRadius,
+        ['--top-fog-border-radius' as any]: topFogBorderRadius,
+      }}
     >
       <RadixScrollArea.Viewport
         className={styles.viewport}
