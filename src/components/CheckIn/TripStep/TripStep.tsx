@@ -115,7 +115,7 @@ const TripStep = () => {
           )}
           onClick={goBack}
         >
-          <div className={styles.arrow}>
+          <div className={styles.icon}>
             <MdArrowBack size={20} />
           </div>
           <span>{origin?.name}</span>
@@ -252,7 +252,7 @@ const TripStep = () => {
 
       <footer className={styles.footer}>
         <button className={styles.timeButton} onClick={handleOnEarlierClick}>
-          <div className={styles.arrow}>
+          <div className={styles.icon}>
             <MdKeyboardDoubleArrowLeft size={20} />
           </div>
           <span>Früher</span>
@@ -275,7 +275,7 @@ const TripStep = () => {
 
         <button className={styles.timeButton} onClick={handleOnLaterClick}>
           <span>Später</span>
-          <div className={styles.arrow}>
+          <div className={styles.icon}>
             <MdKeyboardDoubleArrowRight size={20} />
           </div>
         </button>
