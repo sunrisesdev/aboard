@@ -50,10 +50,13 @@ const getServedProducts = (trips: HAFASTrip[]) => {
 };
 
 const TripStep = () => {
-  const { goBack, origin, setTrip } = useContext(CheckInContext);
+  const { departureTime, goBack, origin, setTrip } = useContext(CheckInContext);
 
   const [filter, setFilter] = useState<TransportType>();
-  const { departures, isLoading } = useDepartures(origin?.name ?? '', filter);
+  const { departures, isLoading } = useDepartures(origin?.name ?? '', {
+    from: departureTime,
+    transportType: filter,
+  });
 
   const productsFetched = useRef(false);
   const [products, setProducts] = useState<HAFASProductType[]>([]);

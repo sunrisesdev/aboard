@@ -4,6 +4,7 @@ import { CheckInContextValue } from './types';
 export const CheckInContext = createContext<CheckInContextValue>({
   checkIn: () => void 0,
   currentStatus: undefined,
+  departureTime: undefined,
   destination: undefined,
   error: undefined,
   goBack: () => void 0,
@@ -11,6 +12,7 @@ export const CheckInContext = createContext<CheckInContextValue>({
   message: '',
   origin: undefined,
   query: '',
+  setDepartureTime: () => void 0,
   setDestination: () => void 0,
   setIsOpen: () => void 0,
   setMessage: () => void 0,
