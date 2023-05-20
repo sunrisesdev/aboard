@@ -2,6 +2,7 @@
 
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
+import { LiveCheckInContext } from '@/contexts/LiveCheckIn/LiveCheckIn.context';
 import { useRecentStations } from '@/hooks/useRecentStations/useRecentStations';
 import { useStationSearch } from '@/hooks/useStationSearch/useStationSearch';
 import clsx from 'clsx';
@@ -13,6 +14,7 @@ import { StationProps } from './types';
 
 const OriginStep = () => {
   const { isOpen, query, setOrigin } = useContext(CheckInContext);
+  const { journey } = useContext(LiveCheckInContext);
   const { isLoading: isLoadingRecentStations, recentStations } =
     useRecentStations();
   const { isLoading: isLoadingStations, stations } = useStationSearch(query);
@@ -63,6 +65,29 @@ const OriginStep = () => {
                     </li>
                   </ul>
                 )}
+              </section>
+            )}
+
+            {journey.length > 0 && (
+              <section className={styles.container}>
+                <div className={styles.title}>Live Check-In fortsetzen</div>
+                <ul className={styles.stationList}>
+                  <li>
+                    <Station
+                      name={journey.at(-1)!.destination.name}
+                      onClick={() =>
+                        setOrigin({
+                          ibnr: journey.at(-1)!.destination.id,
+                          name: journey.at(-1)!.destination.name,
+                          rilIdentifier:
+                            journey.at(-1)!.destination.rilIdentifier,
+                        })
+                      }
+                      query={query}
+                      rilIdentifier={journey.at(-1)!.destination.rilIdentifier}
+                    />
+                  </li>
+                </ul>
               </section>
             )}
 

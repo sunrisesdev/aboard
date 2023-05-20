@@ -178,7 +178,7 @@
     justify-content: center;
     margin-left: 1rem;
     overflow: hidden;
-    padding: 0.75rem;
+    padding: 0.5rem 0.75rem;
   }
 
   .description {
@@ -193,7 +193,7 @@
 
   .watermark {
     left: 0;
-    opacity: 0.05;
+    opacity: 0.1;
     position: absolute;
     top: 50%;
     transform: translate3d(-25%, -50%, 0) rotate(-157.5deg);

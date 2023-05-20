@@ -13,7 +13,7 @@ import { CheckInContext } from '../CheckIn.context';
 import styles from './Search.module.scss';
 
 const Search = () => {
-  const { goBack, isOpen, setIsOpen, setOrigin, setQuery } =
+  const { goBack, isOpen, setIsOpen, setOrigin, setQuery, query } =
     useContext(CheckInContext);
   const inputRef = useRef<HTMLInputElement>(null);
 

@@ -1,3 +1,15 @@
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .base {
   border-radius: 0.5rem 0.5rem 0 0;
   color: #FFF;
@@ -59,8 +71,19 @@
   margin-bottom: 1rem;
 }
 
+.lineIndicator {
+  font-weight: 500;
+}
+
 .productIcon {
   height: 1.25rem;
+}
+
+.spinner {
+  animation: spinner 2s linear infinite;
+  aspect-ratio: 1;
+  display: flex;
+  margin-left: auto;
 }
 
 .time {
@@ -89,10 +112,12 @@
   align-items: center;
   display: flex;
   gap: 0.5rem;
+  width: 100%;
 }
 
 .upcoming {
   margin-top: 0.5rem;
+  width: 100%;
 }
 
 .watermark {
