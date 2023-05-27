@@ -63,7 +63,6 @@ const StatusDetails = ({
     status.train.origin.departurePlanned ?? '',
     status.train.origin.id.toString()
   );
-  console.log(user);
 
   const direction = (allStops ?? initialStops).at(-1)?.name;
   const destinationAt = (allStops ?? initialStops).findIndex(
