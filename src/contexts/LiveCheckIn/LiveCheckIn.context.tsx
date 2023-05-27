@@ -5,6 +5,7 @@ import {
   ReactNode,
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import { LiveCheckIn, LiveCheckInContextValue } from './types';
@@ -21,6 +22,7 @@ export const LiveCheckInContext = createContext<LiveCheckInContextValue>({
 const LiveCheckInContextProvider = ({ children }: { children: ReactNode }) => {
   const [checkIns, setCheckIns] = useState<LiveCheckIn[]>([]);
   const [_, refresh] = useState(0);
+  const storageAvailable = useRef(false);
 
   const remainingCheckIns = checkIns.filter(({ checkedIn }) => !checkedIn);
   const untilNextCheckIn =
@@ -50,6 +52,24 @@ const LiveCheckInContextProvider = ({ children }: { children: ReactNode }) => {
     remainingCheckIns: remainingCheckIns,
     untilNextCheckIn,
   };
+
+  useEffect(() => {
+    const fromStorage = localStorage.getItem('liveCheckIn');
+
+    if (!!fromStorage) {
+      setCheckIns(JSON.parse(fromStorage));
+    }
+
+    setTimeout(() => {
+      storageAvailable.current = true;
+    }, 100);
+  }, []);
+
+  useEffect(() => {
+    if (storageAvailable.current) {
+      localStorage.setItem('liveCheckIn', JSON.stringify(checkIns));
+    }
+  }, [checkIns, storageAvailable]);
 
   useEffect(() => {
     const interval = setInterval(() => {
