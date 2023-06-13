@@ -1,0 +1,57 @@
+@import '@/styles/index';
+
+.base {
+  background-color: #FFF;
+  border-radius: 0.5rem;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+
+  .extraTime {
+    margin-left: auto;
+  }
+
+  .station {
+    align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .time {
+    font-weight: 500;
+    opacity: 0.85;
+    padding-left: 0.5rem;
+    white-space: nowrap;
+  }
+}
+
+.changeover {
+  margin: 0rem 1rem 0rem 1.25rem;
+  padding: 1rem 0;
+  position: relative;
+
+  .content {
+    align-items: center;
+    display: flex;
+    font-size: 0.875rem;
+    font-weight: 500;
+    gap: 0.25rem;
+    justify-content: center;
+    opacity: 0.5;
+    padding-left: 1.375rem;
+  }
+}
+
+.header {
+  align-items: center;
+  background-color: var(--accent);
+  border-radius: 0.5rem 0.5rem 0 0;
+  color: var(--contrast);
+  display: flex;
+  font-size: 0.875rem;
+  font-weight: 500;
+  gap: 0.5rem;
+  margin: -0.5rem -0.5rem 0.5rem -1rem;
+  padding: 0.5rem;
+}

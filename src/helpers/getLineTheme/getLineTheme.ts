@@ -22,3 +22,29 @@ export const getLineTheme = (
     ...theme,
   };
 };
+
+export const getWhiteLineTheme = (
+  id: string,
+  productType: HAFASProductType
+): Required<Theme> => {
+  const theme = CUSTOM_LINE_THEMES[id];
+
+  if (!theme) {
+    const { accent, accentRGB } = PRODUCT_THEMES[productType];
+    return {
+      accent: '#FFF',
+      accentRGB: '255, 255, 255',
+      contrast: accent,
+      contrastRGB: accentRGB,
+    };
+  }
+
+  const { accent, accentRGB } = theme;
+
+  return {
+    accent: '#FFF',
+    accentRGB: '255, 255, 255',
+    contrast: accent,
+    contrastRGB: accentRGB,
+  };
+};
