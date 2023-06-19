@@ -1,3 +1,4 @@
+import Notifications from '../Notifications/Notifications';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import styles from './Navbar.module.scss';
 import Username from './Username';
@@ -23,7 +24,10 @@ const Navbar = () => {
           <Username />
         </div>
       </div>
-      <ProfileImage />
+      <div className={styles.items}>
+        <Notifications />
+        <ProfileImage />
+      </div>
     </nav>
   );
 };
