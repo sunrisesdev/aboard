@@ -1,0 +1,21 @@
+.base {
+  padding: 1.25rem 1rem 0.5rem;
+  display: flex;
+  margin-bottom: 0.75rem;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.username {
+  font-size: 1.25rem;
+
+  font-weight: 600;
+  line-height: 1;
+}
+
+.greeting {
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1;
+}

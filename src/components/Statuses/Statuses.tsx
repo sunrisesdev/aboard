@@ -1,3 +1,5 @@
+'use client';
+
 import { useDashboard } from '@/hooks/useDashboard/useDashboard';
 import Image from 'next/image';
 import Link from 'next/link';
