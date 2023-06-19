@@ -11,7 +11,7 @@ const ProfileImage = () => {
   if (!session?.user.image)
     return (
       <div className={styles.wrapper}>
-        <Shimmer height={'2rem'} width={'2rem'} className={styles.base} />
+        <Shimmer height={'2.5rem'} width={'2.5rem'} className={styles.base} />
       </div>
     );
 
@@ -20,8 +20,8 @@ const ProfileImage = () => {
       <Image
         src={session.user.image}
         alt={session.user.name}
-        width={32}
-        height={32}
+        width={40}
+        height={40}
         className={styles.base}
       />
     </div>

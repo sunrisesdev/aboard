@@ -17,8 +17,8 @@ const getCurrentGreeting = () => {
 const Navbar = () => {
   return (
     <nav className={styles.base}>
-      <div>
-        <div className={styles.greeting}>{getCurrentGreeting()}</div>
+      <div className={styles.text}>
+        <div className={styles.greeting}>{getCurrentGreeting()}.</div>
         <div className={styles.username}>
           <Username />
         </div>
