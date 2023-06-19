@@ -1,0 +1,39 @@
+@import '@/styles/index';
+
+.base {
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  overflow: hidden;
+}
+
+.avatar {
+  border-radius: 9999rem;
+}
+
+.header {
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  padding-right: 1rem;
+  width: 100%;
+}
+
+.route {
+  align-items: center;
+  background-image: linear-gradient(210deg, rgba(var(--contrast-rgb), 0.03), rgba(var(--contrast-rgb), 0.1));
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: 1rem;
+  overflow: hidden;
+  padding: 0.5rem 1rem 1rem;
+}
+
+.username {
+  font-weight: 600;
+}
+
+.time {
+  margin-left: auto;
+}
