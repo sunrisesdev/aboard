@@ -36,10 +36,12 @@ export const parseSchedule = ({
 
   return {
     actual: formatTime(actualDate),
+    actualValue,
     delayInMinutes,
     isDelayed: delayInMinutes > 0,
     isEarly: delayInMinutes < 0,
     isOnTime: delayInMinutes === 0,
     planned: formatTime(plannedDate),
+    plannedValue,
   };
 };
