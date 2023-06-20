@@ -57,30 +57,30 @@ const ScrollArea = ({
         root.style.setProperty('--bottom-fog-opacity', '1');
       }
 
-      viewport.scrollTop < 0
-        ? setTopOverscroll(0 - viewport.scrollTop)
-        : setTopOverscroll(0);
+      // viewport.scrollTop < 0
+      //   ? setTopOverscroll(0 - viewport.scrollTop)
+      //   : setTopOverscroll(0);
 
-      const threshold = 96;
+      // const threshold = 96;
 
-      if (viewport.scrollTop <= -threshold) {
-        setIsPullingDown(true);
-      }
+      // if (viewport.scrollTop <= -threshold) {
+      //   setIsPullingDown(true);
+      // }
 
-      if (
-        viewport.scrollTop > -threshold &&
-        viewport.scrollTop + viewport.clientHeight <
-          viewport.scrollHeight + threshold
-      ) {
-        setIsPullingDown(false);
-      }
+      // if (
+      //   viewport.scrollTop > -threshold &&
+      //   viewport.scrollTop + viewport.clientHeight <
+      //     viewport.scrollHeight + threshold
+      // ) {
+      //   setIsPullingDown(false);
+      // }
 
-      if (
-        viewport.scrollTop + viewport.clientHeight >=
-        viewport.scrollHeight + threshold
-      ) {
-        viewport.style.background = 'green';
-      }
+      // if (
+      //   viewport.scrollTop + viewport.clientHeight >=
+      //   viewport.scrollHeight + threshold
+      // ) {
+      //   viewport.style.background = 'green';
+      // }
     };
 
     viewport.addEventListener('scroll', handleScroll, { passive: true });
