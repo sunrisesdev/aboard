@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { PRODUCT_ICONS } from '../CheckIn/consts';
 import LineIndicator from '../LineIndicator/LineIndicator';
+import Shimmer from '../Shimmer/Shimmer';
 import ThemeProvider from '../ThemeProvider/ThemeProvider';
 import Time from '../Time/Time';
 import styles from './StatusCard.module.scss';
@@ -126,4 +127,93 @@ const StatusCard = ({ status }: StatusCardProps) => {
   );
 };
 
-export default StatusCard;
+const StatusCardSkeleton = () => {
+  const getWidth = () => Math.random() * (85 - 50) + 50;
+
+  return (
+    <ThemeProvider
+      color="#FFF"
+      colorRGB="255, 255, 255"
+      contrast="#DDDBDD"
+      contrastRGB="221, 219, 221"
+    >
+      <article className={styles.base}>
+        <header className={styles.header}>
+          <Shimmer
+            height="2rem"
+            style={{ borderRadius: '9999rem' }}
+            width="2rem"
+          />
+
+          <Shimmer className={styles.username} width={`${getWidth() / 2}%`} />
+
+          <Shimmer
+            height="1.25rem"
+            style={{ marginLeft: 'auto' }}
+            width="1.25rem"
+          />
+        </header>
+
+        <header className={styles.origin}>
+          <div className={styles.stop} />
+
+          <Shimmer height="1.5rem" width={`${getWidth() / 1.5}%`} />
+
+          <Shimmer className={styles.time} width="2rem" />
+        </header>
+
+        <section className={styles.destination}>
+          <Shimmer
+            className={styles.station}
+            height="1.5rem"
+            style={{ marginInline: '1rem' }}
+            width={`${getWidth() / 1.5}%`}
+          />
+
+          <div className={styles.footer}>
+            <Shimmer
+              className={styles.lineIndicator}
+              height="1.25rem"
+              width="3rem"
+            />
+
+            <div className={styles.line}>
+              <svg
+                className={styles.partial}
+                height={20}
+                version="1.1"
+                width="100%"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <line
+                  strokeDasharray="0.1 6"
+                  x1={0}
+                  y1={10}
+                  x2="100%"
+                  y2={10}
+                  stroke="rgba(var(--contrast-rgb, 255, 255, 255), 0.5)"
+                  strokeWidth="2px"
+                  strokeLinecap="round"
+                />
+              </svg>
+
+              <Shimmer
+                className={styles.progress}
+                height="2px"
+                width={`${getWidth()}%`}
+              />
+            </div>
+
+            <div className={styles.stop} />
+
+            <Shimmer className={styles.time} width="2rem" />
+          </div>
+        </section>
+      </article>
+    </ThemeProvider>
+  );
+};
+
+export default Object.assign(StatusCard, {
+  Skeleton: StatusCardSkeleton,
+});
