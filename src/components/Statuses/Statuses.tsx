@@ -2,7 +2,7 @@
 
 import { useDashboard } from '@/hooks/useDashboard/useDashboard';
 import { Status } from '@/traewelling-sdk/types';
-import { parseSchedule } from '@/utils/parseSchedule';
+import { formatDate } from '@/utils/formatDate';
 import StatusCard from '../StatusCard/StatusCard';
 import styles from './Statuses.module.scss';
 
@@ -25,26 +25,29 @@ const Statuses = () => {
     return <div className={styles.base}>Keine Daten vorhanden</div>;
   }
 
-  //sort by date
-  const sortedStatuses: { dateKey: string; statuses: Status[] }[] = [];
-  statuses.forEach((status) => {
-    const departureSchedule = parseSchedule({
-      actual:
-        status.train.origin.departureReal ??
-        status.train.origin.departure ??
-        '',
-      planned: status.train.origin.departurePlanned ?? '',
-    });
-    const date = new Date(departureSchedule.actualValue);
-    const dateKey = `${date.getDate()}.${
-      date.getMonth() + 1
-    }.${date.getFullYear()}`;
+  //helper function to get dateKey from status departureTime
+  const getDateKey = (status: Status) => {
+    const date = new Date(
+      status.train.origin.departureReal ?? status.train.origin.departure ?? ''
+    );
+    //remove time from date
+    date.setHours(0, 0, 0, 0);
+    return date;
+  };
 
-    const existingDate = sortedStatuses.find((s) => s.dateKey === dateKey);
+  //Group statuses by date
+  const groupedStatuses: { dateKey: Date; statuses: Status[] }[] = [];
+
+  statuses.forEach((status) => {
+    //get Date of status and check if it already exists in groupedStatuses
+    const dateKey = getDateKey(status);
+    const existingDate = groupedStatuses.find(
+      (group) => group.dateKey.toDateString() === dateKey.toDateString()
+    );
     if (existingDate) {
       existingDate.statuses.push(status);
     } else {
-      sortedStatuses.push({
+      groupedStatuses.push({
         dateKey,
         statuses: [status],
       });
@@ -53,16 +56,14 @@ const Statuses = () => {
 
   return (
     <div>
-      {sortedStatuses.map((s) => (
-        <div key={s.dateKey} className={styles.base}>
-          <div className={styles.date}>
-            <hr />
-            <span>{s.dateKey}</span>
-            <hr />
+      {groupedStatuses.map((group) => (
+        <div className={styles.base} key={group.dateKey.toDateString()}>
+          <span className={styles.date}>{formatDate(group.dateKey)}</span>
+          <div className={styles.statusGroup}>
+            {group.statuses.map((status) => (
+              <StatusCard key={status.id} status={status} />
+            ))}
           </div>
-          {s.statuses.map((status) => (
-            <StatusCard key={status.id} status={status} />
-          ))}
         </div>
       ))}
     </div>

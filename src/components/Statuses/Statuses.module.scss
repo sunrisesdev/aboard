@@ -1,22 +1,21 @@
 .base {
+  padding: 0 1rem;
+  &:not(:first-of-type) {
+    margin-top: 1rem;
+  }
+}
+
+.statusGroup {
   display: flex;
   flex-direction: column;
-  padding: 0 1rem;
   gap: 1rem;
+}
 
-  .date {
-    margin: 0;
-    margin-top: 1rem;
-    font-size: 1rem;
-    color: rgba(0, 0, 0, 0.57);
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
-    hr {
-      width: 100%;
-    }
-  }
+.date {
+  color: var(--sky11);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 .profilePicture {
