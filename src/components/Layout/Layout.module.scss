@@ -1,0 +1,45 @@
+.wrapper {
+  display: flex;
+  height: 100vh;
+  width: 414px;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+/* The device with borders */
+.smartphone {
+  width: 414px;
+  height: 818px;
+  margin: auto;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 9999rem;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* The screen (or content) of the device */
+.content {
+  width: 100%;
+  height: 100%;
+  background: white;
+  border: none;
+  border: 9999rem;
+  overflow: scroll;
+  padding: 3.25rem 1.75rem 1rem;
+}
+
+.image {
+  width: 414px;
+  height: 818px;
+  object-fit: contain;
+  z-index: 2;
+  pointer-events: none;
+  margin: 0 auto;
+}

@@ -1,3 +1,4 @@
+import Layout from '@/components/Layout/Layout';
 import Providers from '@/components/Providers/Providers';
 import UmamiScript from '@/scripts/UmamiScript/UmamiScript';
 import { sourceSans3 } from '@/styles/fonts';
@@ -19,7 +20,9 @@ export default async function RootLayout({
     <html lang="de">
       <head />
       <body className={sourceSans3.className}>
-        <Providers session={session}>{children}</Providers>
+        <Providers session={session}>
+          <Layout>{children}</Layout>
+        </Providers>
         <UmamiScript />
       </body>
     </html>
