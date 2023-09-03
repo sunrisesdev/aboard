@@ -5,9 +5,12 @@ export const getStopsAfter = (
   stationId: string,
   stops: Stop[]
 ) => {
+  const after = new Date(plannedDeparture).toISOString();
+
   const startingAt = stops.findIndex(
     ({ departurePlanned, id }) =>
-      plannedDeparture === departurePlanned && stationId === id.toString()
+      after === new Date(departurePlanned!).toISOString() &&
+      stationId === id.toString()
   );
 
   return stops.slice(typeof startingAt === 'undefined' ? 0 : startingAt + 1);
