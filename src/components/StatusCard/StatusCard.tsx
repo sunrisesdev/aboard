@@ -10,7 +10,14 @@ import Time from '../Time/Time';
 import styles from './StatusCard.module.scss';
 import { StatusCardProps } from './types';
 
+import clsx from 'clsx';
+import { useState } from 'react';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+
 const StatusCard = ({ status }: StatusCardProps) => {
+  const [hasLiked, setHasLiked] = useState(status.liked);
+  const [likes, setLikes] = useState(status.likes);
+
   const hasArrived =
     new Date(
       status.train.destination.arrival ??
@@ -37,11 +44,20 @@ const StatusCard = ({ status }: StatusCardProps) => {
   const timePassed = Date.now() - departureSchedule.actualValue;
   const progress = Math.max(0, Math.min(timePassed * (100 / travelTime), 100));
 
+  const handleLike = async () => {
+    await fetch(`/traewelling/statuses/${status.id}/like`, {
+      method: hasLiked ? 'DELETE' : 'POST',
+    });
+
+    setHasLiked(!hasLiked);
+    setLikes(hasLiked ? likes - 1 : likes + 1);
+  };
+
   return (
     <ThemeProvider
       theme={getWhiteLineTheme(status.train.number, status.train.category)}
     >
-      <Link className={styles.link} href={`/status/${status.id}`}>
+      <div>
         <article className={styles.base}>
           <header className={styles.header}>
             <Image
@@ -58,9 +74,21 @@ const StatusCard = ({ status }: StatusCardProps) => {
               <div className={styles.username}>{status.username}</div>
             </div>
 
-            {PRODUCT_ICONS[status.train.category]({
-              className: styles.productIcon,
-            })}
+            <div className={styles.icons}>
+              {PRODUCT_ICONS[status.train.category]({
+                className: styles.productIcon,
+              })}
+
+              <div className={styles.heart} onClick={handleLike}>
+                {hasLiked ? (
+                  <AiFillHeart className={styles.heartFilled} />
+                ) : (
+                  <AiOutlineHeart />
+                )}
+
+                <span className={styles.amount}>{likes}</span>
+              </div>
+            </div>
           </header>
 
           <header className={styles.origin}>
@@ -71,7 +99,10 @@ const StatusCard = ({ status }: StatusCardProps) => {
             <Time className={styles.time}>{departureSchedule.actual}</Time>
           </header>
 
-          <section className={styles.destination}>
+          <Link
+            className={clsx(styles.link, styles.destination)}
+            href={`/status/${status.id}`}
+          >
             <div className={styles.station}>
               {status.train.destination.name}
             </div>
@@ -120,9 +151,9 @@ const StatusCard = ({ status }: StatusCardProps) => {
 
               <Time className={styles.time}>{arrivalSchedule.actual}</Time>
             </div>
-          </section>
+          </Link>
         </article>
-      </Link>
+      </div>
     </ThemeProvider>
   );
 };
@@ -147,11 +178,10 @@ const StatusCardSkeleton = () => {
 
           <Shimmer className={styles.username} width={`${getWidth() / 2}%`} />
 
-          <Shimmer
-            height="1.25rem"
-            style={{ marginLeft: 'auto' }}
-            width="1.25rem"
-          />
+          <div className={styles.icons}>
+            <Shimmer height="1.25rem" width="1.25rem" />
+            <Shimmer height="1.25rem" width="1.25rem" />
+          </div>
         </header>
 
         <header className={styles.origin}>
