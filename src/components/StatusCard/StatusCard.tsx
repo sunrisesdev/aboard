@@ -11,9 +11,13 @@ import styles from './StatusCard.module.scss';
 import { StatusCardProps } from './types';
 
 import clsx from 'clsx';
+import { useState } from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 
 const StatusCard = ({ status }: StatusCardProps) => {
+  const [hasLiked, setHasLiked] = useState(status.liked);
+  const [likes, setLikes] = useState(status.likes);
+
   const hasArrived =
     new Date(
       status.train.destination.arrival ??
@@ -40,12 +44,13 @@ const StatusCard = ({ status }: StatusCardProps) => {
   const timePassed = Date.now() - departureSchedule.actualValue;
   const progress = Math.max(0, Math.min(timePassed * (100 / travelTime), 100));
 
-  const isLiked = status.liked;
-
   const handleLike = async () => {
     await fetch(`/traewelling/statuses/${status.id}/like`, {
-      method: isLiked ? 'DELETE' : 'POST',
+      method: hasLiked ? 'DELETE' : 'POST',
     });
+
+    setHasLiked(!hasLiked);
+    setLikes(hasLiked ? likes - 1 : likes + 1);
   };
 
   return (
@@ -75,13 +80,13 @@ const StatusCard = ({ status }: StatusCardProps) => {
               })}
 
               <div className={styles.heart} onClick={handleLike}>
-                {isLiked ? (
+                {hasLiked ? (
                   <AiFillHeart className={styles.heartFilled} />
                 ) : (
                   <AiOutlineHeart />
                 )}
 
-                <span className={styles.amount}>{status.likes}</span>
+                <span className={styles.amount}>{likes}</span>
               </div>
             </div>
           </header>
