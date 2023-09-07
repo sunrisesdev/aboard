@@ -10,7 +10,6 @@ import Time from '../Time/Time';
 import styles from './StatusCard.module.scss';
 import { StatusCardProps } from './types';
 
-import clsx from 'clsx';
 import { useState } from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 
@@ -99,57 +98,62 @@ const StatusCard = ({ status }: StatusCardProps) => {
             <Time className={styles.time}>{departureSchedule.actual}</Time>
           </header>
 
-          <Link
-            className={clsx(styles.link, styles.destination)}
-            href={`/status/${status.id}`}
-          >
-            <div className={styles.station}>
-              {status.train.destination.name}
-            </div>
+          <Link className={styles.link} href={`/status/${status.id}`}>
+            {status.body && (
+              <div className={styles.message}>
+                <span>{status.body}</span>
+              </div>
+            )}
 
-            <div className={styles.footer}>
-              <LineIndicator
-                className={styles.lineIndicator}
-                lineId={status.train.number}
-                lineName={status.train.lineName}
-                product={status.train.category}
-                productName=""
-              />
+            <div className={styles.destination}>
+              <div className={styles.station}>
+                {status.train.destination.name}
+              </div>
 
-              <div className={styles.line}>
-                <svg
-                  className={styles.partial}
-                  height={20}
-                  version="1.1"
-                  width="100%"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <line
-                    strokeDasharray="0.1 6"
-                    x1={0}
-                    y1={10}
-                    x2="100%"
-                    y2={10}
-                    stroke="rgba(var(--contrast-rgb, 255, 255, 255), 0.5)"
-                    strokeWidth="2px"
-                    strokeLinecap="round"
-                  />
-                </svg>
-                <div
-                  className={styles.progress}
-                  style={{ width: `${progress}%` }}
+              <div className={styles.footer}>
+                <LineIndicator
+                  className={styles.lineIndicator}
+                  lineId={status.train.number}
+                  lineName={status.train.lineName}
+                  product={status.train.category}
+                  productName=""
                 />
-                {/* {!hasArrived && (
+
+                <div className={styles.line}>
+                  <svg
+                    className={styles.partial}
+                    height={20}
+                    version="1.1"
+                    width="100%"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <line
+                      strokeDasharray="0.1 6"
+                      x1={0}
+                      y1={10}
+                      x2="100%"
+                      y2={10}
+                      stroke="rgba(var(--contrast-rgb, 255, 255, 255), 0.5)"
+                      strokeWidth="2px"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <div
+                    className={styles.progress}
+                    style={{ width: `${progress}%` }}
+                  />
+                  {/* {!hasArrived && (
                   <FaCaretRight
                     color="var(--contrast)"
                     style={{ marginLeft: '-6px' }}
                   />
                 )} */}
+                </div>
+
+                <div className={styles.stop} />
+
+                <Time className={styles.time}>{arrivalSchedule.actual}</Time>
               </div>
-
-              <div className={styles.stop} />
-
-              <Time className={styles.time}>{arrivalSchedule.actual}</Time>
             </div>
           </Link>
         </article>
