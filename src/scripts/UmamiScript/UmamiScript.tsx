@@ -11,7 +11,7 @@ const UmamiScript = () => {
 
   return (
     <Script
-      src="/tracking/umami.js"
+      src="/tracking/script.js"
       data-website-id={websiteId}
       strategy="afterInteractive"
     />

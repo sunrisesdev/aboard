@@ -1,0 +1,14 @@
+.legal {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 2rem 0 5rem;
+
+  a {
+    color: var(--slate7);
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 0.9rem;
+    line-height: 1.5rem;
+  }
+}

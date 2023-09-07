@@ -1,0 +1,16 @@
+.base {
+  position: relative;
+  display: flex;
+
+  font-size: 1.25rem;
+}
+
+.dot {
+  position: absolute;
+  height: 0.375rem;
+  width: 0.375rem;
+  background-color: var(--crimson9);
+  border-radius: 50%;
+  right: -0.125rem;
+  top: -0.125rem;
+}

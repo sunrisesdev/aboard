@@ -1,21 +1,22 @@
-'use client';
-
-import Button from '@/components/Button/Button';
 import CheckIn from '@/components/CheckIn/CheckIn';
+import Navbar from '@/components/Navbar/Navbar';
 import Statuses from '@/components/Statuses/Statuses';
-import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
+import styles from './dashboard.module.scss';
 
 const DashboardHome = () => {
-  const { data: session } = useSession();
-
   return (
     <main>
-      <div>Hallo {session?.user?.name}!</div>
-      <Button onClick={() => signOut()}>Abmelden</Button>
+      <Navbar />
 
       <Statuses />
 
       <CheckIn />
+
+      <div className={styles.legal}>
+        <Link href="/impressum">Impressum</Link>
+        <Link href="/datenschutz">Datenschutz</Link>
+      </div>
     </main>
   );
 };

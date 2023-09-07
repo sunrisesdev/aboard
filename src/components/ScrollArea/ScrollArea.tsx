@@ -16,8 +16,8 @@ const ScrollArea = ({
   const rootRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
 
-  // const [isPullingDown, setIsPullingDown] = useState(false);
-  // const [topOverscroll, setTopOverscroll] = useState(0);
+  const [isPullingDown, setIsPullingDown] = useState(false);
+  const [topOverscroll, setTopOverscroll] = useState(0);
 
   useEffect(() => {
     if (noFog || !rootRef.current || !viewportRef.current) {

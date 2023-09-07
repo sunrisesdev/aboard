@@ -23,7 +23,7 @@ const nextConfig = {
     return [
       {
         source: '/tracking/:path*',
-        destination: 'https://umami.cloudron.nbank.dev/:path*',
+        destination: 'https://tracking.nbank.dev/:path*',
       },
     ];
   },

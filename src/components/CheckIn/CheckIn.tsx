@@ -1,3 +1,5 @@
+'use client';
+
 import { LiveCheckInContext } from '@/contexts/LiveCheckIn/LiveCheckIn.context';
 import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import { useCurrentStatus } from '@/hooks/useCurrentStatus/useCurrentStatus';

@@ -3,11 +3,13 @@
 import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useStops } from '@/hooks/useStops/useStops';
+import { CheckinInput } from '@/traewelling-sdk/functions/trains';
 import { Stop } from '@/traewelling-sdk/types';
 import { formatDate } from '@/utils/formatDate';
 import { formatTime } from '@/utils/formatTime';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
+import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -21,6 +23,7 @@ import {
   MdOutlineToken,
 } from 'react-icons/md';
 import { TbRoute } from 'react-icons/tb';
+import Button from '../Button/Button';
 import { PRODUCT_ICONS } from '../CheckIn/consts';
 import LineIndicator from '../LineIndicator/LineIndicator';
 import Route from '../Route/Route';
@@ -50,13 +53,36 @@ const getNextStop = (stops: Stop[]) => {
   }
 };
 
+const post = async (status: CheckinInput, session?: Session | null) => {
+  const token = session?.user.accessToken;
+
+  if (!token) {
+    return;
+  }
+
+  const response = await fetch('/traewelling/stations/checkin', {
+    body: JSON.stringify(status),
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  });
+
+  if (!response.ok) {
+    throw response;
+  }
+
+  return await response.json();
+};
+
 const StatusDetails = ({
   status,
   stops: initialStops = [],
 }: StatusDetailsProps) => {
   const [nextStop, setNextStop] = useState<Stop>();
-  const { data } = useSession();
-  const user = data?.user;
+  const { data: session } = useSession();
+  const user = session?.user;
   const { stops: allStops } = useStops(
     status.train.hafasId,
     status.train.lineName,
@@ -107,6 +133,29 @@ const StatusDetails = ({
   const checkInDate = formatDate(new Date(status.createdAt));
   const checkedInAt = formatTime(new Date(status.createdAt));
   const [_isPending, startTransition] = useTransition();
+  const [joined, setJoined] = useState(false);
+
+  const checkIn = async () => {
+    try {
+      await post(
+        {
+          arrival: status.train.destination.arrivalPlanned!,
+          body: status.body,
+          business: status.business,
+          departure: status.train.origin.departurePlanned!,
+          destination: status.train.destination.evaIdentifier,
+          ibnr: true,
+          lineName: status.train.lineName,
+          start: status.train.origin.evaIdentifier,
+          tripId: status.train.hafasId,
+          visibility: status.visibility,
+        },
+        session
+      );
+
+      setTimeout(() => setJoined(true), 500);
+    } catch {}
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -267,6 +316,15 @@ const StatusDetails = ({
               </div>
             </li>
           </ul>
+
+          <Button
+            className={styles.joinButton}
+            disabled={joined}
+            onClick={checkIn}
+            variant="primary"
+          >
+            {joined ? 'Erfolgreich beigetreten!' : 'Check-In beitreten'}
+          </Button>
         </div>
       </main>
     </ThemeProvider>

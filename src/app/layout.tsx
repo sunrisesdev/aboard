@@ -1,8 +1,10 @@
+import Layout from '@/components/Layout/Layout';
 import Providers from '@/components/Providers/Providers';
 import LiveCheckInContextProvider from '@/contexts/LiveCheckIn/LiveCheckIn.context';
 import UmamiScript from '@/scripts/UmamiScript/UmamiScript';
 import { sourceSans3 } from '@/styles/fonts';
 import '@/styles/globals.css';
+import type { Metadata } from 'next';
 import { Session } from 'next-auth';
 import { getServerSession } from 'next-auth/next';
 import 'normalize.css';
@@ -20,18 +22,24 @@ export default async function RootLayout({
       <head />
       <body className={sourceSans3.className}>
         <Providers session={session}>
-          <LiveCheckInContextProvider>{children}</LiveCheckInContextProvider>
+          <LiveCheckInContextProvider>
+            <Layout>{children}</Layout>
+          </LiveCheckInContextProvider>
         </Providers>
+
         <UmamiScript />
       </body>
     </html>
   );
 }
 
-export const metadata = {
-  title: 'aboard.at',
-  description:
-    'Aboard is an alternative webclient for Träwelling focused on mobile UX.',
+const APP_NAME = 'Aboard';
+const APP_DEFAULT_TITLE = 'aboard.at';
+const APP_TITLE_TEMPLATE = '%s - Aboard.at';
+const APP_DESCRIPTION =
+  'Aboard is an alternative webclient for Träwelling focused on mobile UX.';
+
+export const metadata: Metadata = {
   viewport: 'width=device-width, initial-scale=1',
   icons: [
     {
@@ -39,9 +47,38 @@ export const metadata = {
       url: '/favicon.ico',
     },
   ],
+  applicationName: APP_NAME,
+  title: {
+    default: APP_DEFAULT_TITLE,
+    template: APP_TITLE_TEMPLATE,
+  },
+  description: APP_DESCRIPTION,
+  manifest: '/manifest.json',
+  themeColor: '#FFFFFF',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Aboard',
+    title: APP_DEFAULT_TITLE,
+    // startUpImage: [],
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: 'website',
+    siteName: APP_NAME,
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
+    description: APP_DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary',
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
+    description: APP_DESCRIPTION,
   },
 };
