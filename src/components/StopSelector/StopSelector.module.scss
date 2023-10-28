@@ -1,0 +1,151 @@
+.base {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding-top: 1rem;
+
+  &::before {
+    background-color: var(--accent);
+    content: '';
+    display: block;
+    height: calc(2.5rem + ((var(--stop-count, 1) - 1) * 3rem));
+    // left: 1.9375rem;
+    left: 1.25rem;
+    max-height: 50%;
+    position: absolute;
+    top: 0;
+    width: 2px;
+  }
+
+  li:last-of-type .stop::before {
+    height: calc(100% - 1.25rem);
+    height: 1.5rem;
+  }
+
+  li:last-of-type .stop[disabled] .partial {
+    height: 50%;
+  }
+}
+
+.stop {
+  appearance: none;
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--slate12);
+  cursor: pointer;
+  display: flex;
+  min-height: 3rem;
+  // padding-left: 3rem;
+  padding-left: 2.625rem;
+  padding-right: 1rem;
+  position: relative;
+  text-align: left;
+  user-select: none;
+  width: 100%;
+
+  &:active {
+    background-color: var(--slate5);
+  }
+
+  &:hover {
+    background-color: var(--slate4);
+  }
+
+  &::after {
+    background-color: #FFF;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--accent);
+    content: '';
+    display: block;
+    height: 6px;
+    // left: 1.8125rem;
+    left: 1.125rem;
+    position: absolute;
+    top: calc(50% - 3px);
+    width: 6px;
+  }
+
+  &::before {
+    background-color: var(--accent);
+    content: '';
+    display: block;
+    height: 100%;
+    // left: 1.9375rem;
+    left: 1.25rem;
+    position: absolute;
+    top: 0;
+    width: 2px;
+  }
+
+  &:disabled, &[disabled] {
+    background-color: #FFF;
+    isolation: isolate;
+    pointer-events: none;
+
+    &::after {
+      display: none;
+    }
+
+    &::before {
+      background-image: repeating-linear-gradient(-60deg, #FFF, #FFF 4px, var(--crimson3) 4px, var(--crimson3) 6px);
+      border: 1px solid #FFF;
+      border-radius: 0.5rem;
+      bottom: 0.125rem;
+      height: unset !important;
+      left: 0.5rem;
+      right: 0.5rem;
+      top: 0.125rem;
+      width: unset;
+      z-index: -1;
+    }
+
+    .name, .time {
+      color: var(--crimson11);
+      // text-decoration: line-through;
+    }
+  }
+
+  &.isSkeleton {
+    pointer-events: none;
+  }
+
+  .name {
+    flex-grow: 1;
+    line-height: 1.2;
+    padding-block: 0.5rem;
+  }
+
+  .time {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding-left: 0.5rem;
+
+    .isDelayed {
+      color: var(--sky11);
+      font-weight: 400;
+      text-decoration: line-through;
+    }
+  }
+
+  .cancelledNote {
+    align-items: center;
+    color: var(--crimson11);
+    display: flex;
+    font-size: 0.75rem;
+    font-weight: 600;
+    gap: 0.25rem;
+    text-transform: uppercase;
+  }
+
+  .partial {
+    // background-color: #FFF;
+    left: 0;
+    position: absolute;
+    top: 0;
+  }
+}

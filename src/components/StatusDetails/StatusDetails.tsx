@@ -2,7 +2,10 @@
 
 import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
+import { useCheckIn } from '@/hooks/useCheckIn/useCheckIn';
 import { useStops } from '@/hooks/useStops/useStops';
+import { useTrip } from '@/hooks/useTrip/useTrip';
+import { JoinCheckInOverlay } from '@/overlays/JoinCheckIn/JoinCheckIn';
 import { CheckinInput } from '@/traewelling-sdk/functions/trains';
 import { Stop } from '@/traewelling-sdk/types';
 import { formatDate } from '@/utils/formatDate';
@@ -89,7 +92,6 @@ const StatusDetails = ({
     status.train.origin.departurePlanned ?? '',
     status.train.origin.id.toString()
   );
-  console.log(user);
 
   const direction = (allStops ?? initialStops).at(-1)?.name;
   const destinationAt = (allStops ?? initialStops).findIndex(
@@ -156,6 +158,19 @@ const StatusDetails = ({
 
       setTimeout(() => setJoined(true), 500);
     } catch {}
+  };
+
+  const { trip } = useTrip(
+    status.train.hafasId,
+    status.train.lineName,
+    status.train.origin.id.toString()
+  );
+  const { join } = useCheckIn();
+  const [isJoinOverlayActive, setJoinOverlayActive] = useState(false);
+
+  const handleJoinClick = () => {
+    join({ status, trip });
+    setJoinOverlayActive(true);
   };
 
   return (
@@ -318,14 +333,26 @@ const StatusDetails = ({
             </li>
           </ul>
 
-          <Button
+          {/* <Button
             className={styles.joinButton}
             disabled={joined}
             onClick={checkIn}
             variant="primary"
           >
             {joined ? 'Erfolgreich beigetreten!' : 'Check-In beitreten'}
+          </Button> */}
+          <Button
+            className={styles.joinButton}
+            onClick={handleJoinClick}
+            variant="primary"
+          >
+            Check-In beitreten
           </Button>
+
+          <JoinCheckInOverlay
+            isActive={isJoinOverlayActive}
+            setActive={setJoinOverlayActive}
+          />
         </div>
       </main>
     </ThemeProvider>
