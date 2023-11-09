@@ -1,0 +1,14 @@
+@import '@/styles/index';
+
+.base {
+  margin: 0;
+  cursor: pointer;
+}
+
+.drawer {
+  background-color: white;
+  padding: 1rem;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}

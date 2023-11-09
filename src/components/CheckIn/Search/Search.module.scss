@@ -1,8 +1,8 @@
 .base {
-  background-color: #FFF;
+  background-color: #fff;
   border-radius: 0.375rem;
   box-shadow: rgba(99, 99, 99, 0.2) 0 0.125rem 0.5rem 0; // CSS Scan #6
-  color: var(--slate12);
+  color: var(--slate-12);
   cursor: pointer;
   display: flex;
   height: 2.75rem;
@@ -40,8 +40,8 @@
 
 .leftAddon::after,
 .rightAddon::before {
-  background-color: var(--slate4);
-  content: "";
+  background-color: var(--slate-4);
+  content: '';
   display: block;
   height: 1.5rem;
   position: absolute;
