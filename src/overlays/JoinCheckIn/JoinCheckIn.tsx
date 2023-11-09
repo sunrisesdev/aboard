@@ -36,7 +36,7 @@ export const JoinCheckInOverlay = ({
 
   return (
     <Sheet
-      detent="content-height"
+      // detent="content-height"
       initialSnap={1}
       isOpen={isActive}
       onClose={() => ref.current?.snapTo(2)}
@@ -99,7 +99,7 @@ const DestinationContent = ({
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const ref = useRef<HTMLElement | null>(null);
-  const { state } = useCheckIn();
+  const { state, selectDestination } = useCheckIn();
 
   useEffect(() => {
     if (disableScroll) ref.current?.scrollTo({ behavior: 'smooth', top: 0 });
@@ -222,7 +222,10 @@ const DestinationContent = ({
             overflowY: disableScroll ? 'hidden' : 'unset',
           }}
         >
-          <StopSelector onSelect={() => void 0} stops={availableStops ?? []} />
+          <StopSelector
+            onSelect={(stop) => selectDestination({ destination: stop })}
+            stops={availableStops ?? []}
+          />
         </Sheet.Scroller>
       </div>
     </>

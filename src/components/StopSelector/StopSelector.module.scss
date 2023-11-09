@@ -112,9 +112,20 @@
   }
 
   .name {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
     line-height: 1.2;
     padding-block: 0.5rem;
+
+    .area {
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 600;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+      opacity: 0.5;
+    }
   }
 
   .time {

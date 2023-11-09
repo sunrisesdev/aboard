@@ -1,4 +1,4 @@
-import { inter } from '@/styles/fonts';
+import { figtree, inter } from '@/styles/fonts';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
 import { TbRouteOff } from 'react-icons/tb';
@@ -84,13 +84,12 @@ const Stop = ({
       )}
 
       <div className={styles.name}>
-        <span>{name}</span>
-        {/* <br />
-        <span
-          style={{ fontSize: '0.875rem', fontWeight: '500', opacity: '0.75' }}
-        >
-          Heidelberg
-        </span> */}
+        {name.includes('###') && (
+          <span className={clsx(figtree.className, styles.area)}>
+            {name.split('###')[1]}
+          </span>
+        )}
+        <span>{name.split('###').at(0)}</span>
       </div>
 
       {!isCancelled ? (
