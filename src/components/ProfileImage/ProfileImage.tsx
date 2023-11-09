@@ -1,6 +1,6 @@
 'use client';
 
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Shimmer from '../Shimmer/Shimmer';
 import styles from './ProfileImage.module.scss';
@@ -16,7 +16,7 @@ const ProfileImage = () => {
     );
 
   return (
-    <div className={styles.wrapper} onClick={() => signOut()}>
+    <div className={styles.wrapper}>
       <Image
         src={session.user.image}
         alt={session.user.name}

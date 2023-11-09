@@ -1,4 +1,5 @@
 import Notifications from '../Notifications/Notifications';
+import ProfileDrawer from '../ProfileDrawer/ProfileDrawer';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import styles from './Navbar.module.scss';
 import Username from './Username';
@@ -26,7 +27,9 @@ const Navbar = () => {
       </div>
       <div className={styles.items}>
         <Notifications />
-        <ProfileImage />
+        <ProfileDrawer>
+          <ProfileImage />
+        </ProfileDrawer>
       </div>
     </nav>
   );
