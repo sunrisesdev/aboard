@@ -4,6 +4,7 @@
 @import '@radix-ui/colors/amber.css';
 @import '@radix-ui/colors/crimson.css';
 @import '@radix-ui/colors/green.css';
+@import '@radix-ui/colors/red.css';
 @import '@radix-ui/colors/sky.css';
 @import '@radix-ui/colors/slate.css';
 
@@ -18,6 +19,8 @@
   --color-subway: #0065ae;
   --color-taxi: #af8000;
   --color-tram: #d91a1a;
+
+  --layout-width: 25rem;
 }
 
 *,
@@ -32,6 +35,7 @@ html,
 body {
   max-width: 100vw;
   overflow-x: clip;
+  background-color: #f2f2f2;
 }
 
 html {
