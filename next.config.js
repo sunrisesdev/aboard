@@ -23,14 +23,10 @@ const nextConfig = {
     return [
       {
         source: '/tracking/:path*',
-        destination: 'https://umami.cloudron.nbank.dev/:path*',
+        destination: 'https://tracking.nbank.dev/:path*',
       },
     ];
   },
 };
 
-const withPWA = require('@ducanh2912/next-pwa').default({
-  dest: 'public',
-});
-
-module.exports = withPWA(nextConfig);
+module.exports = nextConfig;

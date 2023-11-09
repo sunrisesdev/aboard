@@ -6,8 +6,7 @@ import ThemeProvider from '@/components/ThemeProvider/ThemeProvider';
 import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { parseSchedule } from '@/utils/parseSchedule';
-import * as RadioGroup from '@radix-ui/react-radio-group';
-import { useContext } from 'react';
+import { useContext, useId } from 'react';
 import {
   MdArrowBack,
   MdCheck,
@@ -21,17 +20,48 @@ import {
   MdSwapCalls,
   MdWorkOutline,
 } from 'react-icons/md';
+import { TbChevronDown } from 'react-icons/tb';
 import { CheckInContext } from '../CheckIn.context';
 import { PRODUCT_ICONS } from '../consts';
 import styles from './FinalStep.module.scss';
 
-const TRAVEL_TYPES = ['private', 'business', 'commute'];
+const TRAVEL_TYPES = [
+  {
+    icon: <MdOutlineBeachAccess size={18} />,
+    name: 'Ich reise privat',
+  },
+  {
+    icon: <MdWorkOutline size={18} />,
+
+    name: 'Ich reise beruflich',
+  },
+  {
+    icon: <MdSwapCalls size={18} />,
+    name: 'Ich pendele zur Arbeit/nach Hause',
+  },
+];
+
 const VISIBILITIES = [
-  'public',
-  'unlisted',
-  'followers',
-  'private',
-  'authenticated',
+  {
+    icon: <MdOutlineLockOpen size={18} />,
+    name: 'Alle',
+  },
+  {
+    icon: <MdFilterListOff size={18} />,
+    name: 'Alle mit dem Link',
+  },
+  {
+    icon: <MdOutlineGroups size={18} />,
+    name: 'Nur Follower',
+  },
+  {
+    icon: <MdOutlineLockPerson size={18} />,
+    name: 'Nur ich',
+  },
+  {
+    icon: <MdFingerprint size={18} />,
+    name: 'Nur angemeldete Personen',
+  },
 ];
 
 const FinalStep = () => {
@@ -62,6 +92,9 @@ const FinalStep = () => {
   });
 
   const theme = getLineTheme(trip!.line.id, trip!.line.product);
+
+  const travelTypeId = useId();
+  const visibilityId = useId();
 
   useAppTheme(theme.accent);
 
@@ -158,30 +191,26 @@ const FinalStep = () => {
                   Wie bist du unterwegs?
                 </label>
 
-                <RadioGroup.Root
-                  className={styles.radioGroup}
-                  id="travelType"
-                  onValueChange={(value) =>
-                    setTravelType(TRAVEL_TYPES.indexOf(value))
-                  }
-                  value={TRAVEL_TYPES[travelType]}
-                >
-                  <RadioGroup.Item className={styles.radioItem} value="private">
-                    <MdOutlineBeachAccess size={18} />
-                    <span>Privat</span>
-                  </RadioGroup.Item>
-                  <RadioGroup.Item
-                    className={styles.radioItem}
-                    value="business"
+                <div className={styles.selectArea}>
+                  <label htmlFor={travelTypeId}>
+                    {TRAVEL_TYPES[travelType].icon}
+                    <span>{TRAVEL_TYPES[travelType].name}</span>
+
+                    <TbChevronDown className={styles.chevron} />
+                  </label>
+
+                  <select
+                    id={travelTypeId}
+                    onChange={(event) => setTravelType(+event.target.value)}
+                    value={travelType}
                   >
-                    <MdWorkOutline size={18} />
-                    <span>Beruflich</span>
-                  </RadioGroup.Item>
-                  <RadioGroup.Item className={styles.radioItem} value="commute">
-                    <MdSwapCalls size={18} />
-                    <span>Pendeln</span>
-                  </RadioGroup.Item>
-                </RadioGroup.Root>
+                    {TRAVEL_TYPES.map(({ name }, index) => (
+                      <option key={name} value={index}>
+                        {name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </section>
 
               <section>
@@ -189,39 +218,26 @@ const FinalStep = () => {
                   Wer darf diesen Check-In sehen?
                 </label>
 
-                <RadioGroup.Root
-                  className={styles.radioGroup}
-                  id="visibility"
-                  onValueChange={(value) =>
-                    setVisibility(VISIBILITIES.indexOf(value))
-                  }
-                  value={VISIBILITIES[visibility]}
-                >
-                  <RadioGroup.Item className={styles.radioItem} value="public">
-                    <MdOutlineLockOpen size={18} />
-                  </RadioGroup.Item>
-                  <RadioGroup.Item
-                    className={styles.radioItem}
-                    value="unlisted"
+                <div className={styles.selectArea}>
+                  <label htmlFor={visibilityId}>
+                    {VISIBILITIES[visibility].icon}
+                    <span>{VISIBILITIES[visibility].name}</span>
+
+                    <TbChevronDown className={styles.chevron} />
+                  </label>
+
+                  <select
+                    id={visibilityId}
+                    onChange={(event) => setVisibility(+event.target.value)}
+                    value={visibility}
                   >
-                    <MdFilterListOff size={18} />
-                  </RadioGroup.Item>
-                  <RadioGroup.Item
-                    className={styles.radioItem}
-                    value="followers"
-                  >
-                    <MdOutlineGroups size={18} />
-                  </RadioGroup.Item>
-                  <RadioGroup.Item className={styles.radioItem} value="private">
-                    <MdOutlineLockPerson size={18} />
-                  </RadioGroup.Item>
-                  <RadioGroup.Item
-                    className={styles.radioItem}
-                    value="authenticated"
-                  >
-                    <MdFingerprint size={18} />
-                  </RadioGroup.Item>
-                </RadioGroup.Root>
+                    {VISIBILITIES.map(({ name }, index) => (
+                      <option key={name} value={index}>
+                        {name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </section>
 
               {!!error && <article className={styles.error}>{error}</article>}
