@@ -1,13 +1,17 @@
 import Script from 'next/script';
 
 const WEBSITE_IDS = {
-  production: '4c8d3f9b-21a7-4dab-94c9-71004745d56b',
-  development: 'abf15967-1fcd-4c24-8301-1931652f2757',
-  test: 'abf15967-1fcd-4c24-8301-1931652f2757',
+  production: '13b8972f-5450-4cd9-a024-f81b0def6407',
+  development: '',
+  test: '',
 };
 
 const UmamiScript = () => {
   const websiteId = WEBSITE_IDS[process.env.NODE_ENV];
+
+  if (!websiteId) {
+    return null;
+  }
 
   return (
     <Script
