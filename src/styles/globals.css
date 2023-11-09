@@ -19,6 +19,8 @@
   --color-subway: #0065ae;
   --color-taxi: #af8000;
   --color-tram: #d91a1a;
+
+  --layout-width: 25rem;
 }
 
 *,
@@ -33,6 +35,7 @@ html,
 body {
   max-width: 100vw;
   overflow-x: clip;
+  background-color: #f2f2f2;
 }
 
 html {

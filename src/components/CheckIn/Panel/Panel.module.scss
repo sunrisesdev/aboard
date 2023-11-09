@@ -1,8 +1,12 @@
 .base {
   bottom: 0;
   padding-bottom: env(safe-area-inset-bottom);
-  position: sticky;
+  position: fixed;
   width: 100%;
+
+  @media screen and (min-width: 569px) {
+    max-width: var(--layout-width);
+  }
 
   &.isOpen {
     background-color: #fff;
@@ -18,7 +22,8 @@
   &.hasCurrentStatus:not(.isOpen) {
     background-color: var(--accent);
     border-radius: 0.5rem 0.5rem 0 0;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px -10px 36px 0px,
+    box-shadow:
+      rgba(0, 0, 0, 0.16) 0px -10px 36px 0px,
       rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
   }
 }
