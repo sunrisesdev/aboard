@@ -2,11 +2,6 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-
-  @media screen and (min-width: 900px) {
-    display: grid;
-    grid-template-columns: 1fr min(50%, 600px);
-  }
 }
 
 .keyVisual {
@@ -15,10 +10,6 @@
   background-size: cover;
   height: 7.5rem;
   flex-shrink: 0;
-
-  @media screen and (min-width: 900px) {
-    height: unset;
-  }
 }
 
 .hero {
@@ -30,14 +21,10 @@
   justify-content: center;
   padding: 1rem;
   width: 100%;
-
-  @media screen and (min-width: 900px) {
-    padding: 2rem;
-  }
 }
 
 .title {
-  color: #FFF;
+  color: #fff;
   font-size: 1.75rem;
   font-weight: 700;
   line-height: 1;
@@ -45,16 +32,12 @@
   text-align: center;
   text-shadow: 0 0 1rem var(--blackA11), 0 0 0.25rem var(--blackA12);
   transform: skew(-6deg);
-
-  @media screen and (min-width: 900px) {
-    font-size: clamp(1.75rem, 6vw, 4rem);
-    text-align: left;
-  }
 }
 
 .content {
   align-items: center;
-  box-shadow: 0 -16px 15px -3px rgba(0, 0, 0, 0.1), 0 -4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 -16px 15px -3px rgba(0, 0, 0, 0.1),
+    0 -4px 6px -2px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -66,10 +49,6 @@
   a {
     color: var(--sky11);
     text-decoration: none;
-  }
-
-  @media screen and (min-width: 900px) {
-    box-shadow: -25px 0 50px -12px rgba(0, 0, 0, 0.25);
   }
 }
 
