@@ -2,7 +2,10 @@
 
 import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
+import { useCheckIn } from '@/hooks/useCheckIn/useCheckIn';
 import { useStops } from '@/hooks/useStops/useStops';
+import { useTrip } from '@/hooks/useTrip/useTrip';
+import { JoinCheckInOverlay } from '@/overlays/JoinCheckIn/JoinCheckIn';
 import { CheckinInput } from '@/traewelling-sdk/functions/trains';
 import { Stop } from '@/traewelling-sdk/types';
 import { formatDate } from '@/utils/formatDate';
@@ -89,7 +92,6 @@ const StatusDetails = ({
     status.train.origin.departurePlanned ?? '',
     status.train.origin.id.toString()
   );
-  console.log(user);
 
   const direction = (allStops ?? initialStops).at(-1)?.name;
   const destinationAt = (allStops ?? initialStops).findIndex(
@@ -156,6 +158,105 @@ const StatusDetails = ({
 
       setTimeout(() => setJoined(true), 500);
     } catch {}
+  };
+
+  const { trip } = useTrip(
+    status.train.hafasId,
+    status.train.lineName,
+    status.train.origin.id.toString()
+  );
+  const { join } = useCheckIn();
+  const [isJoinOverlayActive, setJoinOverlayActive] = useState(false);
+
+  const handleJoinClick = () => {
+    // if (trip) {
+    //   const stops: { area?: string; station: string }[] = [];
+
+    //   const tripParts = trip.stopovers.map((stop) =>
+    //     stop.name.split(',').map((part) => part.trim())
+    //   );
+
+    //   for (let i = 0; i < tripParts.length; i++) {
+    //     const previousStop = i <= 0 ? undefined : tripParts[i - 1];
+    //     const stop = tripParts[i];
+    //     const nextStop =
+    //       i >= tripParts.length - 1 ? undefined : tripParts[i + 1];
+
+    //     const lastSegments = [
+    //       (previousStop ?? ['!']).at(-1)!,
+    //       stop.at(-1)!,
+    //       (nextStop ?? ['!']).at(-1)!,
+    //     ];
+
+    //     if (lastSegments[0].length < lastSegments[1].length) {
+    //       if (lastSegments[1].startsWith(lastSegments[0])) {
+    //         stops.push({
+    //           area: lastSegments[1],
+    //           station: tripParts[i].slice(0, -1).join(', '),
+    //         });
+
+    //         continue;
+    //       }
+    //     } else {
+    //       if (lastSegments[0].startsWith(lastSegments[1])) {
+    //         stops.push({
+    //           area: lastSegments[0],
+    //           station: tripParts[i].slice(0, -1).join(', '),
+    //         });
+
+    //         continue;
+    //       }
+    //     }
+
+    //     if (lastSegments[2].length < lastSegments[1].length) {
+    //       if (lastSegments[1].startsWith(lastSegments[2])) {
+    //         stops.push({
+    //           area: lastSegments[1],
+    //           station: tripParts[i].slice(0, -1).join(', '),
+    //         });
+
+    //         continue;
+    //       }
+    //     } else {
+    //       if (lastSegments[2].startsWith(lastSegments[1])) {
+    //         stops.push({
+    //           area: lastSegments[2],
+    //           station: tripParts[i].slice(0, -1).join(', '),
+    //         });
+
+    //         continue;
+    //       }
+    //     }
+
+    //     const firstSegments = [
+    //       (previousStop ?? [''])[0],
+    //       stop[0],
+    //       (nextStop ?? [''])[0],
+    //     ];
+
+    //     if (firstSegments.filter((v) => v === stop[0]).length > 1) {
+    //       stops.push({
+    //         area: stop[0],
+    //         station: tripParts[i].slice(1).join(', '),
+    //       });
+
+    //       continue;
+    //     }
+
+    //     stops.push({ station: tripParts[i].join(', ') });
+    //   }
+
+    //   stops.forEach((stop, i) => {
+    //     if (stop.area && stop.station) {
+    //       trip.stopovers[i].name = `${stop.station}###${stop.area}`;
+    //     } else {
+    //       trip.stopovers[i].name = stop.station || stop.area || '';
+    //     }
+    //   });
+    // }
+
+    join({ status, trip });
+    setJoinOverlayActive(true);
   };
 
   return (
@@ -318,14 +419,26 @@ const StatusDetails = ({
             </li>
           </ul>
 
-          <Button
+          {/* <Button
             className={styles.joinButton}
             disabled={joined}
             onClick={checkIn}
             variant="primary"
           >
             {joined ? 'Erfolgreich beigetreten!' : 'Check-In beitreten'}
+          </Button> */}
+          <Button
+            className={styles.joinButton}
+            onClick={handleJoinClick}
+            variant="primary"
+          >
+            Check-In beitreten
           </Button>
+
+          <JoinCheckInOverlay
+            isActive={isJoinOverlayActive}
+            setActive={setJoinOverlayActive}
+          />
         </div>
       </main>
     </ThemeProvider>
