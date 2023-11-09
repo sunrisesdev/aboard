@@ -4,10 +4,11 @@ import { StopSelector } from '@/components/StopSelector/StopSelector';
 import ThemeProvider from '@/components/ThemeProvider/ThemeProvider';
 import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import { useCheckIn } from '@/hooks/useCheckIn/useCheckIn';
+import { useOverlayScroll } from '@/hooks/useOverlayScroll/useOverlayScroll';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
 import { MotionValue, motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Sheet, { SheetRef } from 'react-modal-sheet';
 import styles from './JoinCheckIn.module.scss';
 import { JoinCheckInOverlayProps } from './types';
@@ -94,66 +95,12 @@ const DestinationContent = ({
   disableScroll?: boolean;
   y?: MotionValue<number>;
 }) => {
-  const [contentHeight, setContentHeight] = useState(0);
-  const [viewportHeight, setViewportHeight] = useState(0);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
-  const ref = useRef<HTMLElement | null>(null);
-  const { state, selectDestination } = useCheckIn();
-
-  useEffect(() => {
-    if (disableScroll) ref.current?.scrollTo({ behavior: 'smooth', top: 0 });
-  }, [disableScroll]);
-
-  useEffect(() => {
-    if (!ref.current || !wrapperRef.current) {
-      return;
-    }
-
-    const root = wrapperRef.current;
-    const viewport = ref.current;
-    const content = viewport.children.item(0)!;
-
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        if (
-          entry.target.hasAttribute('data-viewport') &&
-          entry.target.clientHeight !== viewportHeight
-        ) {
-          setViewportHeight(entry.target.clientHeight);
-        } else if (
-          !entry.target.hasAttribute('data-viewport') &&
-          entry.target.scrollHeight !== contentHeight
-        ) {
-          setContentHeight(entry.target.scrollHeight);
-        }
-      }
+  const { contentHeight, scrollerRef, viewportHeight, wrapperRef } =
+    useOverlayScroll({
+      disableScroll,
     });
 
-    const handleScroll = () => {
-      if (viewport.scrollTop <= 0) {
-        root.style.setProperty('--top-fog-opacity', '0');
-      } else if (root.style.getPropertyValue('--top-fog-opacity') !== '1') {
-        root.style.setProperty('--top-fog-opacity', '1');
-      }
-
-      if (viewport.clientHeight + viewport.scrollTop >= viewport.scrollHeight) {
-        root.style.setProperty('--bottom-fog-opacity', '0');
-      } else if (root.style.getPropertyValue('--bottom-fog-opacity') !== '1') {
-        root.style.setProperty('--bottom-fog-opacity', '1');
-      }
-    };
-
-    viewport.addEventListener('scroll', handleScroll, { passive: true });
-    observer.observe(viewport);
-    observer.observe(content);
-
-    return () => {
-      viewport.removeEventListener('scroll', handleScroll);
-      observer.unobserve(viewport);
-      observer.unobserve(content);
-    };
-  }, [contentHeight, ref, viewportHeight, wrapperRef]);
+  const { state, selectDestination } = useCheckIn();
 
   const firstStop = state.trip?.stopovers.find(
     (stop) => stop.evaIdentifier === state.origin?.ibnr
@@ -216,7 +163,7 @@ const DestinationContent = ({
         <Sheet.Scroller
           className={styles.scrollArea}
           draggableAt="top"
-          ref={ref}
+          ref={scrollerRef}
           style={{
             overflowX: 'hidden',
             overflowY: disableScroll ? 'hidden' : 'unset',
