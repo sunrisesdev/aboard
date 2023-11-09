@@ -14,7 +14,7 @@
 
 .hero {
   align-items: center;
-  background-color: var(--blackA6);
+  background-color: var(--black-a6);
   backdrop-filter: blur(0.25rem);
   display: flex;
   height: 100%;
@@ -30,7 +30,7 @@
   line-height: 1;
   margin: 0;
   text-align: center;
-  text-shadow: 0 0 1rem var(--blackA11), 0 0 0.25rem var(--blackA12);
+  text-shadow: 0 0 1rem var(--black-a11), 0 0 0.25rem var(--black-a12);
   transform: skew(-6deg);
 }
 
@@ -47,14 +47,14 @@
   text-align: center;
 
   a {
-    color: var(--sky11);
+    color: var(--sky-11);
     text-decoration: none;
   }
 }
 
 .logo {
   align-items: center;
-  border: 1px dashed var(--sky6);
+  border: 1px dashed var(--sky-6);
   border-radius: 0.375rem;
   color: #272727;
   display: flex;

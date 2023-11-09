@@ -1,5 +1,5 @@
-@import '@radix-ui/colors/blackA.css';
-@import '@radix-ui/colors/whiteA.css';
+@import '@radix-ui/colors/black-alpha.css';
+@import '@radix-ui/colors/white-alpha.css';
 
 @import '@radix-ui/colors/amber.css';
 @import '@radix-ui/colors/crimson.css';
@@ -8,19 +8,21 @@
 @import '@radix-ui/colors/slate.css';
 
 :root {
-  --color-bus: #A3007C;
-  --color-ferry: #284B63;
-  --color-national: #2B2D42; /* #CC0605 */
-  --color-nationalExpress: #2B2D42;
-  --color-regional: #2B2D42;
-  --color-regionalExp: #2B2D42;
-  --color-suburban: #006F35;
-  --color-subway: #0065AE;
-  --color-taxi: #AF8000;
-  --color-tram: #D91A1A;
+  --color-bus: #a3007c;
+  --color-ferry: #284b63;
+  --color-national: #2b2d42; /* #CC0605 */
+  --color-nationalExpress: #2b2d42;
+  --color-regional: #2b2d42;
+  --color-regionalExp: #2b2d42;
+  --color-suburban: #006f35;
+  --color-subway: #0065ae;
+  --color-taxi: #af8000;
+  --color-tram: #d91a1a;
 }
 
-*, *::after, *::before {
+*,
+*::after,
+*::before {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -28,7 +30,8 @@
 
 body {
   background-color: var(--app-theme);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans',
+    Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
   font-size: 16px;
   line-height: 1.5;
 }

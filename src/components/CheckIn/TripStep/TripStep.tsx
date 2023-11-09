@@ -67,7 +67,7 @@ const TripStep = () => {
   const productsFetched = useRef(false);
   const [products, setProducts] = useState<HAFASProductType[]>([]);
 
-  useAppTheme('var(--sky11)');
+  useAppTheme('var(--sky-11)');
 
   useEffect(() => {
     if (productsFetched.current) return;

@@ -1,6 +1,6 @@
 .base {
   align-items: center;
-  background-color: #FFF;
+  background-color: #fff;
   display: flex;
   height: 100%;
   justify-content: center;
@@ -20,7 +20,7 @@
 .spinner {
   animation: spin 1s linear infinite;
   border-radius: 50%;
-  border: 0.25rem solid var(--sky11);
+  border: 0.25rem solid var(--sky-11);
   border-top-color: transparent;
   height: 4rem;
   width: 4rem;
