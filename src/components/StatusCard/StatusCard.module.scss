@@ -88,6 +88,7 @@
 
   .time {
     margin-left: 0.5rem;
+    text-wrap: nowrap;
   }
 }
 
@@ -164,7 +165,7 @@
 }
 
 .stop {
-  background-color: var(--accent, var(--sky11));
+  background-color: var(--accent, var(--sky-11));
   border-radius: 50%;
   box-shadow: 0 0 0 2px var(--contrast, #fff);
   flex-shrink: 0;
@@ -210,7 +211,7 @@
 
     border-radius: 50%;
 
-    background-color: var(--contrast, var(--sky11));
+    background-color: var(--contrast, var(--sky-11));
     color: white;
     position: absolute;
     right: -0.25rem;

@@ -15,7 +15,7 @@
 }
 
 .title {
-  color: var(--sky11);
+  color: var(--sky-11);
   font-size: 0.875rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -43,8 +43,8 @@
     margin-top: 3px;
 
     &::after {
-      border-top: 1px solid var(--slate4);
-      content: "";
+      border-top: 1px solid var(--slate-4);
+      content: '';
       display: block;
       left: 1rem;
       position: absolute;
@@ -59,7 +59,7 @@
   appearance: none;
   background: none;
   border: none;
-  color: var(--slate12);
+  color: var(--slate-12);
   cursor: pointer;
   display: flex;
   height: 3rem;
@@ -70,11 +70,11 @@
   width: 100%;
 
   &:active {
-    background-color: var(--slate5);
+    background-color: var(--slate-5);
   }
 
   &:hover {
-    background-color: var(--slate4);
+    background-color: var(--slate-4);
   }
 
   &.isSkeleton {
@@ -82,7 +82,7 @@
   }
 
   mark {
-    background-color: var(--sky6);
+    background-color: var(--sky-6);
     border-radius: 0.25rem;
     color: var(--blue12);
     // padding-inline: 0.25rem;

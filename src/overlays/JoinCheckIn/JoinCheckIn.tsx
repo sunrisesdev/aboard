@@ -75,7 +75,7 @@ export const JoinCheckInOverlay = ({
             style={{
               alignSelf: 'flex-start',
               backgroundImage:
-                'linear-gradient(to bottom, #0000, var(--blackA9))',
+                'linear-gradient(to bottom, #0000, var(--black-a9))',
               boxSizing: 'content-box',
               height: ref.current?.y,
               paddingBottom: '48px',

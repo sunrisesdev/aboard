@@ -16,15 +16,17 @@
   }
 
   &::after {
-    background-image: linear-gradient(to top, #FFF, #FFF0);
-    border-radius: 0 0 var(--bottom-fog-border-radius, 0) var(--bottom-fog-border-radius, 0);
+    background-image: linear-gradient(to top, #fff, #fff0);
+    border-radius: 0 0 var(--bottom-fog-border-radius, 0)
+      var(--bottom-fog-border-radius, 0);
     bottom: 0;
     opacity: var(--bottom-fog-opacity, 1);
   }
 
   &::before {
-    background-image: linear-gradient(to bottom, #FFF, #FFF0);
-    border-radius: var(--top-fog-border-radius, 0) var(--top-fog-border-radius, 0) 0 0;
+    background-image: linear-gradient(to bottom, #fff, #fff0);
+    border-radius: var(--top-fog-border-radius, 0)
+      var(--top-fog-border-radius, 0) 0 0;
     opacity: var(--top-fog-opacity, 0);
     top: 0;
   }
@@ -36,7 +38,7 @@
 }
 
 .scrollbar {
-  // background-color: var(--blackA6);
+  // background-color: var(--black-a6);
   display: flex;
   padding: 2px;
   touch-action: none;
@@ -45,7 +47,7 @@
 }
 
 // .scrollbar:hover {
-//   background-color: var(--blackA8);
+//   background-color: var(--black-a8);
 // }
 
 .scrollbar[data-orientation='vertical'] {
@@ -53,7 +55,7 @@
 }
 
 .thumb {
-  background-color: var(--slate10);
+  background-color: var(--slate-10);
   border-radius: var(--scrollbar-size);
   flex: 1;
   position: relative;

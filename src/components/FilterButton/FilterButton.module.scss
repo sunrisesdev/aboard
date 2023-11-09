@@ -3,10 +3,10 @@
 .base {
   align-items: center;
   appearance: none;
-  background-color: var(--sky2);
+  background-color: var(--sky-2);
   border: none;
   border-radius: 9999rem;
-  color: var(--sky11);
+  color: var(--sky-11);
   cursor: pointer;
   display: inline-flex;
   font-size: 0.875rem;
@@ -21,7 +21,7 @@
   }
 
   &.isActive {
-    background-color: var(--sky12);
-    color: #FFF;
+    background-color: var(--sky-12);
+    color: #fff;
   }
 }

@@ -1,5 +1,5 @@
 .base {
-  color: var(--contrast, #FFF);
+  color: var(--contrast, #fff);
 }
 
 .destination,
@@ -9,9 +9,9 @@
   position: relative;
 
   &::after {
-    background-color: var(--accent, var(--sky11));
+    background-color: var(--accent, var(--sky-11));
     border-radius: 50%;
-    box-shadow: 0 0 0 2px var(--contrast, #FFF);
+    box-shadow: 0 0 0 2px var(--contrast, #fff);
     content: '';
     display: block;
     height: 6px;
@@ -21,7 +21,7 @@
   }
 
   &::before {
-    background-color: var(--contrast, #FFF);
+    background-color: var(--contrast, #fff);
     content: '';
     display: block;
     height: calc(100% - 0.5625rem);
@@ -77,7 +77,7 @@
   position: relative;
 
   &::before {
-    background-color: var(--contrast, #FFF);
+    background-color: var(--contrast, #fff);
     content: '';
     display: block;
     height: calc(100%);

@@ -76,7 +76,7 @@ const Stop = ({
             y1={0}
             x2={21}
             y2="100%"
-            stroke="var(--crimson11)"
+            stroke="var(--crimson-11)"
             strokeWidth="2px"
             strokeLinecap="round"
           />
