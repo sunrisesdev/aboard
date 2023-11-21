@@ -30,7 +30,7 @@
     "framer-motion": "10.16.4",
     "js-levenshtein": "1.1.6",
     "next": "14.0.1",
-    "next-auth": "4.24.4",
+    "next-auth": "4.24.5",
     "normalize.css": "8.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
