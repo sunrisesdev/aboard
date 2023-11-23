@@ -33,7 +33,7 @@
   align-items: center;
   background: none;
   border: none;
-  color: var(--slate12);
+  color: var(--slate-12);
   cursor: pointer;
   display: flex;
   min-height: 3rem;
@@ -46,11 +46,13 @@
   width: 100%;
 
   &:active {
-    background-color: var(--slate5);
+    background-color: var(--slate-5);
+    --strike-bottom-color: var(--slate-5);
   }
 
   &:hover {
-    background-color: var(--slate4);
+    background-color: var(--slate-4);
+    --strike-bottom-color: var(--slate-4);
   }
 
   &::after {
@@ -89,7 +91,7 @@
     }
 
     &::before {
-      background-image: repeating-linear-gradient(-60deg, #FFF, #FFF 4px, var(--crimson3) 4px, var(--crimson3) 6px);
+      background-image: repeating-linear-gradient(-60deg, #FFF, #FFF 4px, var(--crimson-3) 4px, var(--crimson-3) 6px);
       border: 1px solid #FFF;
       border-radius: 0.5rem;
       bottom: 0.125rem;
@@ -102,7 +104,7 @@
     }
 
     .name, .time {
-      color: var(--crimson11);
+      color: var(--crimson-11);
       // text-decoration: line-through;
     }
   }
@@ -117,6 +119,7 @@
     flex-grow: 1;
     line-height: 1.2;
     padding-block: 0.5rem;
+    padding-right: 1rem;
 
     .area {
       color: var(--accent);
@@ -129,18 +132,7 @@
   }
 
   .time {
-    align-items: flex-end;
-    display: flex;
-    flex-direction: column;
     font-size: 0.875rem;
-    font-weight: 500;
-    padding-left: 0.5rem;
-
-    .isDelayed {
-      color: var(--sky-11);
-      font-weight: 400;
-      text-decoration: line-through;
-    }
   }
 
   .cancelledNote {

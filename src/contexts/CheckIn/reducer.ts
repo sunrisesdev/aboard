@@ -17,6 +17,8 @@ export const checkInReducer = (
   state: CheckInState,
   action: CheckInAction
 ): CheckInState => {
+  console.log(action);
+
   switch (action.type) {
     case 'confirm_check_in':
       return {
