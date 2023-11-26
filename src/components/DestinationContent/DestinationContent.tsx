@@ -54,7 +54,6 @@ export const DestinationContent = ({
                 lineId={state.trip.number}
                 lineName={state.trip.lineName}
                 product={state.trip.category}
-                productName=""
               />
             </div>
 
@@ -93,10 +92,7 @@ export const DestinationContent = ({
             overflowY: disableScroll ? 'hidden' : 'unset',
           }}
         >
-          <StopSelector
-            onSelect={handleSelect}
-            stops={availableStops ?? []}
-          />
+          <StopSelector onSelect={handleSelect} stops={availableStops ?? []} />
         </Sheet.Scroller>
       </div>
     </>

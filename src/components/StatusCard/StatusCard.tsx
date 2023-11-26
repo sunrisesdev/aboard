@@ -118,7 +118,6 @@ const StatusCard = ({ status }: StatusCardProps) => {
                   lineId={status.train.number}
                   lineName={status.train.lineName}
                   product={status.train.category}
-                  productName=""
                 />
 
                 <div className={styles.line}>

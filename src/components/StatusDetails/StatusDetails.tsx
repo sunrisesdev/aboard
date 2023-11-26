@@ -305,7 +305,6 @@ const StatusDetails = ({
                 lineId={status.train.number}
                 lineName={status.train.lineName}
                 product={status.train.category}
-                productName=""
               />
             </div>
 

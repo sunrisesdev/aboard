@@ -54,7 +54,6 @@ export const SelectDestinationOverlay = ({
                 lineId={state.trip.number}
                 lineName={state.trip.lineName}
                 product={state.trip.category}
-                productName=""
               />
 
               <span className={styles.direction}>

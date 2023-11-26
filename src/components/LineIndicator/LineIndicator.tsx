@@ -20,11 +20,10 @@ const LineIndicator = ({
   lineId,
   lineName,
   product,
-  productName,
 }: LineIndicatorProps) => {
-  const displayName = !HIDDEN_PRODUCT_NAMES.includes(productName)
-    ? lineName
-    : lineName.replace(productName, '').trim();
+  const displayName = lineName
+    .replaceAll(new RegExp(`^(${HIDDEN_PRODUCT_NAMES.join('|')})`, 'gi'), '')
+    .trim();
 
   const theme = getLineTheme(lineId, product);
 
@@ -39,7 +38,7 @@ const LineIndicator = ({
           className
         )}
       >
-        {displayName || productName}
+        {displayName}
       </div>
     </ThemeProvider>
   );

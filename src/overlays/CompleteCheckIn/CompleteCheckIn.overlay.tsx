@@ -117,7 +117,6 @@ export const CompleteCheckInOverlay = ({
                 lineId={state.trip.number}
                 lineName={state.trip.lineName}
                 product={state.trip.category}
-                productName=""
               />
               <span className={styles.direction}>
                 {state.trip.destination.name}
