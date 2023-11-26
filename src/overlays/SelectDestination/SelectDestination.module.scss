@@ -10,9 +10,20 @@
 }
 
 .routeContent {
+  align-items: flex-start;
   display: flex;
+  gap: 1rem;
   padding-bottom: 1rem;
   justify-content: space-between;
+
+  &::before {
+    content: "von";
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0.75;
+    position: absolute;
+    transform: translateY(-85%) skewX(-6deg);
+  }
 }
 
 .routeStart {
@@ -25,5 +36,6 @@
   flex-direction: column;
   font-weight: 500;
   gap: 0.5rem;
-  margin-bottom: 1.125rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }

@@ -22,6 +22,7 @@ const OverlayContext = createContext({
 const OverlayRoot = ({
   children,
   className,
+  initialSnapPosition = 1,
   isActive,
   isHidden = false,
   onBackdropTap,
@@ -44,13 +45,13 @@ const OverlayRoot = ({
     if (isHidden) {
       ref.current?.snapTo(3);
     } else {
-      ref.current?.snapTo(1);
+      ref.current?.snapTo(initialSnapPosition);
     }
-  }, [isHidden]);
+  }, [initialSnapPosition, isHidden]);
 
   return (
     <Sheet
-      initialSnap={isHidden ? 3 : 1}
+      initialSnap={isHidden ? 3 : initialSnapPosition}
       isOpen={isActive}
       onClose={() => !isHidden && ref.current?.snapTo(2)}
       onSnap={handleOnSnap}
@@ -61,6 +62,7 @@ const OverlayRoot = ({
         SHEET_HEADER_HEIGHT + 34,
         ...(isHidden ? [0] : []),
       ]}
+      tweenConfig={{ duration: 0.3, ease: 'easeInOut' }}
     >
       <Sheet.Container className={clsx(styles.base, className)} style={style}>
         <Sheet.Header />
@@ -154,6 +156,8 @@ const OverlayScrollArea = ({ children }: PropsWithChildren) => {
       }
     };
 
+    handleScroll();
+
     viewport.addEventListener('scroll', handleScroll, { passive: true });
     observer.observe(viewport);
     observer.observe(content);
@@ -171,6 +175,9 @@ const OverlayScrollArea = ({ children }: PropsWithChildren) => {
         styles.scrollWrapper,
         contentHeight > viewportHeight && styles.hasFog
       )}
+      data-viewport-client-height={scrollerRef.current?.clientHeight}
+      data-viewport-scroll-top={scrollerRef.current?.scrollTop}
+      data-viewport-scroll-height={scrollerRef.current?.scrollHeight}
       ref={wrapperRef}
     >
       <Sheet.Scroller

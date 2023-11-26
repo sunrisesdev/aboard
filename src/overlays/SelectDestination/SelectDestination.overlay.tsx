@@ -7,6 +7,7 @@ import { Time } from '@/components/Time/Time';
 import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import { useCheckIn } from '@/hooks/useCheckIn/useCheckIn';
 import { radioCanada } from '@/styles/fonts';
+import { Stop } from '@/traewelling-sdk/types';
 import { parseSchedule } from '@/utils/parseSchedule';
 import styles from './SelectDestination.module.scss';
 import { SelectDestinationOverlayProps } from './types';
@@ -15,7 +16,7 @@ export const SelectDestinationOverlay = ({
   onComplete,
   ...overlayProps
 }: SelectDestinationOverlayProps) => {
-  const { state } = useCheckIn();
+  const { selectDestination, state } = useCheckIn();
 
   const departureStop = state.trip?.stopovers.find(
     (stop) => stop.evaIdentifier === state.origin?.ibnr
@@ -30,6 +31,11 @@ export const SelectDestinationOverlay = ({
     state.trip?.number ?? '',
     state.trip?.category ?? 'regional'
   );
+
+  const handleDestinationSelected = (destination: Stop) => {
+    selectDestination({ destination });
+    onComplete();
+  };
 
   return (
     <Overlay
@@ -50,6 +56,7 @@ export const SelectDestinationOverlay = ({
                 product={state.trip.category}
                 productName=""
               />
+
               <span className={styles.direction}>
                 {state.trip.destination.name}
               </span>
@@ -68,6 +75,7 @@ export const SelectDestinationOverlay = ({
                 <Time
                   delayStyle="p+d"
                   schedule={departureSchedule}
+                  style={{ marginTop: '0.25rem' }}
                   type="departure"
                 />
               </div>
@@ -77,15 +85,13 @@ export const SelectDestinationOverlay = ({
 
         <Overlay.ScrollArea>
           <StopSelector
-            onSelect={() => void 0}
+            onSelect={handleDestinationSelected}
             stops={
               state.trip?.stopovers.slice(
                 state.trip.stopovers.indexOf(departureStop!) + 1
               ) ?? []
             }
           />
-
-          <button onClick={onComplete}>Complete</button>
         </Overlay.ScrollArea>
       </ThemeProvider>
     </Overlay>

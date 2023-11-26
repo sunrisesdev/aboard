@@ -47,13 +47,15 @@ const RouteLine = ({ variant = 'default' }: RouteLineProps) => {
 };
 
 const RouteStopIndicator = ({
+  className,
   variant = 'default',
 }: RouteStopIndicatorProps) => {
   return (
     <div
       className={clsx(
         styles.stopIndicator,
-        variant !== 'default' && styles[variant]
+        variant !== 'default' && styles[variant],
+        className
       )}
     />
   );

@@ -4,6 +4,7 @@ import { CheckInAction, CheckInState } from './types';
 export const initialCheckInState = (): CheckInState => ({
   departureTime: undefined,
   destination: undefined,
+  hafasId: undefined,
   message: '',
   origin: undefined,
   status: 'draft',
@@ -17,8 +18,6 @@ export const checkInReducer = (
   state: CheckInState,
   action: CheckInAction
 ): CheckInState => {
-  console.log(action);
-
   switch (action.type) {
     case 'confirm_check_in':
       return {
@@ -31,6 +30,7 @@ export const checkInReducer = (
     case 'join_check_in':
       return {
         ...initialCheckInState(),
+        hafasId: action.status.train.hafasId,
         message: action.status.body,
         origin: {
           ibnr: action.status.train.origin.evaIdentifier,
@@ -43,7 +43,11 @@ export const checkInReducer = (
     case 'perform_check_in':
       return { ...state, status: 'loading' };
     case 'report_failure':
-      return { ...state, status: 'draft' };
+      return {
+        ...state,
+        status: 'draft',
+        message: JSON.stringify(action.error),
+      };
     case 'report_success':
       return { ...state, status: 'completed' };
     case 'reset':
@@ -58,7 +62,8 @@ export const checkInReducer = (
       return {
         ...state,
         destination: undefined,
-        trip: action.trip,
+        hafasId: action.trip.tripId,
+        // TODO: Set trip
         tripFinderArgs: undefined,
       };
   }

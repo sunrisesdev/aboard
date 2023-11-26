@@ -1,0 +1,38 @@
+.base {
+  background-color: var(--slate-3);
+  border-radius: 0.375rem;
+  color: var(--slate-12);
+  isolation: isolate;
+  padding: 0.75rem;
+  position: relative;
+
+  &:hover {
+    background-color: var(--slate-4);
+  }
+
+  label {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    font-weight: 400;
+    gap: 0.75rem;
+  }
+
+  select {
+    cursor: pointer;
+    inset: 0;
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    z-index: 99;
+  }
+
+  svg {
+    color: var(--sky-11);
+    color: #9E0A5B;
+  }
+}
+
+.chevron {
+  margin-left: auto;
+}

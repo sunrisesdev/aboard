@@ -257,6 +257,8 @@ const StatusDetails = ({
     // }
   };
 
+  const isJoinable = !!trip;
+
   return (
     <ThemeProvider theme={theme}>
       <main className={styles.base}>
@@ -417,21 +419,15 @@ const StatusDetails = ({
             </li>
           </ul>
 
-          {/* <Button
-            className={styles.joinButton}
-            disabled={joined}
-            onClick={checkIn}
-            variant="primary"
-          >
-            {joined ? 'Erfolgreich beigetreten!' : 'Check-In beitreten'}
-          </Button> */}
-          <Button
-            className={styles.joinButton}
-            onClick={handleJoinClick}
-            variant="primary"
-          >
-            Check-In beitreten
-          </Button>
+          {isJoinable && (
+            <Button
+              className={styles.joinButton}
+              onClick={handleJoinClick}
+              variant="primary"
+            >
+              Check-In beitreten
+            </Button>
+          )}
 
           {content}
         </div>

@@ -18,6 +18,7 @@ export type RouteLineProps = {
 };
 
 export type RouteStopIndicatorProps = {
+  className?: string;
   variant?: 'default' | 'pulsating';
 };
 
