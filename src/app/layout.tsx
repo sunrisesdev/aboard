@@ -3,7 +3,7 @@ import Providers from '@/components/Providers/Providers';
 import UmamiScript from '@/scripts/UmamiScript/UmamiScript';
 import { sourceSans3 } from '@/styles/fonts';
 import '@/styles/globals.css';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Session } from 'next-auth';
 import { getServerSession } from 'next-auth/next';
 import 'normalize.css';
@@ -36,7 +36,6 @@ const APP_DESCRIPTION =
   'Aboard is an alternative webclient for Träwelling focused on mobile UX.';
 
 export const metadata: Metadata = {
-  viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',
   icons: [
     {
       rel: 'icon',
@@ -50,7 +49,6 @@ export const metadata: Metadata = {
   },
   description: APP_DESCRIPTION,
   manifest: '/manifest.json',
-  themeColor: '#FFFFFF',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
@@ -77,4 +75,11 @@ export const metadata: Metadata = {
     },
     description: APP_DESCRIPTION,
   },
+};
+
+export const viewport: Viewport = {
+  initialScale: 1,
+  themeColor: '#FFFFFF',
+  width: 'device-width',
+  viewportFit: 'cover',
 };
