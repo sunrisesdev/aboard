@@ -36,7 +36,7 @@ const APP_DESCRIPTION =
   'Aboard is an alternative webclient for Träwelling focused on mobile UX.';
 
 export const metadata: Metadata = {
-  viewport: 'width=device-width, initial-scale=1',
+  viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',
   icons: [
     {
       rel: 'icon',

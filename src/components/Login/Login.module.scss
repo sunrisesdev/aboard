@@ -5,7 +5,7 @@
 }
 
 .keyVisual {
-  background-image: url('/station-background.jpg');
+  background-image: url('/freiburg.png');
   background-position: center;
   background-size: cover;
   height: 7.5rem;
@@ -15,7 +15,7 @@
 .hero {
   align-items: center;
   background-color: var(--black-a6);
-  backdrop-filter: blur(0.25rem);
+  backdrop-filter: blur(0.125rem);
   display: flex;
   height: 100%;
   justify-content: center;
@@ -30,13 +30,16 @@
   line-height: 1;
   margin: 0;
   text-align: center;
-  text-shadow: 0 0 1rem var(--black-a11), 0 0 0.25rem var(--black-a12);
+  text-shadow:
+    0 0 1rem var(--black-a11),
+    0 0 0.25rem var(--black-a12);
   transform: skew(-6deg);
 }
 
 .content {
   align-items: center;
-  box-shadow: 0 -16px 15px -3px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 -16px 15px -3px rgba(0, 0, 0, 0.1),
     0 -4px 6px -2px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;

@@ -5,10 +5,59 @@
   cursor: pointer;
 }
 
-.drawer {
+.container {
   background-color: white;
-  padding: 1rem;
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.headline {
+  padding: 0 1rem;
+}
+
+.logout {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid var(--black-a2);
+  cursor: pointer;
+
+  .icon {
+    color: var(--black-12);
+  }
+}
+
+.links {
+  li {
+    padding: 0.5rem 1rem;
+    list-style: none;
+
+    a {
+      display: flex;
+      gap: 0.25rem;
+
+      align-items: center;
+    }
+
+    &:first-child {
+      padding-top: 1rem;
+    }
+
+    &:last-child {
+      padding-bottom: 1rem;
+    }
+
+    a {
+      text-decoration: none;
+      color: var(--black-a10);
+    }
+  }
+}
+
+.overlay {
+  background: linear-gradient(to bottom, #0000, var(--black-a9)) !important;
+  background: none !important;
+  border: none !important;
+  display: flex;
 }

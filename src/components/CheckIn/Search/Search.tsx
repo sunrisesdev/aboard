@@ -1,3 +1,4 @@
+import useUmami from '@/hooks/useUmami/useUmami';
 import { NearbyResponse } from '@/traewelling-sdk/functions/trains';
 import { debounce } from '@/utils/debounce';
 import clsx from 'clsx';
@@ -16,6 +17,8 @@ const Search = () => {
   const { goBack, isOpen, setIsOpen, setOrigin, setQuery } =
     useContext(CheckInContext);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { simpleEvent } = useUmami();
 
   useEffect(() => {
     if (isOpen) {
@@ -53,6 +56,8 @@ const Search = () => {
       if (!response.ok) {
         return;
       }
+
+      simpleEvent('nearby_clicked');
 
       const station = (await response.json()) as NearbyResponse;
       setOrigin({
