@@ -1,0 +1,41 @@
+.direction {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.header {
+  color: var(--contrast);
+  flex-shrink: 0;
+  padding-inline: 1rem;
+}
+
+.routeContent {
+  align-items: flex-start;
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  justify-content: space-between;
+
+  &::before {
+    content: "von";
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0.75;
+    position: absolute;
+    transform: translateY(-85%) skewX(-6deg);
+  }
+}
+
+.routeStart {
+  --line-offset: 0.75rem;
+}
+
+.trip {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}

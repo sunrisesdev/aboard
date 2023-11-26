@@ -2,10 +2,9 @@
 
 import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
-import { useCheckIn } from '@/hooks/useCheckIn/useCheckIn';
+import { useJoinCheckIn } from '@/hooks/useJoinCheckIn/useJoinCheckIn';
 import { useStops } from '@/hooks/useStops/useStops';
 import { useTrip } from '@/hooks/useTrip/useTrip';
-import { JoinCheckInOverlay } from '@/overlays/JoinCheckIn/JoinCheckIn';
 import { CheckinInput } from '@/traewelling-sdk/functions/trains';
 import { Stop } from '@/traewelling-sdk/types';
 import { formatDate } from '@/utils/formatDate';
@@ -165,10 +164,12 @@ const StatusDetails = ({
     status.train.lineName,
     status.train.origin.id.toString()
   );
-  const { join } = useCheckIn();
-  const [isJoinOverlayActive, setJoinOverlayActive] = useState(false);
+
+  const { content, startOrResume } = useJoinCheckIn();
 
   const handleJoinClick = () => {
+    startOrResume(status, trip);
+
     // if (trip) {
     //   const stops: { area?: string; station: string }[] = [];
 
@@ -254,10 +255,9 @@ const StatusDetails = ({
     //     }
     //   });
     // }
-
-    join({ status, trip });
-    setJoinOverlayActive(true);
   };
+
+  const isJoinable = !!trip;
 
   return (
     <ThemeProvider theme={theme}>
@@ -419,26 +419,17 @@ const StatusDetails = ({
             </li>
           </ul>
 
-          {/* <Button
-            className={styles.joinButton}
-            disabled={joined}
-            onClick={checkIn}
-            variant="primary"
-          >
-            {joined ? 'Erfolgreich beigetreten!' : 'Check-In beitreten'}
-          </Button> */}
-          <Button
-            className={styles.joinButton}
-            onClick={handleJoinClick}
-            variant="primary"
-          >
-            Check-In beitreten
-          </Button>
+          {isJoinable && (
+            <Button
+              className={styles.joinButton}
+              onClick={handleJoinClick}
+              variant="primary"
+            >
+              Check-In beitreten
+            </Button>
+          )}
 
-          <JoinCheckInOverlay
-            isActive={isJoinOverlayActive}
-            setActive={setJoinOverlayActive}
-          />
+          {content}
         </div>
       </main>
     </ThemeProvider>

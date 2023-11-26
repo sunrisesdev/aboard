@@ -1,5 +1,6 @@
 .base {
   color: var(--contrast, #fff);
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
 }
 
 .destination,
@@ -52,7 +53,6 @@
 }
 
 .destination {
-  margin-bottom: 1rem;
   padding-bottom: 0;
 
   &::after,
