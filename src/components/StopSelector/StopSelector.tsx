@@ -3,6 +3,7 @@ import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
 import { TbRouteOff } from 'react-icons/tb';
 import Shimmer from '../Shimmer/Shimmer';
+import { Time } from '../Time/Time';
 import styles from './StopSelector.module.scss';
 import { StopProps, StopSelectorProps } from './types';
 
@@ -93,12 +94,11 @@ const Stop = ({
       </div>
 
       {!isCancelled ? (
-        <div className={styles.time}>
-          <div className={clsx({ [styles.isDelayed]: isDelayed })}>
-            {schedule.planned}
-          </div>
-          {isDelayed && <div>{schedule.actual}</div>}
-        </div>
+        <Time
+          delayStyle="p+a"
+          schedule={schedule}
+          style={{ ['--strike-text-color' as any]: '#9E0A5B' }}
+        />
       ) : (
         <aside className={clsx(styles.cancelledNote, inter.className)}>
           <TbRouteOff />

@@ -6,5 +6,4 @@ export type LineIndicatorProps = {
   lineId: string;
   lineName: string;
   product: HAFASProductType;
-  productName: string;
 };

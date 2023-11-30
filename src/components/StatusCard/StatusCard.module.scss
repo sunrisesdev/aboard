@@ -83,7 +83,8 @@
     color: var(--contrast);
     font-size: 1rem;
     font-weight: 500;
-    padding-inline: 1rem;
+    padding-inline: 2rem 1rem;
+    text-align: right;
   }
 
   .time {
@@ -203,23 +204,20 @@
   cursor: pointer;
 
   .amount {
-    display: flex;
-    justify-content: center;
     align-items: center;
-    width: 0.875rem;
-    height: 0.875rem;
-
-    border-radius: 50%;
-
     background-color: var(--contrast, var(--sky-11));
+    border-radius: 50%;
+    bottom: -0.25rem;
     color: white;
+    display: flex;
+    font-size: 0.635rem;
+    font-weight: 600;
+    height: 0.875rem;
+    justify-content: center;
+    line-height: 1;
     position: absolute;
     right: -0.25rem;
-    bottom: -0.25rem;
-
-    font-size: 0.5rem;
-
-    font-weight: 500;
+    width: 0.875rem;
   }
 }
 

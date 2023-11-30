@@ -46,7 +46,6 @@ const CurrentStatus = () => {
           lineId={currentStatus.train.number}
           lineName={currentStatus.train.lineName}
           product={currentStatus.train.category}
-          productName=""
         />
 
         <div className={styles.metaText}>

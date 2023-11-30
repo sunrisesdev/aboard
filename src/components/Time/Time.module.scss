@@ -1,0 +1,46 @@
+.base {
+  align-items: center;
+  display: flex;
+  gap: 0.25rem;
+  line-height: 1;
+
+  &.vertical {
+    flex-direction: column;
+    font-size: 0.75rem;
+    font-weight: 500;
+    gap: 0;
+  }
+
+  s {
+    color: var(--strike-text-color);
+    position: relative;
+    text-decoration-color: var(--strike-bottom-color, #FFF);
+    text-decoration-thickness: 0.125rem;
+
+    &::after {
+      border-bottom: 1px solid var(--strike-top-color, currentColor);
+      border-radius: 1rem;
+      content: "";
+      display: block;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 50%;
+    }
+  }
+
+  time {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+}
+
+.delay {
+  font-weight: 500;
+  margin-left: -0.125rem;
+}
+
+.type {
+  font-size: 0.75rem;
+  font-weight: 600;
+}

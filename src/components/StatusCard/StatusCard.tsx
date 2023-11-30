@@ -3,10 +3,10 @@ import { parseSchedule } from '@/utils/parseSchedule';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PRODUCT_ICONS } from '../CheckIn/consts';
+import LegacyTime from '../LegacyTime/LegacyTime';
 import LineIndicator from '../LineIndicator/LineIndicator';
 import Shimmer from '../Shimmer/Shimmer';
 import ThemeProvider from '../ThemeProvider/ThemeProvider';
-import Time from '../Time/Time';
 import styles from './StatusCard.module.scss';
 import { StatusCardProps } from './types';
 
@@ -95,7 +95,9 @@ const StatusCard = ({ status }: StatusCardProps) => {
 
             <div>{status.train.origin.name}</div>
 
-            <Time className={styles.time}>{departureSchedule.actual}</Time>
+            <LegacyTime className={styles.time}>
+              {departureSchedule.actual}
+            </LegacyTime>
           </header>
 
           <Link className={styles.link} href={`/status/${status.id}`}>
@@ -116,7 +118,6 @@ const StatusCard = ({ status }: StatusCardProps) => {
                   lineId={status.train.number}
                   lineName={status.train.lineName}
                   product={status.train.category}
-                  productName=""
                 />
 
                 <div className={styles.line}>
@@ -152,7 +153,9 @@ const StatusCard = ({ status }: StatusCardProps) => {
 
                 <div className={styles.stop} />
 
-                <Time className={styles.time}>{arrivalSchedule.actual}</Time>
+                <LegacyTime className={styles.time}>
+                  {arrivalSchedule.actual}
+                </LegacyTime>
               </div>
             </div>
           </Link>

@@ -54,14 +54,14 @@ export const PRODUCT_THEMES: Record<HAFASProductType, Required<Theme>> = {
     contrastRGB: '255, 255, 255',
   },
   regional: {
-    accent: '#2B2D42',
-    accentRGB: '43, 45, 66',
+    accent: '#415A77',
+    accentRGB: '65, 90, 119',
     contrast: '#FFFFFF',
     contrastRGB: '255, 255, 255',
   },
   regionalExp: {
-    accent: '#2B2D42',
-    accentRGB: '43, 45, 66',
+    accent: '#415A77',
+    accentRGB: '65, 90, 119',
     contrast: '#FFFFFF',
     contrastRGB: '255, 255, 255',
   },

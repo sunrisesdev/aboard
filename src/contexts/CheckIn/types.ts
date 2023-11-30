@@ -1,3 +1,4 @@
+import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
 import { Station, Status, Stop, Trip } from '@/traewelling-sdk/types';
 
 type CheckInStatus = 'draft' | 'ready' | 'loading' | 'completed';
@@ -35,6 +36,7 @@ export type CheckInContextValue = {
 export type CheckInState = {
   departureTime: string | undefined;
   destination: Stop | undefined;
+  hafasId: string | undefined;
   message: string;
   origin: StationIdentity | undefined;
   status: CheckInStatus;
@@ -108,7 +110,7 @@ type SelectOriginAction = {
 type SelectTripAction = {
   type: 'select_trip';
 
-  trip: Trip;
+  trip: HAFASTrip;
 };
 
 export type CheckInAction =

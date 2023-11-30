@@ -55,7 +55,6 @@ const DestinationStep = () => {
                   lineId={trip.line.id}
                   lineName={trip.line.name}
                   product={trip.line.product}
-                  productName={trip.line.productName}
                 />
               </div>
             )}

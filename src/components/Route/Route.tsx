@@ -8,17 +8,18 @@ import {
   RouteTimeProps,
 } from './types';
 
-const Route = ({ children }: RouteProps) => {
-  return <ul className={styles.base}>{children}</ul>;
+const Route = ({ children, className }: RouteProps) => {
+  return <ul className={clsx(styles.base, className)}>{children}</ul>;
 };
 
 const RouteEntry = ({
   children,
+  className,
   lineSlot,
   stopIndicatorVariant,
 }: RouteEntryProps) => {
   return (
-    <li className={styles.entry}>
+    <li className={clsx(styles.entry, className)}>
       <aside className={styles.decoration}>
         <RouteStopIndicator variant={stopIndicatorVariant} />
         {lineSlot}
@@ -46,13 +47,15 @@ const RouteLine = ({ variant = 'default' }: RouteLineProps) => {
 };
 
 const RouteStopIndicator = ({
+  className,
   variant = 'default',
 }: RouteStopIndicatorProps) => {
   return (
     <div
       className={clsx(
         styles.stopIndicator,
-        variant !== 'default' && styles[variant]
+        variant !== 'default' && styles[variant],
+        className
       )}
     />
   );

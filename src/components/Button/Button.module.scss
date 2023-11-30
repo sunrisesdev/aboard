@@ -12,8 +12,10 @@
   color: var(--button-color);
   cursor: pointer;
   display: flex;
+  flex-shrink: 0;
   font-weight: 500;
   height: 2.3125rem;
+  justify-content: center;
   padding: 0 1rem;
   user-select: none;
 
@@ -43,6 +45,13 @@
     --button-base: var(--sky-4);
     --button-color: var(--sky-11);
     --button-hover: var(--sky-5);
+  }
+
+  &.secondary {
+    --button-active: #9E0A5B66;
+    --button-base: #9E0A5B20;
+    --button-color: #9E0A5B;
+    --button-hover: #9E0A5B40;
   }
 
   &.success {

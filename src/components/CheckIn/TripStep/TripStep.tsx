@@ -356,7 +356,6 @@ const Trip = ({
             lineId={lineId}
             lineName={lineName}
             product={product}
-            productName={productName}
           />
         </div>
 
