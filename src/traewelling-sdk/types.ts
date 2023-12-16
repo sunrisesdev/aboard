@@ -1,5 +1,16 @@
 import { HAFASProductType } from './hafasTypes';
 
+export type TrwlLineColorDefinition = {
+  backgroundColor: string;
+  borderColor: string;
+  hafasLineId: string;
+  hafasOperatorCode: string;
+  lineName: string;
+  shape: string;
+  shortOperatorName: string;
+  textColor: string;
+};
+
 export type Station = {
   ibnr: number;
   id: number;
