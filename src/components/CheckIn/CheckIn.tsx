@@ -4,8 +4,8 @@ import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import { useCurrentStatus } from '@/hooks/useCurrentStatus/useCurrentStatus';
 import useUmami from '@/hooks/useUmami/useUmami';
 import { CheckinInput } from '@/traewelling-sdk/functions/trains';
-import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
 import { Station, Stop } from '@/traewelling-sdk/types';
+import { AboardTrip } from '@/types/aboard';
 import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -59,7 +59,7 @@ const CheckIn = () => {
   const [query, setQuery] = useState('');
   const [step, setStep] = useState<CheckInStep>('origin');
   const [travelType, setTravelType] = useState(0);
-  const [trip, setTrip] = useState<HAFASTrip>();
+  const [trip, setTrip] = useState<AboardTrip>();
   const [visibility, setVisibility] = useState(0);
 
   const { trackEvent } = useUmami();
@@ -73,12 +73,12 @@ const CheckIn = () => {
           arrival: destination!.arrivalPlanned!,
           body: message,
           business: travelType,
-          departure: trip!.plannedWhen!,
+          departure: trip?.departure?.planned!,
           destination: destination!.evaIdentifier,
           ibnr: true,
           lineName: trip!.line.name,
-          start: trip!.station.ibnr,
-          tripId: trip!.tripId,
+          start: trip?.departureStation.ibnr!,
+          tripId: trip!.id,
           visibility: visibility,
         },
         session

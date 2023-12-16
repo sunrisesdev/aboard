@@ -1,44 +1,53 @@
 'use client';
 
-import LineIndicator from '@/components/LineIndicator/LineIndicator';
+import { NewLineIndicator } from '@/components/NewLineIndicator/NewLineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
 import ThemeProvider from '@/components/ThemeProvider/ThemeProvider';
-import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useStops } from '@/hooks/useStops/useStops';
 import { inter } from '@/styles/fonts';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
+import colorConvert from 'color-convert';
 import { useContext } from 'react';
 import { MdArrowBack, MdMergeType } from 'react-icons/md';
 import { TbRouteOff } from 'react-icons/tb';
 import { CheckInContext } from '../CheckIn.context';
-import { PRODUCT_ICONS } from '../consts';
+import { METHOD_ICONS } from '../consts';
 import styles from './DestinationStep.module.scss';
 import { StopProps } from './types';
 
 const DestinationStep = () => {
   const { goBack, origin, setDestination, trip } = useContext(CheckInContext);
   const { isLoading, stops } = useStops(
-    trip?.tripId ?? '',
+    trip?.id ?? '',
     trip?.line.name ?? '',
-    trip?.plannedWhen ?? '',
-    trip?.station.id.toString() ?? ''
+    trip?.departure?.planned ?? '',
+    trip?.departureStation.evaId?.toString() ?? ''
   );
 
   const schedule = parseSchedule({
-    actual: trip?.when,
-    delay: trip?.delay,
-    planned: trip?.plannedWhen!,
+    actual: trip?.departure?.actual,
+    planned: trip?.departure?.planned!,
   });
 
-  const theme = getLineTheme(trip!.line.id, trip!.line.product);
+  useAppTheme(trip?.line.appearance.accentColor);
 
-  useAppTheme(theme.accent);
+  const accentRGB = colorConvert.hex
+    .rgb(trip!.line.appearance.accentColor!)
+    .join(', ');
+  const contrastRGB = colorConvert.hex
+    .rgb(trip!.line.appearance.contrastColor!)
+    .join(', ');
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider
+      color={trip!.line.appearance.accentColor}
+      colorRGB={accentRGB}
+      contrast={trip!.line.appearance.contrastColor}
+      contrastRGB={contrastRGB}
+    >
       <main className={styles.base}>
         <header className={styles.header}>
           <button className={styles.backButton} onClick={goBack}>
@@ -47,23 +56,19 @@ const DestinationStep = () => {
             </div>
             {trip && (
               <div className={styles.lineName}>
-                {PRODUCT_ICONS[trip.line.product]({
+                {METHOD_ICONS[trip.line.method]({
                   className: styles.productIcon,
                 })}
-                <LineIndicator
-                  isInverted
-                  lineId={trip.line.id}
-                  lineName={trip.line.name}
-                  product={trip.line.product}
-                />
+
+                <NewLineIndicator line={trip.line} />
               </div>
             )}
             <div style={{ width: '1.25rem' }} />
           </button>
 
-          <div className={styles.direction}>{trip?.direction}</div>
+          <div className={styles.direction}>{trip?.designation}</div>
 
-          {trip?.station.name !== origin?.name && (
+          {trip?.departureStation.name !== origin?.name && (
             <div className={styles.deviationNotice}>
               <MdMergeType size={18} />
               <span>Abweichende Abfahrt von einer Station in der Nähe</span>
@@ -72,7 +77,7 @@ const DestinationStep = () => {
 
           <div className={styles.origin}>
             <div className={styles.station}>
-              <div>{trip?.station.name}</div>
+              <div>{trip?.departureStation.name}</div>
               <span className={styles.time}>
                 ab {schedule.planned}
                 {!schedule.isOnTime && (

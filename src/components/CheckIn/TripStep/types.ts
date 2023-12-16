@@ -1,16 +1,7 @@
-import { HAFASProductType } from '@/traewelling-sdk/hafasTypes';
+import { AboardTrip } from '@/types/aboard';
 
 export type TripProps = {
-  delay: number;
-  departureAt: string | null;
-  destination: string;
-  lineId: string;
-  lineName: string;
   onClick: () => void;
-  plannedDepartureAt: string;
-  product: HAFASProductType;
-  productName: string;
   selectedStationName: string;
-  stationName: string;
-  tripNumber: string;
+  trip: AboardTrip;
 };

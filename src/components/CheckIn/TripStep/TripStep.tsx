@@ -1,22 +1,18 @@
 'use client';
 
 import FilterButton from '@/components/FilterButton/FilterButton';
-import LineIndicator from '@/components/LineIndicator/LineIndicator';
+import { NewLineIndicator } from '@/components/NewLineIndicator/NewLineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
 import ThemeProvider from '@/components/ThemeProvider/ThemeProvider';
-import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useDepartures } from '@/hooks/useDepartures/useDepartures';
 import { inter } from '@/styles/fonts';
-import {
-  HAFASProductType,
-  HAFASStop,
-  HAFASTrip,
-} from '@/traewelling-sdk/hafasTypes';
 import { TransportType } from '@/traewelling-sdk/types';
+import { AboardMethod, AboardTrip } from '@/types/aboard';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
+import colorConvert from 'color-convert';
 import { useContext, useEffect, useRef, useState } from 'react';
 import {
   MdArrowBack,
@@ -26,32 +22,31 @@ import {
 } from 'react-icons/md';
 import { TbRouteOff } from 'react-icons/tb';
 import { CheckInContext } from '../CheckIn.context';
-import { PRODUCT_ICONS } from '../consts';
+import { METHOD_ICONS } from '../consts';
 import styles from './TripStep.module.scss';
 import { TripProps } from './types';
 
-const getServedProducts = (trips: HAFASTrip[]) => {
+const getServedMethods = (trips: AboardTrip[]): AboardMethod[] => {
   if (trips.length === 0) return [];
 
-  const stops = trips.reduce((stops, trip) => {
-    if (stops.some(({ id }) => id === trip.stop.id)) {
-      return stops;
-    }
+  const departureStations = trips.map(
+    ({ departureStation }) => departureStation
+  );
+  const methodSet = new Set<AboardMethod>();
 
-    return [...stops, trip.stop];
-  }, [] as HAFASStop[]);
+  console.log(departureStations);
 
-  const productSet = new Set<HAFASProductType>();
+  departureStations.forEach(({ servesMethod }) => {
+    if (!servesMethod) return;
 
-  stops.forEach(({ products }) => {
-    Object.entries(products).forEach(([type, value]) => {
-      value && productSet.add(type as HAFASProductType);
-    });
+    Object.entries(servesMethod).forEach(
+      ([method, value]) => value && methodSet.add(method as AboardMethod)
+    );
   });
 
-  productSet.delete('taxi');
+  methodSet.delete('taxi');
 
-  return Array.from(productSet).sort((a, b) => a.localeCompare(b));
+  return Array.from(methodSet).sort((a, b) => a.localeCompare(b));
 };
 
 const TripStep = () => {
@@ -64,22 +59,22 @@ const TripStep = () => {
     transportType: filter,
   });
 
-  const productsFetched = useRef(false);
-  const [products, setProducts] = useState<HAFASProductType[]>([]);
+  const servedMethodsFetched = useRef(false);
+  const [servedMethods, setServedMethods] = useState<AboardMethod[]>([]);
 
   useAppTheme('var(--sky-11)');
 
   useEffect(() => {
-    if (productsFetched.current) return;
+    if (servedMethodsFetched.current) return;
 
-    const newProducts = getServedProducts(departures?.trips ?? []);
-    if (newProducts.length > 0) {
-      setProducts(newProducts);
-      productsFetched.current = true;
+    const newMethods = getServedMethods(departures?.trips ?? []);
+    if (newMethods.length > 0) {
+      setServedMethods(newMethods);
+      servedMethodsFetched.current = true;
     }
   }, [departures]);
 
-  const hasProduct = (product: HAFASProductType) => products.includes(product);
+  const servesMethod = (method: AboardMethod) => servedMethods.includes(method);
 
   const handleOnEarlierClick = () => {
     if (isLoading) {
@@ -111,7 +106,7 @@ const TripStep = () => {
         <button
           className={clsx(
             styles.backButton,
-            products.length > 1 && styles.noBottomPadding
+            servedMethods.length > 1 && styles.noBottomPadding
           )}
           onClick={goBack}
         >
@@ -121,9 +116,9 @@ const TripStep = () => {
           <span>{origin?.name}</span>
         </button>
 
-        {products.length > 1 && (
+        {servedMethods.length > 1 && (
           <section className={styles.filters}>
-            {(hasProduct('national') || hasProduct('nationalExpress')) && (
+            {(servesMethod('national') || servesMethod('national-express')) && (
               <FilterButton
                 className={styles.filterButton}
                 isActive={filter === 'express'}
@@ -133,7 +128,7 @@ const TripStep = () => {
                 Fernverkehr
               </FilterButton>
             )}
-            {(hasProduct('regional') || hasProduct('regionalExp')) && (
+            {(servesMethod('regional') || servesMethod('regional-express')) && (
               <FilterButton
                 className={styles.filterButton}
                 isActive={filter === 'regional'}
@@ -143,7 +138,7 @@ const TripStep = () => {
                 Regionalverkehr
               </FilterButton>
             )}
-            {hasProduct('suburban') && (
+            {servesMethod('suburban') && (
               <FilterButton
                 className={styles.filterButton}
                 isActive={filter === 'suburban'}
@@ -153,7 +148,7 @@ const TripStep = () => {
                 S-Bahnen
               </FilterButton>
             )}
-            {hasProduct('subway') && (
+            {servesMethod('subway') && (
               <FilterButton
                 className={styles.filterButton}
                 isActive={filter === 'subway'}
@@ -163,7 +158,7 @@ const TripStep = () => {
                 U-Bahnen
               </FilterButton>
             )}
-            {hasProduct('tram') && (
+            {servesMethod('tram') && (
               <FilterButton
                 className={styles.filterButton}
                 isActive={filter === 'tram'}
@@ -173,7 +168,7 @@ const TripStep = () => {
                 Straßenbahnen
               </FilterButton>
             )}
-            {hasProduct('bus') && (
+            {servesMethod('bus') && (
               <FilterButton
                 className={styles.filterButton}
                 isActive={filter === 'bus'}
@@ -183,7 +178,7 @@ const TripStep = () => {
                 Busse
               </FilterButton>
             )}
-            {hasProduct('ferry') && (
+            {servesMethod('ferry') && (
               <FilterButton
                 className={styles.filterButton}
                 isActive={filter === 'ferry'}
@@ -207,21 +202,12 @@ const TripStep = () => {
             <ul className={styles.tripList}>
               {departures.trips.map((trip) => (
                 <li
-                  key={`${trip.tripId}@${trip.station.ibnr}@${trip.plannedWhen}`}
+                  key={`${trip.id}@${trip.departureStation.ibnr}@${trip.departure?.planned}`}
                 >
                   <Trip
-                    delay={trip.delay}
-                    departureAt={trip.when}
-                    destination={trip.direction ?? trip.destination.name}
-                    lineId={trip.line.id}
-                    lineName={trip.line.name}
                     onClick={() => setTrip(trip)}
-                    plannedDepartureAt={trip.plannedWhen}
-                    product={trip.line.product}
-                    productName={trip.line.productName}
                     selectedStationName={origin?.name ?? ''}
-                    stationName={trip.station.name}
-                    tripNumber={trip.line.fahrtNr}
+                    trip={trip}
                   />
                 </li>
               ))}
@@ -316,53 +302,48 @@ const TripSkeleton = () => {
   );
 };
 
-const Trip = ({
-  delay,
-  departureAt,
-  destination,
-  lineId,
-  lineName,
-  onClick,
-  plannedDepartureAt,
-  product,
-  productName,
-  selectedStationName,
-  stationName,
-  tripNumber,
-}: TripProps) => {
+const Trip = ({ onClick, selectedStationName, trip }: TripProps) => {
   const schedule = parseSchedule({
-    actual: departureAt,
-    delay,
-    planned: plannedDepartureAt,
+    actual: trip.departure?.actual ?? '',
+    planned: trip.departure?.planned ?? '',
   });
 
-  const theme = getLineTheme(lineId, product);
+  const accentRGB = colorConvert.hex
+    .rgb(trip.line.appearance.accentColor!)
+    .join(', ');
+  const contrastRGB = colorConvert.hex
+    .rgb(trip.line.appearance.contrastColor!)
+    .join(', ');
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider
+      color={trip.line.appearance.accentColor}
+      colorRGB={accentRGB}
+      contrast={trip.line.appearance.contrastColor}
+      contrastRGB={contrastRGB}
+    >
       <button
+        aboard-line-id={trip.line.id}
         className={styles.trip}
-        disabled={departureAt === null}
+        disabled={!trip.departure?.actual}
         onClick={onClick}
       >
         <div className={styles.product} />
 
         <div className={styles.line}>
-          {PRODUCT_ICONS[product]({
+          {METHOD_ICONS[trip.line.method]({
             className: styles.productIcon,
           })}
 
-          <LineIndicator
-            lineId={lineId}
-            lineName={lineName}
-            product={product}
-          />
+          <NewLineIndicator line={trip.line} noOutline />
         </div>
 
         <div className={styles.direction}>
-          <div className={styles.destination}>{destination}</div>
-          {selectedStationName !== stationName && (
-            <div className={styles.deviatingStation}>ab {stationName}</div>
+          <div className={styles.destination}>{trip.designation}</div>
+          {selectedStationName !== trip.departureStation.name && (
+            <div className={styles.deviatingStation}>
+              ab {trip.departureStation.name}
+            </div>
           )}
         </div>
 
@@ -373,7 +354,7 @@ const Trip = ({
           {!schedule.isOnTime && <div>{schedule.actual}</div>}
         </div>
 
-        {departureAt === null && (
+        {!trip.departure?.actual === null && (
           <aside className={clsx(styles.cancelledNote, inter.className)}>
             <TbRouteOff />
             <span>Fällt aus</span>

@@ -1,5 +1,5 @@
-import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
 import { Station, Status, Stop } from '@/traewelling-sdk/types';
+import { AboardTrip } from '@/types/aboard';
 
 export type CheckInContextValue = {
   checkIn: () => void;
@@ -21,11 +21,11 @@ export type CheckInContextValue = {
   ) => void;
   setQuery: (value: string) => void;
   setTravelType: (value: number) => void;
-  setTrip: (value: HAFASTrip | undefined) => void;
+  setTrip: (value: AboardTrip | undefined) => void;
   setVisibility: (value: number) => void;
   step: CheckInStep;
   travelType: number;
-  trip: HAFASTrip | undefined;
+  trip: AboardTrip | undefined;
   visibility: number;
 };
 

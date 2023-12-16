@@ -44,8 +44,7 @@ export const createLineAppearanceDataset = async () => {
       const fromDataset = dataset.find(
         ({ lineId, operatorId }) =>
           lineId === line.id &&
-          ((operatorId !== '' && line.operator.id === '') ||
-            operatorId === line.operator.id)
+          (operatorId === '' || operatorId === line.operator.id)
       );
 
       if (fromDataset) {
@@ -61,7 +60,12 @@ export const createLineAppearanceDataset = async () => {
 };
 
 const determineAccentColor = (definition: TrwlLineColorDefinition) => {
+  // Preparations for background gradients
+  // const backgroundColors =
+  //   definition.backgroundColor.toLowerCase().match(/(#[a-f\d]{3,6})/gi) ?? [];
+
   const palette = [
+    // ...backgroundColors,
     definition.backgroundColor.toLowerCase(),
     definition.borderColor.toLowerCase(),
     definition.textColor.toLowerCase(),

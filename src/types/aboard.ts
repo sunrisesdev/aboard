@@ -50,6 +50,7 @@ export type AboardStation = {
   longitude?: number;
   name: string; // TODO: use db-clean-station-name in frontend maybe?
   rilId?: string;
+  servesMethod?: Record<AboardMethod, boolean>;
   trwlId?: number; // = stop.id
 };
 
@@ -62,12 +63,14 @@ export type AboardStopover = {
 };
 
 export type AboardTrip = {
-  id: string;
-  designation: string; // TODO: find better name; = this is the line destination string
+  departure?: Fluctuating<string | undefined>;
   departureStation: AboardStation;
+  designation: string; // TODO: find better name; = this is the line destination string
   destination: AboardStation;
+  id: string;
   line: AboardLine;
   origin?: AboardStation;
+  platform?: Fluctuating<string | undefined>;
   runningNumber?: string;
   stopovers?: AboardStopover[];
 };
