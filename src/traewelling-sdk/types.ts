@@ -30,11 +30,11 @@ export type Status = {
   likes: number;
   preventIndex: boolean;
   train: Train;
-  type: string;
   user: number;
   username: string;
   visibility: number;
   profilePicture: string;
+  isLikable: boolean;
 };
 
 export type Stop = {
@@ -65,11 +65,17 @@ export type Train = {
   duration: number;
   hafasId: string;
   lineName: string;
-  number: string;
+  number: string; // LINE ID
   origin: Stop;
   points: number;
-  speed: number;
+  manualDeparture: string;
+  manualArrival: string;
   trip: number;
+  journeyNumber?: number;
+  operator: {
+    identifier: string;
+    name: string;
+  } | null;
 };
 
 export type TransportType =

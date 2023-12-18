@@ -53,6 +53,13 @@
     padding-right: 1rem;
     position: relative;
     width: 100%;
+
+    & > *:first-child {
+      &[aboard-shape="hexagon"],
+      &[aboard-shape="trapezoid"] {
+        margin-inline: -0.125rem;
+      }
+    }
   }
 
   .line {

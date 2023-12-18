@@ -32,7 +32,6 @@ const TRAVEL_TYPES = [
   },
   {
     icon: <MdWorkOutline size={18} />,
-
     name: 'Ich reise beruflich',
   },
   {

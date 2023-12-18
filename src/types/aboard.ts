@@ -54,6 +54,35 @@ export type AboardStation = {
   trwlId?: number; // = stop.id
 };
 
+export type AboardStatus = {
+  createdAt: string;
+  event: unknown; // TODO: add type
+  id: string;
+  isLikeable: boolean;
+  journey: {
+    destination: AboardStopover;
+    distance: number;
+    duration: number;
+    hafasTripId: string;
+    line: AboardLine;
+    manualArrival: string;
+    manualDeparture: string;
+    origin: AboardStopover;
+    pointsAwarded: number;
+    runningNumber?: string;
+    trwlTripId: number;
+  };
+  likeCount: number;
+  likedByMe?: boolean;
+  message: string;
+  preventIndex: boolean;
+  travelReason: AboardTravelReason;
+  userAvatarUrl: string;
+  userId: number;
+  username: string;
+  visibility: AboardVisibility;
+};
+
 export type AboardStopover = {
   arrival: Fluctuating<string | undefined>;
   departure: Fluctuating<string | undefined>;
@@ -62,18 +91,27 @@ export type AboardStopover = {
   status: 'additional' | 'cancelled' | 'scheduled';
 };
 
+export type AboardTravelReason = 'business' | 'commute' | 'private';
+
 export type AboardTrip = {
   departure?: Fluctuating<string | undefined>;
   departureStation: AboardStation;
   designation: string; // TODO: find better name; = this is the line destination string
   destination: AboardStation;
-  id: string;
+  id: string; // HAFAS id
   line: AboardLine;
   origin?: AboardStation;
   platform?: Fluctuating<string | undefined>;
   runningNumber?: string;
   stopovers?: AboardStopover[];
 };
+
+export type AboardVisibility =
+  | 'only-authenticated'
+  | 'only-followers'
+  | 'private'
+  | 'public'
+  | 'unlisted';
 
 type Fluctuating<T> = {
   actual: T;

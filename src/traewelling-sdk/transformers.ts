@@ -3,8 +3,11 @@ import {
   AboardLineAppearance,
   AboardMethod,
   AboardStation,
+  AboardStatus,
   AboardStopover,
+  AboardTravelReason,
   AboardTrip,
+  AboardVisibility,
 } from '@/types/aboard';
 import {
   HAFASLine,
@@ -13,7 +16,7 @@ import {
   HAFASStop,
   HAFASTrip,
 } from './hafasTypes';
-import { Stop } from './types';
+import { Status, Stop } from './types';
 
 const HAFAS_PRODUCT_MAPPER: Record<HAFASProductType, AboardMethod> = {
   bus: 'bus',
@@ -30,6 +33,12 @@ const HAFAS_PRODUCT_MAPPER: Record<HAFASProductType, AboardMethod> = {
 
 const HIDDEN_PRODUCT_NAMES = ['Bus', 'Fäh', 'STB', 'STR'];
 
+const TRWL_BUSINESS_MAPPER: AboardTravelReason[] = [
+  'private',
+  'business',
+  'commute',
+];
+
 const TRWL_LINE_SHAPE_MAPPER: Record<string, AboardLineAppearance['shape']> = {
   hexagon: 'hexagon',
   pill: 'pill',
@@ -37,6 +46,14 @@ const TRWL_LINE_SHAPE_MAPPER: Record<string, AboardLineAppearance['shape']> = {
   'rectangle-rounded-corner': 'smooth-rectangle',
   trapezoid: 'trapezoid',
 };
+
+const TRWL_VISIBILITY_MAPPER: AboardVisibility[] = [
+  'public',
+  'unlisted',
+  'only-followers',
+  'private',
+  'only-authenticated',
+];
 
 export const transformHAFASLine = (line: HAFASLine): AboardLine => {
   return {
@@ -146,6 +163,49 @@ export const transformTrwlLineShape = (
   shape: string
 ): AboardLineAppearance['shape'] => {
   return TRWL_LINE_SHAPE_MAPPER[shape];
+};
+
+export const transformTrwlStatus = (status: Status): AboardStatus => {
+  return {
+    createdAt: status.createdAt,
+    event: status.event,
+    id: status.id,
+    isLikeable: status.isLikable,
+    journey: {
+      destination: transformTrwlStop(status.train.destination),
+      distance: status.train.distance,
+      duration: status.train.duration,
+      hafasTripId: status.train.hafasId,
+      line: {
+        appearance: {
+          lineName: status.train.lineName,
+          productName: '',
+        },
+        id: status.train.number,
+        method: transformHAFASProductType(status.train.category),
+        name: status.train.lineName,
+        operator: {
+          id: status.train.operator?.identifier ?? '',
+          name: status.train.operator?.name ?? '',
+        },
+      },
+      manualArrival: status.train.manualArrival,
+      manualDeparture: status.train.manualDeparture,
+      origin: transformTrwlStop(status.train.origin),
+      pointsAwarded: status.train.points,
+      trwlTripId: status.train.trip,
+      runningNumber: status.train.journeyNumber?.toString() ?? '',
+    },
+    likeCount: status.likes,
+    likedByMe: status.liked,
+    message: status.body,
+    preventIndex: status.preventIndex,
+    travelReason: TRWL_BUSINESS_MAPPER[status.business],
+    userAvatarUrl: status.profilePicture,
+    userId: status.user,
+    username: status.username,
+    visibility: TRWL_VISIBILITY_MAPPER[status.visibility],
+  };
 };
 
 export const transformTrwlStop = (stop: Stop): AboardStopover => {

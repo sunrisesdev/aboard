@@ -12,6 +12,7 @@ const ThemeProvider = ({
   colorRGB,
   contrast,
   contrastRGB,
+  invert = false,
   theme,
 }: ThemeProviderProps) => {
   const appearanceAccentRGB =
@@ -27,8 +28,16 @@ const ThemeProvider = ({
       contrastRGB ?? appearanceContrastRGB ?? theme?.contrastRGB,
   } as CSSProperties;
 
+  const invertedStyle = {
+    ['--accent']: contrast ?? appearance?.contrastColor ?? theme?.contrast,
+    ['--accent-rgb']:
+      contrastRGB ?? appearanceContrastRGB ?? theme?.contrastRGB,
+    ['--contrast']: color ?? appearance?.accentColor ?? theme?.accent,
+    ['--contrast-rgb']: colorRGB ?? appearanceAccentRGB ?? theme?.accentRGB,
+  } as CSSProperties;
+
   return (
-    <div className={styles.base} style={style}>
+    <div className={styles.base} style={invert ? invertedStyle : style}>
       {children}
     </div>
   );

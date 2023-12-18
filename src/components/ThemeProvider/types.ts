@@ -15,5 +15,6 @@ export type ThemeProviderProps = {
   colorRGB?: string;
   contrast?: string;
   contrastRGB?: string;
+  invert?: boolean;
   theme?: Theme;
 };
