@@ -10,7 +10,7 @@ const Statuses = ({ username }: { username: string }) => {
   return (
     <div>
       {statuses?.map(
-        ({ id, username, profilePicture, body, likes, liked, type, train }) => {
+        ({ id, username, profilePicture, body, likes, liked, train }) => {
           return (
             <div key={id}>
               <div>{username}</div>
