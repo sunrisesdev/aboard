@@ -26,15 +26,15 @@ export type Status = {
   createdAt: string;
   event: any; // TODO: Add type
   id: string;
+  isLikable: boolean;
   liked: boolean;
   likes: number;
   preventIndex: boolean;
+  profilePicture: string;
   train: Train;
   user: number;
   username: string;
   visibility: number;
-  profilePicture: string;
-  isLikable: boolean;
 };
 
 export type Stop = {
@@ -64,18 +64,18 @@ export type Train = {
   distance: number;
   duration: number;
   hafasId: string;
-  lineName: string;
-  number: string; // LINE ID
-  origin: Stop;
-  points: number;
-  manualDeparture: string;
-  manualArrival: string;
-  trip: number;
   journeyNumber?: number;
+  lineName: string;
+  manualArrival: string;
+  manualDeparture: string;
+  number: string; // LINE ID
   operator: {
     identifier: string;
     name: string;
   } | null;
+  origin: Stop;
+  points: number;
+  trip: number;
 };
 
 export type TransportType =

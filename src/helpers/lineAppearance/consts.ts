@@ -1,6 +1,6 @@
 import { AboardLineAppearance, AboardMethod } from '@/types/aboard';
 
-export const FALLBACK_METHOD_APPERANCES: Record<
+export const FALLBACK_METHOD_APPEARANCES: Record<
   AboardMethod,
   Partial<AboardLineAppearance>
 > = {

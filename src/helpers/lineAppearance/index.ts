@@ -4,7 +4,7 @@ import { AboardLine, AboardLineAppearance } from '@/types/aboard';
 import colorConvert from 'color-convert';
 import { getContrastColor } from '../getContrastColor';
 import {
-  FALLBACK_METHOD_APPERANCES,
+  FALLBACK_METHOD_APPEARANCES,
   LINE_APPEARANCE_OVERRIDES,
 } from './consts';
 import { fetchTrwlLineColorDefinitions } from './fetcher';
@@ -53,7 +53,7 @@ export const createLineAppearanceDataset = async () => {
 
       return Object.assign(
         line.appearance,
-        FALLBACK_METHOD_APPERANCES[line.method]
+        FALLBACK_METHOD_APPEARANCES[line.method]
       );
     },
   };

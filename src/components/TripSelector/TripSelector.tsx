@@ -96,7 +96,6 @@ const Trip = ({ onClick, requestedStationName, trip }: TripProps) => {
               className={styles.time}
               delayStyle="p+a"
               schedule={schedule}
-              style={{ ['--strike-text-color' as any]: 'var(--sky-11)' }}
             />
             <Time
               className={styles.time}
