@@ -1,8 +1,12 @@
+import colorConvert from 'color-convert';
 import { CSSProperties } from 'react';
 import styles from './ThemeProvider.module.scss';
 import { ThemeProviderProps } from './types';
 
+// TODO: improve!
+
 const ThemeProvider = ({
+  appearance,
   children,
   color,
   colorRGB,
@@ -10,11 +14,17 @@ const ThemeProvider = ({
   contrastRGB,
   theme,
 }: ThemeProviderProps) => {
+  const appearanceAccentRGB =
+    appearance && colorConvert.hex.rgb(appearance.accentColor!).join(', ');
+  const appearanceContrastRGB =
+    appearance && colorConvert.hex.rgb(appearance.contrastColor!).join(', ');
+
   const style = {
-    ['--accent']: color ?? theme?.accent,
-    ['--accent-rgb']: colorRGB ?? theme?.accentRGB,
-    ['--contrast']: contrast ?? theme?.contrast,
-    ['--contrast-rgb']: contrastRGB ?? theme?.contrastRGB,
+    ['--accent']: color ?? appearance?.accentColor ?? theme?.accent,
+    ['--accent-rgb']: colorRGB ?? appearanceAccentRGB ?? theme?.accentRGB,
+    ['--contrast']: contrast ?? appearance?.contrastColor ?? theme?.contrast,
+    ['--contrast-rgb']:
+      contrastRGB ?? appearanceContrastRGB ?? theme?.contrastRGB,
   } as CSSProperties;
 
   return (

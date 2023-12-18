@@ -1,18 +1,15 @@
 'use client';
 
 import FilterButton from '@/components/FilterButton/FilterButton';
-import { NewLineIndicator } from '@/components/NewLineIndicator/NewLineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
-import ThemeProvider from '@/components/ThemeProvider/ThemeProvider';
+import { TripSelector } from '@/components/TripSelector/TripSelector';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useDepartures } from '@/hooks/useDepartures/useDepartures';
-import { inter } from '@/styles/fonts';
+import { radioCanada } from '@/styles/fonts';
 import { TransportType } from '@/traewelling-sdk/types';
 import { AboardMethod, AboardTrip } from '@/types/aboard';
-import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
-import colorConvert from 'color-convert';
 import { useContext, useEffect, useRef, useState } from 'react';
 import {
   MdArrowBack,
@@ -20,11 +17,8 @@ import {
   MdKeyboardDoubleArrowLeft,
   MdKeyboardDoubleArrowRight,
 } from 'react-icons/md';
-import { TbRouteOff } from 'react-icons/tb';
 import { CheckInContext } from '../CheckIn.context';
-import { METHOD_ICONS } from '../consts';
 import styles from './TripStep.module.scss';
-import { TripProps } from './types';
 
 const getServedMethods = (trips: AboardTrip[]): AboardMethod[] => {
   if (trips.length === 0) return [];
@@ -101,7 +95,7 @@ const TripStep = () => {
   };
 
   return (
-    <main className={styles.base}>
+    <main className={clsx(radioCanada.className, styles.base)}>
       <header className={styles.header}>
         <button
           className={clsx(
@@ -199,19 +193,11 @@ const TripStep = () => {
           topFogBorderRadius="1rem"
         >
           {departures?.trips && departures.trips.length > 0 && (
-            <ul className={styles.tripList}>
-              {departures.trips.map((trip) => (
-                <li
-                  key={`${trip.id}@${trip.departureStation.ibnr}@${trip.departure?.planned}`}
-                >
-                  <Trip
-                    onClick={() => setTrip(trip)}
-                    selectedStationName={origin?.name ?? ''}
-                    trip={trip}
-                  />
-                </li>
-              ))}
-            </ul>
+            <TripSelector
+              onSelect={setTrip}
+              requestedStation={origin}
+              trips={departures.trips}
+            />
           )}
 
           {isLoading && (
@@ -281,12 +267,6 @@ const TripSkeleton = () => {
         <Shimmer
           height="1.25rem"
           style={{ borderRadius: '9999rem' }}
-          width="1.25rem"
-        />
-
-        <Shimmer
-          height="1.25rem"
-          style={{ borderRadius: '9999rem' }}
           width="1.75rem"
         />
       </div>
@@ -299,69 +279,6 @@ const TripSkeleton = () => {
         <Shimmer width="2rem" />
       </div>
     </button>
-  );
-};
-
-const Trip = ({ onClick, selectedStationName, trip }: TripProps) => {
-  const schedule = parseSchedule({
-    actual: trip.departure?.actual ?? '',
-    planned: trip.departure?.planned ?? '',
-  });
-
-  const accentRGB = colorConvert.hex
-    .rgb(trip.line.appearance.accentColor!)
-    .join(', ');
-  const contrastRGB = colorConvert.hex
-    .rgb(trip.line.appearance.contrastColor!)
-    .join(', ');
-
-  return (
-    <ThemeProvider
-      color={trip.line.appearance.accentColor}
-      colorRGB={accentRGB}
-      contrast={trip.line.appearance.contrastColor}
-      contrastRGB={contrastRGB}
-    >
-      <button
-        aboard-line-id={trip.line.id}
-        className={styles.trip}
-        disabled={!trip.departure?.actual}
-        onClick={onClick}
-      >
-        <div className={styles.product} />
-
-        <div className={styles.line}>
-          {METHOD_ICONS[trip.line.method]({
-            className: styles.productIcon,
-          })}
-
-          <NewLineIndicator line={trip.line} noOutline />
-        </div>
-
-        <div className={styles.direction}>
-          <div className={styles.destination}>{trip.designation}</div>
-          {selectedStationName !== trip.departureStation.name && (
-            <div className={styles.deviatingStation}>
-              ab {trip.departureStation.name}
-            </div>
-          )}
-        </div>
-
-        <div className={styles.time}>
-          <div className={clsx({ [styles.isDelayed]: !schedule.isOnTime })}>
-            {schedule.planned}
-          </div>
-          {!schedule.isOnTime && <div>{schedule.actual}</div>}
-        </div>
-
-        {!trip.departure?.actual === null && (
-          <aside className={clsx(styles.cancelledNote, inter.className)}>
-            <TbRouteOff />
-            <span>Fällt aus</span>
-          </aside>
-        )}
-      </button>
-    </ThemeProvider>
   );
 };
 
