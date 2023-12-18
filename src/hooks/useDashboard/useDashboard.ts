@@ -1,8 +1,8 @@
-import { Status } from '@/traewelling-sdk/types';
+import { AboardDashboardResponse } from '@/app/api/dashboard/route';
 import useSWR from 'swr';
 
-const fetcher = async (): Promise<Status[] | null> => {
-  const response = await fetch('/traewelling/dashboard');
+const fetcher = async (): Promise<AboardDashboardResponse> => {
+  const response = await fetch('/api/dashboard');
 
   if (!response.ok) {
     return null;
@@ -12,9 +12,7 @@ const fetcher = async (): Promise<Status[] | null> => {
 };
 
 export const useDashboard = () => {
-  const { data, isLoading } = useSWR(['/traewelling/dashboard'], ([_]) =>
-    fetcher()
-  );
+  const { data, isLoading } = useSWR(['/api/dashboard'], ([_]) => fetcher());
 
   return {
     isLoading,

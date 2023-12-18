@@ -1,4 +1,4 @@
-import { DeparturesResponse } from '@/traewelling-sdk/functions/trains';
+import { AboardDeparturesResponse } from '@/app/api/stations/[station]/route';
 import { TransportType } from '@/traewelling-sdk/types';
 import useSWR from 'swr';
 import { UseDeparturesOptions } from './types';
@@ -7,7 +7,7 @@ const fetcher = async (
   stationName: string,
   transportType?: TransportType,
   from?: string
-): Promise<DeparturesResponse> => {
+): Promise<AboardDeparturesResponse> => {
   if (!stationName.trim()) {
     return { meta: null, trips: [] };
   }
@@ -23,10 +23,7 @@ const fetcher = async (
   }
 
   const response = await fetch(
-    `/traewelling/stations/${stationName.replace(
-      '/',
-      '%20'
-    )}?${params.toString()}`
+    `/api/stations/${stationName.replace('/', '%20')}?${params.toString()}`
   );
 
   if (!response.ok) {
@@ -41,12 +38,7 @@ export const useDepartures = (
   options?: UseDeparturesOptions
 ) => {
   const { data, isLoading } = useSWR(
-    [
-      '/traewelling/stations/',
-      stationName,
-      options?.transportType,
-      options?.from,
-    ],
+    ['/api/stations/', stationName, options?.transportType, options?.from],
     ([_, stationName, transportType, from]) =>
       fetcher(stationName, transportType, from)
   );

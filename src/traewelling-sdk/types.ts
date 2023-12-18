@@ -1,5 +1,16 @@
 import { HAFASProductType } from './hafasTypes';
 
+export type TrwlLineColorDefinition = {
+  backgroundColor: string;
+  borderColor: string;
+  hafasLineId: string;
+  hafasOperatorCode: string;
+  lineName: string;
+  shape: string;
+  shortOperatorName: string;
+  textColor: string;
+};
+
 export type Station = {
   ibnr: number;
   id: number;
@@ -15,15 +26,15 @@ export type Status = {
   createdAt: string;
   event: any; // TODO: Add type
   id: string;
+  isLikable: boolean;
   liked: boolean;
   likes: number;
   preventIndex: boolean;
+  profilePicture: string;
   train: Train;
-  type: string;
   user: number;
   username: string;
   visibility: number;
-  profilePicture: string;
 };
 
 export type Stop = {
@@ -53,11 +64,17 @@ export type Train = {
   distance: number;
   duration: number;
   hafasId: string;
+  journeyNumber?: number;
   lineName: string;
-  number: string;
+  manualArrival: string;
+  manualDeparture: string;
+  number: string; // LINE ID
+  operator: {
+    identifier: string;
+    name: string;
+  } | null;
   origin: Stop;
   points: number;
-  speed: number;
   trip: number;
 };
 

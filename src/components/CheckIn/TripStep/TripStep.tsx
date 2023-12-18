@@ -1,21 +1,14 @@
 'use client';
 
 import FilterButton from '@/components/FilterButton/FilterButton';
-import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import Shimmer from '@/components/Shimmer/Shimmer';
-import ThemeProvider from '@/components/ThemeProvider/ThemeProvider';
-import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
+import { TripSelector } from '@/components/TripSelector/TripSelector';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useDepartures } from '@/hooks/useDepartures/useDepartures';
-import { inter } from '@/styles/fonts';
-import {
-  HAFASProductType,
-  HAFASStop,
-  HAFASTrip,
-} from '@/traewelling-sdk/hafasTypes';
+import { radioCanada } from '@/styles/fonts';
 import { TransportType } from '@/traewelling-sdk/types';
-import { parseSchedule } from '@/utils/parseSchedule';
+import { AboardMethod, AboardTrip } from '@/types/aboard';
 import clsx from 'clsx';
 import { useContext, useEffect, useRef, useState } from 'react';
 import {
@@ -24,34 +17,30 @@ import {
   MdKeyboardDoubleArrowLeft,
   MdKeyboardDoubleArrowRight,
 } from 'react-icons/md';
-import { TbRouteOff } from 'react-icons/tb';
 import { CheckInContext } from '../CheckIn.context';
-import { PRODUCT_ICONS } from '../consts';
 import styles from './TripStep.module.scss';
-import { TripProps } from './types';
 
-const getServedProducts = (trips: HAFASTrip[]) => {
+const getServedMethods = (trips: AboardTrip[]): AboardMethod[] => {
   if (trips.length === 0) return [];
 
-  const stops = trips.reduce((stops, trip) => {
-    if (stops.some(({ id }) => id === trip.stop.id)) {
-      return stops;
-    }
+  const departureStations = trips.map(
+    ({ departureStation }) => departureStation
+  );
+  const methodSet = new Set<AboardMethod>();
 
-    return [...stops, trip.stop];
-  }, [] as HAFASStop[]);
+  console.log(departureStations);
 
-  const productSet = new Set<HAFASProductType>();
+  departureStations.forEach(({ servesMethod }) => {
+    if (!servesMethod) return;
 
-  stops.forEach(({ products }) => {
-    Object.entries(products).forEach(([type, value]) => {
-      value && productSet.add(type as HAFASProductType);
-    });
+    Object.entries(servesMethod).forEach(
+      ([method, value]) => value && methodSet.add(method as AboardMethod)
+    );
   });
 
-  productSet.delete('taxi');
+  methodSet.delete('taxi');
 
-  return Array.from(productSet).sort((a, b) => a.localeCompare(b));
+  return Array.from(methodSet).sort((a, b) => a.localeCompare(b));
 };
 
 const TripStep = () => {
@@ -64,22 +53,22 @@ const TripStep = () => {
     transportType: filter,
   });
 
-  const productsFetched = useRef(false);
-  const [products, setProducts] = useState<HAFASProductType[]>([]);
+  const servedMethodsFetched = useRef(false);
+  const [servedMethods, setServedMethods] = useState<AboardMethod[]>([]);
 
   useAppTheme('var(--sky-11)');
 
   useEffect(() => {
-    if (productsFetched.current) return;
+    if (servedMethodsFetched.current) return;
 
-    const newProducts = getServedProducts(departures?.trips ?? []);
-    if (newProducts.length > 0) {
-      setProducts(newProducts);
-      productsFetched.current = true;
+    const newMethods = getServedMethods(departures?.trips ?? []);
+    if (newMethods.length > 0) {
+      setServedMethods(newMethods);
+      servedMethodsFetched.current = true;
     }
   }, [departures]);
 
-  const hasProduct = (product: HAFASProductType) => products.includes(product);
+  const servesMethod = (method: AboardMethod) => servedMethods.includes(method);
 
   const handleOnEarlierClick = () => {
     if (isLoading) {
@@ -106,12 +95,12 @@ const TripStep = () => {
   };
 
   return (
-    <main className={styles.base}>
+    <main className={clsx(radioCanada.className, styles.base)}>
       <header className={styles.header}>
         <button
           className={clsx(
             styles.backButton,
-            products.length > 1 && styles.noBottomPadding
+            servedMethods.length > 1 && styles.noBottomPadding
           )}
           onClick={goBack}
         >
@@ -121,9 +110,9 @@ const TripStep = () => {
           <span>{origin?.name}</span>
         </button>
 
-        {products.length > 1 && (
+        {servedMethods.length > 1 && (
           <section className={styles.filters}>
-            {(hasProduct('national') || hasProduct('nationalExpress')) && (
+            {(servesMethod('national') || servesMethod('national-express')) && (
               <FilterButton
                 className={styles.filterButton}
                 isActive={filter === 'express'}
@@ -133,7 +122,7 @@ const TripStep = () => {
                 Fernverkehr
               </FilterButton>
             )}
-            {(hasProduct('regional') || hasProduct('regionalExp')) && (
+            {(servesMethod('regional') || servesMethod('regional-express')) && (
               <FilterButton
                 className={styles.filterButton}
                 isActive={filter === 'regional'}
@@ -143,7 +132,7 @@ const TripStep = () => {
                 Regionalverkehr
               </FilterButton>
             )}
-            {hasProduct('suburban') && (
+            {servesMethod('suburban') && (
               <FilterButton
                 className={styles.filterButton}
                 isActive={filter === 'suburban'}
@@ -153,7 +142,7 @@ const TripStep = () => {
                 S-Bahnen
               </FilterButton>
             )}
-            {hasProduct('subway') && (
+            {servesMethod('subway') && (
               <FilterButton
                 className={styles.filterButton}
                 isActive={filter === 'subway'}
@@ -163,7 +152,7 @@ const TripStep = () => {
                 U-Bahnen
               </FilterButton>
             )}
-            {hasProduct('tram') && (
+            {servesMethod('tram') && (
               <FilterButton
                 className={styles.filterButton}
                 isActive={filter === 'tram'}
@@ -173,7 +162,7 @@ const TripStep = () => {
                 Straßenbahnen
               </FilterButton>
             )}
-            {hasProduct('bus') && (
+            {servesMethod('bus') && (
               <FilterButton
                 className={styles.filterButton}
                 isActive={filter === 'bus'}
@@ -183,7 +172,7 @@ const TripStep = () => {
                 Busse
               </FilterButton>
             )}
-            {hasProduct('ferry') && (
+            {servesMethod('ferry') && (
               <FilterButton
                 className={styles.filterButton}
                 isActive={filter === 'ferry'}
@@ -204,28 +193,11 @@ const TripStep = () => {
           topFogBorderRadius="1rem"
         >
           {departures?.trips && departures.trips.length > 0 && (
-            <ul className={styles.tripList}>
-              {departures.trips.map((trip) => (
-                <li
-                  key={`${trip.tripId}@${trip.station.ibnr}@${trip.plannedWhen}`}
-                >
-                  <Trip
-                    delay={trip.delay}
-                    departureAt={trip.when}
-                    destination={trip.direction ?? trip.destination.name}
-                    lineId={trip.line.id}
-                    lineName={trip.line.name}
-                    onClick={() => setTrip(trip)}
-                    plannedDepartureAt={trip.plannedWhen}
-                    product={trip.line.product}
-                    productName={trip.line.productName}
-                    selectedStationName={origin?.name ?? ''}
-                    stationName={trip.station.name}
-                    tripNumber={trip.line.fahrtNr}
-                  />
-                </li>
-              ))}
-            </ul>
+            <TripSelector
+              onSelect={setTrip}
+              requestedStation={origin}
+              trips={departures.trips}
+            />
           )}
 
           {isLoading && (
@@ -295,12 +267,6 @@ const TripSkeleton = () => {
         <Shimmer
           height="1.25rem"
           style={{ borderRadius: '9999rem' }}
-          width="1.25rem"
-        />
-
-        <Shimmer
-          height="1.25rem"
-          style={{ borderRadius: '9999rem' }}
           width="1.75rem"
         />
       </div>
@@ -313,74 +279,6 @@ const TripSkeleton = () => {
         <Shimmer width="2rem" />
       </div>
     </button>
-  );
-};
-
-const Trip = ({
-  delay,
-  departureAt,
-  destination,
-  lineId,
-  lineName,
-  onClick,
-  plannedDepartureAt,
-  product,
-  productName,
-  selectedStationName,
-  stationName,
-  tripNumber,
-}: TripProps) => {
-  const schedule = parseSchedule({
-    actual: departureAt,
-    delay,
-    planned: plannedDepartureAt,
-  });
-
-  const theme = getLineTheme(lineId, product);
-
-  return (
-    <ThemeProvider theme={theme}>
-      <button
-        className={styles.trip}
-        disabled={departureAt === null}
-        onClick={onClick}
-      >
-        <div className={styles.product} />
-
-        <div className={styles.line}>
-          {PRODUCT_ICONS[product]({
-            className: styles.productIcon,
-          })}
-
-          <LineIndicator
-            lineId={lineId}
-            lineName={lineName}
-            product={product}
-          />
-        </div>
-
-        <div className={styles.direction}>
-          <div className={styles.destination}>{destination}</div>
-          {selectedStationName !== stationName && (
-            <div className={styles.deviatingStation}>ab {stationName}</div>
-          )}
-        </div>
-
-        <div className={styles.time}>
-          <div className={clsx({ [styles.isDelayed]: !schedule.isOnTime })}>
-            {schedule.planned}
-          </div>
-          {!schedule.isOnTime && <div>{schedule.actual}</div>}
-        </div>
-
-        {departureAt === null && (
-          <aside className={clsx(styles.cancelledNote, inter.className)}>
-            <TbRouteOff />
-            <span>Fällt aus</span>
-          </aside>
-        )}
-      </button>
-    </ThemeProvider>
   );
 };
 

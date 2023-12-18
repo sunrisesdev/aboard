@@ -1,3 +1,4 @@
+import { AboardLineAppearance } from '@/types/aboard';
 import { ReactNode } from 'react';
 
 export type Theme = {
@@ -8,10 +9,12 @@ export type Theme = {
 };
 
 export type ThemeProviderProps = {
+  appearance?: AboardLineAppearance;
   children: ReactNode;
   color?: string;
   colorRGB?: string;
   contrast?: string;
   contrastRGB?: string;
+  invert?: boolean;
   theme?: Theme;
 };

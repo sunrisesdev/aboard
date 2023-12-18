@@ -63,11 +63,11 @@ export type HAFASStop = {
 export type HAFASTrip = {
   currentTripPosition: HAFASLocation;
   delay: number;
-  destination: HAFASStation;
+  destination: HAFASStop;
   direction: string;
   line: HAFASLine;
   loadFactor?: string;
-  origin: HAFASStation | null;
+  origin: HAFASStop | null;
   plannedPlatform: string | null;
   plannedWhen: string;
   platform: string | null;
