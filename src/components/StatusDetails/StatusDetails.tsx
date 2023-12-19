@@ -101,34 +101,28 @@ const StatusDetails = ({
   const { content, startOrResume } = useJoinCheckIn();
 
   const handleJoinClick = () => {
-    startOrResume(status, trip);
-
+    // startOrResume(status, trip);
     // if (trip) {
     //   const stops: { area?: string; station: string }[] = [];
-
     //   const tripParts = trip.stopovers.map((stop) =>
     //     stop.name.split(',').map((part) => part.trim())
     //   );
-
     //   for (let i = 0; i < tripParts.length; i++) {
     //     const previousStop = i <= 0 ? undefined : tripParts[i - 1];
     //     const stop = tripParts[i];
     //     const nextStop =
     //       i >= tripParts.length - 1 ? undefined : tripParts[i + 1];
-
     //     const lastSegments = [
     //       (previousStop ?? ['!']).at(-1)!,
     //       stop.at(-1)!,
     //       (nextStop ?? ['!']).at(-1)!,
     //     ];
-
     //     if (lastSegments[0].length < lastSegments[1].length) {
     //       if (lastSegments[1].startsWith(lastSegments[0])) {
     //         stops.push({
     //           area: lastSegments[1],
     //           station: tripParts[i].slice(0, -1).join(', '),
     //         });
-
     //         continue;
     //       }
     //     } else {
@@ -137,18 +131,15 @@ const StatusDetails = ({
     //           area: lastSegments[0],
     //           station: tripParts[i].slice(0, -1).join(', '),
     //         });
-
     //         continue;
     //       }
     //     }
-
     //     if (lastSegments[2].length < lastSegments[1].length) {
     //       if (lastSegments[1].startsWith(lastSegments[2])) {
     //         stops.push({
     //           area: lastSegments[1],
     //           station: tripParts[i].slice(0, -1).join(', '),
     //         });
-
     //         continue;
     //       }
     //     } else {
@@ -157,29 +148,23 @@ const StatusDetails = ({
     //           area: lastSegments[2],
     //           station: tripParts[i].slice(0, -1).join(', '),
     //         });
-
     //         continue;
     //       }
     //     }
-
     //     const firstSegments = [
     //       (previousStop ?? [''])[0],
     //       stop[0],
     //       (nextStop ?? [''])[0],
     //     ];
-
     //     if (firstSegments.filter((v) => v === stop[0]).length > 1) {
     //       stops.push({
     //         area: stop[0],
     //         station: tripParts[i].slice(1).join(', '),
     //       });
-
     //       continue;
     //     }
-
     //     stops.push({ station: tripParts[i].join(', ') });
     //   }
-
     //   stops.forEach((stop, i) => {
     //     if (stop.area && stop.station) {
     //       trip.stopovers[i].name = `${stop.station}###${stop.area}`;
@@ -295,7 +280,7 @@ const StatusDetails = ({
               alt={`Avatar von ${status.username}`}
               className={styles.avatar}
               height={42}
-              src={(status as any).profilePicture}
+              src={status.userAvatarUrl}
               width={42}
             />
 

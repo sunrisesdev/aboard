@@ -1,4 +1,5 @@
 import StatusDetails from '@/components/StatusDetails/StatusDetails';
+import { createLineAppearanceDataset } from '@/helpers/lineAppearance';
 import { TraewellingSdk } from '@/traewelling-sdk';
 import {
   transformTrwlStatus,
@@ -13,7 +14,14 @@ async function getStatusData(id: string) {
 
   if (!status) return null;
 
-  return transformTrwlStatus(status);
+  const transformed = transformTrwlStatus(status);
+  const { getAppearanceForLine } = await createLineAppearanceDataset();
+
+  transformed.journey.line.appearance = getAppearanceForLine(
+    transformed.journey.line
+  );
+
+  return transformed;
 }
 
 async function getTripData(
