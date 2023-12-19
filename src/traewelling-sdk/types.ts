@@ -92,9 +92,9 @@ export type Trip = {
   category: HAFASProductType;
   destination: Station;
   id: number;
-  journeyNumber: number | null;
+  journeyNumber: number | null; // Zugnummer
   lineName: string;
-  number: string;
+  number: string; // HAFAS line id
   origin: Station;
   stopovers: Stop[];
 };

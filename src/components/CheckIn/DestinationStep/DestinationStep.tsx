@@ -21,7 +21,7 @@ import { StopProps } from './types';
 const DestinationStep = () => {
   const { goBack, origin, setDestination, trip } = useContext(CheckInContext);
   const { isLoading, stops } = useStops(
-    trip?.id ?? '',
+    trip?.hafasId ?? '',
     trip?.line.name ?? '',
     trip?.departure?.planned ?? '',
     trip?.departureStation.evaId?.toString() ?? ''

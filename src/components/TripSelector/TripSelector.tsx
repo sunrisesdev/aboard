@@ -18,7 +18,7 @@ export const TripSelector = ({
     <ul className={styles.base}>
       {trips.map((trip) => (
         <li
-          key={`${trip.id}@${trip.departureStation.ibnr}@${trip.departure?.planned}`}
+          key={`${trip.hafasId}@${trip.departureStation.ibnr}@${trip.departure?.planned}`}
         >
           <Trip
             onClick={() => onSelect(trip)}

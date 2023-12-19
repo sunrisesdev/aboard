@@ -16,7 +16,7 @@ import {
   HAFASStop,
   HAFASTrip,
 } from './hafasTypes';
-import { Status, Stop } from './types';
+import { Station, Status, Stop, Trip } from './types';
 
 const HAFAS_PRODUCT_MAPPER: Record<HAFASProductType, AboardMethod> = {
   bus: 'bus',
@@ -54,6 +54,18 @@ const TRWL_VISIBILITY_MAPPER: AboardVisibility[] = [
   'private',
   'only-authenticated',
 ];
+
+export const transformAboardTravelReason = (
+  travelReason: AboardTravelReason
+): number => {
+  return TRWL_BUSINESS_MAPPER.indexOf(travelReason);
+};
+
+export const transformAboardVisibility = (
+  visibility: AboardVisibility
+): number => {
+  return TRWL_VISIBILITY_MAPPER.indexOf(visibility);
+};
 
 export const transformHAFASLine = (line: HAFASLine): AboardLine => {
   return {
@@ -144,7 +156,7 @@ export const transformHAFASTrip = (trip: HAFASTrip): AboardTrip => {
     },
     designation: trip.direction,
     destination: transformHAFASStop(trip.destination),
-    id: trip.tripId,
+    hafasId: trip.tripId,
     line: transformHAFASLine(trip.line),
     origin: !trip.origin ? undefined : transformHAFASStop(trip.origin),
     platform: {
@@ -156,6 +168,7 @@ export const transformHAFASTrip = (trip: HAFASTrip): AboardTrip => {
         ? undefined
         : trip.line.fahrtNr,
     stopovers: undefined,
+    trwlId: undefined,
   };
 };
 
@@ -163,6 +176,19 @@ export const transformTrwlLineShape = (
   shape: string
 ): AboardLineAppearance['shape'] => {
   return TRWL_LINE_SHAPE_MAPPER[shape];
+};
+
+export const transformTrwlStation = (station: Station): AboardStation => {
+  return {
+    evaId: undefined,
+    ibnr: station.ibnr,
+    latitude: station.latitude,
+    longitude: station.longitude,
+    name: station.name,
+    rilId: station.rilIdentifier ?? undefined,
+    servesMethod: undefined,
+    trwlId: station.id,
+  };
 };
 
 export const transformTrwlStatus = (status: Status): AboardStatus => {
@@ -239,5 +265,33 @@ export const transformTrwlStop = (stop: Stop): AboardStopover => {
       trwlId: stop.id,
     },
     status: stop.cancelled ? 'cancelled' : 'scheduled',
+  };
+};
+
+export const transformTrwlTrip = (trip: Trip): AboardTrip => {
+  return {
+    departure: undefined,
+    departureStation: undefined,
+    designation: trip.stopovers.at(-1)?.name ?? '',
+    destination: transformTrwlStation(trip.destination),
+    hafasId: undefined,
+    line: {
+      appearance: {
+        lineName: trip.lineName,
+        productName: '',
+      },
+      id: trip.number,
+      method: transformHAFASProductType(trip.category),
+      name: trip.lineName,
+      operator: {
+        id: '',
+        name: '',
+      },
+    },
+    origin: transformTrwlStation(trip.origin),
+    platform: undefined,
+    runningNumber: trip.journeyNumber?.toString(),
+    stopovers: trip.stopovers.map(transformTrwlStop),
+    trwlId: trip.id,
   };
 };

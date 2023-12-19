@@ -78,7 +78,7 @@ const CheckIn = () => {
           ibnr: true,
           lineName: trip!.line.name,
           start: trip?.departureStation.ibnr!,
-          tripId: trip!.id,
+          tripId: trip!.hafasId,
           visibility: visibility,
         },
         session
