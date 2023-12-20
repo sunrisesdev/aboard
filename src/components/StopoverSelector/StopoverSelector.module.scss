@@ -18,17 +18,17 @@
     width: 2px;
   }
 
-  li:last-of-type .stop::before {
+  li:last-of-type .stopover::before {
     height: calc(100% - 1.25rem);
     height: 1.5rem;
   }
 
-  li:last-of-type .stop[disabled] .partial {
+  li:last-of-type .stopover[aria-disabled="true"] .partial {
     height: 50%;
   }
 }
 
-.stop {
+.stopover {
   appearance: none;
   align-items: center;
   background: none;
@@ -81,7 +81,7 @@
     width: 2px;
   }
 
-  &:disabled, &[disabled] {
+  &[aria-disabled="true"] {
     background-color: #FFF;
     isolation: isolate;
     pointer-events: none;

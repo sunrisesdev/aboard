@@ -1,9 +1,11 @@
-import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
-import { Station, Status, Stop, Trip } from '@/traewelling-sdk/types';
+import {
+  AboardStation,
+  AboardStatus,
+  AboardStopover,
+  AboardTrip,
+} from '@/types/aboard';
 
 type CheckInStatus = 'draft' | 'ready' | 'loading' | 'completed';
-
-type StationIdentity = Pick<Station, 'ibnr' | 'name' | 'rilIdentifier'>;
 
 export type CheckInContextValue = {
   // currentStatus: Status | null | undefined;
@@ -35,20 +37,13 @@ export type CheckInContextValue = {
 
 export type CheckInState = {
   departureTime: string | undefined;
-  destination: Stop | undefined;
+  destination: AboardStopover | undefined;
   hafasId: string | undefined;
   message: string;
-  origin: StationIdentity | undefined;
+  origin: AboardStation | undefined;
   status: CheckInStatus;
-  travelType: number;
-  trip: Trip | undefined;
-  tripFinderArgs:
-    | {
-        id: string;
-        lineName: string;
-        start: number;
-      }
-    | undefined;
+  travelReason: number;
+  trip: AboardTrip | undefined;
   visibility: number;
 };
 
@@ -63,8 +58,8 @@ type ConfirmCheckInAction = {
 type JoinCheckInAction = {
   type: 'join_check_in';
 
-  status: Status;
-  trip?: Trip;
+  status: AboardStatus;
+  trip?: AboardTrip;
 };
 
 type PerformCheckInAction = {
@@ -98,19 +93,19 @@ type SelectDepartureTimeAction = {
 type SelectDestinationAction = {
   type: 'select_destination';
 
-  destination: Stop;
+  destination: AboardStopover;
 };
 
 type SelectOriginAction = {
   type: 'select_origin';
 
-  origin: StationIdentity;
+  origin: AboardStation;
 };
 
 type SelectTripAction = {
   type: 'select_trip';
 
-  trip: HAFASTrip;
+  trip: AboardTrip;
 };
 
 export type CheckInAction =

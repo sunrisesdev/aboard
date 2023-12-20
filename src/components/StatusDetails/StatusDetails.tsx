@@ -101,7 +101,8 @@ const StatusDetails = ({
   const { content, startOrResume } = useJoinCheckIn();
 
   const handleJoinClick = () => {
-    // startOrResume(status, trip);
+    startOrResume(status, trip);
+
     // if (trip) {
     //   const stops: { area?: string; station: string }[] = [];
     //   const tripParts = trip.stopovers.map((stop) =>

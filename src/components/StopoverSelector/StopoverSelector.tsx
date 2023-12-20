@@ -1,31 +1,24 @@
-import { figtree, inter } from '@/styles/fonts';
+import { inter } from '@/styles/fonts';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
 import { TbRouteOff } from 'react-icons/tb';
 import Shimmer from '../Shimmer/Shimmer';
 import { Time } from '../Time/Time';
-import styles from './StopSelector.module.scss';
-import { StopProps, StopSelectorProps } from './types';
+import styles from './StopoverSelector.module.scss';
+import { StopoverProps, StopoverSelectorProps } from './types';
 
-export const StopSelector = ({ onSelect, stops }: StopSelectorProps) => {
+export const StopoverSelector = ({
+  onSelect,
+  stopovers,
+}: StopoverSelectorProps) => {
   return (
     <ul
       className={styles.base}
-      style={{ ['--stop-count' as any]: stops.length }}
+      style={{ ['--stop-count' as any]: stopovers.length }}
     >
-      {stops.map((stop, index) => (
+      {stopovers.map((stopover, index) => (
         <li key={index}>
-          <Stop
-            arrivalAt={stop.arrival ?? stop.departure}
-            isCancelled={stop.cancelled}
-            isDelayed={
-              stop.isArrivalDelayed ||
-              (!stop.arrival && stop.isDepartureDelayed)
-            }
-            name={stop.name}
-            onClick={() => onSelect(stop)}
-            plannedArrivalAt={stop.arrivalPlanned ?? stop.departurePlanned}
-          />
+          <Stopover onClick={() => onSelect(stopover)} stopover={stopover} />
         </li>
       ))}
     </ul>
@@ -36,7 +29,7 @@ const StopSkeleton = () => {
   const width = Math.random() * (85 - 50) + 50;
 
   return (
-    <button className={clsx(styles.stop, styles.isSkeleton)}>
+    <button className={clsx(styles.stopover, styles.isSkeleton)}>
       <div className={styles.name}>
         <Shimmer width={`${width}%`} />
       </div>
@@ -48,21 +41,20 @@ const StopSkeleton = () => {
   );
 };
 
-const Stop = ({
-  arrivalAt,
-  isCancelled,
-  isDelayed,
-  name,
-  onClick,
-  plannedArrivalAt,
-}: StopProps) => {
+const Stopover = ({ onClick, stopover }: StopoverProps) => {
+  const isCancelled = stopover.status === 'cancelled';
+
   const schedule = parseSchedule({
-    actual: arrivalAt,
-    planned: plannedArrivalAt!,
+    actual: stopover.arrival.actual ?? stopover.departure.actual,
+    planned: stopover.arrival.planned ?? stopover.departure.planned!,
   });
 
   return (
-    <button className={styles.stop} disabled={isCancelled} onClick={onClick}>
+    <button
+      aria-disabled={isCancelled}
+      className={styles.stopover}
+      onClick={onClick}
+    >
       {isCancelled && (
         <svg
           className={styles.partial}
@@ -85,12 +77,7 @@ const Stop = ({
       )}
 
       <div className={styles.name}>
-        {name.includes('###') && (
-          <span className={clsx(figtree.className, styles.area)}>
-            {name.split('###')[1]}
-          </span>
-        )}
-        <span>{name.split('###').at(0)}</span>
+        <span>{stopover.station.name}</span>
       </div>
 
       {!isCancelled ? (

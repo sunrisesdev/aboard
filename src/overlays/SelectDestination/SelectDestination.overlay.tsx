@@ -1,13 +1,12 @@
-import LineIndicator from '@/components/LineIndicator/LineIndicator';
+import { NewLineIndicator } from '@/components/NewLineIndicator/NewLineIndicator';
 import { Overlay } from '@/components/Overlay/Overlay';
 import Route from '@/components/Route/Route';
-import { StopSelector } from '@/components/StopSelector/StopSelector';
+import { StopoverSelector } from '@/components/StopoverSelector/StopoverSelector';
 import ThemeProvider from '@/components/ThemeProvider/ThemeProvider';
 import { Time } from '@/components/Time/Time';
-import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import { useCheckIn } from '@/hooks/useCheckIn/useCheckIn';
 import { radioCanada } from '@/styles/fonts';
-import { Stop } from '@/traewelling-sdk/types';
+import { AboardStopover } from '@/types/aboard';
 import { parseSchedule } from '@/utils/parseSchedule';
 import styles from './SelectDestination.module.scss';
 import { SelectDestinationOverlayProps } from './types';
@@ -18,21 +17,19 @@ export const SelectDestinationOverlay = ({
 }: SelectDestinationOverlayProps) => {
   const { selectDestination, state } = useCheckIn();
 
-  const departureStop = state.trip?.stopovers.find(
-    (stop) => stop.evaIdentifier === state.origin?.ibnr
+  const departureStop = state.trip?.stopovers?.find(
+    (stop) =>
+      stop.station.trwlId === state.origin?.trwlId &&
+      new Date(stop.departure.planned!).toISOString() ===
+        new Date(state.departureTime!).toISOString()
   );
 
   const departureSchedule = parseSchedule({
-    actual: departureStop?.departureReal,
-    planned: departureStop?.departurePlanned ?? '',
+    actual: departureStop?.departure.actual,
+    planned: departureStop?.departure.planned ?? '',
   });
 
-  const theme = getLineTheme(
-    state.trip?.number ?? '',
-    state.trip?.category ?? 'regional'
-  );
-
-  const handleDestinationSelected = (destination: Stop) => {
+  const handleDestinationSelected = (destination: AboardStopover) => {
     selectDestination({ destination });
     onComplete();
   };
@@ -42,23 +39,16 @@ export const SelectDestinationOverlay = ({
       {...overlayProps}
       className={radioCanada.className}
       style={{
-        backgroundColor: `${theme.accent}`,
+        backgroundColor: `${state.trip?.line.appearance.accentColor}`,
       }}
     >
-      <ThemeProvider theme={theme}>
+      <ThemeProvider appearance={state.trip?.line.appearance}>
         <header className={styles.header}>
           {state.trip && (
             <div className={styles.trip}>
-              <LineIndicator
-                isInverted
-                lineId={state.trip.number}
-                lineName={state.trip.lineName}
-                product={state.trip.category}
-              />
+              <NewLineIndicator line={state.trip.line} />
 
-              <span className={styles.direction}>
-                {state.trip.destination.name}
-              </span>
+              <span className={styles.direction}>{state.trip.designation}</span>
             </div>
           )}
 
@@ -83,10 +73,10 @@ export const SelectDestinationOverlay = ({
         </header>
 
         <Overlay.ScrollArea>
-          <StopSelector
+          <StopoverSelector
             onSelect={handleDestinationSelected}
-            stops={
-              state.trip?.stopovers.slice(
+            stopovers={
+              state.trip?.stopovers?.slice(
                 state.trip.stopovers.indexOf(departureStop!) + 1
               ) ?? []
             }

@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import Sheet from 'react-modal-sheet';
 import { PRODUCT_ICONS } from '../CheckIn/consts';
 import LineIndicator from '../LineIndicator/LineIndicator';
-import { StopSelector } from '../StopSelector/StopSelector';
+import { StopoverSelector } from '../StopoverSelector/StopoverSelector';
 import styles from './DestinationContent.module.scss';
 import { DestinationContentProps } from './types';
 
@@ -92,7 +92,10 @@ export const DestinationContent = ({
             overflowY: disableScroll ? 'hidden' : 'unset',
           }}
         >
-          <StopSelector onSelect={handleSelect} stops={availableStops ?? []} />
+          <StopoverSelector
+            onSelect={handleSelect}
+            stopovers={availableStops ?? []}
+          />
         </Sheet.Scroller>
       </div>
     </>

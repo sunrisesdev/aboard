@@ -8,7 +8,7 @@ import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useDepartures } from '@/hooks/useDepartures/useDepartures';
 import { radioCanada } from '@/styles/fonts';
 import { TransportType } from '@/traewelling-sdk/types';
-import { AboardMethod, AboardTrip } from '@/types/aboard';
+import { AboardMethod, AboardStation, AboardTrip } from '@/types/aboard';
 import clsx from 'clsx';
 import { useContext, useEffect, useRef, useState } from 'react';
 import {
@@ -28,15 +28,15 @@ const getServedMethods = (trips: AboardTrip[]): AboardMethod[] => {
   );
   const methodSet = new Set<AboardMethod>();
 
-  console.log(departureStations);
+  departureStations
+    .filter((station): station is AboardStation => !!station)
+    .forEach(({ servesMethod }) => {
+      if (!servesMethod) return;
 
-  departureStations.forEach(({ servesMethod }) => {
-    if (!servesMethod) return;
-
-    Object.entries(servesMethod).forEach(
-      ([method, value]) => value && methodSet.add(method as AboardMethod)
-    );
-  });
+      Object.entries(servesMethod).forEach(
+        ([method, value]) => value && methodSet.add(method as AboardMethod)
+      );
+    });
 
   methodSet.delete('taxi');
 
