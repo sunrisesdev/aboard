@@ -176,7 +176,7 @@ const StatusDetails = ({
     // }
   };
 
-  const isJoinable = !!trip;
+  const isJoinable = !!user && !!trip && status.userId !== user.id;
 
   return (
     <ThemeProvider appearance={status.journey.line.appearance}>
