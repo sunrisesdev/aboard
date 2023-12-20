@@ -18,7 +18,7 @@ export const TripSelector = ({
     <ul className={styles.base}>
       {trips.map((trip) => (
         <li
-          key={`${trip.hafasId}@${trip.departureStation.ibnr}@${trip.departure?.planned}`}
+          key={`${trip.hafasId}@${trip.departureStation?.ibnr}@${trip.departure?.planned}`}
         >
           <Trip
             onClick={() => onSelect(trip)}
@@ -33,7 +33,7 @@ export const TripSelector = ({
 
 const Trip = ({ onClick, requestedStationName, trip }: TripProps) => {
   const departsFromDeviatingStation =
-    requestedStationName !== trip.departureStation.name;
+    requestedStationName !== trip.departureStation?.name;
 
   const isCancelled = !trip.departure?.actual;
 
@@ -81,7 +81,7 @@ const Trip = ({ onClick, requestedStationName, trip }: TripProps) => {
 
             {departsFromDeviatingStation && (
               <div className={styles.deviationNote}>
-                ab {trip.departureStation.name}
+                ab {trip.departureStation?.name}
               </div>
             )}
           </div>
