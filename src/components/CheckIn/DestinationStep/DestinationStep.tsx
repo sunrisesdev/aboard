@@ -21,10 +21,10 @@ import { StopProps } from './types';
 const DestinationStep = () => {
   const { goBack, origin, setDestination, trip } = useContext(CheckInContext);
   const { isLoading, stops } = useStops(
-    trip?.id ?? '',
+    trip?.hafasId ?? '',
     trip?.line.name ?? '',
     trip?.departure?.planned ?? '',
-    trip?.departureStation.evaId?.toString() ?? ''
+    trip?.departureStation?.evaId?.toString() ?? ''
   );
 
   const schedule = parseSchedule({
@@ -68,7 +68,7 @@ const DestinationStep = () => {
 
           <div className={styles.direction}>{trip?.designation}</div>
 
-          {trip?.departureStation.name !== origin?.name && (
+          {trip?.departureStation?.name !== origin?.name && (
             <div className={styles.deviationNotice}>
               <MdMergeType size={18} />
               <span>Abweichende Abfahrt von einer Station in der Nähe</span>
@@ -77,7 +77,7 @@ const DestinationStep = () => {
 
           <div className={styles.origin}>
             <div className={styles.station}>
-              <div>{trip?.departureStation.name}</div>
+              <div>{trip?.departureStation?.name}</div>
               <span className={styles.time}>
                 ab {schedule.planned}
                 {!schedule.isOnTime && (

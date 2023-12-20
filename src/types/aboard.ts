@@ -95,15 +95,16 @@ export type AboardTravelReason = 'business' | 'commute' | 'private';
 
 export type AboardTrip = {
   departure?: Fluctuating<string | undefined>;
-  departureStation: AboardStation;
+  departureStation?: AboardStation;
   designation: string; // TODO: find better name; = this is the line destination string
   destination: AboardStation;
-  id: string; // HAFAS id
+  hafasId?: string; // HAFAS id
   line: AboardLine;
   origin?: AboardStation;
   platform?: Fluctuating<string | undefined>;
   runningNumber?: string;
   stopovers?: AboardStopover[];
+  trwlId?: number;
 };
 
 export type AboardVisibility =

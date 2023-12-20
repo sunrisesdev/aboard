@@ -1,4 +1,5 @@
 /* eslint-disable indent */
+import { transformAboardTravelReason } from '@/traewelling-sdk/transformers';
 import { CheckInAction, CheckInState } from './types';
 
 export const initialCheckInState = (): CheckInState => ({
@@ -8,9 +9,8 @@ export const initialCheckInState = (): CheckInState => ({
   message: '',
   origin: undefined,
   status: 'draft',
-  travelType: 0,
+  travelReason: 0,
   trip: undefined,
-  tripFinderArgs: undefined,
   visibility: 0,
 });
 
@@ -24,20 +24,17 @@ export const checkInReducer = (
         ...state,
         message: action.message,
         status: 'ready',
-        travelType: action.travelType,
+        travelReason: action.travelType,
         visibility: action.visibility,
       };
     case 'join_check_in':
       return {
         ...initialCheckInState(),
-        hafasId: action.status.train.hafasId,
-        message: action.status.body,
-        origin: {
-          ibnr: action.status.train.origin.evaIdentifier,
-          name: action.status.train.origin.name,
-          rilIdentifier: action.status.train.origin.rilIdentifier,
-        },
-        travelType: action.status.business,
+        departureTime: action.status.journey.origin.departure.planned,
+        hafasId: action.status.journey.hafasTripId,
+        message: action.status.message,
+        origin: action.status.journey.origin.station,
+        travelReason: transformAboardTravelReason(action.status.travelReason),
         trip: action.trip,
       };
     case 'perform_check_in':
@@ -62,9 +59,8 @@ export const checkInReducer = (
       return {
         ...state,
         destination: undefined,
-        hafasId: action.trip.tripId,
-        // TODO: Set trip
-        tripFinderArgs: undefined,
+        hafasId: action.trip.hafasId,
+        trip: action.trip,
       };
   }
 };

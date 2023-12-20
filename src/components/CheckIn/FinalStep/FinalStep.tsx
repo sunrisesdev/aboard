@@ -133,7 +133,7 @@ const FinalStep = () => {
 
           <div className={styles.direction}>{trip?.designation}</div>
 
-          {trip?.departureStation.name !== origin?.name && (
+          {trip?.departureStation?.name !== origin?.name && (
             <div className={styles.deviationNotice}>
               <MdMergeType size={18} />
               <span>Abweichende Abfahrt von einer Station in der Nähe</span>
@@ -142,7 +142,7 @@ const FinalStep = () => {
 
           <div className={styles.origin}>
             <div className={styles.station}>
-              <div>{trip?.departureStation.name}</div>
+              <div>{trip?.departureStation?.name}</div>
               <span className={styles.time}>
                 ab {departureSchedule.planned}
                 {!departureSchedule.isOnTime && (
