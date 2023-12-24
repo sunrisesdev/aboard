@@ -13,9 +13,9 @@ import LockBodyScroll from '../LockBodyScroll/LockBodyScroll';
 import ThemeProvider from '../ThemeProvider/ThemeProvider';
 import { CheckInContext } from './CheckIn.context';
 import styles from './CheckIn.module.scss';
-import CurrentStatus from './CurrentStatus/CurrentStatus';
 import DestinationStep from './DestinationStep/DestinationStep';
 import FinalStep from './FinalStep/FinalStep';
+import { NewCurrentStatus } from './NewCurrentStatus/NewCurrentStatus';
 import OriginStep from './OriginStep/OriginStep';
 import Panel from './Panel/Panel';
 import TripStep from './TripStep/TripStep';
@@ -173,7 +173,7 @@ const CheckIn = () => {
 
             {!isOpen && !!status && (
               <Link className={styles.statusLink} href={`/status/${status.id}`}>
-                <CurrentStatus />
+                <NewCurrentStatus />
               </Link>
             )}
           </Panel>
