@@ -10,6 +10,7 @@ import { inter } from '@/styles/fonts';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
 import colorConvert from 'color-convert';
+import dbCleanStationName from 'db-clean-station-name';
 import { useContext } from 'react';
 import { MdArrowBack, MdMergeType } from 'react-icons/md';
 import { TbRouteOff } from 'react-icons/tb';
@@ -172,9 +173,11 @@ const Stop = ({
     planned: plannedArrivalAt!,
   });
 
+  const cleanName = dbCleanStationName(name).trim();
+
   return (
     <button className={styles.stop} disabled={isCancelled} onClick={onClick}>
-      <div className={styles.name}>{name}</div>
+      <div className={styles.name}>{cleanName || name}</div>
 
       {!isCancelled ? (
         <div className={styles.time}>

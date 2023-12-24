@@ -81,12 +81,14 @@ const StatusDetails = ({
       : `${Math.floor(duration / 60)} Std. ${duration % 60} Min.`;
 
   const arrivalSchedule = parseSchedule({
-    actual: status.journey.destination.arrival.actual,
+    actual:
+      status.journey.manualArrival ?? status.journey.destination.arrival.actual,
     planned: status.journey.destination.arrival.planned!,
   });
 
   const departureSchedule = parseSchedule({
-    actual: status.journey.origin.departure.actual,
+    actual:
+      status.journey.manualDeparture ?? status.journey.origin.departure.actual,
     planned: status.journey.origin.departure.planned!,
   });
 

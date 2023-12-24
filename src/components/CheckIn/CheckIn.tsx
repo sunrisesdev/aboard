@@ -1,6 +1,5 @@
 'use client';
 
-import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import { useCurrentStatus } from '@/hooks/useCurrentStatus/useCurrentStatus';
 import useUmami from '@/hooks/useUmami/useUmami';
 import { CheckinInput } from '@/traewelling-sdk/functions/trains';
@@ -161,14 +160,10 @@ const CheckIn = () => {
     visibility,
   };
 
-  const theme = !status
-    ? undefined
-    : getLineTheme(status.train.number, status.train.category);
-
   return (
     <CheckInContext.Provider value={contextValue}>
       <div className={styles.base}>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider appearance={status?.journey.line.appearance}>
           <Panel>
             {step === 'origin' && <OriginStep />}
             {step === 'trip' && <TripStep />}

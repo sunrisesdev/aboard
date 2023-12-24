@@ -1,4 +1,4 @@
-import LineIndicator from '@/components/LineIndicator/LineIndicator';
+import { NewLineIndicator } from '@/components/NewLineIndicator/NewLineIndicator';
 import { parseSchedule } from '@/utils/parseSchedule';
 import { useContext } from 'react';
 import { MdOutlineToken } from 'react-icons/md';
@@ -14,20 +14,24 @@ const CurrentStatus = () => {
   }
 
   const arrivalSchedule = parseSchedule({
-    actual: currentStatus.train.destination.arrival,
-    planned: currentStatus.train.destination.arrivalPlanned!,
+    actual:
+      currentStatus.journey.manualArrival ??
+      currentStatus.journey.destination.arrival.actual,
+    planned: currentStatus.journey.destination.arrival.planned!,
   });
 
   const departureSchedule = parseSchedule({
-    actual: currentStatus.train.origin.departure,
-    planned: currentStatus.train.origin.departurePlanned!,
+    actual:
+      currentStatus.journey.manualDeparture ??
+      currentStatus.journey.origin.departure.actual,
+    planned: currentStatus.journey.origin.departure.planned!,
   });
 
   return (
     <section className={styles.base}>
       <div className={styles.origin}>
         <div className={styles.station}>
-          <span>{currentStatus.train.origin.name}</span>
+          <span>{currentStatus.journey.origin.station.name}</span>
           <span className={styles.time}>
             ab {departureSchedule.planned}
             {!departureSchedule.isOnTime && (
@@ -40,28 +44,22 @@ const CurrentStatus = () => {
       </div>
 
       <div className={styles.meta}>
-        <LineIndicator
-          className={styles.lineIndicator}
-          isInverted
-          lineId={currentStatus.train.number}
-          lineName={currentStatus.train.lineName}
-          product={currentStatus.train.category}
-        />
+        <NewLineIndicator line={currentStatus.journey.line} />
 
         <div className={styles.metaText}>
           <TbRoute size={18} />
-          <span>{Math.ceil(currentStatus.train.distance / 1000)} km</span>
+          <span>{Math.ceil(currentStatus.journey.distance / 1000)} km</span>
         </div>
 
         <div className={styles.metaText}>
           <MdOutlineToken size={18} />
-          <span>{currentStatus.train.points}</span>
+          <span>{currentStatus.journey.pointsAwarded}</span>
         </div>
       </div>
 
       <div className={styles.destination}>
         <div className={styles.station}>
-          <span>{currentStatus.train.destination.name}</span>
+          <span>{currentStatus.journey.destination.station.name}</span>
           <span className={styles.time}>
             an {arrivalSchedule.planned}
             {!arrivalSchedule.isOnTime && (

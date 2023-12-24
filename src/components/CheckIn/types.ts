@@ -1,9 +1,9 @@
-import { Station, Status, Stop } from '@/traewelling-sdk/types';
-import { AboardTrip } from '@/types/aboard';
+import { Station, Stop } from '@/traewelling-sdk/types';
+import { AboardStatus, AboardTrip } from '@/types/aboard';
 
 export type CheckInContextValue = {
   checkIn: () => void;
-  currentStatus: Status | null | undefined;
+  currentStatus: AboardStatus | null | undefined;
   departureTime: string | undefined;
   destination: Stop | undefined;
   error: string | undefined; // TODO: Temporary solution
