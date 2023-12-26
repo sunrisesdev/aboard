@@ -204,7 +204,12 @@ export const transformTrwlStatus = (status: Status): AboardStatus => {
       hafasTripId: status.train.hafasId,
       line: {
         appearance: {
-          lineName: status.train.lineName,
+          lineName: status.train.lineName
+            .replaceAll(
+              new RegExp(`^(${HIDDEN_PRODUCT_NAMES.join('|')})(.)`, 'gi'),
+              '$2'
+            )
+            .trim(),
           productName: '',
         },
         id: status.train.number,
