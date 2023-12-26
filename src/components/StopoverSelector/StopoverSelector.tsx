@@ -1,6 +1,7 @@
 import { inter } from '@/styles/fonts';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
+import dbCleanStationName from 'db-clean-station-name';
 import { TbRouteOff } from 'react-icons/tb';
 import Shimmer from '../Shimmer/Shimmer';
 import { Time } from '../Time/Time';
@@ -42,6 +43,8 @@ const StopSkeleton = () => {
 };
 
 const Stopover = ({ onClick, stopover }: StopoverProps) => {
+  const cleanName = dbCleanStationName(stopover.station.name).trim();
+
   const isCancelled = stopover.status === 'cancelled';
 
   const schedule = parseSchedule({
@@ -77,7 +80,7 @@ const Stopover = ({ onClick, stopover }: StopoverProps) => {
       )}
 
       <div className={styles.name}>
-        <span>{stopover.station.name}</span>
+        <span>{cleanName || stopover.station.name}</span>
       </div>
 
       {!isCancelled ? (

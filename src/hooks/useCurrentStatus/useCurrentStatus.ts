@@ -1,8 +1,8 @@
-import { Status } from '@/traewelling-sdk/types';
+import { AboardCurrentStatusResponse } from '@/app/api/statuses/current/route';
 import useSWR from 'swr';
 
-const fetcher = async (): Promise<Status | null> => {
-  const response = await fetch('/traewelling/statuses/current');
+const fetcher = async (): Promise<AboardCurrentStatusResponse> => {
+  const response = await fetch('/api/statuses/current');
 
   if (!response.ok) {
     return null;
@@ -12,9 +12,8 @@ const fetcher = async (): Promise<Status | null> => {
 };
 
 export const useCurrentStatus = () => {
-  const { data, isLoading, mutate } = useSWR(
-    ['/traewelling/statuses/current'],
-    () => fetcher()
+  const { data, isLoading, mutate } = useSWR(['/api/statuses/current'], () =>
+    fetcher()
   );
 
   return {

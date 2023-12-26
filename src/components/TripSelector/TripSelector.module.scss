@@ -86,7 +86,7 @@
 
   .decoratedBorder {
     align-self: stretch;
-    background-color: rgba(var(--accent-rgb), 0.6);
+    background-color: rgba(var(--accent-rgb, 221, 219, 221), 0.6);
     border-radius: 0.375rem 0 0 0.375rem;
     flex-shrink: 0;
     width: 0.375rem;

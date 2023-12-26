@@ -22,7 +22,8 @@ export const NewLineIndicator = ({
     !noOutline &&
     (line.appearance.accentColor === line.appearance.border ||
       (!line.appearance.border &&
-        line.appearance.accentColor === line.appearance.background));
+        line.appearance.accentColor === line.appearance.background) ||
+      line.appearance.background?.startsWith('linear-gradient'));
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 

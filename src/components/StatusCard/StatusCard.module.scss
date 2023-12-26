@@ -87,7 +87,7 @@
   }
 
   .station {
-    color: var(--contrast);
+    color: var(--safe-accent, var(--contrast));
     font-size: 1rem;
     font-weight: 500;
     padding-inline: 2rem 1rem;
@@ -183,6 +183,7 @@
 
 .time {
   color: rgba(var(--contrast-rgb), 0.85);
+  color: var(--safe-accent, var(--contrast));
   font-size: 0.875rem;
   font-weight: 600;
   margin-left: auto;
@@ -215,7 +216,7 @@
     background-color: var(--contrast, var(--sky-11));
     border-radius: 50%;
     bottom: -0.25rem;
-    color: white;
+    color: var(--safe-contrast, #FFF);
     display: flex;
     font-size: 0.635rem;
     font-weight: 600;

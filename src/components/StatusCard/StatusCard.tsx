@@ -52,6 +52,15 @@ const StatusCard = ({ status }: StatusCardProps) => {
     setLikes(hasLiked ? likes - 1 : likes + 1);
   };
 
+  const [accentH, accentS, accentL] = colorConvert.hex.hsl(
+    status.journey.line.appearance.accentColor!
+  );
+  const safeAccentColor = `#${colorConvert.hsl.hex([
+    accentH,
+    accentS,
+    Math.min(accentL, 25),
+  ])}`;
+
   return (
     <ThemeProvider
       color="#FFFFFF"
@@ -59,7 +68,13 @@ const StatusCard = ({ status }: StatusCardProps) => {
       contrast={status.journey.line.appearance.accentColor}
       contrastRGB={accentRGB}
     >
-      <div>
+      <div
+        style={{
+          ['--safe-accent' as any]: safeAccentColor,
+          ['--safe-contrast' as any]:
+            status.journey.line.appearance.contrastColor,
+        }}
+      >
         <article className={styles.base}>
           <header className={styles.header}>
             <Image

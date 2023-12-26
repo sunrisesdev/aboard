@@ -1,6 +1,5 @@
 'use client';
 
-import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import { useCurrentStatus } from '@/hooks/useCurrentStatus/useCurrentStatus';
 import useUmami from '@/hooks/useUmami/useUmami';
 import { CheckinInput } from '@/traewelling-sdk/functions/trains';
@@ -14,9 +13,9 @@ import LockBodyScroll from '../LockBodyScroll/LockBodyScroll';
 import ThemeProvider from '../ThemeProvider/ThemeProvider';
 import { CheckInContext } from './CheckIn.context';
 import styles from './CheckIn.module.scss';
-import CurrentStatus from './CurrentStatus/CurrentStatus';
 import DestinationStep from './DestinationStep/DestinationStep';
 import FinalStep from './FinalStep/FinalStep';
+import { NewCurrentStatus } from './NewCurrentStatus/NewCurrentStatus';
 import OriginStep from './OriginStep/OriginStep';
 import Panel from './Panel/Panel';
 import TripStep from './TripStep/TripStep';
@@ -161,14 +160,10 @@ const CheckIn = () => {
     visibility,
   };
 
-  const theme = !status
-    ? undefined
-    : getLineTheme(status.train.number, status.train.category);
-
   return (
     <CheckInContext.Provider value={contextValue}>
       <div className={styles.base}>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider appearance={status?.journey.line.appearance}>
           <Panel>
             {step === 'origin' && <OriginStep />}
             {step === 'trip' && <TripStep />}
@@ -178,7 +173,7 @@ const CheckIn = () => {
 
             {!isOpen && !!status && (
               <Link className={styles.statusLink} href={`/status/${status.id}`}>
-                <CurrentStatus />
+                <NewCurrentStatus />
               </Link>
             )}
           </Panel>

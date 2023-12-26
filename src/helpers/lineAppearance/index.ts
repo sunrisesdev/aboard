@@ -51,9 +51,14 @@ export const createLineAppearanceDataset = async () => {
         return Object.assign(line.appearance, fromDataset.appearance);
       }
 
+      const overrides = LINE_APPEARANCE_OVERRIDES.filter(([pattern]) =>
+        pattern.test(line.id)
+      ).map(([, override]) => override);
+
       return Object.assign(
         line.appearance,
-        FALLBACK_METHOD_APPEARANCES[line.method]
+        FALLBACK_METHOD_APPEARANCES[line.method],
+        ...overrides
       );
     },
   };
