@@ -80,5 +80,32 @@ export const LINE_APPEARANCE_OVERRIDES: [
   RegExp,
   Partial<AboardLineAppearance>,
 ][] = [
+  // [
+  //   /^5-hvv[a-z]{3}-\d+$/, // All bus lines operated in Hamburg
+  //   { accentColor: '#E2001A', background: '#E2001A', shape: 'hexagon' },
+  // ],
+  // [
+  //   /^6-hvvhad-\d+$/, // All ferries operated by HADAG in Hamburg
+  //   {
+  //     accentColor: '#00B7E1',
+  //     background: '#00B7E1',
+  //     color: '#FFFFFF',
+  //     contrastColor: '#000000',
+  //   },
+  // ],
+  // [
+  //   /^7-swm001-7$/, // U7 operated by SWM in München
+  //   {
+  //     accentColor: '#C3022D',
+  //     background: 'linear-gradient(to bottom right, #51832B 50%, #C3022D 50%)',
+  //   },
+  // ],
+  // [
+  //   /^7-swm001-8$/, // U8 operated by SWM in München
+  //   {
+  //     accentColor: '#C3022D',
+  //     background: 'linear-gradient(to bottom right, #C3022D 50%, #ED6720 50%)',
+  //   },
+  // ],
   [/^8-webuet-\d{1,2}$/, { shape: 'square' }], // All tram lines operated by ÜSTRA in Hannover
 ];
