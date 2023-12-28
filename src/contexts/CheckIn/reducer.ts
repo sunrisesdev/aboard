@@ -58,6 +58,7 @@ export const checkInReducer = (
     case 'select_trip':
       return {
         ...state,
+        departureTime: action.trip.departure?.planned,
         destination: undefined,
         hafasId: action.trip.hafasId,
         trip: action.trip,
