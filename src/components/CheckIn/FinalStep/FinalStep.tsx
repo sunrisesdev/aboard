@@ -1,11 +1,11 @@
 'use client';
 
-import LineIndicator from '@/components/LineIndicator/LineIndicator';
+import { NewLineIndicator } from '@/components/NewLineIndicator/NewLineIndicator';
 import ScrollArea from '@/components/ScrollArea/ScrollArea';
 import ThemeProvider from '@/components/ThemeProvider/ThemeProvider';
-import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { parseSchedule } from '@/utils/parseSchedule';
+import colorConvert from 'color-convert';
 import { useContext, useId } from 'react';
 import {
   MdArrowBack,
@@ -22,7 +22,7 @@ import {
 } from 'react-icons/md';
 import { TbChevronDown } from 'react-icons/tb';
 import { CheckInContext } from '../CheckIn.context';
-import { PRODUCT_ICONS } from '../consts';
+import { METHOD_ICONS } from '../consts';
 import styles from './FinalStep.module.scss';
 
 const TRAVEL_TYPES = [
@@ -32,7 +32,6 @@ const TRAVEL_TYPES = [
   },
   {
     icon: <MdWorkOutline size={18} />,
-
     name: 'Ich reise beruflich',
   },
   {
@@ -86,20 +85,29 @@ const FinalStep = () => {
   });
 
   const departureSchedule = parseSchedule({
-    actual: trip?.when,
-    delay: trip?.delay,
-    planned: trip?.plannedWhen!,
+    actual: trip?.departure?.actual,
+    planned: trip?.departure?.planned!,
   });
-
-  const theme = getLineTheme(trip!.line.id, trip!.line.product);
 
   const travelTypeId = useId();
   const visibilityId = useId();
 
-  useAppTheme(theme.accent);
+  useAppTheme(trip?.line.appearance.accentColor);
+
+  const accentRGB = colorConvert.hex
+    .rgb(trip!.line.appearance.accentColor!)
+    .join(', ');
+  const contrastRGB = colorConvert.hex
+    .rgb(trip!.line.appearance.contrastColor!)
+    .join(', ');
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider
+      color={trip!.line.appearance.accentColor}
+      colorRGB={accentRGB}
+      contrast={trip!.line.appearance.contrastColor}
+      contrastRGB={contrastRGB}
+    >
       <main className={styles.base}>
         <header className={styles.header}>
           <div className={styles.buttons}>
@@ -109,15 +117,11 @@ const FinalStep = () => {
               </div>
               {trip && (
                 <div className={styles.lineName}>
-                  {PRODUCT_ICONS[trip.line.product]({
+                  {METHOD_ICONS[trip.line.method]({
                     className: styles.productIcon,
                   })}
-                  <LineIndicator
-                    isInverted
-                    lineId={trip.line.id}
-                    lineName={trip.line.name}
-                    product={trip.line.product}
-                  />
+
+                  <NewLineIndicator line={trip.line} />
                 </div>
               )}
             </button>
@@ -127,9 +131,9 @@ const FinalStep = () => {
             </button>
           </div>
 
-          <div className={styles.direction}>{trip?.direction}</div>
+          <div className={styles.direction}>{trip?.designation}</div>
 
-          {trip?.station.name !== origin?.name && (
+          {trip?.departureStation?.name !== origin?.name && (
             <div className={styles.deviationNotice}>
               <MdMergeType size={18} />
               <span>Abweichende Abfahrt von einer Station in der Nähe</span>
@@ -138,7 +142,7 @@ const FinalStep = () => {
 
           <div className={styles.origin}>
             <div className={styles.station}>
-              <div>{trip?.station.name}</div>
+              <div>{trip?.departureStation?.name}</div>
               <span className={styles.time}>
                 ab {departureSchedule.planned}
                 {!departureSchedule.isOnTime && (

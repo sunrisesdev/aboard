@@ -1,21 +1,16 @@
 'use client';
 
-import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import useAppTheme from '@/hooks/useAppTheme/useAppTheme';
 import { useJoinCheckIn } from '@/hooks/useJoinCheckIn/useJoinCheckIn';
-import { useStops } from '@/hooks/useStops/useStops';
-import { useTrip } from '@/hooks/useTrip/useTrip';
-import { CheckinInput } from '@/traewelling-sdk/functions/trains';
-import { Stop } from '@/traewelling-sdk/types';
+import { AboardStopover } from '@/types/aboard';
 import { formatDate } from '@/utils/formatDate';
 import { formatTime } from '@/utils/formatTime';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
-import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useMemo, useState, useTransition } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   MdArrowBack,
   MdCommit,
@@ -26,144 +21,84 @@ import {
 } from 'react-icons/md';
 import { TbRoute } from 'react-icons/tb';
 import Button from '../Button/Button';
-import { PRODUCT_ICONS } from '../CheckIn/consts';
-import LineIndicator from '../LineIndicator/LineIndicator';
+import { METHOD_ICONS } from '../CheckIn/consts';
+import { NewLineIndicator } from '../NewLineIndicator/NewLineIndicator';
 import Route from '../Route/Route';
 import ThemeProvider from '../ThemeProvider/ThemeProvider';
 import styles from './StatusDetails.module.scss';
-import { NextStopCountdownProps, StatusDetailsProps } from './types';
+import { NextStopoverCountdownProps, StatusDetailsProps } from './types';
 
 const getMinutesUntil = (target: Date) => {
   return Math.ceil((target.getTime() - Date.now()) / 1000 / 60);
 };
 
-const getNextStop = (stops: Stop[]) => {
+const getNextStopover = (stopovers: AboardStopover[]) => {
   const now = Date.now();
 
-  for (const stop of stops) {
-    if (stop.cancelled) {
+  for (const stopover of stopovers) {
+    if (stopover.status === 'cancelled') {
       continue;
     }
 
-    const departure = new Date(stop.departure!).getTime();
+    const arrival = new Date(stopover.arrival.actual!).getTime();
 
-    if (now > departure) {
+    if (arrival < now) {
       continue;
     }
 
-    return stop;
+    return stopover;
   }
-};
-
-const post = async (status: CheckinInput, session?: Session | null) => {
-  const token = session?.user.accessToken;
-
-  if (!token) {
-    return;
-  }
-
-  const response = await fetch('/traewelling/stations/checkin', {
-    body: JSON.stringify(status),
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-  });
-
-  if (!response.ok) {
-    throw response;
-  }
-
-  return await response.json();
 };
 
 const StatusDetails = ({
+  destinationIndex,
+  originIndex,
   status,
-  stops: initialStops = [],
+  stopovers = [],
+  trip,
 }: StatusDetailsProps) => {
-  const [nextStop, setNextStop] = useState<Stop>();
   const { data: session } = useSession();
   const user = session?.user;
-  const { stops: allStops } = useStops(
-    status.train.hafasId,
-    status.train.lineName,
-    status.train.origin.departurePlanned ?? '',
-    status.train.origin.id.toString()
+
+  const relevantStopovers = stopovers.slice(
+    originIndex,
+    typeof destinationIndex === 'undefined' ? undefined : destinationIndex + 1
   );
 
-  const direction = (allStops ?? initialStops).at(-1)?.name;
-  const destinationAt = (allStops ?? initialStops).findIndex(
-    (stop) =>
-      stop.id === status.train.destination.id &&
-      stop.departure === status.train.destination.departure
+  const [nextStopover, setNextStopover] = useState<AboardStopover | undefined>(
+    getNextStopover(relevantStopovers)
   );
-  const stops = (allStops ?? initialStops).slice(0, destinationAt + 1);
 
-  useEffect(() => {
-    setNextStop(getNextStop(stops));
-  }, [stops]);
-
-  const theme = getLineTheme(status.train.number, status.train.category);
-  useAppTheme(theme.accent);
+  useAppTheme(status.journey.line.appearance.accentColor!);
 
   const isDestinationNext =
-    !!nextStop &&
-    nextStop.id === status.train.destination.id &&
-    nextStop.departure === status.train.destination.departure;
+    nextStopover && stopovers.indexOf(nextStopover) === destinationIndex;
 
-  const timeInMin =
-    (new Date(status.train.destination.arrival!).getTime() -
-      new Date(status.train.origin.departure!).getTime()) /
-    1000 /
-    60;
-  const duration =
-    timeInMin < 60
-      ? `${timeInMin % 60} Minute${timeInMin % 60 > 1 ? 'n' : ''}`
-      : `${Math.floor(timeInMin / 60)} Std. ${timeInMin % 60} Min.`;
+  const { duration } = status.journey;
+  const formattedDuration =
+    duration < 60
+      ? `${duration % 60} Minute${duration % 60 > 1 ? 'n' : ''}`
+      : `${Math.floor(duration / 60)} Std. ${duration % 60} Min.`;
 
   const arrivalSchedule = parseSchedule({
-    actual: status.train.destination.arrival,
-    planned: status.train.destination.arrivalPlanned!,
+    actual:
+      status.journey.manualArrival ?? status.journey.destination.arrival.actual,
+    planned: status.journey.destination.arrival.planned!,
   });
 
   const departureSchedule = parseSchedule({
-    actual: status.train.origin.departure,
-    planned: status.train.origin.departurePlanned!,
+    actual:
+      status.journey.manualDeparture ?? status.journey.origin.departure.actual,
+    planned: status.journey.origin.departure.planned!,
   });
+
+  const designation =
+    trip?.designation ??
+    stopovers.at(-1)?.station.name ??
+    status.journey.destination.station.name;
 
   const checkInDate = formatDate(new Date(status.createdAt));
   const checkedInAt = formatTime(new Date(status.createdAt));
-  const [_isPending, startTransition] = useTransition();
-  const [joined, setJoined] = useState(false);
-
-  const checkIn = async () => {
-    try {
-      await post(
-        {
-          arrival: status.train.destination.arrivalPlanned!,
-          body: status.body,
-          business: status.business,
-          departure: status.train.origin.departurePlanned!,
-          destination: status.train.destination.evaIdentifier,
-          ibnr: true,
-          lineName: status.train.lineName,
-          start: status.train.origin.evaIdentifier,
-          tripId: status.train.hafasId,
-          visibility: status.visibility,
-        },
-        session
-      );
-
-      setTimeout(() => setJoined(true), 500);
-    } catch {}
-  };
-
-  const { trip } = useTrip(
-    status.train.hafasId,
-    status.train.lineName,
-    status.train.origin.id.toString()
-  );
 
   const { content, startOrResume } = useJoinCheckIn();
 
@@ -172,30 +107,25 @@ const StatusDetails = ({
 
     // if (trip) {
     //   const stops: { area?: string; station: string }[] = [];
-
     //   const tripParts = trip.stopovers.map((stop) =>
     //     stop.name.split(',').map((part) => part.trim())
     //   );
-
     //   for (let i = 0; i < tripParts.length; i++) {
     //     const previousStop = i <= 0 ? undefined : tripParts[i - 1];
     //     const stop = tripParts[i];
     //     const nextStop =
     //       i >= tripParts.length - 1 ? undefined : tripParts[i + 1];
-
     //     const lastSegments = [
     //       (previousStop ?? ['!']).at(-1)!,
     //       stop.at(-1)!,
     //       (nextStop ?? ['!']).at(-1)!,
     //     ];
-
     //     if (lastSegments[0].length < lastSegments[1].length) {
     //       if (lastSegments[1].startsWith(lastSegments[0])) {
     //         stops.push({
     //           area: lastSegments[1],
     //           station: tripParts[i].slice(0, -1).join(', '),
     //         });
-
     //         continue;
     //       }
     //     } else {
@@ -204,18 +134,15 @@ const StatusDetails = ({
     //           area: lastSegments[0],
     //           station: tripParts[i].slice(0, -1).join(', '),
     //         });
-
     //         continue;
     //       }
     //     }
-
     //     if (lastSegments[2].length < lastSegments[1].length) {
     //       if (lastSegments[1].startsWith(lastSegments[2])) {
     //         stops.push({
     //           area: lastSegments[1],
     //           station: tripParts[i].slice(0, -1).join(', '),
     //         });
-
     //         continue;
     //       }
     //     } else {
@@ -224,29 +151,23 @@ const StatusDetails = ({
     //           area: lastSegments[2],
     //           station: tripParts[i].slice(0, -1).join(', '),
     //         });
-
     //         continue;
     //       }
     //     }
-
     //     const firstSegments = [
     //       (previousStop ?? [''])[0],
     //       stop[0],
     //       (nextStop ?? [''])[0],
     //     ];
-
     //     if (firstSegments.filter((v) => v === stop[0]).length > 1) {
     //       stops.push({
     //         area: stop[0],
     //         station: tripParts[i].slice(1).join(', '),
     //       });
-
     //       continue;
     //     }
-
     //     stops.push({ station: tripParts[i].join(', ') });
     //   }
-
     //   stops.forEach((stop, i) => {
     //     if (stop.area && stop.station) {
     //       trip.stopovers[i].name = `${stop.station}###${stop.area}`;
@@ -257,10 +178,10 @@ const StatusDetails = ({
     // }
   };
 
-  const isJoinable = !!trip;
+  const isJoinable = !!user && !!trip && status.userId !== user.id;
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider appearance={status.journey.line.appearance}>
       <main className={styles.base}>
         <header className={styles.header}>
           <nav className={styles.navigation}>
@@ -276,7 +197,7 @@ const StatusDetails = ({
                 className={clsx(
                   styles.actionButton,
                   styles.editButton,
-                  user?.id !== status.user && styles.hidden
+                  user?.id !== status.userId && styles.hidden
                 )}
               >
                 <MdEdit size={20} />
@@ -286,7 +207,7 @@ const StatusDetails = ({
                 className={clsx(
                   styles.actionButton,
                   styles.deleteButton,
-                  user?.id !== status.user && styles.hidden
+                  user?.id !== status.userId && styles.hidden
                 )}
               >
                 <MdDeleteForever size={20} />
@@ -296,19 +217,14 @@ const StatusDetails = ({
 
           <div className={styles.train}>
             <div className={styles.lineName}>
-              {PRODUCT_ICONS[status.train.category]({
+              {METHOD_ICONS[status.journey.line.method]({
                 className: styles.productIcon,
               })}
 
-              <LineIndicator
-                isInverted
-                lineId={status.train.number}
-                lineName={status.train.lineName}
-                product={status.train.category}
-              />
+              <NewLineIndicator line={status.journey.line} />
             </div>
 
-            <span>{direction}</span>
+            <span>{designation}</span>
           </div>
 
           <section className={styles.route}>
@@ -321,22 +237,22 @@ const StatusDetails = ({
                 }
               >
                 <div className={styles.station}>
-                  <span>{status.train.origin.name}</span>
+                  <span>{status.journey.origin.station.name}</span>
                   <Route.Time schedule={departureSchedule} type="departure" />
                 </div>
               </Route.Entry>
 
-              {nextStop && !isDestinationNext && (
+              {nextStopover && !isDestinationNext && (
                 <Route.Entry
                   lineSlot={<Route.Line variant="partial" />}
                   stopIndicatorVariant="pulsating"
                 >
                   <div className={clsx(styles.station, styles.upcoming)}>
-                    <span>{nextStop.name}</span>
-                    <NextStopCountdown
-                      nextStop={nextStop}
-                      setNextStop={setNextStop}
-                      stops={stops}
+                    <span>{nextStopover.station.name}</span>
+                    <NextStopoverCountdown
+                      next={nextStopover}
+                      setNext={setNextStopover}
+                      stopovers={relevantStopovers}
                     />
                   </div>
                 </Route.Entry>
@@ -344,13 +260,13 @@ const StatusDetails = ({
 
               <Route.Entry>
                 <div className={styles.station}>
-                  <span>{status.train.destination.name}</span>
+                  <span>{status.journey.destination.station.name}</span>
                   {isDestinationNext && (
                     <span className={clsx(styles.extraTime, styles.upcoming)}>
-                      <NextStopCountdown
-                        nextStop={nextStop}
-                        setNextStop={setNextStop}
-                        stops={stops}
+                      <NextStopoverCountdown
+                        next={nextStopover}
+                        setNext={setNextStopover}
+                        stopovers={relevantStopovers}
                       />
                     </span>
                   )}
@@ -367,7 +283,7 @@ const StatusDetails = ({
               alt={`Avatar von ${status.username}`}
               className={styles.avatar}
               height={42}
-              src={(status as any).profilePicture}
+              src={status.userAvatarUrl}
               width={42}
             />
 
@@ -375,8 +291,8 @@ const StatusDetails = ({
             <div className={styles.time}>{checkedInAt}</div>
           </div>
 
-          {!!status.body.trim() && (
-            <article className={styles.body}>{status.body}</article>
+          {!!status.message.trim() && (
+            <article className={styles.body}>{status.message}</article>
           )}
 
           <ul className={styles.stats}>
@@ -385,7 +301,7 @@ const StatusDetails = ({
                 <MdOutlineTimer className={styles.icon} size={16} />
                 <span>Fahrzeit</span>
               </div>
-              <div className={styles.value}>{duration}</div>
+              <div className={styles.value}>{formattedDuration}</div>
             </li>
             <li>
               <div className={styles.key}>
@@ -393,9 +309,9 @@ const StatusDetails = ({
                 <span>Entfernung</span>
               </div>
               <div className={styles.value}>
-                {status.train.distance >= 1000
-                  ? `${Math.ceil(status.train.distance / 1000)} km`
-                  : `${status.train.distance} m`}
+                {status.journey.distance >= 1000
+                  ? `${Math.ceil(status.journey.distance / 1000)} km`
+                  : `${status.journey.distance} m`}
               </div>
             </li>
             <li>
@@ -404,7 +320,8 @@ const StatusDetails = ({
                 <span>Punkte</span>
               </div>
               <div className={styles.value}>
-                {status.train.points} Punkt{status.train.points > 1 && 'e'}
+                {status.journey.pointsAwarded} Punkt
+                {status.journey.pointsAwarded > 1 && 'e'}
               </div>
             </li>
             <li>
@@ -413,7 +330,8 @@ const StatusDetails = ({
                 <span>Stationen</span>
               </div>
               <div className={styles.value}>
-                {stops.length} Station{stops.length > 1 && 'en'}
+                {relevantStopovers.length - 1} Station
+                {relevantStopovers.length > 2 && 'en'}
               </div>
             </li>
           </ul>
@@ -435,14 +353,14 @@ const StatusDetails = ({
   );
 };
 
-const NextStopCountdown = ({
-  nextStop,
-  setNextStop,
-  stops,
-}: NextStopCountdownProps) => {
+const NextStopoverCountdown = ({
+  next,
+  setNext,
+  stopovers,
+}: NextStopoverCountdownProps) => {
   const arrival = useMemo(
-    () => new Date(nextStop?.arrival!),
-    [nextStop?.arrival]
+    () => new Date(next?.arrival.actual ?? next?.arrival.planned!),
+    [next?.arrival]
   );
   const [remaining, setRemaining] = useState(getMinutesUntil(arrival));
 
@@ -452,12 +370,12 @@ const NextStopCountdown = ({
       setRemaining(minutes);
 
       if (minutes < 0) {
-        setNextStop(getNextStop(stops));
+        setNext(getNextStopover(stopovers));
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [arrival, setNextStop, stops]);
+  }, [arrival, setNext, stopovers]);
 
   return (
     <span className={styles.time}>

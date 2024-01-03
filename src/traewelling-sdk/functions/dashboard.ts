@@ -16,7 +16,7 @@ export const personal = async () => {
   const data = await res.json();
 
   if (res.status === 200) {
-    return data.data as Status;
+    return data.data as Status[];
   } else if (res.status === 404) {
     return null;
   }

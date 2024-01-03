@@ -1,0 +1,82 @@
+.base {
+  --line-padding: 0.375rem;
+
+  align-items: center;
+  background: var(--line-background);
+  color: var(--line-color);
+  display: flex;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  height: 1.25rem;
+  line-height: 1;
+  min-width: 1.75rem;
+  justify-content: center;
+  padding: 0 var(--line-padding);
+  white-space: nowrap;
+
+  &[aboard-shape="hexagon"] {
+    clip-path: polygon(0.5rem 0%, calc(100% - 0.5rem) 0%, 100% 50%, calc(100% - 0.5rem) 100%, 0.5rem 100%, 0% 50%);
+    min-width: 2rem;
+    padding: 0 0.625rem;
+  }
+
+  &[aboard-shape="pill"] {
+    border-radius: 99rem;
+  }
+
+  &[aboard-shape="rectangle"] {
+
+  }
+
+  &[aboard-shape="smooth-rectangle"] {
+    border-radius: 0.25rem;
+  }
+
+  &[aboard-shape="square"] {
+    aspect-ratio: 1;
+    border-radius: 0;
+    min-width: unset;
+    padding: 0;
+  }
+
+  &[aboard-shape="trapezoid"] {
+    clip-path: polygon(0 0, 100% 0, calc(100% - 0.25rem) 100%, 0.25rem 100%);
+    padding: 0 0.625rem;
+  }
+}
+
+.hasBorder {
+  --line-padding: 0.25rem;
+
+  border: 0.125rem solid var(--line-border);
+}
+
+.hasOutline {
+  outline: 1px solid #FFF; // TODO: because sometimes --contrast looks better
+}
+
+.wrapper {
+  isolation: isolate;
+  position: relative;
+  width: fit-content;
+
+  &::before {
+    background-color: #FFF;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    transform: scale(var(--scale-x), var(--scale-y));
+    width: 100%;
+    z-index: -1;
+  }
+
+  &[aboard-shape="hexagon"]::before {
+    clip-path: polygon(calc(0.5rem * var(--scale-x)) 0%, calc(100% - (0.5rem * var(--scale-x))) 0%, 100% 50%, calc(100% - (0.5rem * var(--scale-x))) 100%, calc(0.5rem * var(--scale-x)) 100%, 0% 50%);
+  }
+
+  &[aboard-shape="trapezoid"]::before {
+    clip-path: polygon(0 0, 100% 0, calc(100% - (0.25rem * var(--scale-x))) 100%, calc(0.25rem * var(--scale-x)) 100%);
+  }
+}

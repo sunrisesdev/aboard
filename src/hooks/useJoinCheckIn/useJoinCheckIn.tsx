@@ -1,7 +1,7 @@
 import { CompleteCheckInOverlay } from '@/overlays/CompleteCheckIn/CompleteCheckIn.overlay';
 import { SelectDestinationOverlay } from '@/overlays/SelectDestination/SelectDestination.overlay';
 import { CheckinInput } from '@/traewelling-sdk/functions/trains';
-import { Status, Trip } from '@/traewelling-sdk/types';
+import { AboardStatus, AboardTrip } from '@/types/aboard';
 import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -45,8 +45,11 @@ export const useJoinCheckIn = () => {
     next();
   };
 
-  const startOrResume = (status: Status, trip: Trip | undefined) => {
-    if (state.trip?.id !== trip?.id) {
+  const startOrResume = (
+    status: AboardStatus,
+    trip: AboardTrip | undefined
+  ) => {
+    if (state.trip?.hafasId !== trip?.hafasId) {
       join({ status, trip });
     }
 
@@ -60,20 +63,23 @@ export const useJoinCheckIn = () => {
       perform();
 
       try {
-        const departureStop = state.trip?.stopovers.find(
-          (stop) => stop.evaIdentifier === state.origin?.ibnr
+        const departureStop = state.trip?.stopovers?.find(
+          (stop) =>
+            stop.station.evaId === state.origin?.evaId &&
+            new Date(stop.departure.planned!).toISOString() ===
+              new Date(state.departureTime!).toISOString()
         );
 
         await post(
           {
-            arrival: state.destination?.arrivalPlanned!,
+            arrival: state.destination?.arrival.planned!,
             body: state.message,
-            business: state.travelType,
-            departure: departureStop?.departurePlanned!,
-            destination: state.destination?.evaIdentifier!,
+            business: state.travelReason,
+            departure: departureStop?.departure.planned!,
+            destination: state.destination?.station.evaId!,
             ibnr: true,
-            lineName: state.trip?.lineName!,
-            start: departureStop?.evaIdentifier!,
+            lineName: state.trip?.line.name!,
+            start: departureStop?.station.evaId!,
             tripId: state.hafasId!,
             visibility: state.visibility,
           },

@@ -1,12 +1,15 @@
-import { Status, Stop } from '@/traewelling-sdk/types';
+import { AboardStatus, AboardStopover, AboardTrip } from '@/types/aboard';
 
-export type NextStopCountdownProps = {
-  nextStop: Stop | undefined;
-  setNextStop: (value: Stop | undefined) => void;
-  stops: Stop[];
+export type NextStopoverCountdownProps = {
+  next: AboardStopover | undefined;
+  setNext: (value: AboardStopover | undefined) => void;
+  stopovers: AboardStopover[];
 };
 
 export type StatusDetailsProps = {
-  status: Status;
-  stops?: Stop[];
+  destinationIndex?: number;
+  originIndex?: number;
+  status: AboardStatus;
+  stopovers?: AboardStopover[];
+  trip?: AboardTrip;
 };

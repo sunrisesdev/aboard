@@ -1,41 +1,41 @@
-import { getWhiteLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import { parseSchedule } from '@/utils/parseSchedule';
+import colorConvert from 'color-convert';
 import Image from 'next/image';
 import Link from 'next/link';
-import { PRODUCT_ICONS } from '../CheckIn/consts';
+import { useState } from 'react';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+import { METHOD_ICONS } from '../CheckIn/consts';
 import LegacyTime from '../LegacyTime/LegacyTime';
-import LineIndicator from '../LineIndicator/LineIndicator';
+import { NewLineIndicator } from '../NewLineIndicator/NewLineIndicator';
 import Shimmer from '../Shimmer/Shimmer';
 import ThemeProvider from '../ThemeProvider/ThemeProvider';
 import styles from './StatusCard.module.scss';
 import { StatusCardProps } from './types';
 
-import { useState } from 'react';
-import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
-
 const StatusCard = ({ status }: StatusCardProps) => {
-  const [hasLiked, setHasLiked] = useState(status.liked);
-  const [likes, setLikes] = useState(status.likes);
+  const [hasLiked, setHasLiked] = useState(status.likedByMe ?? false);
+  const [likes, setLikes] = useState(status.likeCount);
 
-  const hasArrived =
-    new Date(
-      status.train.destination.arrival ??
-        status.train.destination.arrivalReal ??
-        ''
-    ).getTime() <= Date.now();
+  const accentRGB =
+    status.journey.line.appearance.accentColor &&
+    colorConvert.hex
+      .rgb(status.journey.line.appearance.accentColor!)
+      .join(', ');
 
   const arrivalSchedule = parseSchedule({
     actual:
-      status.train.destination.arrivalReal ??
-      status.train.destination.arrival ??
+      status.journey.manualArrival ??
+      status.journey.destination.arrival.actual ??
       '',
-    planned: status.train.destination.arrivalPlanned ?? '',
+    planned: status.journey.destination.arrival.planned ?? '',
   });
 
   const departureSchedule = parseSchedule({
     actual:
-      status.train.origin.departureReal ?? status.train.origin.departure ?? '',
-    planned: status.train.origin.departurePlanned ?? '',
+      status.journey.manualDeparture ??
+      status.journey.origin.departure.actual ??
+      '',
+    planned: status.journey.origin.departure.planned ?? '',
   });
 
   const travelTime =
@@ -52,18 +52,36 @@ const StatusCard = ({ status }: StatusCardProps) => {
     setLikes(hasLiked ? likes - 1 : likes + 1);
   };
 
+  const [accentH, accentS, accentL] = colorConvert.hex.hsl(
+    status.journey.line.appearance.accentColor!
+  );
+  const safeAccentColor = `#${colorConvert.hsl.hex([
+    accentH,
+    accentS,
+    Math.min(accentL, 25),
+  ])}`;
+
   return (
     <ThemeProvider
-      theme={getWhiteLineTheme(status.train.number, status.train.category)}
+      color="#FFFFFF"
+      colorRGB="255, 255, 255"
+      contrast={status.journey.line.appearance.accentColor}
+      contrastRGB={accentRGB}
     >
-      <div>
+      <div
+        style={{
+          ['--safe-accent' as any]: safeAccentColor,
+          ['--safe-contrast' as any]:
+            status.journey.line.appearance.contrastColor,
+        }}
+      >
         <article className={styles.base}>
           <header className={styles.header}>
             <Image
               alt={`Profilbild von ${status.username}`}
               className={styles.avatar}
               height={32}
-              src={status.profilePicture}
+              src={status.userAvatarUrl}
               style={{ flexShrink: 0 }}
               unoptimized
               width={32}
@@ -74,7 +92,7 @@ const StatusCard = ({ status }: StatusCardProps) => {
             </div>
 
             <div className={styles.icons}>
-              {PRODUCT_ICONS[status.train.category]({
+              {METHOD_ICONS[status.journey.line.method]({
                 className: styles.productIcon,
               })}
 
@@ -93,7 +111,7 @@ const StatusCard = ({ status }: StatusCardProps) => {
           <header className={styles.origin}>
             <div className={styles.stop} />
 
-            <div>{status.train.origin.name}</div>
+            <div>{status.journey.origin.station.name}</div>
 
             <LegacyTime className={styles.time}>
               {departureSchedule.actual}
@@ -101,24 +119,26 @@ const StatusCard = ({ status }: StatusCardProps) => {
           </header>
 
           <Link className={styles.link} href={`/status/${status.id}`}>
-            {status.body && (
+            {status.message && (
               <div className={styles.message}>
-                <span>{status.body}</span>
+                <span>{status.message}</span>
               </div>
             )}
 
             <div className={styles.destination}>
               <div className={styles.station}>
-                {status.train.destination.name}
+                {status.journey.destination.station.name}
               </div>
 
               <div className={styles.footer}>
-                <LineIndicator
+                {/* <LineIndicator
                   className={styles.lineIndicator}
                   lineId={status.train.number}
                   lineName={status.train.lineName}
                   product={status.train.category}
-                />
+                /> */}
+
+                <NewLineIndicator line={status.journey.line} noOutline />
 
                 <div className={styles.line}>
                   <svg
@@ -143,12 +163,6 @@ const StatusCard = ({ status }: StatusCardProps) => {
                     className={styles.progress}
                     style={{ width: `${progress}%` }}
                   />
-                  {/* {!hasArrived && (
-                  <FaCaretRight
-                    color="var(--contrast)"
-                    style={{ marginLeft: '-6px' }}
-                  />
-                )} */}
                 </div>
 
                 <div className={styles.stop} />

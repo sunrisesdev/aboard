@@ -1,5 +1,5 @@
-import { Status } from '@/traewelling-sdk/types';
+import { AboardStatus } from '@/types/aboard';
 
 export type StatusCardProps = {
-  status: Status;
+  status: AboardStatus;
 };

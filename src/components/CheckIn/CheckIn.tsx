@@ -1,11 +1,10 @@
 'use client';
 
-import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import { useCurrentStatus } from '@/hooks/useCurrentStatus/useCurrentStatus';
 import useUmami from '@/hooks/useUmami/useUmami';
 import { CheckinInput } from '@/traewelling-sdk/functions/trains';
-import { HAFASTrip } from '@/traewelling-sdk/hafasTypes';
 import { Station, Stop } from '@/traewelling-sdk/types';
+import { AboardTrip } from '@/types/aboard';
 import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -14,9 +13,9 @@ import LockBodyScroll from '../LockBodyScroll/LockBodyScroll';
 import ThemeProvider from '../ThemeProvider/ThemeProvider';
 import { CheckInContext } from './CheckIn.context';
 import styles from './CheckIn.module.scss';
-import CurrentStatus from './CurrentStatus/CurrentStatus';
 import DestinationStep from './DestinationStep/DestinationStep';
 import FinalStep from './FinalStep/FinalStep';
+import { NewCurrentStatus } from './NewCurrentStatus/NewCurrentStatus';
 import OriginStep from './OriginStep/OriginStep';
 import Panel from './Panel/Panel';
 import TripStep from './TripStep/TripStep';
@@ -59,7 +58,7 @@ const CheckIn = () => {
   const [query, setQuery] = useState('');
   const [step, setStep] = useState<CheckInStep>('origin');
   const [travelType, setTravelType] = useState(0);
-  const [trip, setTrip] = useState<HAFASTrip>();
+  const [trip, setTrip] = useState<AboardTrip>();
   const [visibility, setVisibility] = useState(0);
 
   const { trackEvent } = useUmami();
@@ -73,12 +72,12 @@ const CheckIn = () => {
           arrival: destination!.arrivalPlanned!,
           body: message,
           business: travelType,
-          departure: trip!.plannedWhen!,
+          departure: trip?.departure?.planned!,
           destination: destination!.evaIdentifier,
           ibnr: true,
           lineName: trip!.line.name,
-          start: trip!.station.ibnr,
-          tripId: trip!.tripId,
+          start: trip?.departureStation?.ibnr!,
+          tripId: trip!.hafasId!,
           visibility: visibility,
         },
         session
@@ -161,14 +160,10 @@ const CheckIn = () => {
     visibility,
   };
 
-  const theme = !status
-    ? undefined
-    : getLineTheme(status.train.number, status.train.category);
-
   return (
     <CheckInContext.Provider value={contextValue}>
       <div className={styles.base}>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider appearance={status?.journey.line.appearance}>
           <Panel>
             {step === 'origin' && <OriginStep />}
             {step === 'trip' && <TripStep />}
@@ -178,7 +173,7 @@ const CheckIn = () => {
 
             {!isOpen && !!status && (
               <Link className={styles.statusLink} href={`/status/${status.id}`}>
-                <CurrentStatus />
+                <NewCurrentStatus />
               </Link>
             )}
           </Panel>

@@ -74,6 +74,7 @@
   font-weight: 600;
   gap: 1rem;
   padding: 0.5rem;
+  padding-left: 0.6875rem;
   position: relative;
 
   &::before {
@@ -93,8 +94,4 @@
     display: flex;
     gap: 0.25rem;
   }
-}
-
-.lineIndicator {
-  font-weight: 500;
 }

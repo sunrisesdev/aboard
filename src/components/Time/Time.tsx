@@ -3,13 +3,20 @@ import clsx from 'clsx';
 import styles from './Time.module.scss';
 import { TimeProps } from './types';
 
-export const Time = ({ delayStyle, schedule, style, type }: TimeProps) => {
+export const Time = ({
+  className,
+  delayStyle,
+  schedule,
+  style,
+  type,
+}: TimeProps) => {
   return (
     <div
       className={clsx(
         radioCanada.className,
         styles.base,
-        delayStyle === 'p+a' && styles.vertical
+        delayStyle === 'p+a' && styles.vertical,
+        className
       )}
       style={style}
     >

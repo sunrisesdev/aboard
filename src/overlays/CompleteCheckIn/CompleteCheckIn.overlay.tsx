@@ -1,17 +1,16 @@
 import Button from '@/components/Button/Button';
-import LineIndicator from '@/components/LineIndicator/LineIndicator';
 import { NativeSelect } from '@/components/NativeSelect/NativeSelect';
+import { NewLineIndicator } from '@/components/NewLineIndicator/NewLineIndicator';
 import { Overlay } from '@/components/Overlay/Overlay';
 import Route from '@/components/Route/Route';
 import ThemeProvider from '@/components/ThemeProvider/ThemeProvider';
 import { Time } from '@/components/Time/Time';
-import { getLineTheme } from '@/helpers/getLineTheme/getLineTheme';
 import { useCheckIn } from '@/hooks/useCheckIn/useCheckIn';
 import { caveat, radioCanada } from '@/styles/fonts';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   MdFilterListOff,
   MdFingerprint,
@@ -71,33 +70,40 @@ export const CompleteCheckInOverlay = ({
   const { confirm, state } = useCheckIn();
 
   const [message, setMessage] = useState(state.message);
-  const [travelType, setTravelType] = useState(state.travelType);
+  const [travelReason, setTravelReason] = useState(state.travelReason);
   const [visibility, setVisibility] = useState(state.visibility);
 
   const arrivalSchedule = parseSchedule({
-    actual: state.destination?.arrivalReal,
-    planned: state.destination?.arrivalPlanned ?? '',
+    actual: state.destination?.arrival.actual,
+    planned: state.destination?.arrival.planned ?? '',
   });
 
-  const departureStop = state.trip?.stopovers.find(
-    (stop) => stop.evaIdentifier === state.origin?.ibnr
+  const departureStop = state.trip?.stopovers?.find(
+    (stop) => stop.station.ibnr === state.origin?.ibnr
   );
 
   const departureSchedule = parseSchedule({
-    actual: departureStop?.departureReal,
-    planned: departureStop?.departurePlanned ?? '',
+    actual: departureStop?.departure.actual,
+    planned: departureStop?.departure.planned ?? '',
   });
 
   const handleCheckInClicked = async () => {
-    confirm({ message, travelType, visibility });
+    confirm({ message, travelType: travelReason, visibility });
 
     await onComplete();
   };
 
-  const theme = getLineTheme(
-    state.trip?.number ?? '',
-    state.trip?.category ?? 'regional'
-  );
+  useEffect(() => {
+    setMessage(state.message);
+  }, [state.message]);
+
+  useEffect(() => {
+    setTravelReason(state.travelReason);
+  }, [state.travelReason]);
+
+  useEffect(() => {
+    setVisibility(state.visibility);
+  }, [state.visibility]);
 
   return (
     <Overlay
@@ -105,19 +111,15 @@ export const CompleteCheckInOverlay = ({
       className={radioCanada.className}
       initialSnapPosition={0}
       style={{
-        backgroundColor: `${theme.accent}`,
+        backgroundColor: `${state.trip?.line.appearance.accentColor}`,
       }}
     >
-      <ThemeProvider theme={theme}>
+      <ThemeProvider appearance={state.trip?.line.appearance}>
         <header className={styles.header}>
           {state.trip && (
             <div className={styles.trip}>
-              <LineIndicator
-                isInverted
-                lineId={state.trip.number}
-                lineName={state.trip.lineName}
-                product={state.trip.category}
-              />
+              <NewLineIndicator line={state.trip.line} />
+
               <span className={styles.direction}>
                 {state.trip.destination.name}
               </span>
@@ -143,7 +145,7 @@ export const CompleteCheckInOverlay = ({
 
             <Route.Entry stopIndicatorVariant="default">
               <div className={styles.routeContent} data-station="end">
-                <div>{state.destination?.name}</div>
+                <div>{state.destination?.station.name}</div>
 
                 <Time
                   delayStyle="p+d"
@@ -191,16 +193,16 @@ export const CompleteCheckInOverlay = ({
             <section>
               <label className={styles.label}>Wie bist du unterwegs?</label>
               <NativeSelect
-                onSelect={(value) => setTravelType(+value)}
+                onSelect={(value) => setTravelReason(+value)}
                 options={TRAVEL_TYPES.map(({ name }, index) => (
                   <option key={name} value={index}>
                     {name}
                   </option>
                 ))}
-                value={travelType.toString()}
+                value={travelReason.toString()}
               >
-                {TRAVEL_TYPES[travelType].icon}
-                <span>{TRAVEL_TYPES[travelType].name}</span>
+                {TRAVEL_TYPES[travelReason].icon}
+                <span>{TRAVEL_TYPES[travelReason].name}</span>
               </NativeSelect>
             </section>
 

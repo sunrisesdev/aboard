@@ -1,22 +1,46 @@
 import StatusDetails from '@/components/StatusDetails/StatusDetails';
-import { getStopsAfter } from '@/helpers/getStopsAfter';
+import { createLineAppearanceDataset } from '@/helpers/lineAppearance';
 import { TraewellingSdk } from '@/traewelling-sdk';
+import {
+  transformTrwlStatus,
+  transformTrwlTrip,
+} from '@/traewelling-sdk/transformers';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { StatusPageProps } from './types';
 
-function getStatusData(id: string) {
-  return TraewellingSdk.status.single({ id });
+async function getStatusData(id: string) {
+  const status = await TraewellingSdk.status.single({ id });
+
+  if (!status) return null;
+
+  const transformed = transformTrwlStatus(status);
+  const { getAppearanceForLine } = await createLineAppearanceDataset();
+
+  transformed.journey.line.appearance = getAppearanceForLine(
+    transformed.journey.line
+  );
+
+  return transformed;
 }
 
-function getStops(hafasTripId: string, lineName: string, start: string) {
+async function getTripData(
+  hafasTripId: string,
+  lineName: string,
+  start: string
+) {
   try {
-    const response = TraewellingSdk.trains.trip({
+    const trip = await TraewellingSdk.trains.trip({
       hafasTripId,
       lineName,
       start,
     });
-    return response;
+
+    if (!('id' in trip)) {
+      return trip;
+    }
+
+    return transformTrwlTrip(trip);
   } catch (error) {
     console.error(error);
     return { stopovers: [] };
@@ -29,8 +53,8 @@ export async function generateMetadata({
   const status = await getStatusData(params.id);
 
   return {
-    title: `${status?.username} reist nach ${status?.train.destination.name} - aboard.at`,
-    description: `Nutze aboard.at um ${status?.username} auf seiner Reise nach ${status?.train.destination.name} zu begleiten.`,
+    title: `${status?.username} reist nach ${status?.journey.destination.station.name} - aboard.at`,
+    description: `Nutze aboard.at um ${status?.username} auf seiner Reise nach ${status?.journey.destination.station.name} zu begleiten.`,
   };
 }
 
@@ -39,19 +63,45 @@ export default async function Page({ params }: StatusPageProps) {
 
   if (!status) notFound();
 
-  const { stopovers } = await getStops(
-    status.train.hafasId,
-    status.train.lineName,
-    status.train.origin.id.toString()
+  const tripData = await getTripData(
+    status.journey.hafasTripId,
+    status.journey.line.name,
+    status.journey.origin.station.trwlId!.toString()
   );
 
-  const stops = getStopsAfter(
-    status.train.origin.departurePlanned ?? '',
-    status.train.origin.id.toString(),
-    stopovers
+  if ('trwlId' in tripData) {
+    tripData.hafasId = status.journey.hafasTripId;
+    tripData.line = status.journey.line;
+  }
+
+  const arrivingAt = new Date(
+    status.journey.destination.arrival.planned!
+  ).toISOString();
+  const departuringAt = new Date(
+    status.journey.origin.departure.planned!
+  ).toISOString();
+
+  const destinationIndex = tripData.stopovers?.findLastIndex(
+    ({ arrival, station }) =>
+      new Date(arrival.planned!).toISOString() === arrivingAt &&
+      station.trwlId === status.journey.destination.station.trwlId
   );
 
-  return <StatusDetails status={status} stops={stops} />;
+  const originIndex = tripData.stopovers?.findIndex(
+    ({ departure, station }) =>
+      new Date(departure.planned!).toISOString() === departuringAt &&
+      station.trwlId === status.journey.origin.station.trwlId
+  );
+
+  return (
+    <StatusDetails
+      destinationIndex={destinationIndex}
+      originIndex={originIndex}
+      status={status}
+      stopovers={tripData.stopovers}
+      trip={'trwlId' in tripData ? tripData : undefined}
+    />
+  );
 }
 
 export const revalidate = 60;
