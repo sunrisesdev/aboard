@@ -3,6 +3,7 @@ import colorConvert from 'color-convert';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { METHOD_ICONS } from '../CheckIn/consts';
 import LegacyTime from '../LegacyTime/LegacyTime';
@@ -45,12 +46,25 @@ const StatusCard = ({ status }: StatusCardProps) => {
 
   const handleLike = async () => {
     const isLiked = hasLiked;
-    setHasLiked(!isLiked);
-    setLikes(isLiked ? likes - 1 : likes + 1);
+    const initialLikes = likes;
 
-    await fetch(`/traewelling/statuses/${status.id}/like`, {
-      method: isLiked ? 'DELETE' : 'POST',
-    });
+    try {
+      setHasLiked(!isLiked);
+      setLikes(isLiked ? likes - 1 : likes + 1);
+
+      await fetch(`/traewelling/statuses/${status.id}/like`, {
+        method: isLiked ? 'DELETE' : 'POST',
+      });
+    } catch (error) {
+      setHasLiked(isLiked);
+      setLikes(initialLikes);
+
+      toast.error(
+        'Fehler beim Liken des Statuses. Bitte versuchen Sie es erneut.'
+      );
+
+      console.log('Failed to like status:', error);
+    }
   };
 
   const [accentH, accentS, accentL] = colorConvert.hex.hsl(
