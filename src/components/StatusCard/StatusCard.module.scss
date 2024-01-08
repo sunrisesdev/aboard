@@ -2,7 +2,8 @@
 
 .base {
   border-radius: 0.5rem;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+  box-shadow:
+    rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   isolation: isolate;
   overflow: hidden;
@@ -55,8 +56,8 @@
     width: 100%;
 
     & > *:first-child {
-      &[aboard-shape="hexagon"],
-      &[aboard-shape="trapezoid"] {
+      &[aboard-shape='hexagon'],
+      &[aboard-shape='trapezoid'] {
         margin-inline: -0.125rem;
       }
     }
@@ -213,10 +214,10 @@
 
   .amount {
     align-items: center;
-    background-color: var(--contrast, var(--sky-11));
+    background-color: var(--sky-11);
     border-radius: 50%;
     bottom: -0.25rem;
-    color: var(--safe-contrast, #FFF);
+    color: var(--safe-contrast, #fff);
     display: flex;
     font-size: 0.635rem;
     font-weight: 600;
@@ -226,6 +227,9 @@
     position: absolute;
     right: -0.25rem;
     width: 0.875rem;
+
+    // remove the like number
+    display: none;
   }
 }
 
