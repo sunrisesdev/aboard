@@ -44,12 +44,13 @@ const StatusCard = ({ status }: StatusCardProps) => {
   const progress = Math.max(0, Math.min(timePassed * (100 / travelTime), 100));
 
   const handleLike = async () => {
-    await fetch(`/traewelling/statuses/${status.id}/like`, {
-      method: hasLiked ? 'DELETE' : 'POST',
-    });
+    const isLiked = hasLiked;
+    setHasLiked(!isLiked);
+    setLikes(isLiked ? likes - 1 : likes + 1);
 
-    setHasLiked(!hasLiked);
-    setLikes(hasLiked ? likes - 1 : likes + 1);
+    await fetch(`/traewelling/statuses/${status.id}/like`, {
+      method: isLiked ? 'DELETE' : 'POST',
+    });
   };
 
   const [accentH, accentS, accentL] = colorConvert.hex.hsl(
