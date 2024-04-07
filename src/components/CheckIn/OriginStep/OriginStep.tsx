@@ -35,9 +35,15 @@ const OriginStep = () => {
                       <li key={station.ibnr}>
                         <Station
                           name={station.name}
-                          onClick={() => setOrigin(station)}
+                          onClick={() =>
+                            setOrigin({
+                              ibnr: station.ibnr!,
+                              name: station.name,
+                              rilIdentifier: station.rilId ?? null,
+                            })
+                          }
                           query={query}
-                          rilIdentifier={station.rilIdentifier}
+                          rilIdentifier={station.rilId ?? null}
                         />
                       </li>
                     ))}

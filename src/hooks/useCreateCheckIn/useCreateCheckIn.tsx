@@ -4,6 +4,7 @@ import { SelectOriginOverlay } from '@/overlays/SelectOrigin/SelectOrigin.overla
 import { SelectTripOverlay } from '@/overlays/SelectTrip/SelectTrip.overlay';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 import { useCheckIn } from '../useCheckIn/useCheckIn';
 import { useConsecutiveOverlays } from '../useConsecutiveOverlays/useConsecutiveOverlays';
 
@@ -29,12 +30,17 @@ export const useCreateCheckIn = () => {
     setActive(true);
   };
 
+  const inputRef = useCallback((inputElement: HTMLInputElement) => {
+    inputElement?.focus();
+  }, []);
+
   const content = (
     <>
       <SelectOriginOverlay
         {...originProps}
         onBackdropTap={() => setActive(false)}
         onComplete={handleStepComplete}
+        ref={inputRef}
       />
 
       <SelectTripOverlay

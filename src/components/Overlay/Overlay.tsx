@@ -3,8 +3,10 @@ import { motion } from 'framer-motion';
 import {
   PropsWithChildren,
   createContext,
+  forwardRef,
   useContext,
   useEffect,
+  useImperativeHandle,
   useRef,
   useState,
 } from 'react';
@@ -13,94 +15,101 @@ import Sheet, { SheetRef } from 'react-modal-sheet';
 import styles from './Overlay.module.scss';
 import { OverlayRootProps } from './types';
 
-const SHEET_HEADER_HEIGHT = 40;
+export const SHEET_HEADER_HEIGHT = 40;
 
 const OverlayContext = createContext({
   isExpanded: false,
 });
 
-const OverlayRoot = ({
-  children,
-  className,
-  initialSnapPosition = 1,
-  isActive,
-  isHidden = false,
-  onBackdropTap,
-  onClose,
-  style,
-  withBackdrop,
-}: OverlayRootProps) => {
-  const [backdropStyle, setBackdropStyle] = useState<
-    'clear' | 'partial' | 'full'
-  >('clear');
-  const [isExpanded, setExpanded] = useState(false);
-  const ref = useRef<SheetRef>();
+const OverlayRoot = forwardRef<SheetRef | undefined, OverlayRootProps>(
+  (
+    {
+      children,
+      className,
+      collapsedSnapHeight = SHEET_HEADER_HEIGHT + 34,
+      initialSnapPosition = 1,
+      isActive,
+      isHidden = false,
+      onBackdropTap,
+      onClose,
+      staticBackdrop = true, // TODO
+      style,
+      withBackdrop,
+    },
+    ref
+  ) => {
+    const sheetRef = useRef<SheetRef>();
 
-  const handleOnSnap = (index: number) => {
-    setBackdropStyle((['full', 'partial', 'clear'] as const)[index]);
-    setExpanded(index === 0);
-  };
+    useImperativeHandle(ref, () => sheetRef.current);
 
-  useEffect(() => {
-    if (isHidden) {
-      ref.current?.snapTo(3);
-    } else {
-      ref.current?.snapTo(initialSnapPosition);
-    }
-  }, [initialSnapPosition, isHidden]);
+    const [backdropStyle, setBackdropStyle] = useState<
+      'clear' | 'partial' | 'full'
+    >('clear');
+    const [isExpanded, setExpanded] = useState(false);
 
-  return (
-    <Sheet
-      initialSnap={isHidden ? 3 : initialSnapPosition}
-      isOpen={isActive}
-      onClose={() => !isHidden && ref.current?.snapTo(2)}
-      onSnap={handleOnSnap}
-      ref={ref}
-      snapPoints={[
-        -16,
-        1 / 3,
-        SHEET_HEADER_HEIGHT + 34,
-        ...(isHidden ? [0] : []),
-      ]}
-      tweenConfig={{ duration: 0.3, ease: 'easeInOut' }}
-    >
-      <Sheet.Container className={clsx(styles.base, className)} style={style}>
-        <Sheet.Header />
+    const handleOnSnap = (index: number) => {
+      setBackdropStyle((['full', 'partial', 'clear'] as const)[index]);
+      setExpanded(index === 0);
+    };
 
-        {onClose && (
-          <button
-            className={styles.closeButton}
-            onClick={onClose}
-            type="button"
-          >
-            <TbX />
-          </button>
-        )}
+    useEffect(() => {
+      if (isHidden) {
+        sheetRef.current?.snapTo(3);
+      } else {
+        sheetRef.current?.snapTo(initialSnapPosition);
+      }
+    }, [initialSnapPosition, isHidden]);
 
-        <Sheet.Content style={{ paddingBottom: ref.current?.y }}>
-          <OverlayContext.Provider value={{ isExpanded }}>
-            {children}
-          </OverlayContext.Provider>
-        </Sheet.Content>
-      </Sheet.Container>
-
-      <Sheet.Backdrop
-        className={styles.backdropContainer}
-        onTap={onBackdropTap || (onClose ? () => void 0 : undefined)}
+    return (
+      <Sheet
+        initialSnap={isHidden ? 3 : initialSnapPosition}
+        isOpen={isActive}
+        onClose={() => !isHidden && sheetRef.current?.snapTo(2)}
+        onSnap={handleOnSnap}
+        ref={sheetRef}
+        snapPoints={[-16, 1 / 3, collapsedSnapHeight, ...(isHidden ? [0] : [])]}
+        tweenConfig={{ duration: 0.3, ease: 'easeInOut' }}
       >
-        <motion.div
-          animate={{
-            opacity: backdropStyle === 'clear' || !withBackdrop ? 0 : 1,
-          }}
-          className={styles.backdrop}
-          style={{
-            height: ref.current?.y,
-          }}
-        />
-      </Sheet.Backdrop>
-    </Sheet>
-  );
-};
+        <Sheet.Container className={clsx(styles.base, className)} style={style}>
+          <Sheet.Header />
+
+          {onClose && (
+            <button
+              className={styles.closeButton}
+              onClick={onClose}
+              type="button"
+            >
+              <TbX />
+            </button>
+          )}
+
+          <Sheet.Content style={{ paddingBottom: sheetRef.current?.y }}>
+            <OverlayContext.Provider value={{ isExpanded }}>
+              {children}
+            </OverlayContext.Provider>
+          </Sheet.Content>
+        </Sheet.Container>
+
+        <Sheet.Backdrop
+          className={styles.backdropContainer}
+          onTap={onBackdropTap || (onClose ? () => void 0 : undefined)}
+        >
+          <motion.div
+            animate={{
+              opacity: backdropStyle === 'clear' || !withBackdrop ? 0 : 1,
+            }}
+            className={clsx(styles.backdrop, styles.isStatic)}
+            style={{
+              height: staticBackdrop ? undefined : sheetRef.current?.y,
+            }}
+          />
+        </Sheet.Backdrop>
+      </Sheet>
+    );
+  }
+);
+
+OverlayRoot.displayName = 'OverlayRoot';
 
 const OverlayScrollArea = ({ children }: PropsWithChildren) => {
   const { isExpanded } = useContext(OverlayContext);

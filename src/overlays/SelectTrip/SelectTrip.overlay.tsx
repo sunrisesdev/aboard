@@ -19,7 +19,9 @@ export const SelectTripOverlay = ({
     <Overlay {...overlayProps} className={radioCanada.className}>
       <header></header>
 
-      <Overlay.ScrollArea></Overlay.ScrollArea>
+      <Overlay.ScrollArea>
+        <section>hi</section>
+      </Overlay.ScrollArea>
     </Overlay>
   );
 };

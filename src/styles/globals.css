@@ -21,6 +21,18 @@
   --color-tram: #d91a1a;
 
   --layout-width: 25rem;
+
+  --tanish-50: #fff5ed;
+  --tanish-100: #ffe7d5;
+  --tanish-200: #feccaa;
+  --tanish-300: #fda26b;
+  --tanish-400: #fb783c;
+  --tanish-500: #f95516;
+  --tanish-600: #ea3a0c;
+  --tanish-700: #c2290c;
+  --tanish-800: #9a2212;
+  --tanish-900: #7c1f12;
+  --tanish-950: #430c07;
 }
 
 *,

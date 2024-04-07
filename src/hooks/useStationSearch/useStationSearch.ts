@@ -1,16 +1,14 @@
-import { AutocompleteResponse } from '@/traewelling-sdk/functions/trains';
-import { Station } from '@/traewelling-sdk/types';
+import { AboardAutocompleteResponse } from '@/app/api/stations/autocomplete/route';
+import { AboardStation } from '@/types/aboard';
 import levenshtein from 'js-levenshtein';
 import useSWR from 'swr';
 
-const fetcher = async (query: string): Promise<AutocompleteResponse> => {
+const fetcher = async (query: string): Promise<AboardAutocompleteResponse> => {
   if (!query || query.trim().length < 2) {
     return [];
   }
 
-  const response = await fetch(
-    `/traewelling/stations/autocomplete?query=${query}`
-  );
+  const response = await fetch(`/api/stations/autocomplete?query=${query}`);
 
   if (!response.ok) {
     return [];
@@ -20,10 +18,10 @@ const fetcher = async (query: string): Promise<AutocompleteResponse> => {
 };
 
 const getMatchDetails = (
-  { name, rilIdentifier }: Pick<Station, 'name' | 'rilIdentifier'>,
+  { name, rilId }: AboardStation,
   queryPattern: RegExp
 ) => {
-  const extendedName = `${name}${!rilIdentifier ? '' : ` (${rilIdentifier})`}`;
+  const extendedName = `${name}${!rilId ? '' : ` (${rilId})`}`;
 
   const matchedLength = Array.from(extendedName.matchAll(queryPattern))
     .flat()
@@ -34,7 +32,7 @@ const getMatchDetails = (
 
 export const useStationSearch = (query: string) => {
   const { data, isLoading } = useSWR(
-    ['/traewelling/stations/autocomplete', query],
+    ['/api/stations/autocomplete', query],
     ([_, query]) => fetcher(query)
   );
 
@@ -49,9 +47,9 @@ export const useStationSearch = (query: string) => {
     const [valueB, nameB] = getMatchDetails(b, queryPattern);
 
     // Always prioritize RIL identifiers
-    if (a.rilIdentifier === query) {
+    if (a.rilId === query) {
       return -1;
-    } else if (b.rilIdentifier === query) {
+    } else if (b.rilId === query) {
       return 1;
     }
 

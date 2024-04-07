@@ -1,0 +1,28 @@
+.station {
+  align-items: center;
+  appearance: none;
+  background: none;
+  border: none;
+  color: var(--slate-12);
+  cursor: pointer;
+  height: 3rem;
+  padding: 0 1rem;
+  position: relative;
+  text-align: left;
+  user-select: none;
+  width: 100%;
+
+  &:active {
+    background-color: var(--slate-5);
+  }
+
+  &:hover {
+    background-color: var(--slate-4);
+  }
+
+  mark {
+    background-color: var(--tanish-200);
+    border-radius: 0.25rem;
+    color: var(--tanish-950);
+  }
+}

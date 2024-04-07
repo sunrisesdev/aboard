@@ -11,6 +11,12 @@
   box-sizing: content-box;
   padding-bottom: 3rem;
   width: 100%;
+
+  &.isStatic {
+    background: var(--black-a6);
+    height: 100lvh;
+    opacity: 1 !important;
+  }
 }
 
 .backdropContainer {
