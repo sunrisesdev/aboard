@@ -31,7 +31,7 @@
     "db-clean-station-name": "1.2.0",
     "framer-motion": "10.16.4",
     "js-levenshtein": "1.1.6",
-    "next": "14.0.4",
+    "next": "14.1.1",
     "next-auth": "4.24.5",
     "normalize.css": "8.0.1",
     "papaparse": "5.4.1",
