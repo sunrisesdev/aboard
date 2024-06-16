@@ -47,8 +47,8 @@ export async function GET(
       });
     }
 
-    const data = await TraewellingSdk.trains.departures({
-      name: context.params.station,
+    const data = await TraewellingSdk.station.departures({
+      id: +context.params.station,
       travelType: transportType as TransportType,
       when: from,
     });

@@ -4,11 +4,11 @@ import useSWR from 'swr';
 import { UseDeparturesOptions } from './types';
 
 const fetcher = async (
-  stationName: string,
+  stationId?: number,
   transportType?: TransportType,
   from?: string
 ): Promise<AboardDeparturesResponse> => {
-  if (!stationName.trim()) {
+  if (typeof stationId === 'undefined') {
     return { meta: null, trips: [] };
   }
 
@@ -23,7 +23,7 @@ const fetcher = async (
   }
 
   const response = await fetch(
-    `/api/stations/${stationName.replace('/', '%20')}?${params.toString()}`
+    `/api/stations/${stationId}?${params.toString()}`
   );
 
   if (!response.ok) {
@@ -34,13 +34,13 @@ const fetcher = async (
 };
 
 export const useDepartures = (
-  stationName: string,
+  stationId?: number,
   options?: UseDeparturesOptions
 ) => {
   const { data, isLoading } = useSWR(
-    ['/api/stations/', stationName, options?.transportType, options?.from],
-    ([_, stationName, transportType, from]) =>
-      fetcher(stationName, transportType, from)
+    ['/api/stations/', stationId, options?.transportType, options?.from],
+    ([_, stationId, transportType, from]) =>
+      fetcher(stationId, transportType, from)
   );
 
   return {

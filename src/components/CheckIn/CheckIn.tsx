@@ -54,7 +54,7 @@ const CheckIn = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [origin, setOrigin] =
-    useState<Pick<Station, 'ibnr' | 'name' | 'rilIdentifier'>>();
+    useState<Pick<Station, 'id' | 'ibnr' | 'name' | 'rilIdentifier'>>();
   const [query, setQuery] = useState('');
   const [step, setStep] = useState<CheckInStep>('origin');
   const [travelType, setTravelType] = useState(0);

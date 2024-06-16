@@ -10,14 +10,14 @@ export type CheckInContextValue = {
   goBack: () => void;
   isOpen: boolean;
   message: string;
-  origin: Pick<Station, 'ibnr' | 'name' | 'rilIdentifier'> | undefined;
+  origin: Pick<Station, 'id' | 'ibnr' | 'name' | 'rilIdentifier'> | undefined;
   query: string;
   setDepartureTime: (value: string | undefined) => void;
   setDestination: (value: Stop | undefined) => void;
   setIsOpen: (value: boolean) => void;
   setMessage: (value: string) => void;
   setOrigin: (
-    value: Pick<Station, 'ibnr' | 'name' | 'rilIdentifier'> | undefined
+    value: Pick<Station, 'id' | 'ibnr' | 'name' | 'rilIdentifier'> | undefined
   ) => void;
   setQuery: (value: string) => void;
   setTravelType: (value: number) => void;

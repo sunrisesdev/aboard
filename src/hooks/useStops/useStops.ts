@@ -12,10 +12,9 @@ const fetcher = async (
   }
 
   const response = await fetch(
-    `/traewelling/trips?hafasTripId=${hafasTripId}&lineName=${lineName}&start=${start.replace(
-      '/',
-      '%20'
-    )}`
+    `/traewelling/trips?hafasTripId=${encodeURIComponent(
+      hafasTripId
+    )}&lineName=${lineName}&start=${start.replace('/', '%20')}`
   );
 
   if (!response.ok) {

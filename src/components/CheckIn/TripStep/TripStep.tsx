@@ -48,7 +48,7 @@ const TripStep = () => {
     useContext(CheckInContext);
 
   const [filter, setFilter] = useState<TransportType>();
-  const { departures, isLoading } = useDepartures(origin?.name ?? '', {
+  const { departures, isLoading } = useDepartures(origin?.id, {
     from: departureTime,
     transportType: filter,
   });
