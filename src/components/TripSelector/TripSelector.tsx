@@ -56,7 +56,7 @@ const Trip = ({ onClick, requestedStationName, trip }: TripProps) => {
         aria-disabled={isCancelled}
         className={styles.trip}
         data-line-id={trip.line.id}
-        data-operator-id={trip.line.operator.id}
+        data-operator-id={trip.line.operator?.id}
         onClick={onClick}
       >
         <aside className={styles.decoratedBorder} />

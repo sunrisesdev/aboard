@@ -43,6 +43,8 @@ export const departures = async (input: DeparturesInput) => {
     url.searchParams.append('when', input.when);
   }
 
+  console.log(url.toString());
+
   const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${session?.user.accessToken}`,

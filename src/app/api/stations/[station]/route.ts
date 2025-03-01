@@ -94,6 +94,8 @@ export async function GET(
       body: transformedData,
     });
   } catch (error) {
+    console.log(error);
+
     return createErrorResponse({ error });
   }
 }

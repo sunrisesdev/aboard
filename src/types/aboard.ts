@@ -3,7 +3,7 @@ export type AboardLine = {
   id: string;
   method: AboardMethod;
   name: string;
-  operator: AboardOperator;
+  operator?: AboardOperator;
 };
 
 export type AboardLineAppearance = {

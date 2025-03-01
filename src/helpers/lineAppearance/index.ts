@@ -44,7 +44,7 @@ export const createLineAppearanceDataset = async () => {
       const fromDataset = dataset.find(
         ({ lineId, operatorId }) =>
           lineId === line.id &&
-          (operatorId === '' || operatorId === line.operator.id)
+          (operatorId === '' || operatorId === line.operator?.id)
       );
 
       if (fromDataset) {

@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import {
   AboardLine,
   AboardLineAppearance,
@@ -81,10 +82,12 @@ export const transformHAFASLine = (line: HAFASLine): AboardLine => {
     id: line.id,
     method: transformHAFASProductType(line.product),
     name: line.name,
-    operator: {
-      id: line.operator.id,
-      name: line.operator.name,
-    },
+    operator: !line.operator
+      ? undefined
+      : {
+          id: line.operator.id,
+          name: line.operator.name,
+        },
   };
 };
 
