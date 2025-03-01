@@ -9,6 +9,18 @@
   padding-block: 1rem;
 }
 
+.stationIds {
+  display: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  margin-top: 0.125rem;
+  text-align: center;
+
+  @media (min-width: 570px) {
+    display: block;
+  }
+}
+
 .trip {
   all: unset;
   align-items: center;

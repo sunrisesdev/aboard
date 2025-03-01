@@ -50,6 +50,9 @@ const Trip = ({ onClick, requestedStationName, trip }: TripProps) => {
 
   const isTimeDocked = isCancelled || departsFromDeviatingStation;
 
+  const fr = trip.hafasId?.match(/#FR#(\d+)#/)?.[1];
+  const to = trip.hafasId?.match(/#TO#(\d+)#/)?.[1];
+
   return (
     <ThemeProvider appearance={trip.line.appearance}>
       <button
@@ -60,7 +63,6 @@ const Trip = ({ onClick, requestedStationName, trip }: TripProps) => {
         onClick={onClick}
       >
         <aside className={styles.decoratedBorder} />
-
         <div className={styles.content}>
           <div className={styles.lineIndicatorContainer}>
             <NewLineIndicator line={trip.line} noOutline />
@@ -119,6 +121,9 @@ const Trip = ({ onClick, requestedStationName, trip }: TripProps) => {
           )}
         </div>
       </button>
+      <p className={styles.stationIds}>
+        {fr}, {to}
+      </p>
     </ThemeProvider>
   );
 };

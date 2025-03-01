@@ -1,3 +1,4 @@
+import { identifyLineByMagic } from '@/helpers/identifyLineByMagic';
 import { createLineAppearanceDataset } from '@/helpers/lineAppearance';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { TraewellingSdk } from '@/traewelling-sdk';
@@ -87,7 +88,9 @@ export async function GET(
     };
 
     transformedData.trips.forEach((trip) => {
-      trip.line.appearance = getAppearanceForLine(trip.line);
+      trip.line.appearance = getAppearanceForLine(
+        identifyLineByMagic(trip.hafasId, trip.line)
+      );
     });
 
     return createResponse({

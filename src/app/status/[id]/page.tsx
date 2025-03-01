@@ -1,4 +1,5 @@
 import StatusDetails from '@/components/StatusDetails/StatusDetails';
+import { identifyLineByMagic } from '@/helpers/identifyLineByMagic';
 import { createLineAppearanceDataset } from '@/helpers/lineAppearance';
 import { TraewellingSdk } from '@/traewelling-sdk';
 import {
@@ -18,7 +19,10 @@ async function getStatusData(id: string) {
   const { getAppearanceForLine } = await createLineAppearanceDataset();
 
   transformed.journey.line.appearance = getAppearanceForLine(
-    transformed.journey.line
+    identifyLineByMagic(
+      transformed.journey.hafasTripId,
+      transformed.journey.line
+    )
   );
 
   return transformed;
