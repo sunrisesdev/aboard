@@ -1,7 +1,7 @@
 import { inter } from '@/styles/fonts';
 import { parseSchedule } from '@/utils/parseSchedule';
 import clsx from 'clsx';
-import { TbRouteOff } from 'react-icons/tb';
+import { TbClockQuestion, TbRouteOff } from 'react-icons/tb';
 import { METHOD_ICONS } from '../CheckIn/consts';
 import { NewLineIndicator } from '../NewLineIndicator/NewLineIndicator';
 import ThemeProvider from '../ThemeProvider/ThemeProvider';
@@ -35,7 +35,9 @@ const Trip = ({ onClick, requestedStationName, trip }: TripProps) => {
   const departsFromDeviatingStation =
     requestedStationName !== trip.departureStation?.name;
 
-  const isCancelled = !trip.departure?.actual;
+  // const isCancelled = !trip.departure?.actual;
+  const isCancelled = false;
+  const isInLimbo = !trip.departure?.actual;
 
   const schedule = parseSchedule({
     actual: trip.departure?.actual ?? '',
@@ -57,7 +59,7 @@ const Trip = ({ onClick, requestedStationName, trip }: TripProps) => {
     <ThemeProvider appearance={trip.line.appearance}>
       <button
         aria-disabled={isCancelled}
-        className={styles.trip}
+        className={clsx(styles.trip, isInLimbo && styles.inLimbo)}
         data-line-id={trip.line.id}
         data-operator-id={trip.line.operator?.id}
         onClick={onClick}
@@ -84,6 +86,12 @@ const Trip = ({ onClick, requestedStationName, trip }: TripProps) => {
             {departsFromDeviatingStation && (
               <div className={styles.deviationNote}>
                 ab {trip.departureStation?.name}
+              </div>
+            )}
+
+            {isInLimbo && (
+              <div className={styles.limboNote}>
+                <TbClockQuestion fontSize={16} /> Live-Status unbekannt
               </div>
             )}
           </div>
