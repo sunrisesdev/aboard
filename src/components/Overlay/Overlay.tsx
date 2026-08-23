@@ -34,7 +34,7 @@ const OverlayRoot = ({
     'clear' | 'partial' | 'full'
   >('clear');
   const [isExpanded, setExpanded] = useState(false);
-  const ref = useRef<SheetRef>();
+  const ref = useRef<SheetRef>(null);
 
   const handleOnSnap = (index: number) => {
     setBackdropStyle((['full', 'partial', 'clear'] as const)[index]);

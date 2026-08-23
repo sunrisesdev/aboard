@@ -18,9 +18,10 @@ async function getUserStatuses(username: string) {
 export async function generateMetadata({
   params,
 }: {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }): Promise<Metadata> {
-  const userData = await getUserProfileData(params.username);
+  const { username } = await params;
+  const userData = await getUserProfileData(username);
 
   return { title: `${userData?.displayName} - aboard.at` };
 }
@@ -28,10 +29,11 @@ export async function generateMetadata({
 export default async function Page({
   params,
 }: {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }) {
-  const userData = await getUserProfileData(params.username);
-  const statuses = await getUserStatuses(params.username);
+  const { username } = await params;
+  const userData = await getUserProfileData(username);
+  const statuses = await getUserStatuses(username);
 
   if (userData === null) notFound();
 
@@ -40,7 +42,7 @@ export default async function Page({
       <h1>User</h1>
       <pre>{JSON.stringify(userData, null, 2)}</pre>
       <h1>Statuses</h1>
-      <Statuses username={params.username} />
+      <Statuses username={username} />
     </div>
   );
 }

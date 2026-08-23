@@ -4,10 +4,11 @@ import createResponse from '@/utils/api/createResponse';
 
 export async function GET(
   request: Request,
-  context: { params: { username: string } }
+  context: { params: Promise<{ username: string }> }
 ) {
   try {
-    const data = await TraewellingSdk.user.getStatuses(context.params.username);
+    const { username } = await context.params;
+    const data = await TraewellingSdk.user.getStatuses(username);
 
     return createResponse({
       body: data,

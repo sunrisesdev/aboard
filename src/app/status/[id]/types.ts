@@ -1,5 +1,5 @@
 export type StatusPageProps = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };

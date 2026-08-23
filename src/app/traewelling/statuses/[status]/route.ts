@@ -4,10 +4,12 @@ import createResponse from '@/utils/api/createResponse';
 
 export async function GET(
   _request: Request,
-  context: { params: { status: string } }
+  context: { params: Promise<{ status: string }> }
 ) {
   try {
-    if (!(context.params.status ?? '').trim()) {
+    const { status } = await context.params;
+
+    if (!(status ?? '').trim()) {
       return createErrorResponse({
         error: 'Invalid parameters',
         statusCode: 400,
@@ -16,7 +18,7 @@ export async function GET(
 
     // CAREFUL: Authorization is optional for this function!
     const data = await TraewellingSdk.status.single({
-      id: context.params.status,
+      id: status,
     });
     return createResponse({
       body: data,

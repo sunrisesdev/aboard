@@ -4,10 +4,12 @@ import createResponse from '@/utils/api/createResponse';
 
 export async function POST(
   _request: Request,
-  context: { params: { status: string } }
+  context: { params: Promise<{ status: string }> }
 ) {
   try {
-    if (!(context.params.status ?? '').trim()) {
+    const { status } = await context.params;
+
+    if (!(status ?? '').trim()) {
       return createErrorResponse({
         error: 'Invalid parameters',
         statusCode: 400,
@@ -15,7 +17,7 @@ export async function POST(
     }
 
     const data = await TraewellingSdk.status.like({
-      id: context.params.status,
+      id: status,
       method: 'POST',
     });
     return createResponse({
@@ -28,10 +30,12 @@ export async function POST(
 
 export async function DELETE(
   _request: Request,
-  context: { params: { status: string } }
+  context: { params: Promise<{ status: string }> }
 ) {
   try {
-    if (!(context.params.status ?? '').trim()) {
+    const { status } = await context.params;
+
+    if (!(status ?? '').trim()) {
       return createErrorResponse({
         error: 'Invalid parameters',
         statusCode: 400,
@@ -39,7 +43,7 @@ export async function DELETE(
     }
 
     const data = await TraewellingSdk.status.like({
-      id: context.params.status,
+      id: status,
       method: 'DELETE',
     });
     return createResponse({

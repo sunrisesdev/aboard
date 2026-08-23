@@ -19,9 +19,10 @@ const ALLOWED_TRANSPORT_TYPES = [
 
 export async function GET(
   request: Request,
-  context: { params: { station: string } }
+  context: { params: Promise<{ station: string }> }
 ) {
   try {
+    const { station } = await context.params;
     const session = await getServerSession(authOptions);
 
     const { transportType, from } = getSafeURLParams({
@@ -38,7 +39,7 @@ export async function GET(
     }
 
     if (
-      !(context.params.station ?? '').trim() ||
+      !(station ?? '').trim() ||
       (!!transportType && !ALLOWED_TRANSPORT_TYPES.includes(transportType))
     ) {
       return createErrorResponse({
@@ -48,7 +49,7 @@ export async function GET(
     }
 
     const data = await TraewellingSdk.station.departures({
-      id: +context.params.station,
+      id: +station,
       travelType: transportType as TransportType,
       when: from,
     });

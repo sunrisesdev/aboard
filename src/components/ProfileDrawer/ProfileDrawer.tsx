@@ -20,7 +20,7 @@ const SHEET_HEADER_HEIGHT = 40;
 const ProfileDrawer = ({ children }: PropsWithChildren<ProfileDrawerProps>) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isExpanded, setExpanded] = useState(false);
-  const ref = useRef<SheetRef>();
+  const ref = useRef<SheetRef>(null);
   const { data: session } = useSession();
 
   const handleOnSnap = (index: number) => {

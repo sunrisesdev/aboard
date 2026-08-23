@@ -54,7 +54,8 @@ async function getTripData(
 export async function generateMetadata({
   params,
 }: StatusPageProps): Promise<Metadata> {
-  const status = await getStatusData(params.id);
+  const { id } = await params;
+  const status = await getStatusData(id);
 
   return {
     title: `${status?.username} reist nach ${status?.journey.destination.station.name} - aboard.at`,
@@ -63,7 +64,8 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: StatusPageProps) {
-  const status = await getStatusData(params.id);
+  const { id } = await params;
+  const status = await getStatusData(id);
 
   if (!status) notFound();
 
