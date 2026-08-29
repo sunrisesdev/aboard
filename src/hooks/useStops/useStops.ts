@@ -5,16 +5,15 @@ import useSWR from 'swr';
 const fetcher = async (
   hafasTripId: string,
   lineName: string,
-  start: string
 ): Promise<TripResponse | undefined> => {
-  if (!hafasTripId || !lineName || !start.trim()) {
+  if (!hafasTripId || !lineName) {
     return;
   }
 
   const response = await fetch(
     `/traewelling/trips?hafasTripId=${encodeURIComponent(
       hafasTripId
-    )}&lineName=${lineName}&start=${start.replace('/', '%20')}`
+    )}&lineName=${lineName}`
   );
 
   if (!response.ok) {
@@ -28,14 +27,14 @@ export const useStops = (
   hafasTripId: string,
   lineName: string,
   plannedDeparture: string,
-  start: string
+  stationId: number,
 ) => {
   const { data, isLoading } = useSWR(
-    ['/traewelling/trips', hafasTripId, lineName, start],
-    ([_, hafasTripId, lineName, start]) => fetcher(hafasTripId, lineName, start)
+    ['/traewelling/trip', hafasTripId, lineName],
+    ([_, hafasTripId, lineName]) => fetcher(hafasTripId, lineName)
   );
 
-  const stops = data && getStopsAfter(plannedDeparture, start, data.stopovers);
+  const stops = data && getStopsAfter(plannedDeparture, stationId, data.stopovers);
 
   return {
     isLoading,

@@ -25,7 +25,7 @@ const DestinationStep = () => {
     trip?.hafasId ?? '',
     trip?.line.name ?? '',
     trip?.departure?.planned ?? '',
-    trip?.departureStation?.evaId?.toString() ?? ''
+    trip?.departureStation?.trwlId ?? -1,
   );
 
   const schedule = parseSchedule({
@@ -101,11 +101,11 @@ const DestinationStep = () => {
                 {stops.map((stop, index) => (
                   <li key={index}>
                     <Stop
-                      arrivalAt={stop.arrival ?? stop.departure}
+                      arrivalAt={stop.arrivalReal ?? stop.arrivalPlanned ?? stop.departureReal ?? stop.departurePlanned}
                       isCancelled={stop.cancelled}
                       isDelayed={
                         stop.isArrivalDelayed ||
-                        (!stop.arrival && stop.isDepartureDelayed)
+                        (!stop.arrivalReal && stop.isDepartureDelayed)
                       }
                       name={stop.name}
                       onClick={() => setDestination(stop)}

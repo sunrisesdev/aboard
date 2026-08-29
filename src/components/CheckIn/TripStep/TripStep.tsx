@@ -68,7 +68,7 @@ const TripStep = () => {
     }
   }, [departures]);
 
-  const servesMethod = (method: AboardMethod) => servedMethods.includes(method);
+  const servesMethod = (method: AboardMethod) => servedMethods.length === 0 || servedMethods.includes(method);
 
   const handleOnEarlierClick = () => {
     if (isLoading) {
@@ -110,7 +110,7 @@ const TripStep = () => {
           <span>{origin?.name}</span>
         </button>
 
-        {servedMethods.length > 1 && (
+        {servedMethods && servedMethods.length > 1 && (
           <section className={styles.filters}>
             {(servesMethod('national') || servesMethod('national-express')) && (
               <FilterButton

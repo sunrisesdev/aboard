@@ -36,7 +36,7 @@ export async function GET(request: Request) {
 
     transformedData.forEach((status) => {
       status.journey.line.appearance = getAppearanceForLine(
-        identifyLineByMagic(status.journey.hafasTripId, status.journey.line)
+        status.journey.line,
       );
     });
 

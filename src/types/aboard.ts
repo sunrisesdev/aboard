@@ -27,16 +27,20 @@ export type AboardLineAppearance = {
 };
 
 export type AboardMethod =
-  | 'bus'
-  | 'ferry'
-  | 'national-express'
-  | 'national'
-  | 'regional-express'
-  | 'regional'
-  | 'suburban'
-  | 'subway'
-  | 'taxi'
-  | 'tram';
+	| 'bus'
+	| 'ferry'
+	| 'national-express'
+	| 'national'
+	| 'regional-express'
+	| 'regional'
+	| 'suburban'
+	| 'subway'
+	| 'taxi'
+	| 'tram'
+	| 'aerial'
+	| 'airplane'
+	| 'funicular'
+	| '_';
 
 export type AboardOperator = {
   id: string;

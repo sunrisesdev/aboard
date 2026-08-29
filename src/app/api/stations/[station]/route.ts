@@ -2,7 +2,7 @@ import { identifyLineByMagic } from '@/helpers/identifyLineByMagic';
 import { createLineAppearanceDataset } from '@/helpers/lineAppearance';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { TraewellingSdk } from '@/traewelling-sdk';
-import { transformHAFASTrip } from '@/traewelling-sdk/transformers';
+import { transformTrwlDeparture } from '@/traewelling-sdk/transformers';
 import { TransportType } from '@/traewelling-sdk/types';
 import { AboardStation, AboardTrip } from '@/types/aboard';
 import createErrorResponse from '@/utils/api/createErrorResponse';
@@ -85,12 +85,12 @@ export async function GET(
         } as AboardStation,
         times: data.meta?.times,
       },
-      trips: data.trips.map(transformHAFASTrip),
+      trips: data.trips.map(transformTrwlDeparture),
     };
 
     transformedData.trips.forEach((trip) => {
       trip.line.appearance = getAppearanceForLine(
-        identifyLineByMagic(trip.hafasId, trip.line)
+        trip.line,
       );
     });
 

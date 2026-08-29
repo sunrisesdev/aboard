@@ -89,4 +89,16 @@ export const PRODUCT_THEMES: Record<HAFASProductType, Required<Theme>> = {
     contrast: '#FFFFFF',
     contrastRGB: '255, 255, 255',
   },
+  freightTrain: {
+    accent: '#415A77',
+    accentRGB: '65, 90, 119',
+    contrast: '#FFFFFF',
+    contrastRGB: '255, 255, 255',
+  },
+  plane: { // TODO: Create proper color scheme
+    accent: '#A3007C',
+    accentRGB: '163, 0, 124',
+    contrast: '#FFFFFF',
+    contrastRGB: '255, 255, 255',
+  },
 };

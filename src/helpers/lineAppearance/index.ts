@@ -10,61 +10,78 @@ import {
 import { fetchTrwlLineColorDefinitions } from './fetcher';
 
 export const createLineAppearanceDataset = async () => {
-  const trwlLineColorDefinitions = await fetchTrwlLineColorDefinitions();
-  const dataset = trwlLineColorDefinitions.map((definition) => {
-    const overrides = LINE_APPEARANCE_OVERRIDES.filter(([pattern]) =>
-      pattern.test(definition.hafasLineId)
-    ).map(([, override]) => override);
+  // const trwlLineColorDefinitions = await fetchTrwlLineColorDefinitions();
+  // const dataset = trwlLineColorDefinitions.map((definition) => {
+  //   const overrides = LINE_APPEARANCE_OVERRIDES.filter(([pattern]) =>
+  //     pattern.test(definition.hafasLineId)
+  //   ).map(([, override]) => override);
 
-    const accentColor = determineAccentColor(definition);
-    const [accentR, accentG, accentB] = colorConvert.hex.rgb(accentColor);
+  //   const accentColor = determineAccentColor(definition);
+  //   const [accentR, accentG, accentB] = colorConvert.hex.rgb(accentColor);
 
-    const appearance: Partial<AboardLineAppearance> = Object.assign(
-      {
-        accentColor,
-        background: definition.backgroundColor,
-        border: definition.borderColor,
-        color: definition.textColor,
-        contrastColor: getContrastColor(accentR, accentG, accentB),
-        lineName: definition.lineName,
-        shape: transformTrwlLineShape(definition.shape),
-      } satisfies Partial<AboardLineAppearance>,
-      ...overrides
-    );
+  //   const appearance: Partial<AboardLineAppearance> = Object.assign(
+  //     {
+  //       accentColor,
+  //       background: definition.backgroundColor,
+  //       border: definition.borderColor,
+  //       color: definition.textColor,
+  //       contrastColor: getContrastColor(accentR, accentG, accentB),
+  //       lineName: definition.lineName,
+  //       shape: transformTrwlLineShape(definition.shape),
+  //     } satisfies Partial<AboardLineAppearance>,
+  //     ...overrides
+  //   );
 
-    return {
-      appearance,
-      lineId: definition.hafasLineId,
-      operatorId: definition.hafasOperatorCode,
-    };
-  });
+  //   return {
+  //     appearance,
+  //     lineId: definition.hafasLineId,
+  //     operatorId: definition.hafasOperatorCode,
+  //   };
+  // });
 
   return {
     getAppearanceForLine: (line: AboardLine): AboardLineAppearance => {
-      const fromDataset = dataset.find(
-        ({ lineId, operatorId }) =>
-          lineId === line.id &&
-          (operatorId === '' || operatorId === line.operator?.id)
-      );
+      // const fromDataset = dataset.find(
+      //   ({ lineId, operatorId }) =>
+      //     lineId === line.id &&
+      //     (operatorId === '' || operatorId === line.operator?.id)
+      // );
 
-      if (fromDataset) {
-        return Object.assign(line.appearance, fromDataset.appearance);
+      // if (fromDataset) {
+      //   return Object.assign(line.appearance, fromDataset.appearance);
+      // }
+
+      // const overrides = LINE_APPEARANCE_OVERRIDES.filter(([pattern]) =>
+      //   pattern.test(line.id)
+      // ).map(([, override]) => override);
+
+      const fb = FALLBACK_METHOD_APPEARANCES[line.method];
+
+      line.appearance = {
+        lineName: line.appearance.lineName,
+        accentColor: line.appearance.accentColor ?? line.appearance.background ?? fb.accentColor,
+        background: line.appearance.background ?? fb.background,
+        border: fb.border,
+        color: line.appearance.color ?? fb.color,
+        contrastColor: line.appearance.color ?? fb.contrastColor,
+        shape: line.appearance.shape ?? fb.shape,
+        productName: '',
+      };
+
+      if (!line.appearance.accentColor) {
+        line.appearance.accentColor = determineAccentColor({
+          backgroundColor: line.appearance.background!,
+          borderColor: line.appearance.border!,
+          textColor: line.appearance.color!,
+        });
       }
 
-      const overrides = LINE_APPEARANCE_OVERRIDES.filter(([pattern]) =>
-        pattern.test(line.id)
-      ).map(([, override]) => override);
-
-      return Object.assign(
-        line.appearance,
-        FALLBACK_METHOD_APPEARANCES[line.method],
-        ...overrides
-      );
+      return line.appearance;
     },
   };
 };
 
-const determineAccentColor = (definition: TrwlLineColorDefinition) => {
+const determineAccentColor = (definition: Pick<TrwlLineColorDefinition, 'backgroundColor' | 'borderColor' | 'textColor'>) => {
   // Preparations for background gradients
   // const backgroundColors =
   //   definition.backgroundColor.toLowerCase().match(/(#[a-f\d]{3,6})/gi) ?? [];

@@ -1,4 +1,5 @@
 import { HAFASProductType } from './hafasTypes';
+import { MotisMode } from './motisTypes';
 
 export type TrwlLineColorDefinition = {
   backgroundColor: string;
@@ -12,12 +13,27 @@ export type TrwlLineColorDefinition = {
 };
 
 export type Station = {
-  ibnr: number;
   id: number;
   latitude: number;
   longitude: number;
   name: string;
-  rilIdentifier: string | null;
+	areas: Area[];
+	identifiers: StationIdentifier[],
+	time_offset: number | null;
+	created_at: string | null;
+};
+
+export type Area = {
+	name: string;
+	default: boolean;
+	adminLevel: number;
+};
+
+export type StationIdentifier = {
+	type: string;
+	identifier: string;
+	name: string | null;
+	origin: string | null;
 };
 
 export type Status = {
@@ -25,57 +41,74 @@ export type Status = {
   business: number;
   createdAt: string;
   event: any; // TODO: Add type
-  id: string;
+  id: number;
   isLikable: boolean;
   liked: boolean;
   likes: number;
-  preventIndex: boolean;
-  profilePicture: string;
-  train: Train;
-  user: number;
-  username: string;
+	checkin: Transport;
+  user: LightUser;
+	createdBy: LightUser | null;
+	tags: StatusTag[];
+	moderation_notes: string | null;
+	lock_visibility: boolean;
+	hide_body: boolean;
   visibility: number;
 };
 
-export type Stop = {
-  arrival: string | null;
-  arrivalPlanned: string | null;
-  arrivalPlatformPlanned: string | null;
-  arrivalPlatformReal: string | null;
-  arrivalReal: string | null;
-  cancelled: boolean;
-  departure: string | null;
-  departurePlanned: string | null;
-  departurePlatformPlanned: string | null;
-  departurePlatformReal: string | null;
-  departureReal: string | null;
-  evaIdentifier: number;
-  id: number;
-  isArrivalDelayed: boolean;
-  isDepartureDelayed: boolean;
-  name: string;
-  platform: string | null;
-  rilIdentifier: string | null;
+export type StatusTag = {
+	key: string;
+	value: string;
+	visibility: number;
 };
 
-export type Train = {
-  category: HAFASProductType;
-  destination: Stop;
-  distance: number;
-  duration: number;
-  hafasId: string;
-  journeyNumber?: number;
-  lineName: string;
-  manualArrival: string;
-  manualDeparture: string;
-  number: string; // LINE ID
-  operator: {
-    identifier: string;
-    name: string;
-  } | null;
-  origin: Stop;
-  points: number;
-  trip: number;
+export type Transport = {
+	trip: number;
+	hafasId: string;
+	category: HAFASProductType;
+	mode: MotisMode;
+	number: string;
+	lineName: string;
+	routeColor: string | null;
+	routeTextColor: string | null;
+	journeyNumber: number;
+	manualJourneyNumber: string | null;
+	distance: number; // in meters
+	points: number;
+	duration: number; // in minutes
+	manualDeparture: string | null;
+	manualArrival: string | null;
+	origin: Stopover;
+	destination: Stopover;
+	operator: Operator | null;
+	dataSource: DataSource | null;
+};
+
+export type Stopover = {
+	id: number;
+	name: string;
+	arrivalPlanned: string;
+	arrivalReal: string | null;
+	arrivalPlatformPlanned: string | null;
+	arrivalPlatformReal: string | null;
+	departurePlanned: string;
+	departureReal: string | null;
+	departurePlatformPlanned: string | null;
+	departurePlatformReal: string | null;
+	platform: string | null;
+	isArrivalDelayed: boolean;
+	isDepartureDelayed: boolean;
+	cancelled: boolean;
+};
+
+export type Operator = {
+	id: number;
+	identifier: string;
+	name: string;
+};
+
+export type DataSource = {
+	id: string;
+	attribution: string;
 };
 
 export type TransportType =
@@ -88,34 +121,26 @@ export type TransportType =
   | 'taxi'
   | 'tram';
 
-export type Trip = {
-  category: HAFASProductType;
-  destination: Station;
-  id: number;
-  journeyNumber: number | null; // Zugnummer
-  lineName: string;
-  number: string; // HAFAS line id
-  origin: Station;
-  stopovers: Stop[];
+export type LightUser = {
+	id: number;
+	uuid: string;
+	displayName: string;
+	username: string;
+	profilePicture: string;
+	mastodon: any;
+	preventIndex: boolean;
 };
 
-export type User = {
-  displayName: string;
+export type User = LightUser & {
   home: Station | null;
-  id: number;
   language: string | null;
-  mastodonUrl: string | null;
   points: number;
-  preventIndex: boolean;
   privacyHideDays: number | null;
   privateProfile: boolean;
-  profilePicture: string;
   role: number; // TODO: Type
   trainDistance: number;
   trainDuration: number;
   trainSpeed: number;
-  twitterUrl: string | null;
-  username: string;
 };
 
 export type PublicUser = {
@@ -135,4 +160,49 @@ export type PublicUser = {
   twitterUrl: string | null;
   userInvisibleToMe: boolean;
   username: string;
+};
+
+export type Departure = {
+	tripId: string;
+	stop: {
+		type: 'stop';
+		id: number;
+		name: string;
+		location: {
+			type: 'location';
+			id: string | null;
+			latitude: number;
+			longitude: number;
+		}
+	};
+	when: string | null;
+	plannedWhen: string;
+	platform: string | null;
+	plannedPlatform: string | null;
+	direction: string;
+	line: {
+		type: 'line';
+		id: string;
+		fahrtNr: string;
+		name: string;
+		color: string | null;
+		textColor: string | null;
+		mode: MotisMode;
+		product: HAFASProductType;
+	};
+	cancelled: boolean;
+	station: Station;
+};
+
+export type Trip = {
+	id: number;
+	category: HAFASProductType,
+	mode: MotisMode,
+	number: string;
+	lineName: string;
+	journeyNumber: number;
+	origin: Station;
+	destination: Station;
+	stopovers: Stopover[];
+	dataSource: DataSource | null;
 };

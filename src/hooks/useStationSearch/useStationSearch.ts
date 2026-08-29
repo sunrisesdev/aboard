@@ -20,9 +20,10 @@ const fetcher = async (query: string): Promise<AutocompleteResponse> => {
 };
 
 const getMatchDetails = (
-  { name, rilIdentifier }: Pick<Station, 'name' | 'rilIdentifier'>,
+  { name, identifiers }: Pick<Station, 'name' | 'identifiers'>,
   queryPattern: RegExp
 ) => {
+  const rilIdentifier = identifiers.filter(id => id.type === 'de_db_ril100')[0]?.identifier;
   const extendedName = `${name}${!rilIdentifier ? '' : ` (${rilIdentifier})`}`;
 
   const matchedLength = Array.from(extendedName.matchAll(queryPattern))
@@ -48,10 +49,13 @@ export const useStationSearch = (query: string) => {
     const [valueA, nameA] = getMatchDetails(a, queryPattern);
     const [valueB, nameB] = getMatchDetails(b, queryPattern);
 
+    const aRilIdentifier = a.identifiers.filter(id => id.type === 'de_db_ril100')[0]?.identifier;
+    const bRilIdentifier = b.identifiers.filter(id => id.type === 'de_db_ril100')[0]?.identifier;
+
     // Always prioritize RIL identifiers
-    if (a.rilIdentifier === query) {
+    if (aRilIdentifier === query) {
       return -1;
-    } else if (b.rilIdentifier === query) {
+    } else if (bRilIdentifier === query) {
       return 1;
     }
 

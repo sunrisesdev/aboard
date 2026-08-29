@@ -6,10 +6,7 @@ type AutocompleteInput = {
   query: string;
 };
 
-export type AutocompleteResponse = Pick<
-  Station,
-  'id' | 'ibnr' | 'name' | 'rilIdentifier'
->[];
+export type AutocompleteResponse = Station[];
 
 export const autocomplete = async (input: AutocompleteInput) => {
   const session = await getServerSession(authOptions);
@@ -144,7 +141,6 @@ export const nearby = async (input: NearbyInput) => {
 type TripInput = {
   hafasTripId: string;
   lineName: string;
-  start: string;
 };
 
 export type TripResponse = Trip;
@@ -158,11 +154,10 @@ export const trip = async (input: TripInput) => {
     };
   }
 
-  const url = new URL('https://traewelling.de/api/v1/trains/trip/');
+  const url = new URL('https://traewelling.de/api/v1/trains/trip');
 
   url.searchParams.append('hafasTripId', input.hafasTripId);
   url.searchParams.append('lineName', input.lineName);
-  url.searchParams.append('start', input.start);
 
   const res = await fetch(url, {
     headers: {

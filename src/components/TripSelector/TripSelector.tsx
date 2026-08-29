@@ -52,8 +52,8 @@ const Trip = ({ onClick, requestedStationName, trip }: TripProps) => {
 
   const isTimeDocked = isCancelled || departsFromDeviatingStation;
 
-  const fr = trip.hafasId?.match(/#FR#(\d+)#/)?.[1];
-  const to = trip.hafasId?.match(/#TO#(\d+)#/)?.[1];
+  // const fr = trip.hafasId?.match(/#FR#(\d+)#/)?.[1];
+  // const to = trip.hafasId?.match(/#TO#(\d+)#/)?.[1];
 
   return (
     <ThemeProvider appearance={trip.line.appearance}>
@@ -129,9 +129,9 @@ const Trip = ({ onClick, requestedStationName, trip }: TripProps) => {
           )}
         </div>
       </button>
-      <p className={styles.stationIds}>
+      {/*<p className={styles.stationIds}>
         {fr}, {to}
-      </p>
+      </p>*/}
     </ThemeProvider>
   );
 };

@@ -17,6 +17,7 @@ import {
   MdOutlineGroups,
   MdOutlineLockOpen,
   MdOutlineLockPerson,
+  MdShield,
   MdSwapCalls,
   MdWorkOutline,
 } from 'react-icons/md';
@@ -61,6 +62,10 @@ const VISIBILITIES = [
     icon: <MdFingerprint size={18} />,
     name: 'Nur angemeldete Personen',
   },
+  {
+    icon: <MdShield size={18} />,
+    name: 'Nur vertrauten Personen',
+  },
 ];
 
 const FinalStep = () => {
@@ -80,7 +85,7 @@ const FinalStep = () => {
   } = useContext(CheckInContext);
 
   const arrivalSchedule = parseSchedule({
-    actual: destination?.arrival,
+    actual: destination?.arrivalReal,
     planned: destination?.arrivalPlanned!,
   });
 

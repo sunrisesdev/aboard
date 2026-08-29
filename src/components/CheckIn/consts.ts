@@ -18,6 +18,10 @@ export const METHOD_ICONS: Record<
   subway: ProductIcon.Subway,
   taxi: ProductIcon.Other,
   tram: ProductIcon.Tram,
+  aerial: ProductIcon.Other, // TODO: Add icon
+  airplane: ProductIcon.Other, // TODO: Add icon
+  funicular: ProductIcon.Other, // TODO: Add icon
+  _: ProductIcon.Other,
 };
 
 export const PRODUCT_ICONS: Record<
@@ -34,4 +38,6 @@ export const PRODUCT_ICONS: Record<
   subway: ProductIcon.Subway,
   taxi: ProductIcon.Other,
   tram: ProductIcon.Tram,
+  freightTrain: ProductIcon.Other,
+  plane: ProductIcon.Other, // TODO: Add icon
 };

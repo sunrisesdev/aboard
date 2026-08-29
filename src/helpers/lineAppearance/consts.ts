@@ -74,6 +74,34 @@ export const FALLBACK_METHOD_APPEARANCES: Record<
     contrastColor: '#FFFFFF',
     shape: 'pill',
   },
+  aerial: { // TODO: Create proper color scheme
+    accentColor: '#AF8000',
+    background: '#AF8000',
+    color: '#FFFFFF',
+    contrastColor: '#FFFFFF',
+    shape: 'smooth-rectangle',
+  },
+  airplane: { // TODO: Create proper color scheme
+    accentColor: '#AF8000',
+    background: '#AF8000',
+    color: '#FFFFFF',
+    contrastColor: '#FFFFFF',
+    shape: 'smooth-rectangle',
+  },
+  funicular: { // TODO: Create proper color scheme
+    accentColor: '#AF8000',
+    background: '#AF8000',
+    color: '#FFFFFF',
+    contrastColor: '#FFFFFF',
+    shape: 'smooth-rectangle',
+  },
+  _: { // TODO: Create proper color scheme
+    accentColor: '#AF8000',
+    background: '#AF8000',
+    color: '#FFFFFF',
+    contrastColor: '#FFFFFF',
+    shape: 'smooth-rectangle',
+  },
 };
 
 export const LINE_APPEARANCE_OVERRIDES: [

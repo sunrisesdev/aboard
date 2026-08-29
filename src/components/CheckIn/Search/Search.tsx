@@ -60,12 +60,7 @@ const Search = () => {
       simpleEvent('nearby_clicked');
 
       const station = (await response.json()) as NearbyResponse;
-      setOrigin({
-        id: station.id,
-        ibnr: station.ibnr,
-        name: station.name,
-        rilIdentifier: station.rilIdentifier,
-      });
+      setOrigin(station);
     });
   };
 

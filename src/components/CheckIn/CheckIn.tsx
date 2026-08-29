@@ -3,7 +3,7 @@
 import { useCurrentStatus } from '@/hooks/useCurrentStatus/useCurrentStatus';
 import useUmami from '@/hooks/useUmami/useUmami';
 import { CheckinInput } from '@/traewelling-sdk/functions/trains';
-import { Station, Stop } from '@/traewelling-sdk/types';
+import { Station, Stopover } from '@/traewelling-sdk/types';
 import { AboardTrip } from '@/types/aboard';
 import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
@@ -49,12 +49,12 @@ const post = async (status: CheckinInput, session?: Session | null) => {
 const CheckIn = () => {
   const { data: session } = useSession();
   const [departureTime, setDepartureTime] = useState<string>();
-  const [destination, setDestination] = useState<Stop>();
+  const [destination, setDestination] = useState<Stopover>();
   const [error, setError] = useState<string>();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [origin, setOrigin] =
-    useState<Pick<Station, 'id' | 'ibnr' | 'name' | 'rilIdentifier'>>();
+    useState<Station>();
   const [query, setQuery] = useState('');
   const [step, setStep] = useState<CheckInStep>('origin');
   const [travelType, setTravelType] = useState(0);
@@ -73,10 +73,9 @@ const CheckIn = () => {
           body: message,
           business: travelType,
           departure: trip?.departure?.planned!,
-          destination: destination!.evaIdentifier,
-          ibnr: true,
+          destination: destination!.id,
           lineName: trip!.line.name,
-          start: trip?.departureStation?.ibnr!,
+          start: trip?.departureStation?.trwlId ?? -1,
           tripId: trip!.hafasId!,
           visibility: visibility,
         },

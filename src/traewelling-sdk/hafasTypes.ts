@@ -35,7 +35,9 @@ export type HAFASProductType =
   | 'suburban'
   | 'subway'
   | 'taxi'
-  | 'tram';
+	| 'tram'
+	| 'plane'
+	| 'freightTrain';
 
 export type HAFASStation = {
   id: string;

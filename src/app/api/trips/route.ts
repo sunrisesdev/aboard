@@ -7,9 +7,9 @@ import { getServerSession } from 'next-auth';
 
 export async function GET(request: Request) {
   try {
-    const { hafasTripId, lineName, start } = getSafeURLParams({
+    const { hafasTripId, lineName } = getSafeURLParams({
       url: request.url,
-      requiredParams: ['hafasTripId', 'lineName', 'start'],
+      requiredParams: ['hafasTripId', 'lineName'],
     });
 
     const session = await getServerSession(authOptions);
@@ -23,7 +23,6 @@ export async function GET(request: Request) {
     const data = await TraewellingSdk.trains.trip({
       hafasTripId,
       lineName,
-      start,
     });
 
     return createResponse({

@@ -32,12 +32,12 @@ const OriginStep = () => {
                 {stations && stations.length > 0 && (
                   <ul className={styles.stationList}>
                     {stations.map((station) => (
-                      <li key={station.ibnr}>
+                      <li key={station.id}>
                         <Station
                           name={station.name}
                           onClick={() => setOrigin(station)}
                           query={query}
-                          rilIdentifier={station.rilIdentifier}
+                          rilIdentifier={station.identifiers.filter(id => id.type === 'de_db_ril100')[0]?.identifier}
                         />
                       </li>
                     ))}
@@ -71,11 +71,11 @@ const OriginStep = () => {
               {recentStations && recentStations.length > 0 && (
                 <ul className={styles.stationList}>
                   {recentStations.map((station) => (
-                    <li key={station.ibnr}>
+                    <li key={station.id}>
                       <Station
                         name={station.name}
                         onClick={() => setOrigin(station)}
-                        rilIdentifier={station.rilIdentifier}
+                        rilIdentifier={station.identifiers.filter(id => id.type === 'de_db_ril100')[0]?.identifier}
                       />
                     </li>
                   ))}

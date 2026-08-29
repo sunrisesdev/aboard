@@ -1,7 +1,6 @@
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
-import { HAFASTrip } from '../hafasTypes';
-import { TransportType } from '../types';
+import { Departure, TransportType } from '../types';
 
 type DeparturesInput = {
   id: number;
@@ -25,7 +24,7 @@ export type DeparturesResponse = {
       prev: string;
     };
   } | null;
-  trips: HAFASTrip[];
+  trips: Departure[];
 };
 
 export const departures = async (input: DeparturesInput) => {
