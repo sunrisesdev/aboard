@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icons / U-Bahn</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#D8DBDF" offset="0%"></stop>
+            <stop stop-color="#B4D5F6" offset="40.7890625%"></stop>
+            <stop stop-color="#73AEF4" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Varianten" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Diskrimierungfrei---32px" transform="translate(-264, -28)">
+            <g id="18.-Basic-Elements/C.-Transportation-Icon/c.-40x40/2.-ICE" transform="translate(264, 28)">
+                <rect id="🎨-Icon-Background" fill="#1455C0" x="0" y="0" width="32" height="32" rx="3.20000005"></rect>
+                <g id="Icon-Shape" transform="translate(3.2115, 3.2)" fill="#FFFFFF">
+                    <path d="M15.5190447,5.02857143 L15.5190447,14.5608426 C15.5190447,16.3016134 14.3331611,17.4628571 12.7990447,17.4628571 C11.2649283,17.4628571 10.079985,16.3016134 10.079985,14.5608426 L10.079985,5.02857143 L6.19524103,5.02857143 L6.19524103,14.9148358 C6.19524103,19.0532721 9.29316635,20.5714286 12.7990447,20.5714286 C16.304923,20.5714286 19.404759,19.0569215 19.404759,14.9148358 L19.404759,5.02857143 L15.5190447,5.02857143 Z" id="🎨-Color"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

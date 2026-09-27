@@ -1,13 +1,16 @@
-import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
 
-export function proxy(req: NextRequest) {
-  const requestHeaders = new Headers(req.headers);
-  requestHeaders.set("x-pathname", req.nextUrl.pathname + req.nextUrl.search);
+export const proxy = auth((request) => {
+  const { pathname } = request.nextUrl;
 
-  return NextResponse.next({ request: { headers: requestHeaders } });
-}
+  if ((!request.auth || request.auth.error) && pathname !== "/") {
+    const url = new URL("/", request.nextUrl.origin);
+    url.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(url);
+  }
+});
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

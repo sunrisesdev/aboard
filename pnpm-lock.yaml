@@ -14,6 +14,9 @@ importers:
       '@sindresorhus/slugify':
         specifier: ^3.0.1
         version: 3.0.1
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       ky:
         specifier: ^2.1.0
         version: 2.1.0
@@ -478,6 +481,10 @@ packages:
 
   client-only@0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
+
+  clsx@2.1.1:
+    resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
+    engines: {node: '>=6'}
 
   colorette@1.4.0:
     resolution: {integrity: sha512-Y2oEozpomLn7Q3HFP7dpww7AtMJplbM9lGZP6RDfHqmbeRjiwRg4n6VM6j4KLmRke85uWEI7JqF17f3pqdRA0g==}
@@ -1019,6 +1026,8 @@ snapshots:
   change-case@5.4.4: {}
 
   client-only@0.0.1: {}
+
+  clsx@2.1.1: {}
 
   colorette@1.4.0: {}
 

@@ -1,0 +1,9 @@
+.base {
+  position: relative;
+}
+
+.link::after {
+  content: "";
+  inset: 0;
+  position: absolute;
+}

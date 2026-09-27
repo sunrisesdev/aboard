@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import {
   CheckInBottomDrawer,
   type StopStation,
-} from "@/components/CheckInBottomDrawer/CheckInBottomDrawer";
+} from "@/checkin/CheckInBottomDrawer/CheckInBottomDrawer";
 import { formatTime } from "@/helpers/formatTime";
+import { useState } from "react";
 
 export type StopoverSummary = StopStation & {
   key: string;

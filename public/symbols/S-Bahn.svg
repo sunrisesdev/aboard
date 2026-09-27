@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icons / S-Bahn</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#D8DBDF" offset="0%"></stop>
+            <stop stop-color="#B4D5F6" offset="40.7890625%"></stop>
+            <stop stop-color="#73AEF4" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Varianten" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Diskrimierungfrei---32px" transform="translate(-204, -28)">
+            <g id="18.-Basic-Elements/C.-Transportation-Icon/c.-40x40/2.-ICE" transform="translate(204, 28)">
+                <rect id="🎨-Icon-Background" fill="#408335" x="0" y="0" width="32" height="32" rx="3.20000005"></rect>
+                <g id="Icon-Shape" transform="translate(3.2115, 3.2)" fill="#FFFFFF">
+                    <path d="M17.8533353,9.60785387 C16.5339865,8.13571753 14.5471472,6.84159695 12.2169228,6.84159695 C10.8980951,6.84159695 10.144107,7.56876433 10.144107,8.4200033 C10.144107,12.001896 18.761039,9.48378229 18.761039,15.3701699 C18.761039,17.7474893 16.5339865,20.5142857 12.7828047,20.5142857 C10.6927936,20.5142857 8.2771138,19.5384357 6.9588071,18.314982 L6.9588071,15.2288362 C8.20885365,17.0909888 10.486971,18.5269826 12.7828047,18.5269826 C14.187609,18.5269826 15.3178095,17.6946241 15.3178095,16.8072425 C15.3178095,13.4562308 6.83896104,15.5309235 6.83896104,9.74972703 C6.83896104,6.71698592 9.69911339,5.08571429 12.2685088,5.08571429 C14.4101058,5.08571429 16.328685,5.81288167 17.8533353,7.03687483 L17.8533353,9.60785387 Z" id="🎨-Color"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
