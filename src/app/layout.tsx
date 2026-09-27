@@ -1,85 +1,9 @@
-import Layout from '@/components/Layout/Layout';
-import Providers from '@/components/Providers/Providers';
-import UmamiScript from '@/scripts/UmamiScript/UmamiScript';
-import { sourceSans3 } from '@/styles/fonts';
-import '@/styles/globals.css';
-import type { Metadata, Viewport } from 'next';
-import { Session } from 'next-auth';
-import { getServerSession } from 'next-auth/next';
-import 'normalize.css';
-import { authOptions } from '../pages/api/auth/[...nextauth]';
+import "./globals.css";
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const session = await getServerSession<any, Session>(authOptions);
-
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="de">
-      <head />
-      <body className={sourceSans3.className}>
-        <Providers session={session}>
-          <Layout>{children}</Layout>
-        </Providers>
-        <UmamiScript />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
-
-const APP_NAME = 'Aboard';
-const APP_DEFAULT_TITLE = 'aboard.at';
-const APP_TITLE_TEMPLATE = '%s - Aboard.at';
-const APP_DESCRIPTION =
-  'Aboard is an alternative webclient for Träwelling focused on mobile UX.';
-
-export const metadata: Metadata = {
-  icons: [
-    {
-      rel: 'icon',
-      url: '/favicon.ico',
-    },
-  ],
-  applicationName: APP_NAME,
-  title: {
-    default: APP_DEFAULT_TITLE,
-    template: APP_TITLE_TEMPLATE,
-  },
-  description: APP_DESCRIPTION,
-  manifest: '/manifest.json',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'black-translucent',
-    title: APP_DEFAULT_TITLE,
-    // startUpImage: [],
-  },
-  formatDetection: {
-    telephone: false,
-  },
-  openGraph: {
-    type: 'website',
-    siteName: APP_NAME,
-    title: {
-      default: APP_DEFAULT_TITLE,
-      template: APP_TITLE_TEMPLATE,
-    },
-    description: APP_DESCRIPTION,
-  },
-  twitter: {
-    card: 'summary',
-    title: {
-      default: APP_DEFAULT_TITLE,
-      template: APP_TITLE_TEMPLATE,
-    },
-    description: APP_DESCRIPTION,
-  },
-};
-
-export const viewport: Viewport = {
-  initialScale: 1,
-  themeColor: '#FFFFFF',
-  width: 'device-width',
-  viewportFit: 'cover',
-};
