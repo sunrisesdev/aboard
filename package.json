@@ -11,6 +11,8 @@
     "generate:traewelling-types": "openapi-typescript src/lib/traewelling/openapi.json -o src/lib/traewelling/schema.d.ts"
   },
   "dependencies": {
+    "@base-ui/react": "^1.8.0",
+    "@sindresorhus/slugify": "^3.0.1",
     "ky": "^2.1.0",
     "next": "16.3.6",
     "next-auth": "5.0.0-beta.32",

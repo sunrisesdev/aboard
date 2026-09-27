@@ -1,5 +1,5 @@
 import { requireSession, signOut } from "@/lib/auth";
-import Link from "next/link";
+import { StationSearchDrawer } from "@/components/StationSearchDrawer/StationSearchDrawer";
 
 export default async function DashboardPage() {
   const session = await requireSession();
@@ -8,9 +8,7 @@ export default async function DashboardPage() {
     <main>
       <h1>Hallo, {session.user.displayName}</h1>
       <p>@{session.user.username}</p>
-      <nav>
-        <Link href="/stations">Stationssuche</Link>
-      </nav>
+      <StationSearchDrawer />
       <form
         action={async () => {
           "use server";
