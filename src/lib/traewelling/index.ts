@@ -1,8 +1,4 @@
-export {
-  type CheckinRequestBody,
-  type CheckinSuccessResource,
-  createCheckin,
-} from "./checkin";
+export { createCheckin } from "./checkin";
 export { createTraewellingClient, type TraewellingClient } from "./client";
 export {
   type CheckinConflictBody,
@@ -21,5 +17,5 @@ export {
   setHomeStation,
   stationHistory,
 } from "./stations";
-export { getTripInfo, type TripResource } from "./trip";
+export { getTripInfo } from "./trip";
 export type { TraewellingUser } from "./types";

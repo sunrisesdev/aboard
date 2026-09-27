@@ -1,0 +1,16 @@
+.skeleton {
+  display: block;
+  border-radius: 0.25rem;
+  background: color-mix(in srgb, var(--foreground) 12%, transparent);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}

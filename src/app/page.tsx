@@ -1,5 +1,5 @@
-import { auth, signIn } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { auth, signIn } from "@/lib/auth";
 
 function sanitizeRedirectTarget(target: string | undefined): string {
   if (target?.startsWith("/") && !target.startsWith("//")) {
@@ -15,7 +15,7 @@ export default async function IndexPage({
   searchParams: Promise<{ redirect?: string }>;
 }) {
   const session = await auth();
-  if (session) {
+  if (session && !session.error) {
     redirect("/dashboard");
   }
 

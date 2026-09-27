@@ -1,5 +1,5 @@
-import { requireSession, signOut } from "@/lib/auth";
 import { StationSearchDrawer } from "@/components/StationSearchDrawer/StationSearchDrawer";
+import { requireSession, signOut } from "@/lib/auth";
 
 export default async function DashboardPage() {
   const session = await requireSession();

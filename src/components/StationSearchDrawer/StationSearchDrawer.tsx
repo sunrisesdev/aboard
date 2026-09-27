@@ -25,42 +25,46 @@ export function StationSearchDrawer() {
 
   return (
     <Drawer.Root open={open} onOpenChange={setOpen}>
-      <Drawer.Trigger className={styles.trigger}>Station suchen…</Drawer.Trigger>
-      <Drawer.Portal>
-        <Drawer.Backdrop className={styles.backdrop} />
-        <Drawer.Viewport className={styles.viewport}>
-          <Drawer.Popup className={styles.popup} initialFocus={searchInputRef}>
-            <Drawer.Content className={styles.content}>
-              {stations && stations.length > 0 && (
-                <ul className={styles.results}>
-                  {stations.map((station) => (
-                    <li key={station.id}>
-                      <Link
-                        href={`/station/${station.id}/${slugify(station.name)}`}
-                        onClick={() => setOpen(false)}
-                      >
-                        {station.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              {isLoading && <p>Suche läuft…</p>}
-              {!isLoading && debouncedQuery && stations?.length === 0 && (
-                <p>Keine Treffer.</p>
-              )}
-              <input
-                ref={searchInputRef}
-                type="text"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Stationsname"
-                className={styles.searchInput}
-              />
-            </Drawer.Content>
-          </Drawer.Popup>
-        </Drawer.Viewport>
-      </Drawer.Portal>
+      <Drawer.Trigger className={styles.trigger}>
+        Station suchen…
+      </Drawer.Trigger>
+      <Drawer.VirtualKeyboardProvider>
+        <Drawer.Portal>
+          <Drawer.Backdrop className={styles.backdrop} />
+          <Drawer.Viewport className={styles.viewport}>
+            <Drawer.Popup className={styles.popup} initialFocus={searchInputRef}>
+              <Drawer.Content className={styles.content}>
+                {stations && stations.length > 0 && (
+                  <ul className={styles.results}>
+                    {stations.map((station) => (
+                      <li key={station.id}>
+                        <Link
+                          href={`/station/${station.id}/${slugify(station.name)}`}
+                          onClick={() => setOpen(false)}
+                        >
+                          {station.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {isLoading && <p>Suche läuft…</p>}
+                {!isLoading && debouncedQuery && stations?.length === 0 && (
+                  <p>Keine Treffer.</p>
+                )}
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Stationsname"
+                  className={styles.searchInput}
+                />
+              </Drawer.Content>
+            </Drawer.Popup>
+          </Drawer.Viewport>
+        </Drawer.Portal>
+      </Drawer.VirtualKeyboardProvider>
     </Drawer.Root>
   );
 }

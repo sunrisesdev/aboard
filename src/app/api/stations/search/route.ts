@@ -1,8 +1,8 @@
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import type { StationResource } from "@/lib/traewelling";
 import { createTraewellingClient, searchStations } from "@/lib/traewelling";
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
 
 function onlyDistinct(stations: StationResource[]) {
   const ids = new Set<number>();
@@ -25,7 +25,7 @@ function onlyDistinct(stations: StationResource[]) {
 
 export async function GET(request: NextRequest) {
   const session = await auth();
-  if (!session) {
+  if (!session || session.error) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 

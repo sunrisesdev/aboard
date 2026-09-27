@@ -2,6 +2,8 @@ import ky, { isHTTPError } from "ky";
 import { TraewellingApiError } from "./errors";
 
 export function createTraewellingClient(accessToken: string) {
+  console.log(accessToken);
+
   return ky.create({
     baseUrl: "https://traewelling.de/api/",
     headers: {
