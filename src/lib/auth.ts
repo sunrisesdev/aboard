@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation";
-import NextAuth from "next-auth";
+import NextAuth, { customFetch } from "next-auth";
 import type { Provider } from "next-auth/providers";
 import type { components } from "@/lib/traewelling/schema";
 import type { TraewellingUser } from "@/lib/traewelling/types";
+import { userAgent } from "@/userAgent";
 
 type TraewellingToken = TraewellingUser & {
   accessToken?: string;
@@ -29,7 +30,15 @@ const traewelling: Provider = {
   profile(profile: { data: components["schemas"]["UserAuthResource"] }) {
     return { ...profile.data, id: String(profile.data.id) };
   },
+  [customFetch]: (input, init) => {
+    const headers = new Headers(init?.headers);
+    headers.set("User-Agent", userAgent);
+
+    return fetch(input, { ...init, headers });
+  },
 };
+
+const refreshBeforeExpiry = 60_000;
 
 // Laravel Passport redeems refresh tokens at the same `/oauth/token` endpoint
 // used for the initial exchange (grant_type=refresh_token), not a dedicated
@@ -44,7 +53,10 @@ async function refreshAccessToken(
   try {
     const response = await fetch("https://traewelling.de/oauth/token", {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "User-Agent": userAgent,
+      },
       body: new URLSearchParams({
         grant_type: "refresh_token",
         refresh_token: token.refreshToken,
@@ -54,7 +66,9 @@ async function refreshAccessToken(
     });
 
     if (!response.ok) {
-      throw new Error(`Refresh failed with status ${response.status}`);
+      throw new Error(
+        `Refresh failed with status ${response.status}: ${await response.text()}`,
+      );
     }
 
     const refreshed: {
@@ -70,7 +84,9 @@ async function refreshAccessToken(
       accessTokenExpiresAt: Date.now() + refreshed.expires_in * 1000,
       error: undefined,
     };
-  } catch {
+  } catch (error) {
+    console.error("Träwelling access token refresh failed", error);
+
     return { ...token, error: "RefreshAccessTokenError" };
   }
 }
@@ -100,7 +116,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // instead of silently keeping a dead access token forever.
       const isExpired =
         !current.accessTokenExpiresAt ||
-        Date.now() >= current.accessTokenExpiresAt;
+        Date.now() >= current.accessTokenExpiresAt - refreshBeforeExpiry;
       if (!isExpired) {
         return current;
       }

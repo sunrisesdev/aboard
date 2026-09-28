@@ -1,7 +1,8 @@
 import type { TraewellingClient } from "./client";
 import type { components, operations } from "./schema";
 
-type TripResource = components["schemas"]["TripResource"];
+export type StopoverResource = components["schemas"]["StopoverResource"];
+export type TripResource = components["schemas"]["TripResource"];
 
 export async function getTripInfo(
   client: TraewellingClient,

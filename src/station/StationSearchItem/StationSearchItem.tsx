@@ -10,10 +10,7 @@ export const StationSearchItem = ({ className, station, ...props }: Extend<'div'
 
   return (
     <div className={clsx(styles.base, className)} {...props}>
-      <Link
-        className={styles.link}
-        href={`/station/${station.id}?${new URLSearchParams({ name: station.name })}`}
-      >
+      <Link className={styles.link} href={`/station/${station.id}?${new URLSearchParams({ name: station.name })}`}>
         {station.name}
         {rilIdentifier && <Badge style={{ marginLeft: '1ch' }}>{rilIdentifier}</Badge>}
       </Link>

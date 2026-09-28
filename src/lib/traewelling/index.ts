@@ -16,6 +16,7 @@ export {
   searchStations,
   setHomeStation,
   stationHistory,
+  type TravelType,
 } from "./stations";
-export { getTripInfo } from "./trip";
+export { getTripInfo, type StopoverResource, type TripResource } from "./trip";
 export type { TraewellingUser } from "./types";

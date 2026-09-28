@@ -3,6 +3,7 @@ import type { components, operations } from "./schema";
 
 export type DepartureResource = components["schemas"]["DepartureResource"];
 export type StationResource = components["schemas"]["StationResource"];
+export type TravelType = components["schemas"]["TravelType"];
 
 export async function autocompleteStation(
   client: TraewellingClient,

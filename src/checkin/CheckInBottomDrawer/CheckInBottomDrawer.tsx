@@ -4,15 +4,10 @@ import { Drawer } from "@base-ui/react/drawer";
 import { useState } from "react";
 import { submitCheckinAction } from "@/checkin/actions";
 import { Button } from "@/components/Button/Button";
+import { cleanStationName } from "@/helpers/cleanStationName";
 import { formatTime } from "@/helpers/formatTime";
+import type { StopoverResource } from "@/lib/traewelling";
 import styles from "./CheckInBottomDrawer.module.css";
-
-export type StopStation = {
-  stationId: number;
-  stationName: string;
-  plannedAt: string | null;
-  actualAt: string | null;
-};
 
 export function CheckInBottomDrawer({
   open,
@@ -20,26 +15,26 @@ export function CheckInBottomDrawer({
   tripId,
   lineName,
   destinationName,
-  departure,
-  arrival,
+  startStation,
+  endStation,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   tripId: string;
   lineName: string;
   destinationName: string;
-  departure: StopStation;
-  arrival: StopStation;
+  startStation: StopoverResource;
+  endStation?: StopoverResource;
 }) {
   const [body, setBody] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const departureTime = departure.actualAt ?? departure.plannedAt;
-  const arrivalTime = arrival.actualAt ?? arrival.plannedAt;
+  const departureTime = startStation.departureReal ?? startStation.departurePlanned;
+  const arrivalTime = endStation?.arrivalReal ?? endStation?.arrivalPlanned;
 
   async function handleSubmit() {
-    if (!departureTime || !arrivalTime) {
+    if (!endStation || !departureTime || !arrivalTime) {
       return;
     }
 
@@ -48,8 +43,8 @@ export function CheckInBottomDrawer({
     const result = await submitCheckinAction({
       tripId,
       lineName,
-      start: departure.stationId,
-      destination: arrival.stationId,
+      start: startStation.station.id,
+      destination: endStation.station.id,
       departure: departureTime,
       arrival: arrivalTime,
       body: body || null,
@@ -75,10 +70,10 @@ export function CheckInBottomDrawer({
               <Drawer.Content className={styles.content}>
                 <div className={styles.summary}>
                   <span>
-                    {lineName} nach {destinationName}
+                    {lineName} nach {cleanStationName(destinationName)}
                   </span>
                   <span>
-                    Einstieg: {departure.stationName}
+                    Einstieg: {cleanStationName(startStation.station.name)}
                     {departureTime && (
                       <>
                         {" "}
@@ -89,18 +84,20 @@ export function CheckInBottomDrawer({
                       </>
                     )}
                   </span>
-                  <span>
-                    Ausstieg: {arrival.stationName}
-                    {arrivalTime && (
-                      <>
-                        {" "}
-                        um{" "}
-                        <time dateTime={arrivalTime}>
-                          {formatTime(arrivalTime)}
-                        </time>
-                      </>
-                    )}
-                  </span>
+                  {endStation && (
+                    <span>
+                      Ausstieg: {cleanStationName(endStation.station.name)}
+                      {arrivalTime && (
+                        <>
+                          {" "}
+                          um{" "}
+                          <time dateTime={arrivalTime}>
+                            {formatTime(arrivalTime)}
+                          </time>
+                        </>
+                      )}
+                    </span>
+                  )}
                 </div>
                 <textarea
                   value={body}

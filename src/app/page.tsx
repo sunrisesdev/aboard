@@ -14,13 +14,13 @@ export default async function IndexPage({
 }: {
   searchParams: Promise<{ redirect?: string }>;
 }) {
-  const session = await auth();
-  if (session && !session.error) {
-    redirect("/dashboard");
-  }
-
   const { redirect: redirectParam } = await searchParams;
   const redirectTo = sanitizeRedirectTarget(redirectParam);
+
+  const session = await auth();
+  if (session && !session.error) {
+    redirect(redirectTo);
+  }
 
   return (
     <main>

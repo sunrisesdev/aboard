@@ -1,50 +1,36 @@
 "use client";
 
-import {
-  CheckInBottomDrawer,
-  type StopStation,
-} from "@/checkin/CheckInBottomDrawer/CheckInBottomDrawer";
-import { formatTime } from "@/helpers/formatTime";
 import { useState } from "react";
-
-export type StopoverSummary = StopStation & {
-  key: string;
-  cancelled: boolean;
-};
+import { CheckInBottomDrawer } from "@/checkin/CheckInBottomDrawer/CheckInBottomDrawer";
+import { cleanStationName } from "@/helpers/cleanStationName";
+import { formatTime } from "@/helpers/formatTime";
+import type { StopoverResource } from "@/lib/traewelling";
 
 export function TripStopoverList({
   tripId,
   lineName,
   destinationName,
-  departure,
+  startStation,
   stopovers,
 }: {
   tripId: string;
   lineName: string;
   destinationName: string;
-  departure: StopStation;
-  stopovers: StopoverSummary[];
+  startStation: StopoverResource;
+  stopovers: StopoverResource[];
 }) {
-  const [selected, setSelected] = useState<StopoverSummary | null>(null);
-  const [lastSelected, setLastSelected] = useState<StopoverSummary | null>(
-    null,
-  );
+  const [endStation, setEndStation] = useState<StopoverResource>();
 
   return (
     <>
       <ul>
         {stopovers.map((stopover) => {
-          const time = stopover.actualAt ?? stopover.plannedAt;
+          const time = stopover.arrivalReal ?? stopover.arrivalPlanned;
+
           return (
-            <li key={stopover.key}>
-              <button
-                type="button"
-                onClick={() => {
-                  setSelected(stopover);
-                  setLastSelected(stopover);
-                }}
-              >
-                <span>{stopover.stationName}</span>
+            <li key={stopover.uuid ?? stopover.id}>
+              <button type="button" onClick={() => setEndStation(stopover)}>
+                <span>{cleanStationName(stopover.station.name)}</span>
                 {time && <time dateTime={time}>{formatTime(time)}</time>}
                 {stopover.cancelled && <span>Ausfall</span>}
               </button>
@@ -52,21 +38,17 @@ export function TripStopoverList({
           );
         })}
       </ul>
-      {lastSelected && (
-        <CheckInBottomDrawer
-          open={selected !== null}
-          onOpenChange={(open) => {
-            if (!open) {
-              setSelected(null);
-            }
-          }}
-          tripId={tripId}
-          lineName={lineName}
-          destinationName={destinationName}
-          departure={departure}
-          arrival={lastSelected}
-        />
-      )}
+      <CheckInBottomDrawer
+        open={!!endStation}
+        onOpenChange={(open) => {
+          if (!open) setEndStation(undefined);
+        }}
+        tripId={tripId}
+        lineName={lineName}
+        destinationName={destinationName}
+        startStation={startStation}
+        endStation={endStation}
+      />
     </>
   );
 }
