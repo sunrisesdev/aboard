@@ -67,7 +67,7 @@ export default async function StationboardPage({ params, searchParams }: PagePro
   const session = await requireSession();
 
   return (
-    <main>
+    <main style={{ paddingInline: '1rem' }}>
       <Suspense fallback={<StationboardSkeleton name={name as string | undefined} />}>
         <StationboardLoader
           accessToken={session.accessToken as string}

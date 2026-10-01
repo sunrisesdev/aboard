@@ -3,11 +3,11 @@
 import { Toggle } from '@base-ui/react/toggle';
 import { ToggleGroup } from '@base-ui/react/toggle-group';
 import ky from 'ky';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Button } from '@/components/Button/Button';
 import type { DepartureResource, TravelType } from '@/lib/traewelling';
 import { DepartureTripItem } from '@/station/DepartureTripItem/DepartureTripItem';
-import { groupSplitTrains } from './groupSplitTrains';
+import { groupByDepartureTime } from './groupByDepartureTime';
 import styles from './Stationboard.module.css';
 import { type DepartureCursors, useStationboardReducer } from './useStationboardReducer';
 
@@ -88,10 +88,14 @@ export const Stationboard = ({
     knownTravelTypes.includes(type),
   );
 
-  const departureGroups = groupSplitTrains(
-    [...departures].sort(
-      (a, b) => new Date(a.plannedWhen ?? a.when).getTime() - new Date(b.plannedWhen ?? b.when).getTime(),
-    ),
+  const departureGroups = groupByDepartureTime(departures);
+  const nowMinute = new Date().setSeconds(0, 0);
+  const upcomingIndex = departureGroups.findIndex(({ time }) => time >= nowMinute);
+  const nowDividerIndex = upcomingIndex === -1 ? departureGroups.length : upcomingIndex;
+  const nowDivider = (
+    <li className={styles.nowDivider}>
+      <span>Jetzt</span>
+    </li>
   );
 
   const loadEarlier = async () => {
@@ -185,20 +189,43 @@ export const Stationboard = ({
         {loadingEarlier ? 'Lädt…' : 'Frühere Abfahrten laden'}
       </Button>
 
-      <ul className={styles.list}>
-        {departureGroups.map((group) => (
-          <li key={group[0].tripId}>
-            {group.length > 1 ? (
-              <div className={styles.splitTrain}>
-                {group.map((departure) => (
-                  <DepartureTripItem key={departure.tripId} departure={departure} stationId={stationId} />
+      <ul className={styles.departures}>
+        {departureGroups.map(({ time, label, groups }, index) => (
+          <Fragment key={time}>
+            {index === nowDividerIndex && nowDivider}
+
+            <li className={styles.departureGroup}>
+              <time className={styles.groupLabel} dateTime={new Date(time).toISOString()}>
+                {label}
+              </time>
+
+              <div className={styles.groupItems}>
+                {groups.map((group) => (
+                  <Fragment key={group[0].tripId}>
+                    {group.length > 1 ? (
+                      <div className={styles.splitTrain}>
+                        {group.map((departure, splitTrainIndex) => (
+                          <DepartureTripItem
+                            departure={departure}
+                            key={departure.tripId}
+                            lessInformation={splitTrainIndex > 0}
+                            stationId={stationId}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <DepartureTripItem departure={group[0]} stationId={stationId} />
+                    )}
+
+                    <hr />
+                  </Fragment>
                 ))}
               </div>
-            ) : (
-              <DepartureTripItem departure={group[0]} stationId={stationId} />
-            )}
-          </li>
+            </li>
+          </Fragment>
         ))}
+
+        {nowDividerIndex === departureGroups.length && nowDivider}
       </ul>
 
       <Button className={styles.loadMore} disabled={loadingLater} onClick={loadLater}>

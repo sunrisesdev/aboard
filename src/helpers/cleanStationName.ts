@@ -24,6 +24,8 @@ const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\
 
 const replaceUnderscores: Step = (name) => name.replace(/_+/g, ' ');
 
+const replaceEscapedLinebreak: Step = (name) => name.replace(/\\n/g, ' ');
+
 const correctApostrophes: Step = (name) => name.replace(/[`´']/g, '’');
 
 const replaceNonRoundBrackets: Step = (name) => name.replace(/[[{]/g, '(').replace(/[\]}]/g, ')');
@@ -56,6 +58,7 @@ const correctAbbreviatedStreetWhitespace: Step = (name) => name.replace(/\.\sstr
 const cleanup = pipe(
   removeEmptyBrackets,
   correctWhitespace,
+  replaceEscapedLinebreak,
   removeDuplicateSigns,
   removeLeadingAndTrailingRelicts,
   correctSignWhitespace,

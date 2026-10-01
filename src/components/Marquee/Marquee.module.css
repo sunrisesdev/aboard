@@ -1,0 +1,81 @@
+@property --marquee-fade-start {
+  inherits: false;
+  initial-value: 0px;
+  syntax: "<length>";
+}
+
+@property --marquee-fade-end {
+  inherits: false;
+  initial-value: 0px;
+  syntax: "<length>";
+}
+
+.base {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+
+  &[data-overflowing="true"] {
+    animation: marquee-fade var(--marquee-duration) ease-in-out infinite alternate;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 var(--marquee-fade-start),
+      #000 calc(100% - var(--marquee-fade-end)),
+      transparent
+    );
+
+    & .content {
+      animation: marquee var(--marquee-duration) ease-in-out infinite alternate;
+    }
+  }
+}
+
+.content {
+  display: inline-block;
+}
+
+@keyframes marquee {
+  0%,
+  15% {
+    transform: translateX(0);
+  }
+
+  85%,
+  100% {
+    transform: translateX(calc(-1 * var(--marquee-distance)));
+  }
+}
+
+@keyframes marquee-fade {
+  0%,
+  15% {
+    --marquee-fade-start: 0px;
+    --marquee-fade-end: 0.5rem;
+  }
+
+  25%,
+  75% {
+    --marquee-fade-start: 0.5rem;
+    --marquee-fade-end: 0.5rem;
+  }
+
+  85%,
+  100% {
+    --marquee-fade-start: 0.5rem;
+    --marquee-fade-end: 0px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .base[data-overflowing="true"] {
+    animation: none;
+    mask-image: none;
+    text-overflow: ellipsis;
+
+    & .content {
+      animation: none;
+    }
+  }
+}

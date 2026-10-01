@@ -7,7 +7,7 @@ function getSplitTrainKey(departure: DepartureResource) {
   if (!departure.plannedPlatform && !departure.platform) return undefined;
   if (!splittableTravelTypes.includes(motisModeToTravelType(departure.line.mode))) return undefined;
 
-  return [departure.plannedWhen, departure.plannedPlatform, departure.platform].join('|');
+  return [departure.plannedWhen, departure.when, departure.plannedPlatform, departure.platform].join('|');
 }
 
 export function groupSplitTrains(departures: DepartureResource[]) {

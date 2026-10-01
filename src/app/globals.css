@@ -14,8 +14,8 @@
   --via-neutral-900: oklch(20.5% 0 none);
   --via-neutral-950: oklch(14.5% 0 none);
 
-  --via-bg-surface: light-dark(var(--via-neutral-100), var(--via-neutral-900));
-  --via-bg-primary: light-dark(#fff, var(--via-neutral-950));
+  --via-bg-surface: light-dark(var(--via-neutral-100), var(--via-neutral-950));
+  --via-bg-primary: light-dark(#fff, var(--via-neutral-900));
   --via-bg-secondary: light-dark(var(--via-neutral-50), var(--via-neutral-800));
   --via-bd-primary: light-dark(var(--via-neutral-200), var(--via-neutral-800));
   --via-bd-secondary: light-dark(var(--via-neutral-300), var(--via-neutral-700));
@@ -58,6 +58,12 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+[data-via-icon] {
+  flex-shrink: 0;
+  height: 1em;
+  width: 1em;
 }
 
 @media (prefers-color-scheme: dark) {
