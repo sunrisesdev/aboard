@@ -1,10 +1,10 @@
-export { createCheckin } from "./checkin";
-export { createTraewellingClient, type TraewellingClient } from "./client";
+export { createCheckin } from './checkin';
+export { createTraewellingClient, type TraewellingClient } from './client';
 export {
   type CheckinConflictBody,
   type CheckinForbiddenBody,
   TraewellingApiError,
-} from "./errors";
+} from './errors';
 export {
   autocompleteStation,
   type DepartureResource,
@@ -17,6 +17,6 @@ export {
   setHomeStation,
   stationHistory,
   type TravelType,
-} from "./stations";
-export { getTripInfo, type StopoverResource, type TripResource } from "./trip";
-export type { TraewellingUser } from "./types";
+} from './stations';
+export { getTripInfo, type StopoverResource, type TripResource } from './trip';
+export type { MotisMode, TraewellingUser } from './types';

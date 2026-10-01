@@ -1,12 +1,25 @@
-.badge {
-  display: inline-flex;
+.base {
+  --via-line-padding: 0.375rem;
   align-items: center;
-  justify-content: center;
-  padding: 0.125rem 0.5rem;
-  border-radius: 0.25rem;
-  background: var(--foreground);
-  color: var(--background);
-  font-size: 0.8125rem;
+  background: var(--via-line-bg);
+  color: var(--via-line-fg);
+  display: flex;
+  flex-shrink: 0;
+  font-family: var(--via-line);
+  font-size: 0.75rem;
   font-weight: 600;
+  height: 1.25rem;
+  line-height: 1;
+  min-width: 1.75rem;
+  justify-content: center;
+  padding: 0 var(--via-line-padding);
   white-space: nowrap;
+
+  &[data-via-shape="pill"] {
+    border-radius: 99rem;
+  }
+
+  &[data-via-shape="smooth-rectangle"] {
+    border-radius: 0.25rem;
+  }
 }
