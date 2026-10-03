@@ -6,23 +6,17 @@ import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { requireSession } from '@/lib/auth';
 import { createTraewellingClient, getDepartures, TraewellingApiError, type TravelType } from '@/lib/traewelling';
 import { Stationboard } from '@/station/Stationboard/Stationboard';
+import { StationboardContextProvider } from '@/station/Stationboard/Stationboard.context';
+import { StationboardTimePicker } from '@/station/StationboardTimePicker/StationboardTimePicker';
+import { StationboardTravelTypeFilter } from '@/station/StationboardTravelTypeFilter/StationboardTravelTypeFilter';
 
-const StationboardLoader = async ({
-  accessToken,
-  at,
-  stationId,
-  travelType,
-}: {
-  accessToken: string;
-  at: string | undefined;
-  stationId: string;
-  travelType: TravelType | undefined;
-}) => {
-  const client = createTraewellingClient(accessToken);
-
-  let result: Awaited<ReturnType<typeof getDepartures>>;
+const loadDepartures = async (
+  accessToken: string,
+  stationId: string,
+  { requestedTime, travelType }: { requestedTime: string | undefined; travelType: TravelType | undefined },
+) => {
   try {
-    result = await getDepartures(client, stationId, { when: at, travelType });
+    return await getDepartures(createTraewellingClient(accessToken), stationId, { when: requestedTime, travelType });
   } catch (error) {
     if (error instanceof TraewellingApiError && error.status === 404) {
       notFound();
@@ -30,38 +24,46 @@ const StationboardLoader = async ({
 
     throw error;
   }
+};
 
-  const { data: departures, meta } = result;
+type DeparturesPromise = ReturnType<typeof loadDepartures>;
+
+const StationName = async ({ departuresPromise }: { departuresPromise: DeparturesPromise }) => {
+  const { meta } = await departuresPromise;
+
+  return <h1>{meta.station.name}</h1>;
+};
+
+const StationboardLoader = async ({
+  departuresPromise,
+  stationId,
+  travelType,
+}: {
+  departuresPromise: DeparturesPromise;
+  stationId: string;
+  travelType: TravelType | undefined;
+}) => {
+  const { data: departures, meta } = await departuresPromise;
 
   return (
-    <>
-      <h1>{meta.station.name}</h1>
-      <PageContent>
-        <Stationboard
-          availableTravelTypes={meta.availableTravelTypes}
-          initialCursors={meta.times}
-          initialDepartures={departures}
-          initialRequestedTime={at}
-          initialTravelType={travelType}
-          stationId={stationId}
-        />
-      </PageContent>
-    </>
+    <Stationboard
+      initialCursors={meta.times}
+      initialDepartures={departures}
+      stationId={stationId}
+      travelType={travelType}
+    />
   );
 };
 
-const StationboardSkeleton = ({ name }: { name?: string }) => {
+const StationboardSkeleton = () => {
   return (
-    <>
-      {name ? <h1>{name}</h1> : <Skeleton width="12rem" height="1.5rem" />}
-      <ul>
-        {Array.from({ length: 8 }, (_, index) => (
-          <li key={index}>
-            <Skeleton width="100%" height="1.25rem" />
-          </li>
-        ))}
-      </ul>
-    </>
+    <ul>
+      {Array.from({ length: 8 }, (_, index) => (
+        <li key={index}>
+          <Skeleton width="100%" height="1.25rem" />
+        </li>
+      ))}
+    </ul>
   );
 };
 
@@ -70,17 +72,31 @@ export default async function StationboardPage({ params, searchParams }: PagePro
   const { at, name, travelType } = await searchParams;
   const session = await requireSession();
 
+  // Not awaited: the station name and the departures stream in separately, while the filters are usable right away.
+  const departuresPromise = loadDepartures(session.accessToken as string, stationId, {
+    requestedTime: at as string | undefined,
+    travelType: travelType as TravelType | undefined,
+  });
+
   return (
     <main>
       <CheckInContextProvider>
-        <Suspense fallback={<StationboardSkeleton name={name as string | undefined} />}>
-          <StationboardLoader
-            accessToken={session.accessToken as string}
-            at={at as string | undefined}
-            stationId={stationId}
-            travelType={travelType as TravelType | undefined}
-          />
-        </Suspense>
+        <StationboardContextProvider>
+          <Suspense fallback={name ? <h1>{name}</h1> : <Skeleton width="12rem" height="1.5rem" />}>
+            <StationName departuresPromise={departuresPromise} />
+          </Suspense>
+          <PageContent>
+            <StationboardTravelTypeFilter />
+            <StationboardTimePicker />
+            <Suspense fallback={<StationboardSkeleton />}>
+              <StationboardLoader
+                departuresPromise={departuresPromise}
+                stationId={stationId}
+                travelType={travelType as TravelType | undefined}
+              />
+            </Suspense>
+          </PageContent>
+        </StationboardContextProvider>
       </CheckInContextProvider>
     </main>
   );

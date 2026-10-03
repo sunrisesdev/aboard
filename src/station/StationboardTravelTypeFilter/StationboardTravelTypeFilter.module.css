@@ -1,0 +1,32 @@
+.filterGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.filterToggle {
+  display: inline-flex;
+  align-items: center;
+  height: 2rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--foreground);
+  border-radius: 999px;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.filterToggle[data-pressed] {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.filterToggle[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

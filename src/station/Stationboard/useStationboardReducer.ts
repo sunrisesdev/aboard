@@ -1,79 +1,54 @@
 import { useReducer } from 'react';
-import { motisModeToTravelType } from '@/helpers/motisModeToTravelType';
-import type { DepartureResource, TravelType } from '@/lib/traewelling';
+import type { DepartureResource } from '@/lib/traewelling';
 
 export type DepartureCursors = { now: string; prev: string; next: string };
 
-type StationboardAction =
-  | {
-      type: 'append' | 'prepend';
-      cursors: DepartureCursors;
-      departures: DepartureResource[];
-      requestedTime: string;
-    }
-  | {
-      type: 'replace';
-      cursors: DepartureCursors;
-      departures: DepartureResource[];
-      requestedTime: string | undefined;
-      travelType: TravelType | undefined;
-    };
-
-type StationboardState = {
-  anchor: string;
+type StationboardAction = {
+  type: 'append' | 'prepend' | 'reset';
+  cursors: DepartureCursors;
   departures: DepartureResource[];
-  knownTravelTypes: TravelType[];
-  nextCursor: string;
-  previousCursor: string;
-  requestedTime: string | undefined;
-  travelType: TravelType | undefined;
 };
 
-function addTravelTypes(current: TravelType[], departures: DepartureResource[]) {
-  const types = new Set(current);
+type StationboardState = {
+  departures: DepartureResource[];
+  initialDepartures: DepartureResource[];
+  nextCursor: string;
+  previousCursor: string;
+};
 
-  for (const departure of departures) {
-    const type = motisModeToTravelType(departure.line.mode);
-    if (type) types.add(type);
-  }
-
-  return types.size === current.length ? current : [...types];
+function createStationboardState({
+  cursors,
+  departures,
+}: {
+  cursors: DepartureCursors;
+  departures: DepartureResource[];
+}) {
+  return {
+    departures: uniqueByTrip(departures),
+    initialDepartures: departures,
+    nextCursor: cursors.next,
+    previousCursor: cursors.prev,
+  };
 }
 
 function stationboardReducer(state: StationboardState, action: StationboardAction): StationboardState {
-  const knownTravelTypes = addTravelTypes(state.knownTravelTypes, action.departures);
-
   switch (action.type) {
     case 'append': {
       return {
         ...state,
-        anchor: action.requestedTime,
         departures: uniqueByTrip([...state.departures, ...action.departures]),
-        knownTravelTypes,
         nextCursor: action.cursors.next,
-        requestedTime: action.requestedTime,
       };
     }
     case 'prepend': {
       return {
         ...state,
-        anchor: action.requestedTime,
         departures: uniqueByTrip([...state.departures, ...action.departures]),
-        knownTravelTypes,
         previousCursor: action.cursors.prev,
-        requestedTime: action.requestedTime,
       };
     }
-    case 'replace': {
-      return {
-        anchor: action.requestedTime ?? action.cursors.now,
-        departures: uniqueByTrip(action.departures),
-        knownTravelTypes,
-        nextCursor: action.cursors.next,
-        previousCursor: action.cursors.prev,
-        requestedTime: action.requestedTime,
-        travelType: action.travelType,
-      };
+    case 'reset': {
+      return createStationboardState(action);
     }
   }
 }
@@ -84,25 +59,22 @@ function uniqueByTrip(departures: DepartureResource[]) {
 }
 
 export function useStationboardReducer({
-  availableTravelTypes,
   initialCursors,
   initialDepartures,
-  initialRequestedTime,
-  initialTravelType,
 }: {
-  availableTravelTypes: TravelType[];
   initialCursors: DepartureCursors;
   initialDepartures: DepartureResource[];
-  initialRequestedTime: string | undefined;
-  initialTravelType: TravelType | undefined;
 }) {
-  return useReducer(stationboardReducer, null, () => ({
-    anchor: initialRequestedTime ?? initialCursors.now,
-    departures: uniqueByTrip(initialDepartures),
-    knownTravelTypes: addTravelTypes(availableTravelTypes, initialDepartures),
-    nextCursor: initialCursors.next,
-    previousCursor: initialCursors.prev,
-    requestedTime: initialRequestedTime,
-    travelType: initialTravelType,
-  }));
+  const [state, dispatch] = useReducer(
+    stationboardReducer,
+    { cursors: initialCursors, departures: initialDepartures },
+    createStationboardState,
+  );
+
+  // A new server render (e.g. after changing the filters) replaces everything loaded so far.
+  if (state.initialDepartures !== initialDepartures) {
+    dispatch({ type: 'reset', cursors: initialCursors, departures: initialDepartures });
+  }
+
+  return [state, dispatch] as const;
 }
