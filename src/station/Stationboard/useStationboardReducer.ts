@@ -40,7 +40,7 @@ function addTravelTypes(current: TravelType[], departures: DepartureResource[]) 
   return types.size === current.length ? current : [...types];
 }
 
-function stationboardReducer(state: StationboardState, action: StationboardAction) {
+function stationboardReducer(state: StationboardState, action: StationboardAction): StationboardState {
   const knownTravelTypes = addTravelTypes(state.knownTravelTypes, action.departures);
 
   switch (action.type) {

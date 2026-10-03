@@ -1,8 +1,10 @@
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
+import { ColoredLayer } from '@/components/ColoredLayer/ColoredLayer';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { cleanStationName } from '@/helpers/cleanStationName';
 import { formatTime } from '@/helpers/formatTime';
+import { getColorsByMotisMode } from '@/helpers/getColorsByMotisMode';
 import { requireSession } from '@/lib/auth';
 import { createTraewellingClient, getTripInfo, TraewellingApiError } from '@/lib/traewelling';
 import { TripStopoverList } from './TripStopoverList';
@@ -76,11 +78,22 @@ async function TripStopovers({
 
   const boardingStopover = trip.stopovers[boardingIndex] ?? trip.stopovers[0];
 
+  const modeColors = getColorsByMotisMode(trip.mode?.toUpperCase()) ?? [
+    'var(--via-fg-primary)',
+    'var(--via-bg-surface)',
+  ];
+
+  // const background = normalizeHexColor(trip.) ?? modeColors[0];
+
   return (
     <>
-      <h1>
-        {trip.lineName} nach {cleanStationName(trip.destination.name)}
-      </h1>
+      <ColoredLayer color={modeColors[0]}>
+        <ColoredLayer.Content>
+          <h1>
+            {trip.lineName} nach {cleanStationName(trip.destination.name)}
+          </h1>
+        </ColoredLayer.Content>
+      </ColoredLayer>
       <TripStopoverList
         tripId={trip.tripId}
         lineName={trip.lineName}

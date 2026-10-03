@@ -4,6 +4,7 @@ import { Toggle } from '@base-ui/react/toggle';
 import { ToggleGroup } from '@base-ui/react/toggle-group';
 import ky from 'ky';
 import { Fragment, useState } from 'react';
+import { useCheckIn } from '@/checkin/useCheckIn';
 import { Button } from '@/components/Button/Button';
 import type { DepartureResource, TravelType } from '@/lib/traewelling';
 import { DepartureTripItem } from '@/station/DepartureTripItem/DepartureTripItem';
@@ -80,6 +81,7 @@ export const Stationboard = ({
       initialRequestedTime,
       initialTravelType,
     });
+  const { dispatch: checkInDispatch } = useCheckIn();
   const [jumping, setJumping] = useState(false);
   const [loadingEarlier, setLoadingEarlier] = useState(false);
   const [loadingLater, setLoadingLater] = useState(false);
@@ -209,12 +211,17 @@ export const Stationboard = ({
                             departure={departure}
                             key={departure.tripId}
                             lessInformation={splitTrainIndex > 0}
+                            onSelect={() => checkInDispatch({ type: 'selectDeparture', departure })}
                             stationId={stationId}
                           />
                         ))}
                       </div>
                     ) : (
-                      <DepartureTripItem departure={group[0]} stationId={stationId} />
+                      <DepartureTripItem
+                        departure={group[0]}
+                        onSelect={() => checkInDispatch({ type: 'selectDeparture', departure: group[0] })}
+                        stationId={stationId}
+                      />
                     )}
 
                     <hr />

@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import type { Extend, Structure } from '@/helpers/extend';
+import { getColorsByMotisMode } from '@/helpers/getColorsByMotisMode';
 import type { MotisMode } from '@/lib/traewelling';
 import styles from './LineBadge.module.css';
 
@@ -61,10 +62,7 @@ export const LineBadge = ({
     productName: string | undefined;
   }
 >) => {
-  const modeColors = (mode && colorsByMotisMode[mode.toUpperCase() as MotisMode]) ?? [
-    'var(--via-fg-primary)',
-    'var(--via-bg-surface)',
-  ];
+  const modeColors = getColorsByMotisMode(mode) ?? ['var(--via-fg-primary)', 'var(--via-bg-surface)'];
 
   const background = normalizeHexColor(backgroundColor) ?? modeColors[0];
   const foreground = normalizeHexColor(color) ?? modeColors[1];

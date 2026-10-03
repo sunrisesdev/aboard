@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
+import { CheckInContextProvider } from '@/checkin/CheckIn.context';
+import { PageContent } from '@/components/PageContent/PageContent';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { requireSession } from '@/lib/auth';
 import { createTraewellingClient, getDepartures, TraewellingApiError, type TravelType } from '@/lib/traewelling';
@@ -34,14 +36,16 @@ const StationboardLoader = async ({
   return (
     <>
       <h1>{meta.station.name}</h1>
-      <Stationboard
-        availableTravelTypes={meta.availableTravelTypes}
-        initialCursors={meta.times}
-        initialDepartures={departures}
-        initialRequestedTime={at}
-        initialTravelType={travelType}
-        stationId={stationId}
-      />
+      <PageContent>
+        <Stationboard
+          availableTravelTypes={meta.availableTravelTypes}
+          initialCursors={meta.times}
+          initialDepartures={departures}
+          initialRequestedTime={at}
+          initialTravelType={travelType}
+          stationId={stationId}
+        />
+      </PageContent>
     </>
   );
 };
@@ -67,15 +71,17 @@ export default async function StationboardPage({ params, searchParams }: PagePro
   const session = await requireSession();
 
   return (
-    <main style={{ paddingInline: '1rem' }}>
-      <Suspense fallback={<StationboardSkeleton name={name as string | undefined} />}>
-        <StationboardLoader
-          accessToken={session.accessToken as string}
-          at={at as string | undefined}
-          stationId={stationId}
-          travelType={travelType as TravelType | undefined}
-        />
-      </Suspense>
+    <main>
+      <CheckInContextProvider>
+        <Suspense fallback={<StationboardSkeleton name={name as string | undefined} />}>
+          <StationboardLoader
+            accessToken={session.accessToken as string}
+            at={at as string | undefined}
+            stationId={stationId}
+            travelType={travelType as TravelType | undefined}
+          />
+        </Suspense>
+      </CheckInContextProvider>
     </main>
   );
 }

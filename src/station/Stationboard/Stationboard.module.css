@@ -1,6 +1,7 @@
 .departures {
   background-color: var(--via-bg-primary);
   border-radius: 1rem;
+  box-shadow: var(--via-shadow-md);
   display: flex;
   flex-direction: column;
   list-style: none;
@@ -45,7 +46,7 @@
 
 .nowDivider {
   align-items: center;
-  background-color: var(--via-bd-primary);
+  /* background-color: var(--via-bd-primary); */
   color: var(--foreground);
   display: flex;
   gap: 0.5rem;

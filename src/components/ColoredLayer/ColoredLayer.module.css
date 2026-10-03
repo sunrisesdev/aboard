@@ -1,0 +1,23 @@
+.base {
+  background-color: var(--via-colored-layer-bg);
+  border-radius: var(--via-colored-layer-radius);
+  box-shadow: var(--via-shadow-xs);
+}
+
+.content {
+  border: 0.0625rem solid var(--via-bd-tertiary);
+  border-radius: var(--via-colored-layer-radius);
+  box-shadow: var(--via-shadow-skeuomorphic);
+  position: relative;
+
+  &::before {
+    border: 0.0625rem solid var(--via-bd-highlight);
+    border-radius: calc(var(--via-colored-layer-radius) - 2 * 0.0625rem);
+    content: "";
+    inset: 0.0625rem;
+    mask-image: linear-gradient(to bottom, black, transparent);
+    opacity: 0.5;
+    pointer-events: none;
+    position: absolute;
+  }
+}

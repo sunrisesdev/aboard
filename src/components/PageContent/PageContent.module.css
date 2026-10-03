@@ -1,0 +1,14 @@
+.base {
+  padding-inline: 1rem;
+
+  @media (width > 64em) {
+    padding-inline: 1.5rem;
+  }
+}
+
+.content {
+  display: grid;
+  margin-inline: auto;
+  max-width: 90rem;
+  width: 100%;
+}

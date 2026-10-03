@@ -1,6 +1,5 @@
 import { IconArrowMergeAltRight } from '@tabler/icons-react';
 import { clsx } from 'clsx';
-import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import { LineBadge } from '@/components/LineBadge/LineBadge';
 import { Marquee } from '@/components/Marquee/Marquee';
@@ -18,10 +17,12 @@ import styles from './DepartureTripItem.module.css';
 export const DepartureTripItem = ({
   departure,
   lessInformation = false,
+  onSelect,
   stationId,
 }: {
   departure: DepartureResource;
   lessInformation?: boolean;
+  onSelect?: () => void;
   stationId: string;
 }) => {
   const modeColors = getColorsByMotisMode(departure.line.mode ?? undefined) ?? [
@@ -47,10 +48,11 @@ export const DepartureTripItem = ({
     .join(' · ');
 
   return (
-    <Link
+    <button
       className={clsx(styles.base, hasDeparted && styles.hasDeparted, departure.cancelled && styles.isCancelled)}
-      href={tripHref}
+      onClick={() => onSelect?.()}
       style={{ '--via-line-bg': modeColors[0], '--via-line-fg': modeColors[1] } as CSSProperties}
+      type="button"
     >
       <div className={styles.topLine}>
         <LineBadge
@@ -109,6 +111,6 @@ export const DepartureTripItem = ({
           )}
         </div>
       )}
-    </Link>
+    </button>
   );
 };
