@@ -9,6 +9,7 @@ export type CheckInState = {
 export type CheckInAction =
   | { type: 'selectDeparture'; departure: DepartureResource }
   | { type: 'selectDestination'; destination: StopoverResource }
+  | { type: 'clearDestination' }
   | { type: 'reset' };
 
 export type CheckInTrip = {

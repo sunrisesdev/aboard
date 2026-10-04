@@ -5,7 +5,7 @@
   justify-content: flex-end;
   view-timeline: --trip-side-panel block;
 
-  @media (width <= 64em) {
+  @media (width < 64em) {
     display: none;
   }
 }

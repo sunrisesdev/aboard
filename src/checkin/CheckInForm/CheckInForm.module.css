@@ -1,0 +1,27 @@
+.base {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.characterCounter {
+  align-self: flex-end;
+  margin-bottom: -0.25rem;
+  margin-top: 0.75rem;
+}
+
+.error {
+  color: var(--via-delay-late);
+  font-size: 0.875rem;
+}
+
+.textarea {
+  background-color: var(--via-bg-primary);
+  border: 1px solid var(--via-bd-secondary);
+  border-radius: 0.5rem;
+  color: var(--via-fg-primary);
+  font: inherit;
+  min-height: 5rem;
+  padding: 0.5rem 0.75rem;
+  resize: vertical;
+}

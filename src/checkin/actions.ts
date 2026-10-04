@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import {
+  type Business,
   createCheckin,
   createTraewellingClient,
   TraewellingApiError,
@@ -15,6 +16,7 @@ export type CheckinRequest = {
   departure: string;
   arrival: string;
   body?: string | null;
+  business?: Business;
 };
 
 export type CheckinResult =

@@ -2,9 +2,14 @@ import { clsx } from 'clsx';
 import type { Extend, Structure, StructureWithChildren } from '@/helpers/extend';
 import styles from './TripLine.module.css';
 
-const Root = ({ children, className, ...props }: Extend<StructureWithChildren>) => {
+const Root = ({
+  children,
+  className,
+  orientation = 'vertical',
+  ...props
+}: Extend<StructureWithChildren, { orientation?: 'horizontal' | 'vertical' }>) => {
   return (
-    <div aria-hidden className={clsx(styles.base, className)} {...props}>
+    <div aria-hidden className={clsx(styles.base, className)} data-orientation={orientation} {...props}>
       {children}
     </div>
   );

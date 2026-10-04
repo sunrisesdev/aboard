@@ -1,6 +1,7 @@
 'use client';
 
 import type { PropsWithChildren } from 'react';
+import { CheckInModal } from '@/checkin/CheckInModal/CheckInModal';
 import { useCheckIn } from '@/checkin/useCheckIn';
 import { TripBottomDrawer } from '@/trip/TripBottomDrawer/TripBottomDrawer';
 import { TripSidePanel } from '@/trip/TripSidePanel/TripSidePanel';
@@ -16,6 +17,8 @@ export const StationboardPageContent = ({ children }: PropsWithChildren) => {
       <div className={styles.main}>{children}</div>
 
       <TripSidePanel />
+
+      <CheckInModal />
 
       <TripBottomDrawer />
     </div>

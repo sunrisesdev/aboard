@@ -19,4 +19,4 @@ export {
   type TravelType,
 } from './stations';
 export { getTripInfo, type StopoverResource, type TripResource } from './trip';
-export type { MotisMode, TraewellingUser } from './types';
+export type { Business, MotisMode, TraewellingUser } from './types';

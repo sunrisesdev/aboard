@@ -1,6 +1,7 @@
 'use client';
 
 import { Drawer } from '@base-ui/react/drawer';
+import { CheckInBottomDrawer } from '@/checkin/CheckInBottomDrawer/CheckInBottomDrawer';
 import { useCheckIn } from '@/checkin/useCheckIn';
 import { useLastDefinedValue } from '@/hooks/useLastDefinedValue';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
@@ -29,6 +30,8 @@ export const TripBottomDrawer = () => {
             <Drawer.Content>
               {displayedDeparture && <TripDetails departure={displayedDeparture} inDrawer />}
             </Drawer.Content>
+
+            <CheckInBottomDrawer />
           </Drawer.Popup>
         </Drawer.Viewport>
       </Drawer.Portal>

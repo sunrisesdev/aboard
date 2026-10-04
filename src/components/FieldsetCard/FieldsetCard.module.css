@@ -1,0 +1,39 @@
+.base {
+  background: var(--via-bg-primary);
+  border: 0.0625rem solid var(--via-bd-primary);
+  border-radius: 1rem;
+  box-shadow: var(--via-shadow-xs);
+  padding: 0.75rem 1rem 1rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.header {
+  align-items: center;
+  color: var(--via-fg-secondary);
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.iconContainer {
+  display: flex;
+}
+
+.optionalHint {
+  color: var(--via-fg-tertiary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-left: 0.25rem;
+}
+
+.title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.1ch;
+  text-transform: uppercase;
+}

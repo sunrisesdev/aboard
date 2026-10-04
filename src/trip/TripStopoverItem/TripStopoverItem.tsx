@@ -13,15 +13,19 @@ export const TripStopoverItem = ({
   className,
   last = false,
   mode,
+  onSelect,
   stopover,
   ...props
-}: Extend<Structure, { last?: boolean; mode?: MotisMode; stopover: StopoverResource }>) => {
+}: Extend<
+  Structure,
+  { last?: boolean; mode?: MotisMode; onSelect?: (stopover: StopoverResource) => void; stopover: StopoverResource }
+>) => {
   const planned = stopover.arrivalPlanned ?? stopover.departurePlanned;
   const actual = stopover.arrivalReal ?? stopover.departureReal;
   const delay = planned ? getDelay(planned, actual) : undefined;
 
   return (
-    <button className={clsx(styles.base, className)} type="button" {...props}>
+    <button className={clsx(styles.base, className)} type="button" onClick={() => onSelect?.(stopover)} {...props}>
       <TripLine className={styles.tripLine}>
         <TripLine.RouteSegment />
         <TripLine.StopIndicator />

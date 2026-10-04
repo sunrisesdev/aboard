@@ -20,7 +20,7 @@
 }
 
 .popup {
-  background-color: var(--via-bg-primary);
+  background-color: var(--via-bg-surface);
   border-radius: 1rem 1rem 0 0;
   box-shadow: var(--via-shadow-md);
   color: var(--via-fg-primary);
@@ -30,8 +30,22 @@
   padding: 1rem;
   padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
   transform: translateY(var(--drawer-swipe-movement-y));
-  transition: transform 250ms ease;
+  transform-origin: 50% 0;
+  transition:
+    filter 250ms ease,
+    scale 250ms ease,
+    transform 250ms ease;
   width: 100%;
+
+  /* Steps back behind the nested CheckInBottomDrawer. */
+  &[data-nested-drawer-open] {
+    filter: brightness(0.9);
+    scale: 0.95;
+  }
+
+  &[data-nested-drawer-swiping] {
+    transition-duration: 0ms;
+  }
 
   &[data-starting-style],
   &[data-ending-style] {

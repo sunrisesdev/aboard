@@ -23,6 +23,14 @@
   font-weight: 500;
 }
 
+.footer {
+  background-color: var(--via-bg-secondary);
+  border-top: 1px solid var(--via-bd-primary);
+  color: var(--via-fg-secondary);
+  font-size: 0.875rem;
+  padding: 1rem;
+}
+
 .header {
   align-items: center;
   display: flex;
@@ -40,13 +48,20 @@
   line-height: 1.25;
 }
 
-.delayBadge {
-  background-color: var(--via-bg-primary);
-  box-shadow: var(--via-shadow-xs);
+.delayBadge,
+.platform {
   border-radius: 0.25rem;
+  box-shadow: var(--via-shadow-xs);
   font-size: 0.875rem;
   font-weight: 500;
   padding: 0 0.25rem;
+  white-space: nowrap;
+}
+
+/* Solid background keeps the delay color readable on any line color. */
+.delayBadge {
+  background-color: var(--via-bg-primary);
+  margin-left: auto;
 }
 
 .details {
@@ -57,27 +72,8 @@
   margin-top: 0.25rem;
 }
 
-.deviation {
-  align-items: center;
-  display: flex;
-  gap: 0.375rem;
-  margin-left: auto;
-  white-space: nowrap;
-}
-
-.plannedTime {
-  font-size: 0.875rem;
-  font-weight: 500;
-  opacity: 0.8;
-}
-
 .platform {
   background-color: #fff4;
-  border-radius: 0.25rem;
-  box-shadow: var(--via-shadow-xs);
-  font-size: 0.875rem;
-  font-weight: 500;
-  padding: 0 0.25rem;
 }
 
 .stopovers {
@@ -116,7 +112,7 @@
   background: linear-gradient(
     170deg in oklch,
     oklch(from var(--via-colored-layer-bg) calc(l + 0.06) calc(c * 0.85) h),
-    oklch(from var(--via-colored-layer-bg) calc(l - 0.08) calc(c * 1.25) h)
+    oklch(from var(--via-colored-layer-bg) calc(l - 0.05) calc(c * 1.25) h) /* l - 0.08 */
   );
 
   padding: 1rem 1rem 0;

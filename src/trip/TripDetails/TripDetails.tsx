@@ -12,23 +12,21 @@ import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
 import { formatPlatform } from '@/helpers/formatPlatform';
 import { formatTime } from '@/helpers/formatTime';
-import { getColorsByMotisMode } from '@/helpers/getColorsByMotisMode';
 import { getDelay } from '@/helpers/getDelay';
 import { getDepartureTime } from '@/helpers/getDepartureTime';
+import { getLineColor } from '@/helpers/getLineColor';
 import { getLineContrastColor } from '@/helpers/getLineContrastColor';
 import { isReplacementService } from '@/helpers/isReplacementService';
-import { normalizeHexColor } from '@/helpers/normalizeHexColor';
 import { useLastDefinedValue } from '@/hooks/useLastDefinedValue';
 import type { DepartureResource, MotisMode } from '@/lib/traewelling';
 import { TripStopoverItem } from '../TripStopoverItem/TripStopoverItem';
 import styles from './TripDetails.module.css';
 
 export const TripDetails = ({ departure, inDrawer = false }: { departure: DepartureResource; inDrawer?: boolean }) => {
-  const { trip } = useCheckIn();
+  const { dispatch, trip } = useCheckIn();
   const stopovers = useLastDefinedValue(trip.stopovers);
 
-  const lineColor =
-    normalizeHexColor(departure.line.color ?? undefined) ?? getColorsByMotisMode(departure.line.mode as MotisMode)?.[0];
+  const lineColor = getLineColor(departure.line);
   const replacementService = isReplacementService(departure);
   const platform = formatPlatform(departure.platform, departure.line.mode);
   const delay = getDelay(departure.plannedWhen, departure.when);
@@ -78,12 +76,8 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
                   {platform && <span className={styles.platform}>{platform}</span>}
 
                   {delay.minutes !== 0 && (
-                    <span className={styles.deviation}>
-                      <del className={styles.plannedTime}>{formatTime(departure.plannedWhen)}</del>
-                      <span className={styles.delayBadge} data-via-delay={delay.status}>
-                        {delay.minutes > 0 ? '+' : '−'}
-                        {Math.abs(delay.minutes)}
-                      </span>
+                    <span className={styles.delayBadge} data-via-delay={delay.status}>
+                      {`${delay.minutes > 0 ? '+' : '−'}${Math.abs(delay.minutes)} · statt ${formatTime(departure.plannedWhen)}`}
                     </span>
                   )}
                 </div>
@@ -121,11 +115,14 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
                     <TripStopoverItem
                       last={index === stopovers.length - 1}
                       mode={departure.line.mode?.toUpperCase() as MotisMode}
+                      onSelect={(destination) => dispatch({ type: 'selectDestination', destination })}
                       stopover={stopover}
                     />
                   </li>
                 ))}
               </ul>
+
+              <footer className={styles.footer}>Wähle deine Zielhaltestelle aus dem Fahrtverlauf.</footer>
             </div>
           </>
         )

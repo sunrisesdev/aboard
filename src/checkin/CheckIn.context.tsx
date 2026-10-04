@@ -18,6 +18,9 @@ function checkInReducer(state: CheckInState, action: CheckInAction): CheckInStat
     case 'selectDestination': {
       return { ...state, destination: action.destination };
     }
+    case 'clearDestination': {
+      return { ...state, destination: undefined };
+    }
     case 'reset': {
       return initialCheckInState;
     }
