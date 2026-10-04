@@ -1,8 +1,7 @@
 .backdrop {
-  background: black;
+  background: var(--via-bg-overlay);
   inset: 0;
   min-height: 100dvh;
-  opacity: 0.2;
   position: fixed;
   transition: opacity 200ms ease;
 
@@ -27,13 +26,14 @@
 
 .footer {
   background-color: var(--via-bg-primary);
-  border-top: 1px solid var(--via-bd-primary);
+  border-top: var(--via-bd-width) solid var(--via-bd-primary);
   padding: 1rem 1.5rem;
 }
 
 .popup {
   background-color: var(--via-bg-surface);
   border-radius: 1rem;
+  border: var(--via-bd-width) solid var(--via-bd-elevated);
   box-shadow: var(--via-shadow-md);
   color: var(--via-fg-primary);
   display: flex;

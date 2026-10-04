@@ -32,7 +32,7 @@
 
   hr {
     border: none;
-    border-bottom: 0.0625rem solid var(--via-bd-primary);
+    border-bottom: var(--via-bd-width) solid var(--via-bd-primary);
     margin-right: -0.5rem;
 
     &:last-child {
@@ -70,12 +70,11 @@
   }
 
   &::after {
-    background: linear-gradient(to right, var(--verkehrsblau), var(--verkehrsgruen));
+    background: var(--via-bg-brand-gradient);
     border-radius: 9999rem;
     content: "";
     display: block;
     flex-grow: 1;
-    height: 0.0625rem;
     height: 0.125rem;
   }
 }

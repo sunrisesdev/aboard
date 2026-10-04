@@ -14,7 +14,7 @@
 
 /* Equal-width columns let the indicator move by whole items without measuring them. */
 .indicator {
-  background-color: var(--verkehrsblau);
+  background-color: var(--via-bg-accent);
   border-radius: 0.5rem;
   box-shadow: var(--via-shadow-xs);
   inset-block: var(--via-segmented-control-padding);
@@ -43,7 +43,7 @@
 .item {
   align-items: center;
   background: transparent;
-  border: 0.0625rem solid transparent;
+  border: var(--via-bd-width) solid transparent;
   border-radius: 0.5rem;
   color: var(--via-fg-secondary);
   cursor: pointer;
@@ -84,11 +84,6 @@
 
   &[data-checked] {
     border-color: transparent;
-    color: #fff;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--verkehrsblau);
-    outline-offset: 2px;
+    color: var(--via-fg-on-accent);
   }
 }

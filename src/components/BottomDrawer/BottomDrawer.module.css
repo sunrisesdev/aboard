@@ -1,0 +1,127 @@
+.backdrop {
+  background: var(--via-bg-overlay);
+  inset: 0;
+  position: fixed;
+  transition: opacity 200ms ease;
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+  }
+}
+
+.viewport {
+  align-items: flex-end;
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: fixed;
+  /* Leaves touch gestures to the drawer, only .content opts back into native scrolling. */
+  touch-action: none;
+}
+
+.popup {
+  background-color: var(--via-bg-surface);
+  border: var(--via-bd-width) solid var(--via-bd-elevated);
+  border-bottom: none;
+  border-radius: 1rem 1rem 0 0;
+  box-shadow: var(--via-shadow-md);
+  color: var(--via-fg-primary);
+  display: flex;
+  flex-direction: column;
+  max-height: 80dvh;
+  outline: none;
+  touch-action: none;
+  transform: translateY(calc(var(--drawer-snap-point-offset) + var(--drawer-swipe-movement-y)));
+  transform-origin: 50% 0;
+  transition:
+    filter 250ms ease,
+    padding-bottom 250ms ease,
+    scale 250ms ease,
+    transform 250ms ease;
+  width: 100%;
+
+  /*
+   * Snap points push the popup down, so it may grow to (almost) full height to have room to expand into.
+   * The bottom padding matches the part pushed off screen, which shrinks the content to its visible area
+   * (keeping it scrollable) and keeps the footer on the visible bottom edge.
+   */
+  &[data-via-snap-points] {
+    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 1rem);
+    padding-bottom: max(0px, calc(var(--drawer-snap-point-offset) + var(--drawer-swipe-movement-y)));
+
+    /* Fills the gap below the popup when it is dragged past its fully expanded position. */
+    &::after {
+      background-color: inherit;
+      content: "";
+      height: 3rem;
+      inset-inline: 0;
+      pointer-events: none;
+      position: absolute;
+      top: 100%;
+    }
+
+    &[data-starting-style],
+    &[data-ending-style] {
+      padding-bottom: 0;
+    }
+  }
+
+  /* Steps back behind a nested drawer. */
+  &[data-nested-drawer-open] {
+    filter: brightness(0.9);
+    scale: 0.95;
+  }
+
+  &[data-swiping],
+  &[data-nested-drawer-swiping] {
+    transition-duration: 0ms;
+  }
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    transform: translateY(100%);
+  }
+}
+
+.handle {
+  display: grid;
+  flex-shrink: 0;
+  height: 1.25rem;
+  place-items: center;
+
+  &::before {
+    background-color: var(--via-bd-secondary);
+    border-radius: 9999rem;
+    content: "";
+    display: block;
+    height: 0.25rem;
+    margin-inline: auto;
+    width: 2.5rem;
+  }
+}
+
+/* Scrolls on its own so the footer stays visible. */
+.content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 1rem 1rem;
+  touch-action: auto;
+
+  /* Without a footer the content has to clear the home indicator itself. */
+  &:last-child {
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.footer {
+  background-color: var(--via-bg-primary);
+  border-top: var(--via-bd-width) solid var(--via-bd-primary);
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  padding: 1rem;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+}

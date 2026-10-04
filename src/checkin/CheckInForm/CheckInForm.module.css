@@ -11,13 +11,13 @@
 }
 
 .error {
-  color: var(--via-delay-late);
+  color: var(--via-fg-error);
   font-size: 0.875rem;
 }
 
 .textarea {
   background-color: var(--via-bg-primary);
-  border: 1px solid var(--via-bd-secondary);
+  border: var(--via-bd-width) solid var(--via-bd-secondary);
   border-radius: 0.5rem;
   color: var(--via-fg-primary);
   font: inherit;

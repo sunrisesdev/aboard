@@ -7,15 +7,14 @@
   gap: 0.625rem;
   grid-template-columns: 1.25rem minmax(0, 1fr);
   min-height: 2.75rem;
+  /* Edge-to-edge inside a clipping card, so the focus ring is drawn inside. */
+  outline-offset: -2px;
   padding-inline: 1rem;
   width: 100%;
 
   @media (hover: hover) {
     &:hover {
-      background-color: light-dark(
-        color-mix(in oklch, var(--verkehrsblau), var(--via-bg-primary) 90%),
-        color-mix(in oklch, var(--verkehrsblau), var(--via-bg-primary) 60%)
-      );
+      background-color: var(--via-bg-accent-subtle);
     }
   }
 }

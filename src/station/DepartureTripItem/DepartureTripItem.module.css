@@ -6,6 +6,8 @@
   cursor: pointer;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  /* Tightly stacked inside a clipping list, so the focus ring is drawn inside. */
+  outline-offset: -2px;
   padding: 0.5rem;
 
   &.hasDeparted {
@@ -14,7 +16,7 @@
 
   &.isCancelled {
     background-color: light-dark(oklch(93.6% 0.032 17.717), oklch(12.8% 0.092 26.042));
-    box-shadow: inset 0 0 0 0.0625rem lab(40.4273% 67.2623 53.7441);
+    box-shadow: inset 0 0 0 var(--via-bd-width) lab(40.4273% 67.2623 53.7441);
 
     .direction * {
       color: var(--via-fg-tertiary);
@@ -23,23 +25,18 @@
 
     .statusLine {
       background-color: transparent;
-      box-shadow: inset 0 0 0 1px color-mix(in oklch, transparent, lab(40.4273% 67.2623 53.7441) 10%);
+      box-shadow: inset 0 0 0 var(--via-bd-width) color-mix(in oklch, transparent, lab(40.4273% 67.2623 53.7441) 10%);
     }
   }
 
   @media (hover: hover) {
     &:hover {
-      background-color: var(--via-bg-surface);
-      background-color: light-dark(
-        color-mix(in oklch, var(--verkehrsblau), var(--via-bg-primary) 90%),
-        color-mix(in oklch, var(--verkehrsblau), var(--via-bg-primary) 60%)
-      );
+      background-color: var(--via-bg-accent-subtle);
       opacity: 1;
 
       .statusLine {
-        background-color: color-mix(in oklch, transparent, var(--via-fg-primary) 10%);
         background-color: transparent;
-        box-shadow: inset 0 0 0 1px color-mix(in oklch, transparent, var(--via-fg-primary) 10%);
+        box-shadow: inset 0 0 0 var(--via-bd-width) color-mix(in oklch, transparent, var(--via-fg-primary) 10%);
       }
     }
   }

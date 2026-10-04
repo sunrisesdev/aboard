@@ -16,21 +16,43 @@
 
   --via-bg-surface: light-dark(var(--via-neutral-100), var(--via-neutral-950));
   --via-bg-primary: light-dark(#fff, var(--via-neutral-900));
-  --via-bg-secondary: light-dark(var(--via-neutral-50), var(--via-neutral-800));
+  --via-bg-secondary: light-dark(var(--via-neutral-100), var(--via-neutral-950));
+  --via-bg-tertiary: light-dark(var(--via-neutral-200), var(--via-neutral-800));
+  --via-bg-hover: light-dark(oklch(0% 0 none / 4%), oklch(100% 0 none / 6%));
+  --via-bg-active: light-dark(oklch(0% 0 none / 8%), oklch(100% 0 none / 10%));
+  --via-bg-accent: var(--verkehrsblau);
+  --via-bg-hover-on-accent: oklch(100% 0 none / 12%);
+  --via-bg-active-on-accent: oklch(0% 0 none / 12%);
+  --via-bg-brand-gradient: linear-gradient(to right, var(--verkehrsblau), var(--verkehrsgruen));
+  --via-bg-accent-subtle: light-dark(
+    color-mix(in oklch, var(--verkehrsblau), var(--via-bg-primary) 90%),
+    color-mix(in oklch, var(--verkehrsblau), var(--via-bg-primary) 60%)
+  );
+  --via-bg-overlay: light-dark(oklch(0% 0 none / 20%), oklch(0% 0 none / 50%));
 
   --via-bd-primary: light-dark(var(--via-neutral-200), var(--via-neutral-800));
   --via-bd-secondary: light-dark(var(--via-neutral-300), var(--via-neutral-700));
   --via-bd-tertiary: #0000002e;
   --via-bd-highlight: light-dark(#ffffff1f, #ffffff2e);
+  /* Separates floating layers (drawers, modals) in dark mode, where shadows are barely visible. */
+  --via-bd-elevated: light-dark(transparent, var(--via-neutral-800));
+  --via-bd-width: 0.0625rem;
+  --via-bd-offset: calc(-1 * var(--via-bd-width));
 
   --via-fg-primary: light-dark(var(--via-neutral-900), var(--via-neutral-100));
   --via-fg-secondary: light-dark(var(--via-neutral-700), var(--via-neutral-300));
   --via-fg-tertiary: light-dark(var(--via-neutral-600), var(--via-neutral-400));
+  --via-fg-placeholder: var(--via-neutral-500);
+  --via-fg-on-accent: #fff;
+
+  --via-focus-ring: light-dark(var(--verkehrsblau), oklch(70% 0.117 251.3));
 
   --via-delay-early: light-dark(oklch(54.6% 0.245 262.881), oklch(70.7% 0.165 254.624));
   --via-delay-on-time: light-dark(oklch(52.7% 0.154 150.069), oklch(79.2% 0.209 151.711));
   --via-delay-slight: light-dark(oklch(66.6% 0.179 58.318), oklch(85.2% 0.199 91.936));
   --via-delay-late: light-dark(oklch(50.5% 0.213 27.518), oklch(70.4% 0.191 22.216));
+
+  --via-fg-error: var(--via-delay-late);
 
   --via-shadow-skeuomorphic: inset 0 -1px 0 0 rgb(0 0 0 / 0.05);
   --via-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -67,11 +89,8 @@ body {
 }
 
 html {
+  color-scheme: light dark;
   height: 100%;
-
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
 }
 
 body {
@@ -95,14 +114,17 @@ input {
   font: inherit;
 }
 
+:focus-visible {
+  outline: 2px solid var(--via-focus-ring);
+  outline-offset: 2px;
+}
+
+::placeholder {
+  color: var(--via-fg-placeholder);
+}
+
 [data-via-icon] {
   flex-shrink: 0;
   height: 1em;
   width: 1em;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
 }

@@ -10,7 +10,7 @@
   align-items: center;
   height: 2rem;
   padding: 0 0.75rem;
-  border: 1px solid var(--via-bd-secondary);
+  border: var(--via-bd-width) solid var(--via-bd-secondary);
   border-radius: 999px;
   background: var(--via-bg-primary);
   color: var(--via-fg-primary);

@@ -3,6 +3,7 @@
 import { Drawer } from '@base-ui/react/drawer';
 import { CheckInForm } from '@/checkin/CheckInForm/CheckInForm';
 import { useCheckIn } from '@/checkin/useCheckIn';
+import { BottomDrawer } from '@/components/BottomDrawer/BottomDrawer';
 import { useLastDefinedValue } from '@/hooks/useLastDefinedValue';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { CheckInTripSummary } from '../CheckInTripSummary/CheckInTripSummary';
@@ -19,29 +20,30 @@ export const CheckInBottomDrawer = () => {
   const isWide = useMediaQuery('(width >= 64em)');
 
   return (
-    <Drawer.Root
+    <BottomDrawer
+      nested
       open={Boolean(destination) && !isWide}
       onOpenChange={(open) => {
         if (!open) dispatch({ type: 'clearDestination' });
       }}
+      snapPoints={[0.6, 1]}
     >
-      <Drawer.VirtualKeyboardProvider>
-        <Drawer.Portal>
-          <Drawer.Viewport className={styles.viewport}>
-            <Drawer.Popup className={styles.popup}>
-              <Drawer.Content className={styles.content}>
-                <Drawer.Title className={styles.title}>Check-in</Drawer.Title>
+      <CheckInForm.Provider>
+        <Drawer.Title className={styles.title}>Einchecken</Drawer.Title>
 
-                {displayedDeparture && displayedDestination && (
-                  <CheckInTripSummary departure={displayedDeparture} destination={displayedDestination} />
-                )}
+        <BottomDrawer.Content className={styles.content}>
+          {displayedDeparture && displayedDestination && (
+            <CheckInTripSummary departure={displayedDeparture} destination={displayedDestination} />
+          )}
 
-                <CheckInForm />
-              </Drawer.Content>
-            </Drawer.Popup>
-          </Drawer.Viewport>
-        </Drawer.Portal>
-      </Drawer.VirtualKeyboardProvider>
-    </Drawer.Root>
+          <CheckInForm />
+        </BottomDrawer.Content>
+
+        <BottomDrawer.Footer>
+          {/* <Drawer.Close render={<Button variant="secondary" />}>Abbrechen</Drawer.Close> */}
+          <CheckInForm.Submit style={{ width: '100%' }}>Einchecken</CheckInForm.Submit>
+        </BottomDrawer.Footer>
+      </CheckInForm.Provider>
+    </BottomDrawer>
   );
 };

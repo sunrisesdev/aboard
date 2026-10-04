@@ -7,7 +7,7 @@
   gap: 0.375rem;
 
   &[data-via-limit-reached] {
-    color: var(--via-delay-late);
+    color: var(--via-fg-error);
   }
 }
 

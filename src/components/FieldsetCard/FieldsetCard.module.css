@@ -1,6 +1,6 @@
 .base {
   background: var(--via-bg-primary);
-  border: 0.0625rem solid var(--via-bd-primary);
+  border: var(--via-bd-width) solid var(--via-bd-primary);
   border-radius: 1rem;
   box-shadow: var(--via-shadow-xs);
   padding: 0.75rem 1rem 1rem;

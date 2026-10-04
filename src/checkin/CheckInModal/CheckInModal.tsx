@@ -30,24 +30,26 @@ export const CheckInModal = () => {
         <Dialog.Backdrop className={styles.backdrop} />
 
         <Dialog.Popup className={styles.popup}>
-          <div className={styles.body}>
-            <Dialog.Title className={styles.title}>Check-in</Dialog.Title>
+          <CheckInForm.Provider>
+            <div className={styles.body}>
+              <Dialog.Title className={styles.title}>Check-in</Dialog.Title>
 
-            <div className={styles.content}>
-              <aside>
-                {displayedDeparture && displayedDestination && (
-                  <CheckInTripSummary departure={displayedDeparture} destination={displayedDestination} />
-                )}
-              </aside>
+              <div className={styles.content}>
+                <aside>
+                  {displayedDeparture && displayedDestination && (
+                    <CheckInTripSummary departure={displayedDeparture} destination={displayedDestination} />
+                  )}
+                </aside>
 
-              <CheckInForm />
+                <CheckInForm />
+              </div>
             </div>
-          </div>
 
-          <footer className={styles.footer}>
-            <Button variant="secondary">Abbrechen</Button>
-            <Button>Einchecken</Button>
-          </footer>
+            <footer className={styles.footer}>
+              <Dialog.Close render={<Button variant="secondary" />}>Abbrechen</Dialog.Close>
+              <CheckInForm.Submit>Einchecken</CheckInForm.Submit>
+            </footer>
+          </CheckInForm.Provider>
         </Dialog.Popup>
       </Dialog.Portal>
     </Dialog.Root>

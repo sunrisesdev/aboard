@@ -1,12 +1,7 @@
-"use server";
+'use server';
 
-import { auth } from "@/lib/auth";
-import {
-  type Business,
-  createCheckin,
-  createTraewellingClient,
-  TraewellingApiError,
-} from "@/lib/traewelling";
+import { auth } from '@/lib/auth';
+import { type Business, createCheckin, createTraewellingClient, TraewellingApiError } from '@/lib/traewelling';
 
 export type CheckinRequest = {
   tripId: string;
@@ -19,16 +14,12 @@ export type CheckinRequest = {
   business?: Business;
 };
 
-export type CheckinResult =
-  | { success: true }
-  | { success: false; message: string };
+export type CheckinResult = { success: true } | { success: false; message: string };
 
-export async function submitCheckinAction(
-  request: CheckinRequest,
-): Promise<CheckinResult> {
+export async function submitCheckinAction(request: CheckinRequest): Promise<CheckinResult> {
   const session = await auth();
   if (!session || session.error) {
-    return { success: false, message: "Nicht angemeldet." };
+    return { success: false, message: 'Nicht angemeldet.' };
   }
 
   const client = createTraewellingClient(session.accessToken as string);

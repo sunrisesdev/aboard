@@ -1,56 +1,23 @@
 'use client';
 
 import { IconBriefcase, IconBuilding, IconMessage, IconUser } from '@tabler/icons-react';
-import { useActionState, useState } from 'react';
-import { submitCheckinAction } from '@/checkin/actions';
-import { useCheckIn } from '@/checkin/useCheckIn';
+import { type ComponentProps, useState } from 'react';
 import { Button } from '@/components/Button/Button';
 import { CharacterCounter } from '@/components/CharacterCounter/CharacterCounter';
 import { FieldsetCard } from '@/components/FieldsetCard/FieldsetCard';
 import { SegmentedControl } from '@/components/SegmentedControl/SegmentedControl';
 import type { Business } from '@/lib/traewelling';
+import { CheckInFormProvider, useCheckInForm } from './CheckInForm.context';
 import styles from './CheckInForm.module.css';
 
 const bodyMaxLength = 280;
 
-export const CheckInForm = () => {
-  const {
-    dispatch,
-    state: { departure, destination },
-    trip: { boardingStopover },
-  } = useCheckIn();
+const Root = () => {
+  const { error, formAction, formId } = useCheckInForm();
   const [body, setBody] = useState('');
 
-  const [error, formAction, isPending] = useActionState(
-    async (_previousError: string | undefined, formData: FormData) => {
-      const arrival = destination?.arrivalPlanned ?? destination?.departurePlanned;
-
-      if (!departure || !boardingStopover || !destination || !arrival) {
-        return 'Die Fahrt konnte nicht zugeordnet werden.';
-      }
-
-      const result = await submitCheckinAction({
-        arrival,
-        body: (formData.get('body') as string | null) || null,
-        business: Number(formData.get('business')) as Business,
-        departure: boardingStopover.departurePlanned ?? departure.plannedWhen,
-        destination: destination.station.id,
-        lineName: departure.line.name ?? '',
-        start: boardingStopover.station.id,
-        tripId: departure.tripId,
-      });
-
-      if (!result.success) {
-        return result.message;
-      }
-
-      dispatch({ type: 'reset' });
-    },
-    undefined,
-  );
-
   return (
-    <form action={formAction} className={styles.base}>
+    <form action={formAction} className={styles.base} id={formId}>
       <FieldsetCard
         icon={<IconMessage data-via-icon />}
         optional
@@ -86,10 +53,21 @@ export const CheckInForm = () => {
       </FieldsetCard>
 
       {error && <p className={styles.error}>{error}</p>}
-
-      <Button disabled={isPending} type="submit">
-        Einchecken
-      </Button>
     </form>
   );
 };
+
+// Linked to the form via its id, so it can live outside of it.
+export const CheckInFormSubmit = (props: ComponentProps<typeof Button>) => {
+  const { formId, isPending } = useCheckInForm();
+
+  return <Button disabled={isPending} form={formId} type="submit" {...props} />;
+};
+
+CheckInFormSubmit.displayName = 'CheckInForm.Submit';
+
+export const CheckInForm = Object.assign(Root, {
+  displayName: 'CheckInForm',
+  Provider: CheckInFormProvider,
+  Submit: CheckInFormSubmit,
+});
