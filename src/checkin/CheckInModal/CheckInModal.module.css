@@ -24,10 +24,17 @@
   grid-template-columns: 20rem 1fr;
 }
 
+.controls {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
 .footer {
   background-color: var(--via-bg-primary);
   border-top: var(--via-bd-width) solid var(--via-bd-primary);
-  padding: 1rem 1.5rem;
+  display: flex;
+  padding: 1rem;
 }
 
 .popup {

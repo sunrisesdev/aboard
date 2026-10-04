@@ -26,10 +26,20 @@
     transform 0.2s;
   width: var(--via-trip-side-panel-width);
 
-  /* Limits the panel to the visible part of .base while its top edge is still inside the viewport. */
+  /*
+   * Limits the panel to the visible part of .base while its top edge is still inside the viewport.
+   * The top padding only keeps the distance to the viewport edge, so it grows in during the last 1.5rem
+   * before .base reaches the top and the content may use that space until then.
+   * Longhands on purpose: the shorthand gets expanded with a 0s duration at build time.
+   */
   @supports (animation-timeline: view()) {
-    animation: panel-max-height linear both;
-    animation-range: cover 0% cover 100dvh;
+    animation-duration: auto;
+    animation-fill-mode: both;
+    animation-name: panel-max-height, panel-padding-top;
+    animation-timing-function: linear;
+    animation-range:
+      cover 0% cover 100dvh,
+      cover calc(100dvh - 1.5rem) cover 100dvh;
     animation-timeline: --trip-side-panel;
   }
 
@@ -46,5 +56,15 @@
 
   to {
     max-height: 100dvh;
+  }
+}
+
+@keyframes panel-padding-top {
+  from {
+    padding-top: 0;
+  }
+
+  to {
+    padding-top: 1.5rem;
   }
 }

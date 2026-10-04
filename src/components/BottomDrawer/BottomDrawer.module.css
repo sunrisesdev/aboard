@@ -1,5 +1,6 @@
 .backdrop {
   background: var(--via-bg-overlay);
+  backdrop-filter: blur(4px);
   inset: 0;
   position: fixed;
   transition: opacity 200ms ease;
@@ -103,6 +104,7 @@
 
 /* Scrolls on its own so the footer stays visible. */
 .content {
+  border-top: var(--via-bd-width) solid transparent;
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
@@ -113,6 +115,33 @@
   /* Without a footer the content has to clear the home indicator itself. */
   &:last-child {
     padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  /*
+   * Separates the content from whatever sits above it once it is scrolled. The border fades in within the
+   * first 1rem of scrolling and stays hidden if the content does not scroll at all.
+   */
+  @supports (animation-timeline: scroll()) {
+    /*
+     * Longhands on purpose: the shorthand gets expanded with a 0s duration at build time, which makes the
+     * animation jump straight to its end value instead of following the scroll position.
+     */
+    animation-duration: auto;
+    animation-fill-mode: both;
+    animation-name: content-border;
+    animation-range: 0 1rem;
+    animation-timeline: scroll(self);
+    animation-timing-function: linear;
+  }
+}
+
+@keyframes content-border {
+  from {
+    border-top-color: transparent;
+  }
+
+  to {
+    border-top-color: var(--via-bd-primary);
   }
 }
 

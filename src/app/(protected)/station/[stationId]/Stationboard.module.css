@@ -4,6 +4,7 @@
   align-items: start;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 0;
+  margin-top: 1rem;
 
   @media (width >= 64em) {
     transition: grid-template-columns 0.2s;

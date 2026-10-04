@@ -10,6 +10,12 @@
       height: 0.125rem;
       width: auto;
 
+      &.isPartial {
+        border-bottom: 0.125rem dotted currentColor;
+        border-right: none;
+        height: 0;
+      }
+
       &:has(+ .stop) {
         margin-bottom: 0;
         margin-right: -1px;
@@ -27,6 +33,12 @@
   background-color: currentColor;
   flex-grow: 1;
   width: 0.125rem;
+
+  &.isPartial {
+    background: none;
+    border-right: 0.125rem dotted currentColor;
+    width: 0;
+  }
 
   &:has(+ .stop) {
     margin-bottom: -1px;

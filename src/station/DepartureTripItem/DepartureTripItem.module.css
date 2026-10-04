@@ -80,6 +80,10 @@
   display: flex;
   gap: 0.625rem;
 
+  .statusLine {
+    white-space: nowrap;
+  }
+
   & > :last-child {
     margin-left: auto;
   }

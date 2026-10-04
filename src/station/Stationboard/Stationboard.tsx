@@ -94,8 +94,13 @@ export const Stationboard = ({
   );
 
   return (
-    <>
-      <Button className={styles.loadMore} disabled={loadingEarlier} onClick={loadEarlier}>
+    <div className={styles.base}>
+      <Button
+        className={styles.loadMore}
+        disabled={loadingEarlier}
+        onClick={loadEarlier}
+        style={{ marginBottom: '1rem' }}
+      >
         {loadingEarlier ? 'Lädt…' : 'Frühere Abfahrten laden'}
       </Button>
 
@@ -143,9 +148,9 @@ export const Stationboard = ({
         {nowDividerIndex === departureGroups.length && nowDivider}
       </ul>
 
-      <Button className={styles.loadMore} disabled={loadingLater} onClick={loadLater}>
+      <Button className={styles.loadMore} disabled={loadingLater} onClick={loadLater} style={{ marginTop: '1rem' }}>
         {loadingLater ? 'Lädt…' : 'Spätere Abfahrten laden'}
       </Button>
-    </>
+    </div>
   );
 };

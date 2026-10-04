@@ -46,8 +46,10 @@ export const CheckInModal = () => {
             </div>
 
             <footer className={styles.footer}>
-              <Dialog.Close render={<Button variant="secondary" />}>Abbrechen</Dialog.Close>
-              <CheckInForm.Submit>Einchecken</CheckInForm.Submit>
+              <div className={styles.controls}>
+                <Dialog.Close render={<Button variant="secondary" />}>Abbrechen</Dialog.Close>
+                <CheckInForm.Submit>Einchecken</CheckInForm.Submit>
+              </div>
             </footer>
           </CheckInForm.Provider>
         </Dialog.Popup>

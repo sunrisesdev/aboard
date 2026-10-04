@@ -69,9 +69,9 @@ export const CheckInTripSummary = ({
 
         <TripLine className={styles.tripLine} orientation="horizontal">
           <TripLine.StopIndicator />
-          <TripLine.RouteSegment />
+          <TripLine.RouteSegment partial />
           <IconArrowRight className={styles.arrow} size={16} stroke={2} />
-          <TripLine.RouteSegment />
+          <TripLine.RouteSegment partial />
           <TripLine.StopIndicator />
         </TripLine>
 

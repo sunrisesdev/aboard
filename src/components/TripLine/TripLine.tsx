@@ -15,8 +15,12 @@ const Root = ({
   );
 };
 
-export const TripLineRouteSegment = ({ className, ...props }: Extend<Structure>) => {
-  return <div className={clsx(styles.route, className)} {...props} />;
+export const TripLineRouteSegment = ({
+  className,
+  partial = false,
+  ...props
+}: Extend<Structure, { partial?: boolean }>) => {
+  return <div className={clsx(styles.route, partial && styles.isPartial, className)} {...props} />;
 };
 
 TripLineRouteSegment.displayName = 'TripLine.RouteSegment';
