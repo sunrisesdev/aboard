@@ -9,7 +9,7 @@ const Root = ({
   ...props
 }: Extend<StructureWithChildren, { orientation?: 'horizontal' | 'vertical' }>) => {
   return (
-    <div aria-hidden className={clsx(styles.base, className)} data-orientation={orientation} {...props}>
+    <div aria-hidden className={clsx(styles.base, className)} data-via-orientation={orientation} {...props}>
       {children}
     </div>
   );

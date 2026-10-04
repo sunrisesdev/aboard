@@ -1,11 +1,11 @@
-import { Button as BaseButton } from "@base-ui/react/button";
-import styles from "./Button.module.css";
+import { Button as BaseButton } from '@base-ui/react/button';
+import { clsx } from 'clsx';
+import styles from './Button.module.css';
 
-export function Button({ className, ...props }: BaseButton.Props) {
-  return (
-    <BaseButton
-      className={[styles.button, className].filter(Boolean).join(" ")}
-      {...props}
-    />
-  );
+type ButtonProps = BaseButton.Props & {
+  variant?: 'primary' | 'secondary';
+};
+
+export function Button({ className, variant = 'primary', ...props }: ButtonProps) {
+  return <BaseButton className={clsx(styles.base, className)} data-via-variant={variant} {...props} />;
 }

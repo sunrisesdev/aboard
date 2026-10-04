@@ -10,10 +10,10 @@
   align-items: center;
   height: 2rem;
   padding: 0 0.75rem;
-  border: 1px solid var(--foreground);
+  border: 1px solid var(--via-bd-secondary);
   border-radius: 999px;
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--via-bg-primary);
+  color: var(--via-fg-primary);
   font-family: inherit;
   font-size: 0.875rem;
   line-height: 1;
@@ -22,8 +22,8 @@
 }
 
 .filterToggle[data-pressed] {
-  background: var(--foreground);
-  color: var(--background);
+  background: var(--via-fg-primary);
+  color: var(--via-bg-primary);
 }
 
 .filterToggle[data-disabled] {

@@ -33,7 +33,7 @@
     animation-timeline: --trip-side-panel;
   }
 
-  .base[data-open] & {
+  .base[data-via-open] & {
     opacity: 1;
     transform: none;
   }

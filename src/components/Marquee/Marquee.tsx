@@ -21,9 +21,9 @@ export const Marquee = ({ children, className }: { children: ReactNode; classNam
     const update = () => {
       const distance = Math.max(0, content.scrollWidth - container.clientWidth);
 
-      container.dataset.overflowing = String(distance > 0);
-      container.style.setProperty('--marquee-distance', `${distance}px`);
-      container.style.setProperty('--marquee-duration', `${distance / pixelsPerSecond + 3}s`);
+      container.dataset.viaOverflowing = String(distance > 0);
+      container.style.setProperty('--via-marquee-distance', `${distance}px`);
+      container.style.setProperty('--via-marquee-duration', `${distance / pixelsPerSecond + 3}s`);
     };
 
     update();

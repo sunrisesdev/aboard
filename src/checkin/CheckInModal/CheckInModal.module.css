@@ -12,10 +12,23 @@
   }
 }
 
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
 .content {
   display: grid;
   gap: 1.5rem;
   grid-template-columns: 20rem 1fr;
+}
+
+.footer {
+  background-color: var(--via-bg-primary);
+  border-top: 1px solid var(--via-bd-primary);
+  padding: 1rem 1.5rem;
 }
 
 .popup {
@@ -23,12 +36,13 @@
   border-radius: 1rem;
   box-shadow: var(--via-shadow-md);
   color: var(--via-fg-primary);
+  display: flex;
+  flex-direction: column;
   left: 50%;
   max-height: calc(100dvh - 4rem);
   max-width: calc(100vw - 4rem);
   outline: none;
-  overflow-y: auto;
-  padding: 1.5rem;
+  overflow: hidden;
   position: fixed;
   top: 50%;
   transition:

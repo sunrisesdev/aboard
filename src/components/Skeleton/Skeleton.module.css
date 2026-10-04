@@ -1,7 +1,7 @@
 .skeleton {
   display: block;
   border-radius: 0.25rem;
-  background: color-mix(in srgb, var(--foreground) 12%, transparent);
+  background: color-mix(in srgb, var(--via-fg-primary) 12%, transparent);
   animation: pulse 1.4s ease-in-out infinite;
 }
 

@@ -6,6 +6,8 @@
 }
 
 .content {
+  background-position: -1px;
+  background-size: calC(100% + 2px);
   border: 0.0625rem solid var(--via-bd-tertiary);
   border-radius: var(--via-colored-layer-radius);
   box-shadow: var(--via-shadow-skeuomorphic);

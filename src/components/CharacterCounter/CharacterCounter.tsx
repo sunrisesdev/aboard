@@ -11,7 +11,7 @@ export const CharacterCounter = ({
   const progress = Math.min(count / limit, 1);
 
   return (
-    <div className={clsx(styles.base, className)} data-limit-reached={count >= limit || undefined} {...props}>
+    <div className={clsx(styles.base, className)} data-via-limit-reached={count >= limit || undefined} {...props}>
       {/* Fills clockwise from twelve o'clock as the limit is approached. */}
       <svg aria-hidden="true" className={styles.ring} viewBox="0 0 16 16">
         <circle className={styles.track} cx="8" cy="8" r="6.5" />

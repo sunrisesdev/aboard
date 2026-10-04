@@ -1,10 +1,10 @@
-@property --marquee-fade-start {
+@property --via-marquee-fade-start {
   inherits: false;
   initial-value: 0px;
   syntax: "<length>";
 }
 
-@property --marquee-fade-end {
+@property --via-marquee-fade-end {
   inherits: false;
   initial-value: 0px;
   syntax: "<length>";
@@ -16,18 +16,18 @@
   overflow: hidden;
   white-space: nowrap;
 
-  &[data-overflowing="true"] {
-    animation: marquee-fade var(--marquee-duration) ease-in-out infinite alternate;
+  &[data-via-overflowing="true"] {
+    animation: marquee-fade var(--via-marquee-duration) ease-in-out infinite alternate;
     mask-image: linear-gradient(
       to right,
       transparent,
-      #000 var(--marquee-fade-start),
-      #000 calc(100% - var(--marquee-fade-end)),
+      #000 var(--via-marquee-fade-start),
+      #000 calc(100% - var(--via-marquee-fade-end)),
       transparent
     );
 
     & .content {
-      animation: marquee var(--marquee-duration) ease-in-out infinite alternate;
+      animation: marquee var(--via-marquee-duration) ease-in-out infinite alternate;
     }
   }
 }
@@ -44,32 +44,32 @@
 
   85%,
   100% {
-    transform: translateX(calc(-1 * var(--marquee-distance)));
+    transform: translateX(calc(-1 * var(--via-marquee-distance)));
   }
 }
 
 @keyframes marquee-fade {
   0%,
   15% {
-    --marquee-fade-start: 0px;
-    --marquee-fade-end: 0.5rem;
+    --via-marquee-fade-start: 0px;
+    --via-marquee-fade-end: 0.5rem;
   }
 
   25%,
   75% {
-    --marquee-fade-start: 0.5rem;
-    --marquee-fade-end: 0.5rem;
+    --via-marquee-fade-start: 0.5rem;
+    --via-marquee-fade-end: 0.5rem;
   }
 
   85%,
   100% {
-    --marquee-fade-start: 0.5rem;
-    --marquee-fade-end: 0px;
+    --via-marquee-fade-start: 0.5rem;
+    --via-marquee-fade-end: 0px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .base[data-overflowing="true"] {
+  .base[data-via-overflowing="true"] {
     animation: none;
     mask-image: none;
     text-overflow: ellipsis;

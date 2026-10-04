@@ -6,7 +6,7 @@
   font-weight: 600;
   gap: 0.375rem;
 
-  &[data-limit-reached] {
+  &[data-via-limit-reached] {
     color: var(--via-delay-late);
   }
 }

@@ -3,6 +3,7 @@
 import { Dialog } from '@base-ui/react/dialog';
 import { CheckInForm } from '@/checkin/CheckInForm/CheckInForm';
 import { useCheckIn } from '@/checkin/useCheckIn';
+import { Button } from '@/components/Button/Button';
 import { useLastDefinedValue } from '@/hooks/useLastDefinedValue';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { CheckInTripSummary } from '../CheckInTripSummary/CheckInTripSummary';
@@ -27,18 +28,26 @@ export const CheckInModal = () => {
     >
       <Dialog.Portal>
         <Dialog.Backdrop className={styles.backdrop} />
+
         <Dialog.Popup className={styles.popup}>
-          <Dialog.Title className={styles.title}>Check-in</Dialog.Title>
+          <div className={styles.body}>
+            <Dialog.Title className={styles.title}>Check-in</Dialog.Title>
 
-          <div className={styles.content}>
-            <aside>
-              {displayedDeparture && displayedDestination && (
-                <CheckInTripSummary departure={displayedDeparture} destination={displayedDestination} />
-              )}
-            </aside>
+            <div className={styles.content}>
+              <aside>
+                {displayedDeparture && displayedDestination && (
+                  <CheckInTripSummary departure={displayedDeparture} destination={displayedDestination} />
+                )}
+              </aside>
 
-            <CheckInForm />
+              <CheckInForm />
+            </div>
           </div>
+
+          <footer className={styles.footer}>
+            <Button variant="secondary">Abbrechen</Button>
+            <Button>Einchecken</Button>
+          </footer>
         </Dialog.Popup>
       </Dialog.Portal>
     </Dialog.Root>

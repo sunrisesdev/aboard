@@ -20,7 +20,7 @@
 
   --via-bd-primary: light-dark(var(--via-neutral-200), var(--via-neutral-800));
   --via-bd-secondary: light-dark(var(--via-neutral-300), var(--via-neutral-700));
-  --via-bd-tertiary: light-dark(#0000002e, #ffffff2e);
+  --via-bd-tertiary: #0000002e;
   --via-bd-highlight: light-dark(#ffffff1f, #ffffff2e);
 
   --via-fg-primary: light-dark(var(--via-neutral-900), var(--via-neutral-100));

@@ -99,7 +99,7 @@ export const Stationboard = ({
         {loadingEarlier ? 'Lädt…' : 'Frühere Abfahrten laden'}
       </Button>
 
-      <ul className={styles.departures} data-pending={isPending || undefined}>
+      <ul className={styles.departures} data-via-pending={isPending || undefined}>
         {departureGroups.map(({ time, label, groups }, index) => (
           <Fragment key={time}>
             {index === nowDividerIndex && nowDivider}

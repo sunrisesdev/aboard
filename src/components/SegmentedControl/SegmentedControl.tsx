@@ -47,7 +47,7 @@ export const SegmentedControl = <Value,>({
       value={value}
       {...props}
     >
-      <div aria-hidden className={styles.indicator} data-hidden={selectedIndex < 0 || undefined} />
+      <div aria-hidden className={styles.indicator} data-via-hidden={selectedIndex < 0 || undefined} />
 
       {options.map((option) => (
         <Radio.Root

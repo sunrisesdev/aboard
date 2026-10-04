@@ -35,7 +35,7 @@
     var(--via-segmented-control-count)
   );
 
-  &[data-hidden] {
+  &[data-via-hidden] {
     opacity: 0;
   }
 }

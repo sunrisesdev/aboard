@@ -13,7 +13,7 @@ export const TripSidePanel = () => {
   const displayedDeparture = useLastDefinedValue(departure);
 
   return (
-    <aside className={styles.base} data-open={departure ? '' : undefined} inert={!departure}>
+    <aside className={styles.base} data-via-open={departure ? '' : undefined} inert={!departure}>
       <div className={styles.panel}>{displayedDeparture && <TripDetails departure={displayedDeparture} />}</div>
     </aside>
   );
