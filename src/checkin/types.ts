@@ -11,7 +11,15 @@ export type CheckInAction =
   | { type: 'selectDestination'; destination: StopoverResource }
   | { type: 'reset' };
 
+export type CheckInTrip = {
+  boardingStopover?: StopoverResource;
+  stopovers?: StopoverResource[];
+  isLoading: boolean;
+  error?: unknown;
+};
+
 export type CheckInContextValue = {
   state: CheckInState;
   dispatch: ActionDispatch<[action: CheckInAction]>;
+  trip: CheckInTrip;
 };

@@ -30,6 +30,8 @@ export const ColoredLayerContent = ({ children, className, ...props }: Extend<St
   );
 };
 
+ColoredLayerContent.displayName = 'ColoredLayer.Content';
+
 export const ColoredLayer = Object.assign(Root, {
   displayName: 'ColoredLayer',
   Content: ColoredLayerContent,

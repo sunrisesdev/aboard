@@ -1,0 +1,19 @@
+.base {
+  --via-trip-side-panel-width: 30rem;
+
+  align-items: start;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 0;
+
+  @media (width > 64em) {
+    transition: grid-template-columns 0.2s;
+
+    &[data-via-trip-selected] {
+      grid-template-columns: minmax(0, 1fr) var(--via-trip-side-panel-width);
+    }
+  }
+}
+
+.main {
+  min-width: 0;
+}

@@ -1,0 +1,138 @@
+.base {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+
+  &.inDrawer {
+    margin: -0.5rem;
+  }
+}
+
+.connectingLine {
+  color: var(--via-trip-details-contrast);
+  flex-shrink: 0;
+  height: calc(0.5rem + 0.125rem);
+  margin-block: -0.0625rem;
+  margin-left: calc(1rem + 0.0625rem);
+  position: relative;
+  width: 1.25rem;
+}
+
+.destination {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  gap: 0.625rem;
+  margin-bottom: 1rem;
+}
+
+.lineBadge {
+  box-shadow:
+    inset 0 0 0 1px oklch(from currentColor l c h / 0.5),
+    var(--via-shadow-xs);
+}
+
+.origin {
+  line-height: 1.25;
+}
+
+.delayBadge {
+  background-color: var(--via-bg-primary);
+  box-shadow: var(--via-shadow-xs);
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0 0.25rem;
+}
+
+.details {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+}
+
+.deviation {
+  align-items: center;
+  display: flex;
+  gap: 0.375rem;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.plannedTime {
+  font-size: 0.875rem;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.platform {
+  background-color: #fff4;
+  border-radius: 0.25rem;
+  box-shadow: var(--via-shadow-xs);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0 0.25rem;
+}
+
+.stopovers {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.stopoversCard {
+  background: var(--via-bg-primary);
+  border: 0.0625rem solid var(--via-bd-primary);
+  border-radius: 1rem;
+  box-shadow: var(--via-shadow-xs);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.time {
+  font-feature-settings: "tnum";
+  white-space: nowrap;
+}
+
+.tripCard {
+  background: linear-gradient(
+    to bottom,
+    oklch(from contrast-color(currentColor) l c h / 0.1),
+    oklch(from currentColor l c h / 0.1)
+  );
+
+  background: linear-gradient(
+    170deg in oklch,
+    oklch(from var(--via-colored-layer-bg) calc(l + 0.06) calc(c * 0.85) h),
+    oklch(from var(--via-colored-layer-bg) calc(l - 0.08) calc(c * 1.25) h)
+  );
+
+  padding: 1rem 1rem 0;
+}
+/*
+.tint {
+  display: flex;
+  isolation: isolate;
+  position: relative;
+}
+
+.tint::after {
+  background: var(--via-colored-layer-bg);
+  content: "";
+  inset: 0;
+  mix-blend-mode: color;
+  pointer-events: none;
+  position: absolute;
+} */

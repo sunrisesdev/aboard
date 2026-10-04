@@ -9,6 +9,7 @@ import { Stationboard } from '@/station/Stationboard/Stationboard';
 import { StationboardContextProvider } from '@/station/Stationboard/Stationboard.context';
 import { StationboardTimePicker } from '@/station/StationboardTimePicker/StationboardTimePicker';
 import { StationboardTravelTypeFilter } from '@/station/StationboardTravelTypeFilter/StationboardTravelTypeFilter';
+import { StationboardPageContent } from './content';
 
 const loadDepartures = async (
   accessToken: string,
@@ -85,16 +86,20 @@ export default async function StationboardPage({ params, searchParams }: PagePro
           <Suspense fallback={name ? <h1>{name}</h1> : <Skeleton width="12rem" height="1.5rem" />}>
             <StationName departuresPromise={departuresPromise} />
           </Suspense>
+
+          <StationboardTravelTypeFilter />
+          <StationboardTimePicker />
+
           <PageContent>
-            <StationboardTravelTypeFilter />
-            <StationboardTimePicker />
-            <Suspense fallback={<StationboardSkeleton />}>
-              <StationboardLoader
-                departuresPromise={departuresPromise}
-                stationId={stationId}
-                travelType={travelType as TravelType | undefined}
-              />
-            </Suspense>
+            <StationboardPageContent>
+              <Suspense fallback={<StationboardSkeleton />}>
+                <StationboardLoader
+                  departuresPromise={departuresPromise}
+                  stationId={stationId}
+                  travelType={travelType as TravelType | undefined}
+                />
+              </Suspense>
+            </StationboardPageContent>
           </PageContent>
         </StationboardContextProvider>
       </CheckInContextProvider>

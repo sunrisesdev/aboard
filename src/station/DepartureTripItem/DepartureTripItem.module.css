@@ -49,18 +49,6 @@
   font-size: 0.875rem;
   font-weight: 500;
   white-space: nowrap;
-
-  &[data-via-delay="onTime"] {
-    color: oklch(52.7% 0.154 150.069);
-  }
-
-  &[data-via-delay="slight"] {
-    color: oklch(68.1% 0.162 75.834);
-  }
-
-  &[data-via-delay="late"] {
-    color: oklch(50.5% 0.213 27.518);
-  }
 }
 
 .direction {

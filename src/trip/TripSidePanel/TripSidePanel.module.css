@@ -1,0 +1,50 @@
+.base {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  view-timeline: --trip-side-panel block;
+
+  @media (width <= 64em) {
+    display: none;
+  }
+}
+
+.panel {
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 100dvh;
+  opacity: 0;
+  padding-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  padding-top: 1.5rem;
+  position: sticky;
+  transform: translateX(4rem);
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+  width: var(--via-trip-side-panel-width);
+
+  /* Limits the panel to the visible part of .base while its top edge is still inside the viewport. */
+  @supports (animation-timeline: view()) {
+    animation: panel-max-height linear both;
+    animation-range: cover 0% cover 100dvh;
+    animation-timeline: --trip-side-panel;
+  }
+
+  .base[data-open] & {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes panel-max-height {
+  from {
+    max-height: 0;
+  }
+
+  to {
+    max-height: 100dvh;
+  }
+}

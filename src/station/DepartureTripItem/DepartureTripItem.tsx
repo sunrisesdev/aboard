@@ -5,6 +5,7 @@ import { LineBadge } from '@/components/LineBadge/LineBadge';
 import { Marquee } from '@/components/Marquee/Marquee';
 import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
 import { cleanStationName } from '@/helpers/cleanStationName';
+import { formatJourneyNumber } from '@/helpers/formatJourneyNumber';
 import { formatPlatform } from '@/helpers/formatPlatform';
 import { formatTime } from '@/helpers/formatTime';
 import { getColorsByMotisMode } from '@/helpers/getColorsByMotisMode';
@@ -32,16 +33,12 @@ export const DepartureTripItem = ({
 
   const replacementService = isReplacementService(departure);
   const time = getDepartureTime(departure);
-  const delay = getDelay(departure);
+  const delay = getDelay(departure.plannedWhen, departure.when);
   const hasDeparted = new Date(time).setSeconds(0, 0) < new Date().setSeconds(0, 0);
-  const tripHref = `/trip/${encodeURIComponent(departure.tripId)}?${new URLSearchParams({
-    station: String(departure.station.id),
-    time: formatTime(time),
-    line: departure.line.name ?? '',
-  })}`;
+  const journeyNumber = formatJourneyNumber(departure.line.fahrtNr);
 
   const statusLineText = [
-    departure.line.fahrtNr && departure.line.fahrtNr !== departure.line.name && String(+departure.line.fahrtNr),
+    departure.line.fahrtNr !== departure.line.name && journeyNumber,
     formatPlatform(departure.platform, departure.line.mode),
   ]
     .filter(Boolean)
@@ -65,7 +62,7 @@ export const DepartureTripItem = ({
         />
         <Marquee className={styles.direction}>{cleanStationName(departure.direction)}</Marquee>
 
-        {lessInformation && departure.line.fahrtNr ? (
+        {lessInformation && journeyNumber ? (
           <span
             className={styles.statusLine}
             style={{ alignSelf: 'center', gap: '0.25rem', marginBlock: '-3.25px', paddingBlock: '0.125rem' }}
@@ -76,14 +73,14 @@ export const DepartureTripItem = ({
               mode={departure.line.mode ?? undefined}
               width={16}
             />
-            {String(+departure.line.fahrtNr)}
+            {journeyNumber}
           </span>
         ) : (
           <span className={styles.delay} data-via-delay={departure.cancelled ? 'late' : delay.status}>
             {departure.cancelled
               ? 'Fällt aus'
-              : delay.minutes > 0
-                ? `+${delay.minutes} · statt ${formatTime(departure.plannedWhen)}`
+              : delay.minutes !== 0
+                ? `${delay.minutes > 0 ? '+' : '−'}${Math.abs(delay.minutes)} · statt ${formatTime(departure.plannedWhen)}`
                 : 'pünktlich'}
           </span>
         )}

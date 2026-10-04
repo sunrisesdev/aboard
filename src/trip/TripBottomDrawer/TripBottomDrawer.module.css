@@ -1,0 +1,40 @@
+.backdrop {
+  background: black;
+  inset: 0;
+  opacity: 0.2;
+  position: fixed;
+  transition: opacity 200ms ease;
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+  }
+}
+
+.viewport {
+  align-items: flex-end;
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: fixed;
+}
+
+.popup {
+  background-color: var(--via-bg-primary);
+  border-radius: 1rem 1rem 0 0;
+  box-shadow: var(--via-shadow-md);
+  color: var(--via-fg-primary);
+  max-height: 80dvh;
+  outline: none;
+  overflow-y: auto;
+  padding: 1rem;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  transform: translateY(var(--drawer-swipe-movement-y));
+  transition: transform 250ms ease;
+  width: 100%;
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    transform: translateY(100%);
+  }
+}

@@ -2,6 +2,7 @@
   background-color: var(--via-colored-layer-bg);
   border-radius: var(--via-colored-layer-radius);
   box-shadow: var(--via-shadow-xs);
+  color: contrast-color(var(--via-colored-layer-bg));
 }
 
 .content {

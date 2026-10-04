@@ -1,6 +1,8 @@
+import { clsx } from 'clsx';
 import type { CSSProperties } from 'react';
 import type { Extend, Structure } from '@/helpers/extend';
 import { getColorsByMotisMode } from '@/helpers/getColorsByMotisMode';
+import { normalizeHexColor } from '@/helpers/normalizeHexColor';
 import type { MotisMode } from '@/lib/traewelling';
 import styles from './LineBadge.module.css';
 
@@ -31,15 +33,6 @@ const shapeByMotisMode = {
   REGIONAL_RAIL: 'smooth-rectangle',
   SUBURBAN: 'pill',
 } as const satisfies Partial<Record<MotisMode, string>>;
-
-function normalizeHexColor(value?: string) {
-  if (!value) return;
-
-  const safeHexValue = String(value).replace(/[^0-9a-f]/gi, '');
-  if (safeHexValue.length !== 6) return;
-
-  return `#${safeHexValue}`;
-}
 
 export const LineBadge = ({
   backgroundColor,
@@ -78,7 +71,7 @@ export const LineBadge = ({
 
   return (
     <div
-      className={styles.base}
+      className={clsx(styles.base, className)}
       data-via-shape={shape}
       style={{ ...style, '--via-line-bg': background, '--via-line-fg': foreground } as CSSProperties}
       {...props}

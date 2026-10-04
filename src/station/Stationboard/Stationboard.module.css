@@ -43,6 +43,7 @@
 
 .groupLabel {
   align-self: flex-start;
+  font-feature-settings: "tnum";
   font-weight: 600;
   padding-block: 0.75rem;
   position: sticky;

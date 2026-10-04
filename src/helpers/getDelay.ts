@@ -1,11 +1,12 @@
-import type { DepartureResource } from '@/lib/traewelling';
-import { getDepartureTime } from './getDepartureTime';
-
 const lateThresholdInMinutes = 6;
 
-export function getDelay(departure: DepartureResource) {
-  const difference = new Date(getDepartureTime(departure)).getTime() - new Date(departure.plannedWhen).getTime();
-  const minutes = Math.max(0, Math.round(difference / 60_000));
+export function getDelay(planned: string, actual?: string | null) {
+  const difference = new Date(actual ?? planned).getTime() - new Date(planned).getTime();
+  const minutes = Math.round(difference / 60_000);
+
+  if (minutes < 0) {
+    return { minutes, status: 'early' } as const;
+  }
 
   if (minutes >= lateThresholdInMinutes) {
     return { minutes, status: 'late' } as const;

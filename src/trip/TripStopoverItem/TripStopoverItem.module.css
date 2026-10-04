@@ -1,0 +1,49 @@
+.base {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  display: grid;
+  gap: 0.625rem;
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+  min-height: 2.5rem;
+  padding-inline: 1rem;
+  width: 100%;
+}
+
+.content {
+  align-items: center;
+  align-self: center;
+  display: flex;
+  gap: 0.5rem;
+  padding-block: 0.5rem;
+
+  & > *:first-child {
+    flex-grow: 1;
+    text-align: left;
+  }
+}
+
+.platform {
+  color: var(--via-fg-tertiary);
+  margin-right: 0.25rem;
+  white-space: nowrap;
+}
+
+.time {
+  align-items: flex-end;
+  display: flex;
+  font-feature-settings: "tnum";
+  font-weight: 500;
+  flex-direction: column;
+  white-space: nowrap;
+}
+
+.plannedTime {
+  color: var(--via-fg-tertiary);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.tripLine {
+  color: var(--via-trip-details-contrast);
+}

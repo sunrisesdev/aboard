@@ -1,0 +1,27 @@
+.base {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.route {
+  background-color: currentColor;
+  flex-grow: 1;
+  width: 0.125rem;
+
+  &:has(+ .route) {
+    margin-bottom: -1px;
+  }
+}
+
+.stop {
+  aspect-ratio: 1;
+  border: 0.125rem solid currentColor;
+  border-radius: 9999rem;
+  flex-shrink: 0;
+  height: 0.625rem;
+
+  & + .route {
+    margin-top: -1px;
+  }
+}
