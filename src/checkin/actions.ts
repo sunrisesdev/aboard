@@ -1,7 +1,13 @@
 'use server';
 
 import { auth } from '@/lib/auth';
-import { type Business, createCheckin, createTraewellingClient, TraewellingApiError } from '@/lib/traewelling';
+import {
+  type Business,
+  createCheckin,
+  createTraewellingClient,
+  type StatusVisibility,
+  TraewellingApiError,
+} from '@/lib/traewelling';
 
 export type CheckinRequest = {
   tripId: string;
@@ -12,6 +18,7 @@ export type CheckinRequest = {
   arrival: string;
   body?: string | null;
   business?: Business;
+  visibility?: StatusVisibility;
 };
 
 export type CheckinResult = { success: true } | { success: false; message: string };

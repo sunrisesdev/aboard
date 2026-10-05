@@ -36,7 +36,7 @@ export const CheckInBottomDrawer = () => {
             <CheckInTripSummary departure={displayedDeparture} destination={displayedDestination} />
           )}
 
-          <CheckInForm />
+          <CheckInForm inDrawer />
         </BottomDrawer.Content>
 
         <BottomDrawer.Footer>

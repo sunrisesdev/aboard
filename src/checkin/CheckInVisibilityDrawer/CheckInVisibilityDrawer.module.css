@@ -1,0 +1,39 @@
+.trigger {
+  align-items: center;
+  background: var(--via-bg-primary);
+  border: var(--via-bd-width) solid var(--via-bd-secondary);
+  border-radius: 0.5rem;
+  color: var(--via-fg-primary);
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  font-size: 0.9375rem;
+  gap: 0.5rem;
+  height: 2.75rem;
+  padding: 0 0.75rem;
+  text-align: left;
+  width: 100%;
+
+  & > [data-via-icon]:first-child {
+    color: var(--via-fg-secondary);
+    font-size: 1.125rem;
+  }
+}
+
+.value {
+  flex: 1;
+  font-weight: 500;
+  min-width: 0;
+}
+
+.chevron {
+  color: var(--via-fg-tertiary);
+}
+
+.title {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  padding-bottom: 1rem;
+  text-align: center;
+  user-select: none;
+}

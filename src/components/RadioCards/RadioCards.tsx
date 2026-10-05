@@ -5,48 +5,39 @@ import { RadioGroup } from '@base-ui/react/radio-group';
 import { clsx } from 'clsx';
 import type { CSSProperties, ReactNode } from 'react';
 import type { Extend, Structure } from '@/helpers/extend';
-import styles from './SegmentedControl.module.css';
+import styles from './RadioCards.module.css';
 
-export type SegmentedControlOption<Value> = {
+export type RadioCardsOption<Value> = {
+  description?: ReactNode;
   icon?: ReactNode;
   label: ReactNode;
   value: Value;
 };
 
-export const SegmentedControl = <Value,>({
+export const RadioCards = <Value,>({
   className,
+  columns = 1,
   onValueChange,
   options,
   style,
-  value,
   ...props
 }: Extend<
   Structure,
   {
     'aria-labelledby'?: string;
+    columns?: number;
     onValueChange?: (value: Value) => void;
-    options: SegmentedControlOption<Value>[];
+    options: RadioCardsOption<Value>[];
     value?: Value;
   }
 >) => {
-  const selectedIndex = options.findIndex((option) => option.value === value);
-
   return (
     <RadioGroup
       className={clsx(styles.base, className)}
       onValueChange={(nextValue) => onValueChange?.(nextValue as Value)}
-      style={
-        {
-          ...style,
-          '--via-segmented-control-count': options.length,
-          '--via-segmented-control-index': selectedIndex,
-        } as CSSProperties
-      }
-      value={value}
+      style={{ ...style, '--via-radio-cards-columns': columns } as CSSProperties}
       {...props}
     >
-      <div aria-hidden className={styles.indicator} data-via-hidden={selectedIndex < 0 || undefined} />
-
       {options.map((option) => (
         <Radio.Root
           className={styles.item}
@@ -55,8 +46,10 @@ export const SegmentedControl = <Value,>({
           render={<button type="button" />}
           value={option.value}
         >
-          {option.icon}
-          {option.label}
+          {option.icon && <span className={styles.icon}>{option.icon}</span>}
+          <span className={styles.label}>{option.label}</span>
+          {option.description && <span className={styles.description}>{option.description}</span>}
+          <span aria-hidden className={styles.indicator} />
         </Radio.Root>
       ))}
     </RadioGroup>
