@@ -2,7 +2,7 @@
   --via-segmented-control-gap: 0.25rem;
   --via-segmented-control-padding: 0.25rem;
 
-  background: var(--via-bg-surface);
+  background: var(--via-bg-tertiary);
   border-radius: 0.75rem;
   display: grid;
   gap: var(--via-segmented-control-gap);

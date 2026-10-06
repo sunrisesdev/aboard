@@ -10,6 +10,20 @@
   margin-top: 0.75rem;
 }
 
+.divider {
+  border: none;
+  border-bottom: var(--via-bd-width) solid var(--via-bd-secondary);
+  margin: 0.25rem 0.5rem;
+}
+
+.drawerPrivacyCard {
+  background: var(--via-bg-primary);
+  border: var(--via-bd-width) solid var(--via-bd-primary);
+  border-radius: 1rem;
+  box-shadow: var(--via-shadow-xs);
+  padding: 0.5rem;
+}
+
 .error {
   color: var(--via-fg-error);
   font-size: 0.875rem;

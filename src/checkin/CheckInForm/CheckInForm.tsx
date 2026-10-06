@@ -45,25 +45,28 @@ const Root = ({ inDrawer = false }: { inDrawer?: boolean }) => {
           aria-labelledby="label-business"
           onValueChange={(business) => setValue('business', business)}
           options={[
-            { icon: <IconUser data-via-icon />, label: 'Privat', value: 0 },
-            { icon: <IconBriefcase data-via-icon />, label: 'Geschäftlich', value: 1 },
-            { icon: <IconBuilding data-via-icon />, label: 'Arbeitsweg', value: 2 },
+            { icon: <IconUser aria-hidden data-via-icon />, label: 'Privat', value: 0 },
+            { icon: <IconBriefcase aria-hidden data-via-icon />, label: 'Geschäftlich', value: 1 },
+            { icon: <IconBuilding aria-hidden data-via-icon />, label: 'Arbeitsweg', value: 2 },
           ]}
           value={values.business}
         />
       </FieldsetCard>
 
-      <FieldsetCard
-        icon={<IconEye data-via-icon />}
-        title={<FieldsetCard.Title id="label-visibility">Sichtbarkeit</FieldsetCard.Title>}
-      >
-        {inDrawer ? (
+      {inDrawer ? (
+        <div className={styles.drawerPrivacyCard}>
           <CheckInVisibilityDrawer
-            aria-labelledby="label-visibility"
             onValueChange={(visibility) => setValue('visibility', visibility)}
             value={values.visibility}
           />
-        ) : (
+
+          <hr className={styles.divider} />
+        </div>
+      ) : (
+        <FieldsetCard
+          icon={<IconEye data-via-icon />}
+          title={<FieldsetCard.Title id="label-visibility">Sichtbarkeit</FieldsetCard.Title>}
+        >
           <RadioCards<StatusVisibility>
             aria-labelledby="label-visibility"
             columns={2}
@@ -71,8 +74,8 @@ const Root = ({ inDrawer = false }: { inDrawer?: boolean }) => {
             options={visibilityOptions}
             value={values.visibility}
           />
-        )}
-      </FieldsetCard>
+        </FieldsetCard>
+      )}
 
       {error && <p className={styles.error}>{error}</p>}
     </form>

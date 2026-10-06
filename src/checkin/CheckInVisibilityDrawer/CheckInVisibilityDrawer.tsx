@@ -2,7 +2,6 @@
 
 import { Drawer } from '@base-ui/react/drawer';
 import { IconChevronRight } from '@tabler/icons-react';
-import { clsx } from 'clsx';
 import { useId, useState } from 'react';
 import { visibilityOptions } from '@/checkin/visibilityOptions';
 import { BottomDrawer } from '@/components/BottomDrawer/BottomDrawer';
@@ -10,13 +9,10 @@ import { RadioCards } from '@/components/RadioCards/RadioCards';
 import type { StatusVisibility } from '@/lib/traewelling';
 import styles from './CheckInVisibilityDrawer.module.css';
 
-// Nested inside CheckInBottomDrawer, the trigger shows the current value and opens the options in another drawer.
 export const CheckInVisibilityDrawer = ({
-  'aria-labelledby': ariaLabelledBy,
   onValueChange,
   value,
 }: {
-  'aria-labelledby'?: string;
   onValueChange: (value: StatusVisibility) => void;
   value: StatusVisibility;
 }) => {
@@ -31,11 +27,14 @@ export const CheckInVisibilityDrawer = ({
       onOpenChange={setOpen}
       open={open}
       trigger={
-        <Drawer.Trigger aria-labelledby={clsx(ariaLabelledBy, valueId)} className={styles.trigger}>
-          {selectedOption?.icon}
-          <span className={styles.value} id={valueId}>
-            {selectedOption?.label}
-          </span>
+        <Drawer.Trigger aria-labelledby={valueId} className={styles.trigger}>
+          {selectedOption?.icon && <div className={styles.iconContainer}>{selectedOption?.icon}</div>}
+
+          <div id={valueId}>
+            <div className={styles.label}>Sichtbarkeit</div>
+            <span style={{ fontWeight: 500 }}>{selectedOption?.label}</span>
+          </div>
+
           <IconChevronRight className={styles.chevron} data-via-icon />
         </Drawer.Trigger>
       }
