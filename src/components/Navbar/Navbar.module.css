@@ -1,0 +1,11 @@
+.base {
+  align-items: center;
+  background: var(--via-bg-accent);
+  display: flex;
+  height: 3.5rem;
+  padding-inline: 1rem 0.75rem;
+
+  @media (width >= 64em) {
+    padding-inline: 1.5rem;
+  }
+}
