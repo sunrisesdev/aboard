@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
+    "postinstall": "node scripts/copy-maplibre-worker.mjs",
     "generate:traewelling-types": "openapi-typescript src/lib/traewelling/openapi.json -o src/lib/traewelling/schema.d.ts"
   },
   "dependencies": {
@@ -16,6 +17,7 @@
     "@tabler/icons-react": "^3.48.0",
     "clsx": "^2.1.1",
     "ky": "^2.1.0",
+    "maplibre-gl": "^6.12.0",
     "next": "16.3.6",
     "next-auth": "5.0.0-beta.32",
     "react": "19.2.8",

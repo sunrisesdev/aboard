@@ -1,0 +1,86 @@
+.base {
+  --via-route-map-land: var(--via-bg-secondary);
+  --via-route-map-urban: color-mix(in oklch, var(--via-route-map-land), var(--via-fg-primary) 5%);
+  --via-route-map-park: light-dark(oklch(93% 0.035 150), oklch(21% 0.025 150));
+  --via-route-map-water: light-dark(oklch(88% 0.04 240), oklch(26% 0.04 250));
+  --via-route-map-road: var(--via-bd-primary);
+  --via-route-map-road-major: var(--via-bd-secondary);
+  --via-route-map-rail: var(--via-fg-placeholder);
+  --via-route-map-boundary: var(--via-fg-placeholder);
+  --via-route-map-casing: var(--via-bg-primary);
+  --via-route-map-label: var(--via-fg-primary);
+
+  aspect-ratio: 16 / 9;
+  background-color: var(--via-route-map-land);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  position: relative;
+  transition: opacity 0.3s ease;
+
+  /* Without a placeholder, the whole frame stays hidden until the map is ready, since it might fail */
+  &[data-via-status="loading"]:not([data-via-deferred]) {
+    opacity: 0;
+  }
+
+  &[data-via-status="loading"] :is(.canvas, .labels) {
+    opacity: 0;
+  }
+
+  :global(.maplibregl-ctrl-attrib) {
+    background-color: color-mix(in oklch, var(--via-bg-primary), transparent 25%);
+    color: var(--via-fg-tertiary);
+    font-size: 0.625rem;
+
+    a {
+      color: inherit;
+    }
+  }
+}
+
+/* No absolute positioning, since MapLibre's `.maplibregl-map` sets `position: relative` on this element */
+.canvas {
+  height: 100%;
+  transition: opacity 0.3s ease;
+}
+
+.labels {
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  transition: opacity 0.3s ease;
+}
+
+/* Positioned by RouteMapCanvas */
+.label {
+  color: var(--via-route-map-label);
+  font-size: 0.75rem;
+  font-weight: 600;
+  left: 0;
+  line-height: 1.25;
+  max-width: calc(100% - 0.5rem);
+  overflow: hidden;
+  position: absolute;
+  text-overflow: ellipsis;
+  text-shadow:
+    0 0 2px var(--via-route-map-casing),
+    0 0 2px var(--via-route-map-casing),
+    0 0 4px var(--via-route-map-casing);
+  top: 0;
+  white-space: nowrap;
+}
+
+.placeholder {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+}
+
+.notice {
+  color: var(--via-fg-tertiary);
+  font-size: 0.75rem;
+}

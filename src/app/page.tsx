@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth, signIn } from "@/lib/auth";
 
@@ -34,6 +35,7 @@ export default async function IndexPage({
       >
         <button type="submit">Mit Träwelling anmelden</button>
       </form>
+      <Link href="/datenschutz">Datenschutzerklärung</Link>
     </main>
   );
 }

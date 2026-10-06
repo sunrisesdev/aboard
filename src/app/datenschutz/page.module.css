@@ -1,0 +1,36 @@
+.base {
+  display: grid;
+  gap: 2rem;
+  line-height: 1.5;
+  max-width: 45rem;
+  padding-block: 2rem 4rem;
+
+  section {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+  }
+
+  ul {
+    padding-inline-start: 1.25rem;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+}
+
+.meta {
+  color: var(--via-fg-tertiary);
+}

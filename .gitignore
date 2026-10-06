@@ -20,6 +20,9 @@
 # production
 /build
 
+# vendored at install time (see scripts/copy-maplibre-worker.mjs)
+/public/vendor/
+
 # misc
 .DS_Store
 *.pem

@@ -19,6 +19,8 @@ export type MotisMode = components['schemas']['MotisCategory'];
  */
 export type StatusVisibility = components['schemas']['StatusVisibility'];
 
-export type TraewellingUser = Omit<components['schemas']['UserAuthResource'], 'id'> & {
+export type TransportResource = components['schemas']['TransportResource'];
+
+export type TraewellingUser =Omit<components['schemas']['UserAuthResource'], 'id'> & {
   id: string;
 };

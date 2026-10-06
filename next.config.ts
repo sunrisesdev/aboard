@@ -6,6 +6,13 @@ const nextConfig: NextConfig = {
       exclude: ['light-dark'],
     },
   },
+  headers: () => [
+    {
+      // Versioned copies of MapLibre's worker (see scripts/copy-maplibre-worker.mjs)
+      source: '/vendor/maplibre/:path*',
+      headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+    },
+  ],
   reactCompiler: true,
 };
 

@@ -2,10 +2,12 @@ import { type NextFetchEvent, type NextRequest, NextResponse } from 'next/server
 import type { NextAuthRequest } from 'next-auth';
 import { auth } from '@/lib/auth';
 
+const publicPaths = ['/', '/datenschutz'];
+
 function getUnauthenticatedResponse(request: NextAuthRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname === '/') return undefined;
+  if (publicPaths.includes(pathname)) return undefined;
 
   if (pathname.startsWith('/api/')) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -68,5 +70,5 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
 // API routes run through the proxy too, so token refreshes triggered by
 // client-side fetches get persisted to the session cookie.
 export const config = {
-  matcher: ['/((?!api/auth|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!api/auth|_next/static|_next/image|vendor|favicon.ico).*)'],
 };

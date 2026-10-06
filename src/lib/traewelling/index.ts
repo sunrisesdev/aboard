@@ -5,6 +5,7 @@ export {
   type CheckinForbiddenBody,
   TraewellingApiError,
 } from './errors';
+export { getPolylines, type Polyline } from './polyline';
 export {
   autocompleteStation,
   type DepartureResource,
@@ -18,5 +19,6 @@ export {
   stationHistory,
   type TravelType,
 } from './stations';
+export { getStatus, type StatusResource } from './status';
 export { getTripInfo, type StopoverResource, type TripResource } from './trip';
-export type { Business, MotisMode, StatusVisibility, TraewellingUser } from './types';
+export type { Business, MotisMode, StatusVisibility, TraewellingUser, TransportResource } from './types';
