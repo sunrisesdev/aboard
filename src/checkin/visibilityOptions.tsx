@@ -6,7 +6,7 @@ import type { StatusVisibility } from '@/lib/traewelling';
 export const visibilityOptions: RadioCardsOption<StatusVisibility>[] = [
   { description: 'Für alle sichtbar', icon: <IconWorld data-via-icon />, label: 'Öffentlich', value: 0 },
   {
-    description: 'Nicht im Dashboard, aber im Profil',
+    description: 'Nur über Link sichtbar',
     icon: <IconEyeOff data-via-icon />,
     label: 'Ungelistet',
     value: 1,
