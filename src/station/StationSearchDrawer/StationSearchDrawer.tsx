@@ -7,7 +7,7 @@ import useSWR from 'swr';
 import { BottomDrawer } from '@/components/BottomDrawer/BottomDrawer';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import type { StationResource } from '@/lib/traewelling';
-import { StationSearchItem } from '../StationSearchItem/StationSearchItem';
+import { StationSearchItem } from '@/station/StationSearchItem/StationSearchItem';
 import styles from './StationSearchDrawer.module.css';
 
 export function StationSearchDrawer() {

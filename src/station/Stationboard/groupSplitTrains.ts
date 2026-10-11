@@ -1,5 +1,5 @@
-import { motisModeToTravelType } from '@/helpers/motisModeToTravelType';
 import type { DepartureResource, TravelType } from '@/lib/traewelling';
+import { motisModeToTravelType } from './motisModeToTravelType';
 
 const splittableTravelTypes: (TravelType | undefined)[] = ['express', 'regional', 'suburban'];
 

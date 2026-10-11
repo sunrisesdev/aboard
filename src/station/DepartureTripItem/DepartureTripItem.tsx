@@ -5,15 +5,15 @@ import { LineBadge } from '@/components/LineBadge/LineBadge';
 import { Marquee } from '@/components/Marquee/Marquee';
 import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
 import { cleanStationName } from '@/helpers/cleanStationName';
-import { formatJourneyNumber } from '@/helpers/formatJourneyNumber';
+import { formatDelay } from '@/helpers/formatDelay';
 import { formatPlatform } from '@/helpers/formatPlatform';
-import { formatTime } from '@/helpers/formatTime';
 import { getColorsByMotisMode } from '@/helpers/getColorsByMotisMode';
 import { getDelay } from '@/helpers/getDelay';
 import { getDepartureTime } from '@/helpers/getDepartureTime';
 import { isReplacementService } from '@/helpers/isReplacementService';
 import type { DepartureResource, MotisMode } from '@/lib/traewelling';
 import styles from './DepartureTripItem.module.css';
+import { formatJourneyNumber } from './formatJourneyNumber';
 
 export const DepartureTripItem = ({
   departure,
@@ -80,7 +80,7 @@ export const DepartureTripItem = ({
             {departure.cancelled
               ? 'Fällt aus'
               : delay.minutes !== 0
-                ? `${delay.minutes > 0 ? '+' : '−'}${Math.abs(delay.minutes)} · statt ${formatTime(departure.plannedWhen)}`
+                ? formatDelay(delay.minutes, departure.plannedWhen)
                 : 'pünktlich'}
           </span>
         )}

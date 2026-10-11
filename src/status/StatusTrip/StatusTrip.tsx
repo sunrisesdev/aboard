@@ -1,0 +1,226 @@
+import { ColoredLayer } from '@/components/ColoredLayer/ColoredLayer';
+import { LineBadge } from '@/components/LineBadge/LineBadge';
+import { Marquee } from '@/components/Marquee/Marquee';
+import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
+import { TripLine } from '@/components/TripLine/TripLine';
+import { cleanStationName } from '@/helpers/cleanStationName';
+import { formatDelay } from '@/helpers/formatDelay';
+import { formatDuration } from '@/helpers/formatDuration';
+import { formatPlatform } from '@/helpers/formatPlatform';
+import { formatTime } from '@/helpers/formatTime';
+import { getColorsByMotisMode } from '@/helpers/getColorsByMotisMode';
+import { getDelay } from '@/helpers/getDelay';
+import { normalizeHexColor } from '@/helpers/normalizeHexColor';
+import type { MotisMode } from '@/lib/traewelling';
+import type { components } from '@/lib/traewelling/schema';
+import { getCheckinTimes } from '@/status/getCheckinTimes';
+import styles from './StatusTrip.module.css';
+
+type Stopover = components['schemas']['StopoverResource'];
+
+// Renders into the grid areas of StatusTrip, so the stop indicators line up with the station names
+const StatusTripStation = ({
+  area,
+  label,
+  mode,
+  platform,
+  planned,
+  real,
+  station,
+  timePrefix,
+}: {
+  area: 'destination' | 'origin';
+  label: string;
+  mode: string | null;
+  platform: string | null;
+  planned: string | null;
+  real: string | null;
+  station: Stopover['station'];
+  timePrefix: string;
+}) => {
+  const formattedPlatform = formatPlatform(platform, mode);
+  const delay = planned ? getDelay(planned, real) : undefined;
+  const time = real ?? planned;
+
+  return (
+    <>
+      <em className={styles.stationLabel} style={{ gridArea: `${area}Label` }}>
+        {label}
+      </em>
+
+      <div className={styles.stationRow} style={{ gridArea: `${area}Name` }}>
+        <Marquee>{cleanStationName(station.name)}</Marquee>
+        {time && (
+          <span className={styles.time}>
+            {timePrefix} {formatTime(time)}
+          </span>
+        )}
+      </div>
+
+      {(formattedPlatform || (delay && delay.minutes !== 0)) && (
+        <div className={styles.details} style={{ gridArea: `${area}Details` }}>
+          {formattedPlatform && <span className={styles.platform}>{formattedPlatform}</span>}
+
+          {planned && delay && delay.minutes !== 0 && (
+            <span className={styles.delayBadge} data-via-delay={delay.status}>
+              {formatDelay(delay.minutes, planned)}
+            </span>
+          )}
+        </div>
+      )}
+    </>
+  );
+};
+
+/**
+ * @param stopovers Stopovers of the checked-in section, including origin and destination.
+ * @param nextStopover Only set while the trip is ongoing.
+ */
+export const StatusTrip = ({
+  checkin,
+  direction,
+  nextStopover,
+  now,
+  stopovers,
+}: {
+  checkin: components['schemas']['TransportResource'];
+  direction?: Stopover;
+  nextStopover?: Stopover;
+  now: Date;
+  stopovers?: Stopover[];
+}) => {
+  const { destination, origin } = checkin;
+  const { arrival, departure } = getCheckinTimes(checkin);
+
+  // The line fills up by CSS animation, so it keeps progressing without re-rendering. A negative delay
+  // starts it partway through, a positive one (before departure) keeps it empty until then.
+  const progressStyle =
+    arrival && departure && now < new Date(arrival)
+      ? {
+          animationDelay: `${new Date(departure).getTime() - now.getTime()}ms`,
+          animationDuration: `${new Date(arrival).getTime() - new Date(departure).getTime()}ms`,
+        }
+      : undefined;
+
+  const intermediateCount = stopovers?.slice(1, -1).filter(({ cancelled }) => !cancelled).length;
+
+  // The destination is shown below anyway
+  const isNextStopoverIntermediate = !!nextStopover && nextStopover !== stopovers?.at(-1);
+  const nextStopoverTime =
+    nextStopover
+    && (nextStopover.arrivalReal
+      ?? nextStopover.arrivalPlanned
+      ?? nextStopover.departureReal
+      ?? nextStopover.departurePlanned);
+
+  const durationInHours =
+    arrival && departure ? (new Date(arrival).getTime() - new Date(departure).getTime()) / 3_600_000 : undefined;
+  const distanceInKilometers = checkin.distance / 1000;
+
+  return (
+    <ColoredLayer
+      color={
+        normalizeHexColor(checkin.routeColor ?? undefined)
+        ?? getColorsByMotisMode(checkin.mode as MotisMode)?.[0]
+        ?? 'var(--via-fg-primary)'
+      }
+      radius="1rem"
+    >
+      <ColoredLayer.Content className={styles.base}>
+        <header className={styles.header}>
+          <TransportModeIcon height={20} mode={checkin.mode ?? undefined} width={20} />
+
+          <LineBadge
+            backgroundColor={checkin.routeColor ?? undefined}
+            className={styles.lineBadge}
+            color={checkin.routeTextColor ?? undefined}
+            journeyNumber={checkin.manualJourneyNumber ?? String(checkin.journeyNumber)}
+            mode={(checkin.mode ?? undefined) as MotisMode | undefined}
+            name={checkin.lineName}
+            productName={undefined}
+          />
+
+          {direction && (
+            <em style={{ display: 'inline-flex', gap: '0.5ch', minWidth: 0 }}>
+              Richtung <Marquee>{cleanStationName(direction.station.name)}</Marquee>
+            </em>
+          )}
+        </header>
+
+        <div className={styles.trip}>
+          <TripLine className={styles.tripLine}>
+            <TripLine.RouteSegment className={styles.segment} partial={!!progressStyle} />
+            {progressStyle && <div className={styles.progress} style={progressStyle} />}
+            <TripLine.StopIndicator className={styles.stop} style={{ gridArea: 'originStop' }} />
+            <TripLine.StopIndicator className={styles.stop} style={{ gridArea: 'destinationStop' }} />
+          </TripLine>
+
+          <StatusTripStation
+            area="origin"
+            label="von"
+            mode={checkin.mode}
+            platform={origin.departurePlatformReal ?? origin.departurePlatformPlanned}
+            planned={origin.departurePlanned}
+            real={origin.departureReal}
+            station={origin.station}
+            timePrefix="ab"
+          />
+
+          <div className={styles.between}>
+            {intermediateCount !== undefined && (
+              <span>
+                {intermediateCount === 0
+                  ? 'Ohne Zwischenhalt'
+                  : `${intermediateCount} ${intermediateCount === 1 ? 'Zwischenhalt' : 'Zwischenhalte'}`}
+              </span>
+            )}
+
+            {nextStopover && isNextStopoverIntermediate && (
+              <span>
+                Nächster Halt: {cleanStationName(nextStopover.station.name)}
+                {nextStopoverTime && (
+                  <>
+                    {' um '}
+                    <time dateTime={nextStopoverTime}>{formatTime(nextStopoverTime)}</time>
+                  </>
+                )}
+              </span>
+            )}
+          </div>
+
+          <StatusTripStation
+            area="destination"
+            label="nach"
+            mode={checkin.mode}
+            platform={destination.arrivalPlatformReal ?? destination.arrivalPlatformPlanned}
+            planned={destination.arrivalPlanned}
+            real={destination.arrivalReal}
+            station={destination.station}
+            timePrefix="an"
+          />
+        </div>
+
+        <dl className={styles.stats}>
+          <div className={styles.stat}>
+            <dt>Entfernung</dt>
+            <dd>{distanceInKilometers.toLocaleString('de-DE', { maximumFractionDigits: 1 })} km</dd>
+          </div>
+
+          <div className={styles.stat}>
+            <dt>Dauer</dt>
+            <dd>{arrival && departure ? formatDuration(departure, arrival) : '–'}</dd>
+          </div>
+
+          <div className={styles.stat}>
+            <dt>Ø Tempo</dt>
+            <dd>
+              {durationInHours
+                ? `${Math.round(distanceInKilometers / durationInHours).toLocaleString('de-DE')} km/h`
+                : '–'}
+            </dd>
+          </div>
+        </dl>
+      </ColoredLayer.Content>
+    </ColoredLayer>
+  );
+};

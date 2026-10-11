@@ -1,0 +1,163 @@
+.base {
+  background: linear-gradient(
+    170deg in oklch,
+    oklch(from var(--via-colored-layer-bg) calc(l + 0.06) calc(c * 0.85) h),
+    oklch(from var(--via-colored-layer-bg) calc(l - 0.05) calc(c * 1.25) h)
+  );
+  padding: 1rem;
+  user-select: none;
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  gap: 0.375rem;
+  margin-bottom: 1rem;
+}
+
+.lineBadge {
+  box-shadow:
+    inset 0 0 0 var(--via-bd-width) oklch(from currentColor l c h / 0.5),
+    var(--via-shadow-xs);
+}
+
+.trip {
+  /* Fixed, so the line can start and end exactly at the stop indicators next to the names */
+  --station-name-height: 1.25rem;
+  --stop-size: 0.625rem;
+
+  column-gap: 0.625rem;
+  display: grid;
+  grid-template-areas:
+    ". originLabel"
+    "originStop originName"
+    ". originDetails"
+    ". between"
+    ". destinationLabel"
+    "destinationStop destinationName"
+    ". destinationDetails";
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+
+  /* Nested for a higher specificity than TripLine's own styles */
+  .tripLine {
+    display: contents;
+
+    .segment,
+    .progress {
+      grid-column: 1;
+      grid-row: originStop-start / destinationStop-end;
+      justify-self: center;
+      /* From the bottom edge of the origin's indicator to the top edge of the destination's */
+      margin-block: calc((var(--station-name-height) + var(--stop-size)) / 2 - 1px);
+    }
+
+    .stop {
+      align-self: center;
+      height: var(--stop-size);
+      justify-self: center;
+    }
+  }
+}
+
+/* Covers the dotted segment from the top, by the share of the trip's time that has passed */
+.progress {
+  animation: progress linear both;
+  background-color: currentColor;
+  transform-origin: top;
+  width: 0.125rem;
+}
+
+@keyframes progress {
+  from {
+    scale: 1 0;
+  }
+
+  to {
+    scale: 1 1;
+  }
+}
+
+.stationLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  opacity: 0.5;
+}
+
+.stationRow {
+  display: flex;
+  font-weight: 500;
+  gap: 0.5rem;
+  justify-content: space-between;
+  line-height: var(--station-name-height);
+}
+
+.between {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  grid-area: between;
+  opacity: 0.7;
+  padding-block: 1rem;
+}
+
+.stats {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 1rem;
+}
+
+.stat {
+  background-color: #fff4;
+  border-radius: 0.5rem;
+  box-shadow: var(--via-shadow-xs);
+  padding: 0.5rem 0.625rem;
+
+  dt {
+    font-size: 0.875rem;
+    font-weight: 500;
+    opacity: 0.7;
+  }
+
+  dd {
+    font-feature-settings: "tnum";
+    font-size: 1.125rem;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.delayBadge,
+.platform {
+  border-radius: 0.25rem;
+  box-shadow: var(--via-shadow-xs);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0 0.25rem;
+  white-space: nowrap;
+}
+
+/* Solid background keeps the delay color readable on any line color. */
+.delayBadge {
+  background-color: var(--via-bg-primary);
+  margin-left: auto;
+}
+
+.details {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+}
+
+.platform {
+  background-color: #fff4;
+}
+
+.time {
+  font-feature-settings: "tnum";
+  white-space: nowrap;
+}

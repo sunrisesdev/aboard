@@ -1,11 +1,11 @@
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { getVersion, Map as MapLibreMap, setWorkerUrl } from 'maplibre-gl';
 import { useEffect, useRef } from 'react';
-import { buildRouteMapStyle, type RouteMapColors, type RouteMapStop } from '@/helpers/buildRouteMapStyle';
-import { getCoordinatesBounds } from '@/helpers/getCoordinatesBounds';
-import type { Coordinate } from '@/helpers/getPolylineCoordinates';
-import { getRouteMapLabelPosition } from '@/helpers/getRouteMapLabelPosition';
 import { resolveCssColor } from '@/helpers/resolveCssColor';
+import { buildRouteMapStyle, type RouteMapColors, type RouteMapStop } from './buildRouteMapStyle';
+import { getCoordinatesBounds } from './getCoordinatesBounds';
+import type { Coordinate } from './getPolylineCoordinates';
+import { getRouteMapLabelPosition } from './getRouteMapLabelPosition';
 import styles from './RouteMap.module.css';
 
 export type RouteMapStatus = 'loading' | 'ready' | 'failed';
@@ -25,7 +25,14 @@ const colorVariables: Record<Exclude<keyof RouteMapColors, 'route'>, string> = {
   water: '--via-route-map-water',
 };
 
-const fitBoundsOptions = { animate: false, maxZoom: 15, padding: 32 };
+// Kept free at the bottom, so the attribution never covers the route or a label
+const attributionHeight = 44;
+const routePadding = 32;
+const fitBoundsOptions = {
+  animate: false,
+  maxZoom: 15,
+  padding: { bottom: routePadding + attributionHeight, left: routePadding, right: routePadding, top: routePadding },
+};
 const loadTimeout = 8000;
 
 export const RouteMapCanvas = ({
@@ -95,7 +102,7 @@ export const RouteMapCanvas = ({
       const labelElements = labelsRef.current?.children;
       if (!stops || !labelElements) return;
 
-      const frame = { height: container.clientHeight, width: container.clientWidth };
+      const frame = { height: container.clientHeight - attributionHeight, width: container.clientWidth };
       const points = stops.map((stop) => map.project(stop.coordinates));
       const averageY = points.reduce((sum, point) => sum + point.y, 0) / points.length;
 

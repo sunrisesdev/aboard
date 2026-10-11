@@ -1,0 +1,162 @@
+.base {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+  padding-block: 1rem;
+
+  @media (width >= 64em) {
+    gap: 1.5rem;
+    grid-template-columns: minmax(0, 1fr) 28.5rem;
+    padding-block: 1.5rem;
+  }
+}
+
+.attribution {
+  color: var(--via-fg-secondary);
+  font-size: 0.75rem;
+  font-style: italic;
+  text-align: center;
+}
+
+.author {
+  font-weight: 500;
+}
+
+.avatar {
+  border-radius: 9999rem;
+  flex-shrink: 0;
+}
+
+.body {
+  margin-top: 0.75rem;
+  white-space: pre-wrap;
+}
+
+/* Same look as FieldsetCard */
+.card {
+  background: var(--via-bg-primary);
+  border: var(--via-bd-width) solid var(--via-bd-primary);
+  border-radius: 1rem;
+  box-shadow: var(--via-shadow-xs);
+  padding: 1rem;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.header {
+  align-items: flex-start;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.likes {
+  margin-top: 0.5rem;
+}
+
+/* Like .card, but without padding, so the map bleeds to the card's edges */
+.mapCard {
+  background: var(--via-bg-primary);
+  border-radius: 1rem;
+  box-shadow: var(--via-shadow-md);
+  overflow: hidden;
+  position: relative;
+
+  /* Drawn on top of the map, since the map's clipped corners would otherwise cover a regular border */
+  &::after {
+    border: var(--via-bd-width) solid var(--via-bd-primary);
+    border-radius: inherit;
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  /* RouteMap renders nothing when the map can't be displayed */
+  &:empty {
+    display: none;
+  }
+
+  /* Nested for a higher specificity than RouteMap's own styles */
+  .map {
+    aspect-ratio: 1;
+    border-radius: 0;
+    /* Keeps MapLibre's controls (e.g. the attribution) below the border */
+    isolation: isolate;
+
+    @media (width >= 64em) {
+      aspect-ratio: 2;
+    }
+
+    &[data-via-status="idle"] {
+      aspect-ratio: unset;
+      height: 10rem;
+    }
+  }
+}
+
+.meta {
+  color: var(--via-fg-tertiary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 0.75rem;
+}
+
+.pointsBadge {
+  background-color: light-dark(
+    oklch(from var(--via-delay-slight) l c h / 0.5),
+    oklch(from var(--via-delay-slight) l c h / 0.2)
+  );
+  border-radius: 9999rem;
+  color: light-dark(currentColor, var(--via-delay-slight));
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-left: auto;
+  padding: 0.25rem 0.5rem;
+}
+
+.row {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.segment {
+  color: var(--via-fg-secondary);
+  font-size: 0.875rem;
+
+  & > svg {
+    @supports (vertical-align: central) {
+      vertical-align: central;
+    }
+
+    @supports not (vertical-align: central) {
+      bottom: -0.125rem;
+      position: relative;
+    }
+  }
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.userList {
+  display: grid;
+  gap: 0.5rem;
+  list-style: none;
+}
+
+/* Lets long names wrap instead of overflowing the row */
+.userListText {
+  min-width: 0;
+}
+
+.username {
+  color: var(--via-fg-secondary);
+}

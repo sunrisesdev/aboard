@@ -1,5 +1,4 @@
 import type { StopoverResource } from '@/lib/traewelling';
-import { formatTime } from './formatTime';
 
 export function splitStopoversAtBoarding(
   stopovers: StopoverResource[],
@@ -8,19 +7,20 @@ export function splitStopoversAtBoarding(
   // Some lines loop back to the same station more than once, so the boarding
   // stopover can only be identified by station id alone when that id occurs
   // exactly once; otherwise the departure time disambiguates which occurrence
-  // was actually boarded.
+  // was actually boarded. Times are compared as instants, since both sides
+  // may use different offsets for the same moment.
   const isBoardingStation = (stopover: StopoverResource) => String(stopover.station.id) === stationId;
   const boardingStationOccurrences = stopovers.filter(isBoardingStation).length;
+  const boardingTime = time ? new Date(time).getTime() : undefined;
 
   const boardingIndex =
     boardingStationOccurrences === 1
       ? stopovers.findIndex(isBoardingStation)
-      : stopovers.findLastIndex(
-          (stopover) =>
-            isBoardingStation(stopover)
-            && !!time
-            && formatTime(stopover.departurePlanned ?? stopover.departureReal ?? '') === time,
-        );
+      : stopovers.findLastIndex((stopover) => {
+          const departure = stopover.departurePlanned ?? stopover.departureReal;
+
+          return isBoardingStation(stopover) && !!departure && new Date(departure).getTime() === boardingTime;
+        });
 
   return {
     boardingStopover: stopovers[boardingIndex] ?? stopovers[0],

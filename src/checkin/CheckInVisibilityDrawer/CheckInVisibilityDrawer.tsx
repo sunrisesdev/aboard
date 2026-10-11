@@ -3,10 +3,10 @@
 import { Drawer } from '@base-ui/react/drawer';
 import { IconChevronRight } from '@tabler/icons-react';
 import { useId, useState } from 'react';
-import { visibilityOptions } from '@/checkin/visibilityOptions';
 import { BottomDrawer } from '@/components/BottomDrawer/BottomDrawer';
 import { RadioCards } from '@/components/RadioCards/RadioCards';
 import type { StatusVisibility } from '@/lib/traewelling';
+import { visibilityOptions } from '@/status/statusOptions';
 import styles from './CheckInVisibilityDrawer.module.css';
 
 export const CheckInVisibilityDrawer = ({

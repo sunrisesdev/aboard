@@ -2,11 +2,11 @@
 
 import { Dialog } from '@base-ui/react/dialog';
 import { CheckInForm } from '@/checkin/CheckInForm/CheckInForm';
+import { CheckInTripSummary } from '@/checkin/CheckInTripSummary/CheckInTripSummary';
 import { useCheckIn } from '@/checkin/useCheckIn';
 import { Button } from '@/components/Button/Button';
 import { useLastDefinedValue } from '@/hooks/useLastDefinedValue';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { CheckInTripSummary } from '../CheckInTripSummary/CheckInTripSummary';
 import styles from './CheckInModal.module.css';
 
 // Only used on larger breakpoints, smaller ones use CheckInBottomDrawer.

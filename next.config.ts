@@ -13,6 +13,9 @@ const nextConfig: NextConfig = {
       headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
     },
   ],
+  images: {
+    remotePatterns: [{ protocol: 'https', hostname: 'traewelling.de', pathname: '/**' }],
+  },
   reactCompiler: true,
 };
 

@@ -2,7 +2,11 @@ import { Fira_Sans_Condensed, Inter } from 'next/font/google';
 import './globals.css';
 import { clsx } from 'clsx';
 
-const firaSansCondensed = Fira_Sans_Condensed({ weight: ['400', '500', '600', '700'], variable: '--via-sans' });
+const firaSansCondensed = Fira_Sans_Condensed({
+  style: ['italic', 'normal'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--via-sans',
+});
 const inter = Inter({ weight: ['600'], variable: '--via-line' });
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {

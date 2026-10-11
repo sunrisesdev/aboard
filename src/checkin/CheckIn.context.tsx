@@ -3,9 +3,8 @@
 import ky from 'ky';
 import { createContext, type PropsWithChildren, useReducer } from 'react';
 import useSWR from 'swr';
-import { formatTime } from '@/helpers/formatTime';
-import { splitStopoversAtBoarding } from '@/helpers/splitStopoversAtBoarding';
 import type { DepartureResource, TripResource } from '@/lib/traewelling';
+import { splitStopoversAtBoarding } from './splitStopoversAtBoarding';
 import type { CheckInAction, CheckInContextValue, CheckInState } from './types';
 
 const initialCheckInState: CheckInState = {};
@@ -44,7 +43,7 @@ function useTrip(departure: DepartureResource | undefined) {
 
   const { boardingStopover, remainingStopovers } = splitStopoversAtBoarding(data.stopovers, {
     stationId: String(departure.station.id),
-    time: formatTime(departure.plannedWhen),
+    time: departure.plannedWhen,
   });
 
   return { boardingStopover, error, isLoading, stopovers: remainingStopovers };

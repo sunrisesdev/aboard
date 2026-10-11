@@ -1,15 +1,15 @@
 'use client';
 
-import { IconBriefcase, IconBuilding, IconEye, IconMessage, IconUser } from '@tabler/icons-react';
+import { IconBriefcase, IconEye, IconMessage } from '@tabler/icons-react';
 import type { ComponentProps } from 'react';
 import { CheckInVisibilityDrawer } from '@/checkin/CheckInVisibilityDrawer/CheckInVisibilityDrawer';
-import { visibilityOptions } from '@/checkin/visibilityOptions';
 import { Button } from '@/components/Button/Button';
 import { CharacterCounter } from '@/components/CharacterCounter/CharacterCounter';
 import { FieldsetCard } from '@/components/FieldsetCard/FieldsetCard';
 import { RadioCards } from '@/components/RadioCards/RadioCards';
 import { SegmentedControl } from '@/components/SegmentedControl/SegmentedControl';
 import type { Business, StatusVisibility } from '@/lib/traewelling';
+import { businessOptions, visibilityOptions } from '@/status/statusOptions';
 import { CheckInFormProvider, useCheckInForm } from './CheckInForm.context';
 import styles from './CheckInForm.module.css';
 
@@ -44,11 +44,7 @@ const Root = ({ inDrawer = false }: { inDrawer?: boolean }) => {
         <SegmentedControl<Business>
           aria-labelledby="label-business"
           onValueChange={(business) => setValue('business', business)}
-          options={[
-            { icon: <IconUser aria-hidden data-via-icon />, label: 'Privat', value: 0 },
-            { icon: <IconBriefcase aria-hidden data-via-icon />, label: 'Geschäftlich', value: 1 },
-            { icon: <IconBuilding aria-hidden data-via-icon />, label: 'Arbeitsweg', value: 2 },
-          ]}
+          options={businessOptions}
           value={values.business}
         />
       </FieldsetCard>

@@ -10,6 +10,7 @@ import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
 import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
+import { formatDelay } from '@/helpers/formatDelay';
 import { formatPlatform } from '@/helpers/formatPlatform';
 import { formatTime } from '@/helpers/formatTime';
 import { getDelay } from '@/helpers/getDelay';
@@ -19,7 +20,7 @@ import { getLineContrastColor } from '@/helpers/getLineContrastColor';
 import { isReplacementService } from '@/helpers/isReplacementService';
 import { useLastDefinedValue } from '@/hooks/useLastDefinedValue';
 import type { DepartureResource, MotisMode } from '@/lib/traewelling';
-import { TripStopoverItem } from '../TripStopoverItem/TripStopoverItem';
+import { TripStopoverItem } from '@/trip/TripStopoverItem/TripStopoverItem';
 import styles from './TripDetails.module.css';
 
 export const TripDetails = ({ departure, inDrawer = false }: { departure: DepartureResource; inDrawer?: boolean }) => {
@@ -77,7 +78,7 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
 
                   {delay.minutes !== 0 && (
                     <span className={styles.delayBadge} data-via-delay={delay.status}>
-                      {`${delay.minutes > 0 ? '+' : '−'}${Math.abs(delay.minutes)} · statt ${formatTime(departure.plannedWhen)}`}
+                      {formatDelay(delay.minutes, departure.plannedWhen)}
                     </span>
                   )}
                 </div>

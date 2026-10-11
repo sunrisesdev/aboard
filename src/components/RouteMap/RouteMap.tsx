@@ -4,9 +4,9 @@ import { clsx } from 'clsx';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { Button } from '@/components/Button/Button';
-import type { RouteMapStop } from '@/helpers/buildRouteMapStyle';
 import type { Extend, Structure } from '@/helpers/extend';
-import type { Coordinate } from '@/helpers/getPolylineCoordinates';
+import type { RouteMapStop } from './buildRouteMapStyle';
+import type { Coordinate } from './getPolylineCoordinates';
 import styles from './RouteMap.module.css';
 import type { RouteMapStatus } from './RouteMapCanvas';
 
@@ -49,7 +49,8 @@ export const RouteMap = ({
           <Button onClick={() => setIsRequested(true)} variant="secondary">
             Karte laden
           </Button>
-          <p className={styles.notice}>Dabei wird deine IP-Adresse an OpenFreeMap übertragen.</p>
+
+          <div className={styles.notice}>Dabei wird deine IP-Adresse an OpenFreeMap übertragen.</div>
         </div>
       )}
     </div>

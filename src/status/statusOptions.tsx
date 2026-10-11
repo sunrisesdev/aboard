@@ -1,6 +1,23 @@
-import { IconEyeOff, IconHeartHandshake, IconLock, IconUserCheck, IconUsers, IconWorld } from '@tabler/icons-react';
+import {
+  IconBriefcase,
+  IconBuilding,
+  IconEyeOff,
+  IconHeartHandshake,
+  IconLock,
+  IconUser,
+  IconUserCheck,
+  IconUsers,
+  IconWorld,
+} from '@tabler/icons-react';
 import type { RadioCardsOption } from '@/components/RadioCards/RadioCards';
-import type { StatusVisibility } from '@/lib/traewelling';
+import type { SegmentedControlOption } from '@/components/SegmentedControl/SegmentedControl';
+import type { Business, StatusVisibility } from '@/lib/traewelling';
+
+export const businessOptions: SegmentedControlOption<Business>[] = [
+  { icon: <IconUser aria-hidden data-via-icon />, label: 'Privat', value: 0 },
+  { icon: <IconBriefcase aria-hidden data-via-icon />, label: 'Geschäftlich', value: 1 },
+  { icon: <IconBuilding aria-hidden data-via-icon />, label: 'Arbeitsweg', value: 2 },
+];
 
 // Ordered from the widest to the narrowest audience rather than by value.
 export const visibilityOptions: RadioCardsOption<StatusVisibility>[] = [

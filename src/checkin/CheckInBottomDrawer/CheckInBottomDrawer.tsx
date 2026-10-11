@@ -2,11 +2,11 @@
 
 import { Drawer } from '@base-ui/react/drawer';
 import { CheckInForm } from '@/checkin/CheckInForm/CheckInForm';
+import { CheckInTripSummary } from '@/checkin/CheckInTripSummary/CheckInTripSummary';
 import { useCheckIn } from '@/checkin/useCheckIn';
 import { BottomDrawer } from '@/components/BottomDrawer/BottomDrawer';
 import { useLastDefinedValue } from '@/hooks/useLastDefinedValue';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { CheckInTripSummary } from '../CheckInTripSummary/CheckInTripSummary';
 import styles from './CheckInBottomDrawer.module.css';
 
 // Rendered as a nested drawer inside TripBottomDrawer, larger breakpoints use CheckInModal.

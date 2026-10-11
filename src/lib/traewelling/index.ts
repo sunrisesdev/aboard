@@ -19,6 +19,7 @@ export {
   stationHistory,
   type TravelType,
 } from './stations';
-export { getStatus, type StatusResource } from './status';
+export { getStatus, getStatusLikes, getTripStatuses, type StatusLike, type StatusResource } from './status';
+export { getStopovers } from './stopovers';
 export { getTripInfo, type StopoverResource, type TripResource } from './trip';
 export type { Business, MotisMode, StatusVisibility, TraewellingUser, TransportResource } from './types';
