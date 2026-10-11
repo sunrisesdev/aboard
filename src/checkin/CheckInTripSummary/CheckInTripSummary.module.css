@@ -46,7 +46,7 @@
     var(--via-shadow-xs);
 }
 
-.platform {
+.platformBadge {
   background-color: #fff4;
   border-radius: 0.25rem;
   box-shadow: var(--via-shadow-xs);

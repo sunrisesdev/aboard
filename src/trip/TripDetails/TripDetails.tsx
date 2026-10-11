@@ -74,7 +74,7 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
 
               {(platform || delay.minutes !== 0) && (
                 <div className={styles.details}>
-                  {platform && <span className={styles.platform}>{platform}</span>}
+                  {platform && <span className={styles.platformBadge}>{platform}</span>}
 
                   {delay.minutes !== 0 && (
                     <span className={styles.delayBadge} data-via-delay={delay.status}>

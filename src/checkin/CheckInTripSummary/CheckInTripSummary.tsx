@@ -84,8 +84,8 @@ export const CheckInTripSummary = ({
 
         {(departurePlatform || arrivalPlatform) && (
           <div className={clsx(styles.row, styles.platforms)}>
-            {departurePlatform && <span className={styles.platform}>{departurePlatform}</span>}
-            {arrivalPlatform && <span className={clsx(styles.platform, styles.arrival)}>{arrivalPlatform}</span>}
+            {departurePlatform && <span className={styles.platformBadge}>{departurePlatform}</span>}
+            {arrivalPlatform && <span className={clsx(styles.platformBadge, styles.arrival)}>{arrivalPlatform}</span>}
           </div>
         )}
       </ColoredLayer.Content>

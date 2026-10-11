@@ -22,6 +22,7 @@ import {
   getStatusLikes,
   getStopovers,
   getTripStatuses,
+  type StatusLike,
   type StatusResource,
   TraewellingApiError,
 } from '@/lib/traewelling';
@@ -59,6 +60,28 @@ const getBusinessLabel = (business: number) =>
 
 const getVisibilityLabel = (visibility: number) =>
   visibilityOptions.find((option) => option.value === visibility)?.label ?? String(visibility);
+
+const likeListFormat = new Intl.ListFormat('de-DE', { type: 'conjunction' });
+
+// E.g. "Dir, Jonas Weber, Mira K. und 10 weiteren gefällt das", the current user's like always comes first
+const getLikeSummary = (likes: StatusLike[], username: string) => {
+  const ownLike = likes.find((like) => like.username === username);
+  const otherLikes = likes.filter((like) => like !== ownLike);
+  const names = otherLikes.slice(0, 2).map(({ displayName }) => displayName);
+  const overflow = otherLikes.length - names.length;
+
+  const parts = [
+    ownLike && 'Dir',
+    ...names,
+    overflow === 1 && 'einer weiteren Person',
+    overflow > 1 && `${overflow} weiteren`,
+  ].filter((part): part is string => !!part);
+
+  return {
+    avatarLikes: (ownLike ? [ownLike, ...otherLikes] : otherLikes).slice(0, 5),
+    text: `${likeListFormat.format(parts)} gefällt dieser Status.`,
+  };
+};
 
 // Mention positions and lengths count UTF-8 bytes (Träwelling uses PHP's preg_match_all), so the body is
 // sliced as bytes. Each mention starts at an "@", so the slices never split a character.
@@ -133,6 +156,7 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
   const { checkin } = status;
   const body = typeof status.body === 'string' ? status.body : undefined;
   const coTravelerStatuses = tripStatuses.filter(({ id }) => id !== status.id);
+  const likeSummary = getLikeSummary(likes, session.user.username);
 
   const now = new Date();
   const checkinStopovers = tripStopovers && getCheckinStopovers(tripStopovers, checkin);
@@ -261,15 +285,40 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
               </div>
 
               {likes.length > 0 && (
-                <ul className={clsx(styles.userList, styles.likes)}>
-                  {likes.map((user) => (
-                    <li className={styles.row} key={user.id}>
-                      <Image alt="" className={styles.avatar} height={24} src={user.profilePicture} width={24} />
-                      <span>{user.displayName}</span>
-                      <span>@{user.username}</span>
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <div className={styles.likeSummary}>
+                    <div className={styles.avatarStack}>
+                      {likeSummary.avatarLikes.map((user) => (
+                        <Image
+                          alt=""
+                          className={styles.avatar}
+                          height={32}
+                          key={user.id}
+                          src={user.profilePicture}
+                          width={32}
+                        />
+                      ))}
+                    </div>
+                    <span className={styles.likeSummaryText}>{likeSummary.text}</span>
+                  </div>
+
+                  <details className={styles.likeDetails}>
+                    <summary className={styles.likeDetailsToggle}>
+                      <span className={styles.showLabel}>Alle {likes.length} anzeigen</span>
+                      <span className={styles.hideLabel}>Weniger anzeigen</span>
+                    </summary>
+
+                    <ul className={clsx(styles.userList, styles.likes)}>
+                      {likes.map((user) => (
+                        <li className={styles.row} key={user.id}>
+                          <Image alt="" className={styles.avatar} height={24} src={user.profilePicture} width={24} />
+                          <span>{user.displayName}</span>
+                          <span className={styles.username}>@{user.username}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                </>
               )}
             </article>
           )}

@@ -27,6 +27,20 @@
   flex-shrink: 0;
 }
 
+.avatarStack {
+  display: flex;
+  flex-shrink: 0;
+
+  /* The ring in the card's background color separates the overlapping avatars */
+  > * {
+    box-shadow: 0 0 0 0.125rem var(--via-bg-primary);
+  }
+
+  > * + * {
+    margin-left: -0.5rem;
+  }
+}
+
 .body {
   margin-top: 0.75rem;
   white-space: pre-wrap;
@@ -53,8 +67,41 @@
   gap: 0.75rem;
 }
 
+.likeDetails {
+  margin-top: 0.75rem;
+
+  &[open] .showLabel,
+  &:not([open]) .hideLabel {
+    display: none;
+  }
+}
+
+.likeDetailsToggle {
+  border-radius: 0.25rem;
+  color: var(--via-focus-ring);
+  cursor: pointer;
+  font-weight: 500;
+  list-style: none;
+  width: fit-content;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
 .likes {
   margin-top: 0.5rem;
+}
+
+.likeSummary {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.likeSummaryText {
+  color: var(--via-fg-secondary);
 }
 
 /* Like .card, but without padding, so the map bleeds to the card's edges */
@@ -150,6 +197,10 @@
   display: grid;
   gap: 0.5rem;
   list-style: none;
+
+  .username {
+    font-size: 0.75rem;
+  }
 }
 
 /* Lets long names wrap instead of overflowing the row */

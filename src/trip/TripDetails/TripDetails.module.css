@@ -49,7 +49,7 @@
 }
 
 .delayBadge,
-.platform {
+.platformBadge {
   border-radius: 0.25rem;
   box-shadow: var(--via-shadow-xs);
   font-size: 0.875rem;
@@ -72,7 +72,7 @@
   margin-top: 0.25rem;
 }
 
-.platform {
+.platformBadge {
   background-color: #fff4;
 }
 

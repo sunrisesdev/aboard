@@ -21,6 +21,7 @@ type Stopover = components['schemas']['StopoverResource'];
 // Renders into the grid areas of StatusTrip, so the stop indicators line up with the station names
 const StatusTripStation = ({
   area,
+  cancelled,
   label,
   mode,
   platform,
@@ -30,6 +31,7 @@ const StatusTripStation = ({
   timePrefix,
 }: {
   area: 'destination' | 'origin';
+  cancelled?: boolean;
   label: string;
   mode: string | null;
   platform: string | null;
@@ -44,11 +46,11 @@ const StatusTripStation = ({
 
   return (
     <>
-      <em className={styles.stationLabel} style={{ gridArea: `${area}Label` }}>
+      <em className={styles.label} style={{ gridArea: `${area}Label` }}>
         {label}
       </em>
 
-      <div className={styles.stationRow} style={{ gridArea: `${area}Name` }}>
+      <div className={styles.station} style={{ gridArea: `${area}Station` }}>
         <Marquee>{cleanStationName(station.name)}</Marquee>
         {time && (
           <span className={styles.time}>
@@ -57,9 +59,10 @@ const StatusTripStation = ({
         )}
       </div>
 
-      {(formattedPlatform || (delay && delay.minutes !== 0)) && (
+      {(cancelled || formattedPlatform || (delay && delay.minutes !== 0)) && (
         <div className={styles.details} style={{ gridArea: `${area}Details` }}>
-          {formattedPlatform && <span className={styles.platform}>{formattedPlatform}</span>}
+          {cancelled && <span className={styles.cancelledBadge}>Halt entfällt</span>}
+          {formattedPlatform && <span className={styles.platformBadge}>{formattedPlatform}</span>}
 
           {planned && delay && delay.minutes !== 0 && (
             <span className={styles.delayBadge} data-via-delay={delay.status}>
@@ -141,7 +144,7 @@ export const StatusTrip = ({
           />
 
           {direction && (
-            <em style={{ display: 'inline-flex', gap: '0.5ch', minWidth: 0 }}>
+            <em className={styles.direction}>
               Richtung <Marquee>{cleanStationName(direction.station.name)}</Marquee>
             </em>
           )}
@@ -149,14 +152,15 @@ export const StatusTrip = ({
 
         <div className={styles.trip}>
           <TripLine className={styles.tripLine}>
-            <TripLine.RouteSegment className={styles.segment} partial={!!progressStyle} />
+            <TripLine.RouteSegment className={styles.routeSegment} partial={!!progressStyle} />
             {progressStyle && <div className={styles.progress} style={progressStyle} />}
-            <TripLine.StopIndicator className={styles.stop} style={{ gridArea: 'originStop' }} />
-            <TripLine.StopIndicator className={styles.stop} style={{ gridArea: 'destinationStop' }} />
+            <TripLine.StopIndicator className={styles.stopIndicator} style={{ gridArea: 'originStop' }} />
+            <TripLine.StopIndicator className={styles.stopIndicator} style={{ gridArea: 'destinationStop' }} />
           </TripLine>
 
           <StatusTripStation
             area="origin"
+            cancelled={origin.cancelled}
             label="von"
             mode={checkin.mode}
             platform={origin.departurePlatformReal ?? origin.departurePlatformPlanned}
@@ -166,7 +170,7 @@ export const StatusTrip = ({
             timePrefix="ab"
           />
 
-          <div className={styles.between}>
+          <div className={styles.intermediateStops}>
             {intermediateCount !== undefined && (
               <span>
                 {intermediateCount === 0
@@ -190,6 +194,7 @@ export const StatusTrip = ({
 
           <StatusTripStation
             area="destination"
+            cancelled={destination.cancelled}
             label="nach"
             mode={checkin.mode}
             platform={destination.arrivalPlatformReal ?? destination.arrivalPlatformPlanned}

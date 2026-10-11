@@ -8,11 +8,65 @@
   user-select: none;
 }
 
+.cancelledBadge,
+.delayBadge,
+.platformBadge {
+  border-radius: 0.25rem;
+  box-shadow: var(--via-shadow-xs);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0 0.25rem;
+  white-space: nowrap;
+}
+
+/* Solid background keeps the status colors readable on any line color */
+.cancelledBadge,
+.delayBadge {
+  background-color: var(--via-bg-primary);
+}
+
+.cancelledBadge {
+  color: var(--via-delay-late);
+}
+
+.delayBadge {
+  margin-left: auto;
+}
+
+.details {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+}
+
+.direction {
+  display: inline-flex;
+  gap: 0.5ch;
+  min-width: 0;
+}
+
 .header {
   align-items: center;
   display: flex;
   gap: 0.375rem;
   margin-bottom: 1rem;
+}
+
+.intermediateStops {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  grid-area: intermediateStops;
+  opacity: 0.7;
+  padding-block: 1rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  opacity: 0.5;
 }
 
 .lineBadge {
@@ -21,42 +75,8 @@
     var(--via-shadow-xs);
 }
 
-.trip {
-  /* Fixed, so the line can start and end exactly at the stop indicators next to the names */
-  --station-name-height: 1.25rem;
-  --stop-size: 0.625rem;
-
-  column-gap: 0.625rem;
-  display: grid;
-  grid-template-areas:
-    ". originLabel"
-    "originStop originName"
-    ". originDetails"
-    ". between"
-    ". destinationLabel"
-    "destinationStop destinationName"
-    ". destinationDetails";
-  grid-template-columns: 1.25rem minmax(0, 1fr);
-
-  /* Nested for a higher specificity than TripLine's own styles */
-  .tripLine {
-    display: contents;
-
-    .segment,
-    .progress {
-      grid-column: 1;
-      grid-row: originStop-start / destinationStop-end;
-      justify-self: center;
-      /* From the bottom edge of the origin's indicator to the top edge of the destination's */
-      margin-block: calc((var(--station-name-height) + var(--stop-size)) / 2 - 1px);
-    }
-
-    .stop {
-      align-self: center;
-      height: var(--stop-size);
-      justify-self: center;
-    }
-  }
+.platformBadge {
+  background-color: #fff4;
 }
 
 /* Covers the dotted segment from the top, by the share of the trip's time that has passed */
@@ -75,36 +95,6 @@
   to {
     scale: 1 1;
   }
-}
-
-.stationLabel {
-  font-size: 0.875rem;
-  font-weight: 500;
-  opacity: 0.5;
-}
-
-.stationRow {
-  display: flex;
-  font-weight: 500;
-  gap: 0.5rem;
-  justify-content: space-between;
-  line-height: var(--station-name-height);
-}
-
-.between {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  grid-area: between;
-  opacity: 0.7;
-  padding-block: 1rem;
-}
-
-.stats {
-  display: grid;
-  gap: 0.5rem;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-top: 1rem;
 }
 
 .stat {
@@ -129,35 +119,60 @@
   }
 }
 
-.delayBadge,
-.platform {
-  border-radius: 0.25rem;
-  box-shadow: var(--via-shadow-xs);
-  font-size: 0.875rem;
-  font-weight: 500;
-  padding: 0 0.25rem;
-  white-space: nowrap;
-}
-
-/* Solid background keeps the delay color readable on any line color. */
-.delayBadge {
-  background-color: var(--via-bg-primary);
-  margin-left: auto;
-}
-
-.details {
-  align-items: center;
+.station {
   display: flex;
+  font-weight: 500;
   gap: 0.5rem;
   justify-content: space-between;
-  margin-top: 0.25rem;
+  line-height: var(--via-status-trip-station-height);
 }
 
-.platform {
-  background-color: #fff4;
+.stats {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 1rem;
 }
 
 .time {
   font-feature-settings: "tnum";
   white-space: nowrap;
+}
+
+.trip {
+  /* Fixed, so the line can start and end exactly at the stop indicators next to the station names */
+  --via-status-trip-station-height: 1.25rem;
+  --via-status-trip-stop-size: 0.625rem;
+
+  column-gap: 0.625rem;
+  display: grid;
+  grid-template-areas:
+    ". originLabel"
+    "originStop originStation"
+    ". originDetails"
+    ". intermediateStops"
+    ". destinationLabel"
+    "destinationStop destinationStation"
+    ". destinationDetails";
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+
+  /* Nested for a higher specificity than TripLine's own styles */
+  .tripLine {
+    display: contents;
+
+    .routeSegment,
+    .progress {
+      grid-column: 1;
+      grid-row: originStop-start / destinationStop-end;
+      justify-self: center;
+      /* From the bottom edge of the origin's indicator to the top edge of the destination's */
+      margin-block: calc((var(--via-status-trip-station-height) + var(--via-status-trip-stop-size)) / 2 - 1px);
+    }
+
+    .stopIndicator {
+      align-self: center;
+      height: var(--via-status-trip-stop-size);
+      justify-self: center;
+    }
+  }
 }
