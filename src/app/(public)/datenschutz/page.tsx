@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function PrivacyPolicyPage() {
   return (
     <PageContent>
-      <main className={styles.base}>
+      <div className={styles.base}>
         <header>
           <h1>Datenschutzerklärung</h1>
           <p className={styles.meta}>Stand: [TODO: Datum]</p>
@@ -140,7 +140,7 @@ export default function PrivacyPolicyPage() {
             zuständige Aufsichtsbehörde].
           </p>
         </section>
-      </main>
+      </div>
     </PageContent>
   );
 }

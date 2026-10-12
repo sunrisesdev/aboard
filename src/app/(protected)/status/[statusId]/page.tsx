@@ -171,73 +171,9 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
     ?? routeMapStops.map(({ coordinates }) => coordinates);
 
   return (
-    <PageContent>
-      <main className={styles.base}>
-        <div className={styles.column}>
-          <article className={clsx(body && styles.card)}>
-            <header className={styles.header}>
-              <Image alt="" className={styles.avatar} height={40} src={status.user.profilePicture} width={40} />
-              <div>
-                <div className={styles.author}>{status.user.displayName}</div>
-                <div className={styles.username}>@{status.user.username}</div>
-              </div>
-
-              <span className={styles.pointsBadge}>+{status.checkin.points} Punkte</span>
-            </header>
-
-            {body && (
-              <div className={styles.body}>
-                {getBodyParts(body, status.bodyMentions).map(({ text, username }, index) =>
-                  username ? (
-                    <span key={index} style={{ cursor: 'pointer', fontWeight: '500' }} title={`@${username}`}>
-                      {text}
-                    </span>
-                  ) : (
-                    text
-                  ),
-                )}
-              </div>
-            )}
-
-            <div className={styles.meta}>
-              <time dateTime={status.createdAt}>{formatDateTime(status.createdAt)}</time>
-              {status.client && ` · via ${status.client.name}`}
-            </div>
-          </article>
-
-          {status.createdBy && (
-            <p>
-              Eingecheckt von {status.createdBy.displayName} (@{status.createdBy.username})
-            </p>
-          )}
-
-          {status.hide_body && <p>Dein Statustext wurde von der Moderation für andere ausgeblendet.</p>}
-          {status.moderation_notes && <p>Hinweis der Moderation: {status.moderation_notes}</p>}
-
-          <StatusTrip
-            checkin={checkin}
-            direction={checkinStopovers?.direction}
-            nextStopover={nextStopover}
-            now={now}
-            stopovers={checkinStopovers?.stopovers}
-          />
-
-          <div className={styles.mapCard}>
-            <RouteMap
-              className={styles.map}
-              color={getTransportColor(checkin) ?? 'var(--via-fg-primary)'}
-              coordinates={routeCoordinates}
-              deferred
-              stops={routeMapStops}
-            />
-          </div>
-
-          {checkin.dataSource && (
-            <div className={styles.attribution}>{checkin.dataSource.attribution ?? checkin.dataSource.id}</div>
-          )}
-        </div>
-
-        <div className={styles.column}>
+    <PageContent
+      aside={
+        <>
           <FieldsetCard icon={<IconTags data-via-icon />} title={<FieldsetCard.Title>Tags</FieldsetCard.Title>}>
             <div className={styles.tags}>
               {checkin.operator && <KeyValueTag keySlot="Betreiber" valueSlot={checkin.operator.name} />}
@@ -322,27 +258,89 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
               )}
             </article>
           )}
-        </div>
+        </>
+      }
+    >
+      <article className={clsx(body && styles.card)}>
+        <header className={styles.header}>
+          <Image alt="" className={styles.avatar} height={40} src={status.user.profilePicture} width={40} />
+          <div>
+            <div className={styles.author}>{status.user.displayName}</div>
+            <div className={styles.username}>@{status.user.username}</div>
+          </div>
 
-        {status.event && (
-          <dl>
-            <dt>Veranstaltung</dt>
-            <dd>
-              {status.event.url ? (
-                <a href={status.event.url} rel="noreferrer" target="_blank">
-                  {status.event.name}
-                </a>
+          <span className={styles.pointsBadge}>+{status.checkin.points} Punkte</span>
+        </header>
+
+        {body && (
+          <div className={styles.body}>
+            {getBodyParts(body, status.bodyMentions).map(({ text, username }, index) =>
+              username ? (
+                <span key={index} style={{ cursor: 'pointer', fontWeight: '500' }} title={`@${username}`}>
+                  {text}
+                </span>
               ) : (
-                status.event.name
-              )}
-              {status.event.hashtag && ` #${status.event.hashtag}`}
-              {status.event.host && ` · ${status.event.host}`}
-              {status.event.station && ` · ${cleanStationName(status.event.station.name)}`}
-              {` · ${formatDate(status.event.begin)} – ${formatDate(status.event.end)}`}
-            </dd>
-          </dl>
+                text
+              ),
+            )}
+          </div>
         )}
-      </main>
+
+        <div className={styles.meta}>
+          <time dateTime={status.createdAt}>{formatDateTime(status.createdAt)}</time>
+          {status.client && ` · via ${status.client.name}`}
+        </div>
+      </article>
+
+      {status.createdBy && (
+        <p>
+          Eingecheckt von {status.createdBy.displayName} (@{status.createdBy.username})
+        </p>
+      )}
+
+      {status.hide_body && <p>Dein Statustext wurde von der Moderation für andere ausgeblendet.</p>}
+      {status.moderation_notes && <p>Hinweis der Moderation: {status.moderation_notes}</p>}
+
+      <StatusTrip
+        checkin={checkin}
+        direction={checkinStopovers?.direction}
+        nextStopover={nextStopover}
+        now={now}
+        stopovers={checkinStopovers?.stopovers}
+      />
+
+      <div className={styles.mapCard}>
+        <RouteMap
+          className={styles.map}
+          color={getTransportColor(checkin) ?? 'var(--via-fg-primary)'}
+          coordinates={routeCoordinates}
+          deferred
+          stops={routeMapStops}
+        />
+      </div>
+
+      {checkin.dataSource && (
+        <div className={styles.attribution}>{checkin.dataSource.attribution ?? checkin.dataSource.id}</div>
+      )}
+
+      {status.event && (
+        <dl>
+          <dt>Veranstaltung</dt>
+          <dd>
+            {status.event.url ? (
+              <a href={status.event.url} rel="noreferrer" target="_blank">
+                {status.event.name}
+              </a>
+            ) : (
+              status.event.name
+            )}
+            {status.event.hashtag && ` #${status.event.hashtag}`}
+            {status.event.host && ` · ${status.event.host}`}
+            {status.event.station && ` · ${cleanStationName(status.event.station.name)}`}
+            {` · ${formatDate(status.event.begin)} – ${formatDate(status.event.end)}`}
+          </dd>
+        </dl>
+      )}
     </PageContent>
   );
 }

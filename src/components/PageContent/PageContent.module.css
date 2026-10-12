@@ -1,9 +1,15 @@
 .base {
-  padding-inline: 1rem;
+  padding: 1rem;
 
   @media (width >= 64em) {
-    padding-inline: 1.5rem;
+    padding: 1.5rem;
   }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .content {
@@ -13,4 +19,13 @@
   margin-inline: auto;
   max-width: 90rem;
   width: 100%;
+
+  &.withAside {
+    gap: 1rem;
+
+    @media (width >= 64em) {
+      gap: 1.5rem;
+      grid-template-columns: minmax(0, 1fr) 28.5rem;
+    }
+  }
 }

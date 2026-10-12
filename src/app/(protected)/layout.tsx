@@ -10,7 +10,7 @@ export default async function ProtectedLayout({ children }: PropsWithChildren) {
     <UserContextProvider user={user}>
       <Navbar />
 
-      {children}
+      <main>{children}</main>
     </UserContextProvider>
   );
 }

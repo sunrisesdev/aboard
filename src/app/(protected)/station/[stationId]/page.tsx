@@ -80,29 +80,27 @@ export default async function StationboardPage({ params, searchParams }: PagePro
   });
 
   return (
-    <main>
-      <CheckInContextProvider>
-        <StationboardContextProvider>
-          <Suspense fallback={name ? <h1>{name}</h1> : <Skeleton width="12rem" height="1.5rem" />}>
-            <StationName departuresPromise={departuresPromise} />
-          </Suspense>
+    <CheckInContextProvider>
+      <StationboardContextProvider>
+        <Suspense fallback={name ? <h1>{name}</h1> : <Skeleton width="12rem" height="1.5rem" />}>
+          <StationName departuresPromise={departuresPromise} />
+        </Suspense>
 
-          <StationboardTravelTypeFilter />
-          <StationboardTimePicker />
+        <StationboardTravelTypeFilter />
+        <StationboardTimePicker />
 
-          <PageContent>
-            <StationboardPageContent>
-              <Suspense fallback={<StationboardSkeleton />}>
-                <StationboardLoader
-                  departuresPromise={departuresPromise}
-                  stationId={stationId}
-                  travelType={travelType as TravelType | undefined}
-                />
-              </Suspense>
-            </StationboardPageContent>
-          </PageContent>
-        </StationboardContextProvider>
-      </CheckInContextProvider>
-    </main>
+        <PageContent>
+          <StationboardPageContent>
+            <Suspense fallback={<StationboardSkeleton />}>
+              <StationboardLoader
+                departuresPromise={departuresPromise}
+                stationId={stationId}
+                travelType={travelType as TravelType | undefined}
+              />
+            </Suspense>
+          </StationboardPageContent>
+        </PageContent>
+      </StationboardContextProvider>
+    </CheckInContextProvider>
   );
 }
