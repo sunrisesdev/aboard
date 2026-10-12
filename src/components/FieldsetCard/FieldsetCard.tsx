@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import type { ReactNode } from 'react';
+import { Card } from '@/components/Card/Card';
 import type { Extend, StructureWithChildren } from '@/helpers/extend';
 import styles from './FieldsetCard.module.css';
 
@@ -12,7 +13,7 @@ const Root = ({
   ...props
 }: Extend<StructureWithChildren, { icon?: ReactNode; optional?: boolean; title: ReactNode }>) => {
   return (
-    <div className={clsx(styles.base, className)} {...props}>
+    <Card className={clsx(styles.base, className)} {...props}>
       <header className={styles.header}>
         {icon && (
           <div aria-hidden className={styles.iconContainer}>
@@ -24,7 +25,7 @@ const Root = ({
       </header>
 
       <div className={styles.content}>{children}</div>
-    </div>
+    </Card>
   );
 };
 

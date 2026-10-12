@@ -1,0 +1,145 @@
+/* Negative lines so arrival items land in the last column of the row */
+.arrival {
+  grid-column: -2 / -1;
+  justify-self: end;
+  text-align: end;
+}
+
+.arrow {
+  flex-shrink: 0;
+  margin-inline: 0.25rem;
+}
+
+.author {
+  font-weight: 500;
+}
+
+.avatar {
+  border-radius: 9999rem;
+  flex-shrink: 0;
+}
+
+/* Solid background keeps the delay colors readable on any line color */
+.delayBadge {
+  background-color: var(--via-bg-primary);
+  border-radius: 0.25rem;
+  box-shadow: var(--via-shadow-xs);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0 0.25rem;
+  white-space: nowrap;
+}
+
+.header {
+  align-items: flex-start;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.lineBadge {
+  box-shadow:
+    inset 0 0 0 var(--via-bd-width) oklch(from currentColor l c h / 0.5),
+    var(--via-shadow-xs);
+}
+
+.meta {
+  color: var(--via-fg-tertiary);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Covers the dotted segment from the left, by the share of the segment's time that has passed */
+.progress {
+  animation: progress linear both;
+  background-color: currentColor;
+  height: 0.125rem;
+  transform-origin: left;
+}
+
+@keyframes progress {
+  from {
+    scale: 0 1;
+  }
+
+  to {
+    scale: 1 1;
+  }
+}
+
+.row {
+  column-gap: 1rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  justify-items: start;
+}
+
+/* Stacks the route segment and its progress */
+.segment {
+  align-items: center;
+  display: grid;
+  flex-grow: 1;
+
+  > * {
+    grid-area: 1 / 1;
+  }
+
+  /* Overlaps the stop indicators like TripLine's own segments do */
+  &:nth-child(2) {
+    margin-left: -1px;
+  }
+
+  &:nth-last-child(2) {
+    margin-right: -1px;
+  }
+}
+
+.station {
+  line-height: 1.25;
+  max-width: 100%;
+}
+
+.time {
+  font-feature-settings: "tnum";
+  font-size: 1.25rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.timeGroup {
+  align-items: center;
+  display: flex;
+  gap: 0.375rem;
+}
+
+.trip {
+  margin-top: 0.75rem;
+}
+
+.tripContent {
+  background: linear-gradient(
+    170deg in oklch,
+    oklch(from var(--via-colored-layer-bg) calc(l + 0.06) calc(c * 0.85) h),
+    oklch(from var(--via-colored-layer-bg) calc(l - 0.05) calc(c * 1.25) h)
+  );
+  padding: 1rem;
+  user-select: none;
+}
+
+.tripHeader {
+  align-items: center;
+  display: flex;
+  gap: 0.375rem;
+  margin-bottom: 0.75rem;
+}
+
+.tripLine {
+  margin-bottom: 0.25rem;
+}
+
+.username {
+  bottom: 0.0625rem;
+  color: var(--via-fg-secondary);
+  font-size: 0.875rem;
+  margin-left: 0.5ch;
+  position: relative;
+}

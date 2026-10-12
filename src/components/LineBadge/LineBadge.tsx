@@ -1,30 +1,12 @@
 import { clsx } from 'clsx';
 import type { CSSProperties } from 'react';
 import type { Extend, Structure } from '@/helpers/extend';
-import { getColorsByMotisMode } from '@/helpers/getColorsByMotisMode';
-import { normalizeHexColor } from '@/helpers/normalizeHexColor';
+import { getLineColors } from '@/helpers/getLineColors';
 import type { MotisMode } from '@/lib/traewelling';
 import styles from './LineBadge.module.css';
 
 const hiddenProductNames = ['Bus', 'Fäh', 'STB', 'STR'];
 const hiddenProductNamePattern = new RegExp(`^(${hiddenProductNames.join('|')})(.)`, 'gi');
-
-const colorsByMotisMode: Partial<Record<MotisMode, [string, string]>> = {
-  AIRPLANE: ['#008984', '#FFF'],
-  BUS: ['#6E368C', '#FFF'],
-  COACH: ['#DB0078', '#FFF'],
-  FERRY: ['#0087B9', '#FFF'],
-  HIGHSPEED_RAIL: ['#282D37', '#FFF'],
-  LONG_DISTANCE: ['#646973', '#FFF'],
-  METRO: ['#1455C0', '#FFF'],
-  NIGHT_RAIL: ['#646973', '#FFF'],
-  RAIL: ['#646973', '#FFF'],
-  REGIONAL_FAST_RAIL: ['#878C96', 'var(--via-neutral-900)'],
-  REGIONAL_RAIL: ['#878C96', 'var(--via-neutral-900)'],
-  SUBURBAN: ['#408335', '#FFF'],
-  SUBWAY: ['#1455C0', '#FFF'],
-  TRAM: ['#8C2E46', '#FFF'],
-};
 
 const shapeByMotisMode = {
   BUS: 'pill',
@@ -55,10 +37,11 @@ export const LineBadge = ({
     productName: string | undefined;
   }
 >) => {
-  const modeColors = getColorsByMotisMode(mode) ?? ['var(--via-fg-primary)', 'var(--via-bg-surface)'];
-
-  const background = normalizeHexColor(backgroundColor) ?? modeColors[0];
-  const foreground = normalizeHexColor(color) ?? modeColors[1];
+  const { background = 'var(--via-fg-primary)', foreground = 'var(--via-bg-surface)' } = getLineColors({
+    color: backgroundColor,
+    mode,
+    textColor: color,
+  });
 
   const lineName = !name
     ? journeyNumber

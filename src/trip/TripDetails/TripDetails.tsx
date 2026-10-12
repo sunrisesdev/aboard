@@ -10,13 +10,13 @@ import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
 import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
+import { formatDateTime } from '@/helpers/formatDateTime';
 import { formatDelay } from '@/helpers/formatDelay';
 import { formatPlatform } from '@/helpers/formatPlatform';
-import { formatTime } from '@/helpers/formatTime';
 import { getDelay } from '@/helpers/getDelay';
 import { getDeparturePlatform } from '@/helpers/getDeparturePlatform';
 import { getDepartureTime } from '@/helpers/getDepartureTime';
-import { getLineColor } from '@/helpers/getLineColor';
+import { getLineColors } from '@/helpers/getLineColors';
 import { getLineContrastColor } from '@/helpers/getLineContrastColor';
 import { isReplacementService } from '@/helpers/isReplacementService';
 import { useLastDefinedValue } from '@/hooks/useLastDefinedValue';
@@ -28,7 +28,7 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
   const { dispatch, trip } = useCheckIn();
   const stopovers = useLastDefinedValue(trip.stopovers);
 
-  const lineColor = getLineColor(departure.line);
+  const lineColor = getLineColors({ color: departure.line.color, mode: departure.line.mode }).background;
   const replacementService = isReplacementService(departure);
   const platform = formatPlatform(getDeparturePlatform(departure), departure.line.mode);
   const delay = getDelay(departure.plannedWhen, departure.when);
@@ -70,7 +70,7 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
             <div style={{ paddingBottom: '1rem' }}>
               <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between' }}>
                 <Marquee className={styles.origin}>{cleanStationName(departure.station.name)}</Marquee>
-                <span className={styles.time}>ab {formatTime(getDepartureTime(departure))}</span>
+                <span className={styles.time}>ab {formatDateTime(getDepartureTime(departure), 'time')}</span>
               </div>
 
               {(platform || delay.minutes !== 0) && (
@@ -79,7 +79,7 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
 
                   {delay.minutes !== 0 && (
                     <span className={styles.delayBadge} data-via-delay={delay.status}>
-                      {formatDelay(delay.minutes, departure.plannedWhen)}
+                      {formatDelay(delay.minutes, { planned: departure.plannedWhen })}
                     </span>
                   )}
                 </div>

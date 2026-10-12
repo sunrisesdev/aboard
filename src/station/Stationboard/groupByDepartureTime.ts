@@ -1,4 +1,4 @@
-import { formatTime } from '@/helpers/formatTime';
+import { formatDateTime } from '@/helpers/formatDateTime';
 import { getDepartureTime } from '@/helpers/getDepartureTime';
 import type { DepartureResource } from '@/lib/traewelling';
 import { groupSplitTrains } from './groupSplitTrains';
@@ -16,7 +16,7 @@ export function groupByDepartureTime(departures: DepartureResource[]) {
 
   return [...groups].map(([time, timeDepartures]) => ({
     time,
-    label: formatTime(getDepartureTime(timeDepartures[0])),
+    label: formatDateTime(getDepartureTime(timeDepartures[0]), 'time'),
     groups: groupSplitTrains(timeDepartures),
   }));
 }

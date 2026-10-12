@@ -8,12 +8,12 @@ import { Marquee } from '@/components/Marquee/Marquee';
 import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
 import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
+import { formatDateTime } from '@/helpers/formatDateTime';
 import { formatDuration } from '@/helpers/formatDuration';
 import { formatPlatform } from '@/helpers/formatPlatform';
-import { formatTime } from '@/helpers/formatTime';
 import { getDeparturePlatform } from '@/helpers/getDeparturePlatform';
 import { getDepartureTime } from '@/helpers/getDepartureTime';
-import { getLineColor } from '@/helpers/getLineColor';
+import { getLineColors } from '@/helpers/getLineColors';
 import { isReplacementService } from '@/helpers/isReplacementService';
 import type { DepartureResource, MotisMode, StopoverResource } from '@/lib/traewelling';
 import styles from './CheckInTripSummary.module.css';
@@ -35,7 +35,12 @@ export const CheckInTripSummary = ({
   const departureTime = getDepartureTime(departure);
 
   return (
-    <ColoredLayer color={getLineColor(departure.line) ?? 'var(--via-fg-primary)'} radius="1rem">
+    <ColoredLayer
+      color={
+        getLineColors({ color: departure.line.color, mode: departure.line.mode }).background ?? 'var(--via-fg-primary)'
+      }
+      radius="1rem"
+    >
       <ColoredLayer.Content className={styles.base}>
         <header className={styles.header}>
           <TransportModeIcon
@@ -60,14 +65,14 @@ export const CheckInTripSummary = ({
 
         <div className={styles.times}>
           <time className={styles.time} dateTime={departureTime}>
-            {formatTime(departureTime)}
+            {formatDateTime(departureTime, 'time')}
           </time>
 
           {arrivalTime && <span className={styles.duration}>{formatDuration(departureTime, arrivalTime)}</span>}
 
           {arrivalTime && (
             <time className={clsx(styles.time, styles.arrival)} dateTime={arrivalTime}>
-              {formatTime(arrivalTime)}
+              {formatDateTime(arrivalTime, 'time')}
             </time>
           )}
         </div>

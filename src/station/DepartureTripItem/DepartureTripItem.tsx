@@ -7,10 +7,10 @@ import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeI
 import { cleanStationName } from '@/helpers/cleanStationName';
 import { formatDelay } from '@/helpers/formatDelay';
 import { formatPlatform } from '@/helpers/formatPlatform';
-import { getColorsByMotisMode } from '@/helpers/getColorsByMotisMode';
 import { getDelay } from '@/helpers/getDelay';
 import { getDeparturePlatform } from '@/helpers/getDeparturePlatform';
 import { getDepartureTime } from '@/helpers/getDepartureTime';
+import { getLineColors } from '@/helpers/getLineColors';
 import { isReplacementService } from '@/helpers/isReplacementService';
 import type { DepartureResource, MotisMode } from '@/lib/traewelling';
 import styles from './DepartureTripItem.module.css';
@@ -27,10 +27,8 @@ export const DepartureTripItem = ({
   onSelect?: () => void;
   stationId: string;
 }) => {
-  const modeColors = getColorsByMotisMode(departure.line.mode ?? undefined) ?? [
-    'var(--via-fg-primary)',
-    'var(--via-bg-surface)',
-  ];
+  const { background: modeBackground = 'var(--via-fg-primary)', foreground: modeForeground = 'var(--via-bg-surface)' } =
+    getLineColors({ mode: departure.line.mode });
 
   const replacementService = isReplacementService(departure);
   const time = getDepartureTime(departure);
@@ -49,7 +47,7 @@ export const DepartureTripItem = ({
     <button
       className={clsx(styles.base, hasDeparted && styles.hasDeparted, departure.cancelled && styles.isCancelled)}
       onClick={() => onSelect?.()}
-      style={{ '--via-line-bg': modeColors[0], '--via-line-fg': modeColors[1] } as CSSProperties}
+      style={{ '--via-line-bg': modeBackground, '--via-line-fg': modeForeground } as CSSProperties}
       type="button"
     >
       <div className={styles.topLine}>
@@ -81,7 +79,7 @@ export const DepartureTripItem = ({
             {departure.cancelled
               ? 'Fällt aus'
               : delay.minutes !== 0
-                ? formatDelay(delay.minutes, departure.plannedWhen)
+                ? formatDelay(delay.minutes, { planned: departure.plannedWhen })
                 : 'pünktlich'}
           </span>
         )}

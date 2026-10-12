@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { Button } from '@/components/Button/Button';
+import { Card } from '@/components/Card/Card';
 import { FieldsetCard } from '@/components/FieldsetCard/FieldsetCard';
 import { KeyValueTag } from '@/components/KeyValueTag/KeyValueTag';
 import { PageContent } from '@/components/PageContent/PageContent';
@@ -12,8 +13,8 @@ import { getPolylineCoordinates } from '@/components/RouteMap/getPolylineCoordin
 import { getRouteMapStop } from '@/components/RouteMap/getRouteMapStop';
 import { RouteMap } from '@/components/RouteMap/RouteMap';
 import { cleanStationName } from '@/helpers/cleanStationName';
-import { formatDate } from '@/helpers/formatDate';
 import { formatDateTime } from '@/helpers/formatDateTime';
+import { getLineColors } from '@/helpers/getLineColors';
 import { requireSession } from '@/lib/auth';
 import {
   createTraewellingClient,
@@ -28,7 +29,6 @@ import {
 } from '@/lib/traewelling';
 import { getCheckinStopovers } from '@/status/getCheckinStopovers';
 import { getNextStopover } from '@/status/getNextStopover';
-import { getTransportColor } from '@/status/getTransportColor';
 import { StatusTrip } from '@/status/StatusTrip/StatusTrip';
 import { businessOptions, visibilityOptions } from '@/status/statusOptions';
 import styles from './Status.module.css';
@@ -170,6 +170,40 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
       .find((coordinates) => coordinates && coordinates.length >= 2)
     ?? routeMapStops.map(({ coordinates }) => coordinates);
 
+  // Only shown as a card when there's a status text
+  const statusContent = (
+    <>
+      <header className={styles.header}>
+        <Image alt="" className={styles.avatar} height={40} src={status.user.profilePicture} width={40} />
+        <div>
+          <div className={styles.author}>{status.user.displayName}</div>
+          <div className={styles.username}>@{status.user.username}</div>
+        </div>
+
+        <span className={styles.pointsBadge}>+{status.checkin.points} Punkte</span>
+      </header>
+
+      {body && (
+        <div className={styles.body}>
+          {getBodyParts(body, status.bodyMentions).map(({ text, username }, index) =>
+            username ? (
+              <span key={index} style={{ cursor: 'pointer', fontWeight: '500' }} title={`@${username}`}>
+                {text}
+              </span>
+            ) : (
+              text
+            ),
+          )}
+        </div>
+      )}
+
+      <div className={styles.meta}>
+        <time dateTime={status.createdAt}>{formatDateTime(status.createdAt)}</time>
+        {status.client && ` · via ${status.client.name}`}
+      </div>
+    </>
+  );
+
   return (
     <PageContent
       aside={
@@ -214,7 +248,7 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
           )}
 
           {status.isLikable && (
-            <article className={styles.card}>
+            <Card>
               <div className={styles.row}>
                 <Button variant={status.liked ? 'primary' : 'secondary'}>Gefällt mir</Button>
                 {status.likes > 0 && <span style={{ fontWeight: 500 }}>{status.likes}</span>}
@@ -256,41 +290,12 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
                   </details>
                 </>
               )}
-            </article>
+            </Card>
           )}
         </>
       }
     >
-      <article className={clsx(body && styles.card)}>
-        <header className={styles.header}>
-          <Image alt="" className={styles.avatar} height={40} src={status.user.profilePicture} width={40} />
-          <div>
-            <div className={styles.author}>{status.user.displayName}</div>
-            <div className={styles.username}>@{status.user.username}</div>
-          </div>
-
-          <span className={styles.pointsBadge}>+{status.checkin.points} Punkte</span>
-        </header>
-
-        {body && (
-          <div className={styles.body}>
-            {getBodyParts(body, status.bodyMentions).map(({ text, username }, index) =>
-              username ? (
-                <span key={index} style={{ cursor: 'pointer', fontWeight: '500' }} title={`@${username}`}>
-                  {text}
-                </span>
-              ) : (
-                text
-              ),
-            )}
-          </div>
-        )}
-
-        <div className={styles.meta}>
-          <time dateTime={status.createdAt}>{formatDateTime(status.createdAt)}</time>
-          {status.client && ` · via ${status.client.name}`}
-        </div>
-      </article>
+      <article>{body ? <Card>{statusContent}</Card> : statusContent}</article>
 
       {status.createdBy && (
         <p>
@@ -312,7 +317,7 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
       <div className={styles.mapCard}>
         <RouteMap
           className={styles.map}
-          color={getTransportColor(checkin) ?? 'var(--via-fg-primary)'}
+          color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background ?? 'var(--via-fg-primary)'}
           coordinates={routeCoordinates}
           deferred
           stops={routeMapStops}
@@ -337,7 +342,7 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
             {status.event.hashtag && ` #${status.event.hashtag}`}
             {status.event.host && ` · ${status.event.host}`}
             {status.event.station && ` · ${cleanStationName(status.event.station.name)}`}
-            {` · ${formatDate(status.event.begin)} – ${formatDate(status.event.end)}`}
+            {` · ${formatDateTime(status.event.begin, 'date')} – ${formatDateTime(status.event.end, 'date')}`}
           </dd>
         </dl>
       )}

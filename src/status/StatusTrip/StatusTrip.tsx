@@ -4,13 +4,12 @@ import { Marquee } from '@/components/Marquee/Marquee';
 import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
 import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
+import { formatDateTime } from '@/helpers/formatDateTime';
 import { formatDelay } from '@/helpers/formatDelay';
 import { formatDuration } from '@/helpers/formatDuration';
 import { formatPlatform } from '@/helpers/formatPlatform';
-import { formatTime } from '@/helpers/formatTime';
-import { getColorsByMotisMode } from '@/helpers/getColorsByMotisMode';
 import { getDelay } from '@/helpers/getDelay';
-import { normalizeHexColor } from '@/helpers/normalizeHexColor';
+import { getLineColors } from '@/helpers/getLineColors';
 import type { MotisMode } from '@/lib/traewelling';
 import type { components } from '@/lib/traewelling/schema';
 import { getCheckinTimes } from '@/status/getCheckinTimes';
@@ -54,7 +53,7 @@ const StatusTripStation = ({
         <Marquee>{cleanStationName(station.name)}</Marquee>
         {time && (
           <span className={styles.time}>
-            {timePrefix} {formatTime(time)}
+            {timePrefix} {formatDateTime(time, 'time')}
           </span>
         )}
       </div>
@@ -66,7 +65,7 @@ const StatusTripStation = ({
 
           {planned && delay && delay.minutes !== 0 && (
             <span className={styles.delayBadge} data-via-delay={delay.status}>
-              {formatDelay(delay.minutes, planned)}
+              {formatDelay(delay.minutes, { planned })}
             </span>
           )}
         </div>
@@ -122,11 +121,7 @@ export const StatusTrip = ({
 
   return (
     <ColoredLayer
-      color={
-        normalizeHexColor(checkin.routeColor ?? undefined)
-        ?? getColorsByMotisMode(checkin.mode as MotisMode)?.[0]
-        ?? 'var(--via-fg-primary)'
-      }
+      color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background ?? 'var(--via-fg-primary)'}
       radius="1rem"
     >
       <ColoredLayer.Content className={styles.base}>
@@ -185,7 +180,7 @@ export const StatusTrip = ({
                 {nextStopoverTime && (
                   <>
                     {' um '}
-                    <time dateTime={nextStopoverTime}>{formatTime(nextStopoverTime)}</time>
+                    <time dateTime={nextStopoverTime}>{formatDateTime(nextStopoverTime, 'time')}</time>
                   </>
                 )}
               </span>

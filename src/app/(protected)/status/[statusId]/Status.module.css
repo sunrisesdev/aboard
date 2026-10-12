@@ -33,15 +33,6 @@
   white-space: pre-wrap;
 }
 
-/* Same look as FieldsetCard */
-.card {
-  background: var(--via-bg-primary);
-  border: var(--via-bd-width) solid var(--via-bd-primary);
-  border-radius: 1rem;
-  box-shadow: var(--via-shadow-xs);
-  padding: 1rem;
-}
-
 .header {
   align-items: flex-start;
   display: flex;
@@ -85,7 +76,7 @@
   color: var(--via-fg-secondary);
 }
 
-/* Like .card, but without padding, so the map bleeds to the card's edges */
+/* Like Card, but without padding, so the map bleeds to the card's edges */
 .mapCard {
   background: var(--via-bg-primary);
   border-radius: 1rem;

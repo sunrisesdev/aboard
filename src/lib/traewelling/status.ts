@@ -1,5 +1,5 @@
 import type { TraewellingClient } from './client';
-import type { components } from './schema';
+import type { components, operations } from './schema';
 
 export type StatusResource = components['schemas']['StatusResource'];
 
@@ -14,6 +14,15 @@ export async function getStatus(client: TraewellingClient, statusId: number) {
   const { data } = await client.get(`v1/status/${statusId}`).json<{ data: StatusResource }>();
 
   return data;
+}
+
+// Statuses of the current user and the users they follow, newest first. `nextPage` is undefined on the last page.
+export async function getDashboard(client: TraewellingClient, page = 1) {
+  const { data, links } = await client
+    .get('v1/dashboard', { searchParams: { page } })
+    .json<operations['getDashboard']['responses']['200']['content']['application/json']>();
+
+  return { data, nextPage: links.next ? page + 1 : undefined };
 }
 
 // All statuses on the trip the current user is allowed to see, including the user's own
