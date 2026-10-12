@@ -11,6 +11,7 @@ import { cleanStationName } from '@/helpers/cleanStationName';
 import { formatDuration } from '@/helpers/formatDuration';
 import { formatPlatform } from '@/helpers/formatPlatform';
 import { formatTime } from '@/helpers/formatTime';
+import { getDeparturePlatform } from '@/helpers/getDeparturePlatform';
 import { getDepartureTime } from '@/helpers/getDepartureTime';
 import { getLineColor } from '@/helpers/getLineColor';
 import { isReplacementService } from '@/helpers/isReplacementService';
@@ -24,9 +25,13 @@ export const CheckInTripSummary = ({
   departure: DepartureResource;
   destination: StopoverResource;
 }) => {
-  const arrivalPlatform = formatPlatform(destination.platform, departure.line.mode);
+  // Träwelling's combined `platform` prefers the departure platform, the arrival one is relevant here
+  const arrivalPlatform = formatPlatform(
+    destination.arrivalPlatformReal ?? destination.arrivalPlatformPlanned ?? destination.platform,
+    departure.line.mode,
+  );
   const arrivalTime = destination.arrivalReal ?? destination.arrivalPlanned;
-  const departurePlatform = formatPlatform(departure.platform, departure.line.mode);
+  const departurePlatform = formatPlatform(getDeparturePlatform(departure), departure.line.mode);
   const departureTime = getDepartureTime(departure);
 
   return (

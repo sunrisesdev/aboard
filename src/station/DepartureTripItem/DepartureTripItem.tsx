@@ -9,6 +9,7 @@ import { formatDelay } from '@/helpers/formatDelay';
 import { formatPlatform } from '@/helpers/formatPlatform';
 import { getColorsByMotisMode } from '@/helpers/getColorsByMotisMode';
 import { getDelay } from '@/helpers/getDelay';
+import { getDeparturePlatform } from '@/helpers/getDeparturePlatform';
 import { getDepartureTime } from '@/helpers/getDepartureTime';
 import { isReplacementService } from '@/helpers/isReplacementService';
 import type { DepartureResource, MotisMode } from '@/lib/traewelling';
@@ -39,7 +40,7 @@ export const DepartureTripItem = ({
 
   const statusLineText = [
     departure.line.fahrtNr !== departure.line.name && journeyNumber,
-    formatPlatform(departure.platform, departure.line.mode),
+    formatPlatform(getDeparturePlatform(departure), departure.line.mode, { planned: departure.plannedPlatform }),
   ]
     .filter(Boolean)
     .join(' · ');

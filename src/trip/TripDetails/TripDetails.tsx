@@ -14,6 +14,7 @@ import { formatDelay } from '@/helpers/formatDelay';
 import { formatPlatform } from '@/helpers/formatPlatform';
 import { formatTime } from '@/helpers/formatTime';
 import { getDelay } from '@/helpers/getDelay';
+import { getDeparturePlatform } from '@/helpers/getDeparturePlatform';
 import { getDepartureTime } from '@/helpers/getDepartureTime';
 import { getLineColor } from '@/helpers/getLineColor';
 import { getLineContrastColor } from '@/helpers/getLineContrastColor';
@@ -29,7 +30,7 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
 
   const lineColor = getLineColor(departure.line);
   const replacementService = isReplacementService(departure);
-  const platform = formatPlatform(departure.platform, departure.line.mode);
+  const platform = formatPlatform(getDeparturePlatform(departure), departure.line.mode);
   const delay = getDelay(departure.plannedWhen, departure.when);
 
   return (
