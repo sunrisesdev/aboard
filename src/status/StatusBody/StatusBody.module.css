@@ -1,0 +1,8 @@
+.base {
+  white-space: pre-wrap;
+}
+
+.mention {
+  cursor: pointer;
+  font-weight: 500;
+}

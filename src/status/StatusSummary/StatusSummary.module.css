@@ -19,6 +19,10 @@
   flex-shrink: 0;
 }
 
+.body {
+  margin-top: 0.75rem;
+}
+
 /* Solid background keeps the delay colors readable on any line color */
 .delayBadge {
   background-color: var(--via-bg-primary);
@@ -123,6 +127,13 @@
   );
   padding: 1rem;
   user-select: none;
+}
+
+.tripFacts {
+  font-size: 0.9375rem;
+  margin-left: auto;
+  opacity: 0.7;
+  white-space: nowrap;
 }
 
 .tripHeader {

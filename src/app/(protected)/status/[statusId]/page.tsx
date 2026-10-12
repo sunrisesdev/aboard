@@ -24,11 +24,11 @@ import {
   getStopovers,
   getTripStatuses,
   type StatusLike,
-  type StatusResource,
   TraewellingApiError,
 } from '@/lib/traewelling';
 import { getCheckinStopovers } from '@/status/getCheckinStopovers';
 import { getNextStopover } from '@/status/getNextStopover';
+import { StatusBody } from '@/status/StatusBody/StatusBody';
 import { StatusTrip } from '@/status/StatusTrip/StatusTrip';
 import { businessOptions, visibilityOptions } from '@/status/statusOptions';
 import styles from './Status.module.css';
@@ -81,30 +81,6 @@ const getLikeSummary = (likes: StatusLike[], username: string) => {
     avatarLikes: (ownLike ? [ownLike, ...otherLikes] : otherLikes).slice(0, 5),
     text: `${likeListFormat.format(parts)} gefällt dieser Status.`,
   };
-};
-
-// Mention positions and lengths count UTF-8 bytes (Träwelling uses PHP's preg_match_all), so the body is
-// sliced as bytes. Each mention starts at an "@", so the slices never split a character.
-const getBodyParts = (body: string, mentions: StatusResource['bodyMentions']) => {
-  const bytes = new TextEncoder().encode(body);
-  const decoder = new TextDecoder();
-  const parts: { text: string; username?: string }[] = [];
-  let offset = 0;
-
-  for (const { length, position, user } of mentions.toSorted((a, b) => a.position - b.position)) {
-    if (position < offset) continue;
-
-    parts.push({ text: decoder.decode(bytes.subarray(offset, position)) });
-    parts.push({
-      text: decoder.decode(bytes.subarray(position, position + length)),
-      username: typeof user?.username === 'string' ? user.username : undefined,
-    });
-    offset = position + length;
-  }
-
-  parts.push({ text: decoder.decode(bytes.subarray(offset)) });
-
-  return parts.filter(({ text }) => text);
 };
 
 const parseStatusId = (statusId: string) => (/^\d+$/.test(statusId) ? Number(statusId) : notFound());
@@ -183,19 +159,7 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
         <span className={styles.pointsBadge}>+{status.checkin.points} Punkte</span>
       </header>
 
-      {body && (
-        <div className={styles.body}>
-          {getBodyParts(body, status.bodyMentions).map(({ text, username }, index) =>
-            username ? (
-              <span key={index} style={{ cursor: 'pointer', fontWeight: '500' }} title={`@${username}`}>
-                {text}
-              </span>
-            ) : (
-              text
-            ),
-          )}
-        </div>
-      )}
+      {body && <StatusBody body={body} className={styles.body} mentions={status.bodyMentions} />}
 
       <div className={styles.meta}>
         <time dateTime={status.createdAt}>{formatDateTime(status.createdAt)}</time>

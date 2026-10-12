@@ -9,10 +9,13 @@ import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
 import { formatDateTime } from '@/helpers/formatDateTime';
 import { formatDelay } from '@/helpers/formatDelay';
+import { formatDistance } from '@/helpers/formatDistance';
+import { formatDuration } from '@/helpers/formatDuration';
 import { getDelay } from '@/helpers/getDelay';
 import { getLineColors } from '@/helpers/getLineColors';
 import type { MotisMode, StatusResource } from '@/lib/traewelling';
 import { getCheckinTimes } from '@/status/getCheckinTimes';
+import { StatusBody } from '@/status/StatusBody/StatusBody';
 import styles from './StatusSummary.module.css';
 
 // The line fills up by CSS animation like in StatusTrip, here split into the halves before and after the arrow
@@ -26,8 +29,10 @@ const getProgressStyles = (departure: string, arrival: string, now: Date) => {
   }));
 };
 
-export const StatusSummary = ({ status: { checkin, createdAt, user } }: { status: StatusResource }) => {
+export const StatusSummary = ({ status }: { status: StatusResource }) => {
+  const { bodyMentions, checkin, createdAt, user } = status;
   const { destination, origin } = checkin;
+  const body = typeof status.body === 'string' ? status.body : undefined;
   const { arrival, departure } = getCheckinTimes(checkin);
   const now = new Date();
 
@@ -56,6 +61,8 @@ export const StatusSummary = ({ status: { checkin, createdAt, user } }: { status
         </div>
       </header>
 
+      {body && <StatusBody body={body} className={styles.body} mentions={bodyMentions} />}
+
       <ColoredLayer
         className={styles.trip}
         color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background ?? 'var(--via-fg-primary)'}
@@ -72,6 +79,12 @@ export const StatusSummary = ({ status: { checkin, createdAt, user } }: { status
               name={checkin.lineName}
               productName={undefined}
             />
+
+            <span className={styles.tripFacts}>
+              {[formatDistance(checkin.distance), arrival && departure && formatDuration(departure, arrival)]
+                .filter(Boolean)
+                .join(' · ')}
+            </span>
           </div>
 
           <div className={styles.row}>

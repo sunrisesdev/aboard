@@ -6,6 +6,7 @@ import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
 import { formatDateTime } from '@/helpers/formatDateTime';
 import { formatDelay } from '@/helpers/formatDelay';
+import { formatDistance } from '@/helpers/formatDistance';
 import { formatDuration } from '@/helpers/formatDuration';
 import { formatPlatform } from '@/helpers/formatPlatform';
 import { getDelay } from '@/helpers/getDelay';
@@ -203,7 +204,7 @@ export const StatusTrip = ({
         <dl className={styles.stats}>
           <div className={styles.stat}>
             <dt>Entfernung</dt>
-            <dd>{distanceInKilometers.toLocaleString('de-DE', { maximumFractionDigits: 1 })} km</dd>
+            <dd>{formatDistance(checkin.distance)}</dd>
           </div>
 
           <div className={styles.stat}>
