@@ -1,4 +1,4 @@
-import { IconArrowRight, IconTags } from '@tabler/icons-react';
+import { IconArrowRight, IconTags, IconUsers } from '@tabler/icons-react';
 import { clsx } from 'clsx';
 import type { Metadata } from 'next';
 import Image from 'next/image';
@@ -192,7 +192,8 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
 
           {coTravelerStatuses.length > 0 && (
             <FieldsetCard
-              title={<FieldsetCard.Title>Mit in der Fahrt · {coTravelerStatuses.length}</FieldsetCard.Title>}
+              icon={<IconUsers data-via-icon />}
+              title={<FieldsetCard.Title>Mit in der Fahrt</FieldsetCard.Title>}
             >
               <ul className={styles.userList}>
                 {coTravelerStatuses.map(({ checkin, id, user }) => (

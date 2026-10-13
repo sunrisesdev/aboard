@@ -1,6 +1,8 @@
-import { IconArrowRight, IconPencilFilled } from '@tabler/icons-react';
+import { IconArrowRight, IconHeart, IconPencilFilled } from '@tabler/icons-react';
 import { clsx } from 'clsx';
 import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/Button/Button';
 import { Card } from '@/components/Card/Card';
 import { LineBadge } from '@/components/LineBadge/LineBadge';
 import { Marquee } from '@/components/Marquee/Marquee';
@@ -60,7 +62,7 @@ export const StatusSummary = ({ status }: { status: StatusResource }) => {
     arrival && departure && now < new Date(arrival) ? getProgressStyles(departure, arrival, now) : undefined;
 
   return (
-    <Card>
+    <Card className={styles.base}>
       <header className={styles.header}>
         <Image alt="" className={styles.avatar} height={40} src={user.profilePicture} width={40} />
         <div>
@@ -74,95 +76,105 @@ export const StatusSummary = ({ status }: { status: StatusResource }) => {
         </div>
       </header>
 
-      {body && <StatusBody body={body} className={styles.body} mentions={bodyMentions} />}
+      {body && <StatusBody body={body} mentions={bodyMentions} />}
 
-      <TintedSurface
-        className={styles.trip}
-        color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background}
-        radius="1rem"
-      >
-        <TintedSurface.Content className={styles.tripContent}>
-          <div className={styles.tripHeader}>
-            <TransportModeIcon height={20} mode={checkin.mode ?? undefined} width={20} />
+      <Link href={`/status/${status.id}`} style={{ display: 'flex' }}>
+        <TintedSurface
+          color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background}
+          radius="1rem"
+          style={{ width: '100%' }}
+        >
+          <TintedSurface.Content className={styles.tripContent}>
+            <div className={styles.tripHeader}>
+              <TransportModeIcon height={20} mode={checkin.mode ?? undefined} width={20} />
 
-            <LineBadge
-              backgroundColor={checkin.routeColor ?? undefined}
-              className={styles.lineBadge}
-              color={checkin.routeTextColor ?? undefined}
-              journeyNumber={journeyNumber}
-              mode={(checkin.mode ?? undefined) as MotisMode | undefined}
-              name={checkin.lineName}
-              productName={undefined}
-            />
+              <LineBadge
+                backgroundColor={checkin.routeColor ?? undefined}
+                className={styles.lineBadge}
+                color={checkin.routeTextColor ?? undefined}
+                journeyNumber={journeyNumber}
+                mode={(checkin.mode ?? undefined) as MotisMode | undefined}
+                name={checkin.lineName}
+                productName={undefined}
+              />
 
-            {showJourneyNumber && <em style={{ whiteSpace: 'nowrap' }}>{journeyNumber}</em>}
+              {showJourneyNumber && <em style={{ whiteSpace: 'nowrap' }}>{journeyNumber}</em>}
 
-            <span className={styles.tripFacts}>
-              {[formatDistance(checkin.distance), arrival && departure && formatDuration(departure, arrival)]
-                .filter(Boolean)
-                .join(' · ')}
-            </span>
-          </div>
-
-          <div className={styles.row}>
-            {departureTiming.time && (
-              <div className={styles.timeGroup}>
-                <time className={styles.time} dateTime={departureTiming.time}>
-                  {formatDateTime(departureTiming.time, 'time')}
-                </time>
-
-                {!!departureTiming.delay?.minutes && (
-                  <span className={styles.delayBadge} data-via-delay={departureTiming.delay.status}>
-                    {departureTiming.icon}
-                    {formatDelay(departureTiming.delay.minutes)}
-                  </span>
-                )}
-              </div>
-            )}
-
-            {arrivalTiming.time && (
-              <div className={clsx(styles.timeGroup, styles.arrival)}>
-                {!!arrivalTiming.delay?.minutes && (
-                  <span className={styles.delayBadge} data-via-delay={arrivalTiming.delay.status}>
-                    {arrivalTiming.icon}
-                    {formatDelay(arrivalTiming.delay.minutes)}
-                  </span>
-                )}
-
-                <time className={styles.time} dateTime={arrivalTiming.time}>
-                  {formatDateTime(arrivalTiming.time, 'time')}
-                </time>
-              </div>
-            )}
-          </div>
-
-          <TripLine className={styles.tripLine} orientation="horizontal">
-            <TripLine.StopIndicator />
-
-            <div className={styles.segment}>
-              <TripLine.RouteSegment partial={!!progressStyles} />
-              {/* The server renders with a slightly earlier `now` */}
-              {progressStyles && <div className={styles.progress} style={progressStyles[0]} suppressHydrationWarning />}
+              <span className={styles.tripFacts}>
+                {[formatDistance(checkin.distance), arrival && departure && formatDuration(departure, arrival)]
+                  .filter(Boolean)
+                  .join(' · ')}
+              </span>
             </div>
 
-            <IconArrowRight className={styles.arrow} size={16} stroke={2} />
+            <div className={styles.row}>
+              {departureTiming.time && (
+                <div className={styles.timeGroup}>
+                  <time className={styles.time} dateTime={departureTiming.time}>
+                    {formatDateTime(departureTiming.time, 'time')}
+                  </time>
 
-            <div className={styles.segment}>
-              <TripLine.RouteSegment partial={!!progressStyles} />
-              {progressStyles && <div className={styles.progress} style={progressStyles[1]} suppressHydrationWarning />}
+                  {!!departureTiming.delay?.minutes && (
+                    <span className={styles.delayBadge} data-via-delay={departureTiming.delay.status}>
+                      {departureTiming.icon}
+                      {formatDelay(departureTiming.delay.minutes)}
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {arrivalTiming.time && (
+                <div className={clsx(styles.timeGroup, styles.arrival)}>
+                  {!!arrivalTiming.delay?.minutes && (
+                    <span className={styles.delayBadge} data-via-delay={arrivalTiming.delay.status}>
+                      {arrivalTiming.icon}
+                      {formatDelay(arrivalTiming.delay.minutes)}
+                    </span>
+                  )}
+
+                  <time className={styles.time} dateTime={arrivalTiming.time}>
+                    {formatDateTime(arrivalTiming.time, 'time')}
+                  </time>
+                </div>
+              )}
             </div>
 
-            <TripLine.StopIndicator />
-          </TripLine>
+            <TripLine className={styles.tripLine} orientation="horizontal">
+              <TripLine.StopIndicator />
 
-          <div className={styles.row}>
-            <Marquee className={styles.station}>{cleanStationName(origin.station.name)}</Marquee>
-            <Marquee className={clsx(styles.station, styles.arrival)}>
-              {cleanStationName(destination.station.name)}
-            </Marquee>
-          </div>
-        </TintedSurface.Content>
-      </TintedSurface>
+              <div className={styles.segment}>
+                <TripLine.RouteSegment partial={!!progressStyles} />
+                {/* The server renders with a slightly earlier `now` */}
+                {progressStyles && (
+                  <div className={styles.progress} style={progressStyles[0]} suppressHydrationWarning />
+                )}
+              </div>
+
+              <IconArrowRight className={styles.arrow} size={16} stroke={2} />
+
+              <div className={styles.segment}>
+                <TripLine.RouteSegment partial={!!progressStyles} />
+                {progressStyles && (
+                  <div className={styles.progress} style={progressStyles[1]} suppressHydrationWarning />
+                )}
+              </div>
+
+              <TripLine.StopIndicator />
+            </TripLine>
+
+            <div className={styles.row}>
+              <Marquee className={styles.station}>{cleanStationName(origin.station.name)}</Marquee>
+              <Marquee className={clsx(styles.station, styles.arrival)}>
+                {cleanStationName(destination.station.name)}
+              </Marquee>
+            </div>
+          </TintedSurface.Content>
+        </TintedSurface>
+      </Link>
+
+      <Button className={styles.likeButton} variant="secondary">
+        <IconHeart data-via-icon /> {status.likes}
+      </Button>
     </Card>
   );
 };
