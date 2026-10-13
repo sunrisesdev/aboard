@@ -1,9 +1,4 @@
 .base {
-  background: linear-gradient(
-    170deg in oklch,
-    oklch(from var(--via-colored-layer-bg) calc(l + 0.06) calc(c * 0.85) h),
-    oklch(from var(--via-colored-layer-bg) calc(l - 0.05) calc(c * 1.25) h)
-  );
   padding: 1rem;
   user-select: none;
 }
@@ -19,14 +14,14 @@
   white-space: nowrap;
 }
 
-/* Solid background keeps the status colors readable on any line color */
+/* The status colors are tuned for the contrast background */
 .cancelledBadge,
 .delayBadge {
-  background-color: var(--via-bg-primary);
+  background-color: var(--via-tinted-surface-bg-contrast);
 }
 
 .cancelledBadge {
-  color: var(--via-delay-late);
+  color: var(--via-tinted-surface-delay-late);
 }
 
 .delayBadge {
@@ -55,18 +50,18 @@
 }
 
 .intermediateStops {
+  color: var(--via-tinted-surface-fg-secondary);
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   grid-area: intermediateStops;
-  opacity: 0.7;
   padding-block: 1rem;
 }
 
 .label {
+  color: var(--via-tinted-surface-fg-secondary);
   font-size: 0.875rem;
   font-weight: 500;
-  opacity: 0.5;
 }
 
 .lineBadge {
@@ -76,7 +71,7 @@
 }
 
 .platformBadge {
-  background-color: #fff4;
+  background-color: var(--via-tinted-surface-bg-badge);
 }
 
 /* Covers the dotted segment from the top, by the share of the trip's time that has passed */
@@ -98,15 +93,15 @@
 }
 
 .stat {
-  background-color: #fff4;
+  background-color: var(--via-tinted-surface-bg-badge);
   border-radius: 0.5rem;
   box-shadow: var(--via-shadow-xs);
   padding: 0.5rem 0.625rem;
 
+  /* No secondary color, since it's only guaranteed to be readable on the gradient, not on the badge background */
   dt {
     font-size: 0.875rem;
     font-weight: 500;
-    opacity: 0.7;
   }
 
   dd {

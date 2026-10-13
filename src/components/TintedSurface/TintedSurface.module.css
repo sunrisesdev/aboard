@@ -1,0 +1,44 @@
+.base {
+  border-radius: var(--via-tinted-surface-radius);
+  box-shadow: var(--via-shadow-md);
+  color: var(--via-tinted-surface-fg-primary);
+
+  /* Tuned for the contrast background, so delay badges need to use it */
+  [data-via-delay="early"] {
+    color: var(--via-tinted-surface-delay-early);
+  }
+
+  [data-via-delay="onTime"] {
+    color: var(--via-tinted-surface-delay-on-time);
+  }
+
+  [data-via-delay="slight"] {
+    color: var(--via-tinted-surface-delay-slight);
+  }
+
+  [data-via-delay="late"] {
+    color: var(--via-tinted-surface-delay-late);
+  }
+}
+
+.content {
+  /* The palette guarantees the text contrast for an interpolation in OKLab */
+  background: linear-gradient(170deg in oklab, var(--via-tinted-surface-bg-from), var(--via-tinted-surface-bg-to));
+  background-position: var(--via-bd-offset);
+  background-size: calc(100% + 2 * var(--via-bd-width));
+  border: var(--via-bd-width) solid var(--via-bd-tertiary);
+  border-radius: var(--via-tinted-surface-radius);
+  box-shadow: var(--via-shadow-skeuomorphic);
+  position: relative;
+
+  &::before {
+    border: var(--via-bd-width) solid var(--via-bd-highlight);
+    border-radius: calc(var(--via-tinted-surface-radius) - 2 * var(--via-bd-width));
+    content: "";
+    inset: var(--via-bd-width);
+    mask-image: linear-gradient(to bottom, black, transparent);
+    opacity: 0.5;
+    pointer-events: none;
+    position: absolute;
+  }
+}

@@ -3,10 +3,11 @@
 import { clsx } from 'clsx';
 import type { CSSProperties } from 'react';
 import { useCheckIn } from '@/checkin/useCheckIn';
-import { ColoredLayer } from '@/components/ColoredLayer/ColoredLayer';
 import { LineBadge } from '@/components/LineBadge/LineBadge';
 import { Marquee } from '@/components/Marquee/Marquee';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
+import { getTintedPalette } from '@/components/TintedSurface/getTintedPalette';
+import { TintedSurface, tintedSurfaceFallbackColor } from '@/components/TintedSurface/TintedSurface';
 import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
 import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
@@ -38,8 +39,8 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
       className={clsx(styles.base, inDrawer && styles.inDrawer)}
       style={{ '--via-trip-details-contrast': getLineContrastColor(lineColor) } as CSSProperties}
     >
-      <ColoredLayer color={lineColor ?? 'var(--via-fg-primary)'} radius="1rem">
-        <ColoredLayer.Content className={styles.tripCard}>
+      <TintedSurface color={lineColor} radius="1rem">
+        <TintedSurface.Content className={styles.tripCard}>
           <header className={styles.header}>
             <TransportModeIcon
               height={20}
@@ -86,8 +87,8 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
               )}
             </div>
           </div>
-        </ColoredLayer.Content>
-      </ColoredLayer>
+        </TintedSurface.Content>
+      </TintedSurface>
 
       {trip.isLoading ? (
         <ul className={styles.stopovers}>
@@ -102,10 +103,11 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
       ) : (
         stopovers && (
           <>
+            {/* Starts in the text color of the card above, so the line continues seamlessly */}
             <TripLine className={styles.connectingLine}>
               <TripLine.RouteSegment
                 style={{
-                  background: `linear-gradient(to bottom, contrast-color(${lineColor ?? 'var(--via-fg-primary)'}), var(--via-trip-details-contrast))`,
+                  background: `linear-gradient(to bottom, ${getTintedPalette(lineColor ?? tintedSurfaceFallbackColor).foreground}, var(--via-trip-details-contrast))`,
                 }}
               />
             </TripLine>

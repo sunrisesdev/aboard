@@ -1,9 +1,4 @@
 .base {
-  background: linear-gradient(
-    170deg in oklch,
-    oklch(from var(--via-colored-layer-bg) calc(l + 0.06) calc(c * 0.85) h),
-    oklch(from var(--via-colored-layer-bg) calc(l - 0.05) calc(c * 1.25) h)
-  );
   padding: 1rem;
   user-select: none;
 }
@@ -26,10 +21,10 @@
 }
 
 .duration {
+  color: var(--via-tinted-surface-fg-secondary);
   font-size: 0.875rem;
   grid-column: 2;
   justify-self: center;
-  opacity: 0.8;
   white-space: nowrap;
 }
 
@@ -47,7 +42,7 @@
 }
 
 .platformBadge {
-  background-color: #fff4;
+  background-color: var(--via-tinted-surface-bg-badge);
   border-radius: 0.25rem;
   box-shadow: var(--via-shadow-xs);
   font-size: 0.875rem;

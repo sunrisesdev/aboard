@@ -2,9 +2,9 @@
 
 import { IconArrowRight } from '@tabler/icons-react';
 import { clsx } from 'clsx';
-import { ColoredLayer } from '@/components/ColoredLayer/ColoredLayer';
 import { LineBadge } from '@/components/LineBadge/LineBadge';
 import { Marquee } from '@/components/Marquee/Marquee';
+import { TintedSurface } from '@/components/TintedSurface/TintedSurface';
 import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
 import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
@@ -35,13 +35,11 @@ export const CheckInTripSummary = ({
   const departureTime = getDepartureTime(departure);
 
   return (
-    <ColoredLayer
-      color={
-        getLineColors({ color: departure.line.color, mode: departure.line.mode }).background ?? 'var(--via-fg-primary)'
-      }
+    <TintedSurface
+      color={getLineColors({ color: departure.line.color, mode: departure.line.mode }).background}
       radius="1rem"
     >
-      <ColoredLayer.Content className={styles.base}>
+      <TintedSurface.Content className={styles.base}>
         <header className={styles.header}>
           <TransportModeIcon
             height={20}
@@ -98,7 +96,7 @@ export const CheckInTripSummary = ({
             {arrivalPlatform && <span className={clsx(styles.platformBadge, styles.arrival)}>{arrivalPlatform}</span>}
           </div>
         )}
-      </ColoredLayer.Content>
-    </ColoredLayer>
+      </TintedSurface.Content>
+    </TintedSurface>
   );
 };

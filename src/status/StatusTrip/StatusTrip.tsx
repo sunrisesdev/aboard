@@ -1,6 +1,6 @@
-import { ColoredLayer } from '@/components/ColoredLayer/ColoredLayer';
 import { LineBadge } from '@/components/LineBadge/LineBadge';
 import { Marquee } from '@/components/Marquee/Marquee';
+import { TintedSurface } from '@/components/TintedSurface/TintedSurface';
 import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
 import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
@@ -121,11 +121,8 @@ export const StatusTrip = ({
   const distanceInKilometers = checkin.distance / 1000;
 
   return (
-    <ColoredLayer
-      color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background ?? 'var(--via-fg-primary)'}
-      radius="1rem"
-    >
-      <ColoredLayer.Content className={styles.base}>
+    <TintedSurface color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background} radius="1rem">
+      <TintedSurface.Content className={styles.base}>
         <header className={styles.header}>
           <TransportModeIcon height={20} mode={checkin.mode ?? undefined} width={20} />
 
@@ -221,7 +218,7 @@ export const StatusTrip = ({
             </dd>
           </div>
         </dl>
-      </ColoredLayer.Content>
-    </ColoredLayer>
+      </TintedSurface.Content>
+    </TintedSurface>
   );
 };

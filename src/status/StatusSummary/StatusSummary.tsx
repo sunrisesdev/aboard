@@ -1,10 +1,11 @@
-import { IconArrowRight } from '@tabler/icons-react';
+import { IconArrowRight, IconPencilFilled } from '@tabler/icons-react';
 import { clsx } from 'clsx';
 import Image from 'next/image';
 import { Card } from '@/components/Card/Card';
-import { ColoredLayer } from '@/components/ColoredLayer/ColoredLayer';
 import { LineBadge } from '@/components/LineBadge/LineBadge';
 import { Marquee } from '@/components/Marquee/Marquee';
+import { TintedSurface } from '@/components/TintedSurface/TintedSurface';
+import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
 import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
 import { formatDateTime } from '@/helpers/formatDateTime';
@@ -29,6 +30,17 @@ const getProgressStyles = (departure: string, arrival: string, now: Date) => {
   }));
 };
 
+// Experimental: marks times that differ from the plan because the user entered them manually
+const getTiming = (planned: string | null, real: string | null, manual: string | null | undefined) => {
+  const time = manual ?? real ?? planned;
+
+  return {
+    delay: planned && time ? getDelay(planned, time) : undefined,
+    icon: manual && <IconPencilFilled data-via-icon title="Manuell bearbeitet" />,
+    time,
+  };
+};
+
 export const StatusSummary = ({ status }: { status: StatusResource }) => {
   const { bodyMentions, checkin, createdAt, user } = status;
   const { destination, origin } = checkin;
@@ -36,12 +48,13 @@ export const StatusSummary = ({ status }: { status: StatusResource }) => {
   const { arrival, departure } = getCheckinTimes(checkin);
   const now = new Date();
 
-  const arrivalDelay = destination.arrivalPlanned
-    ? getDelay(destination.arrivalPlanned, destination.arrivalReal)
-    : undefined;
-  const arrivalTime = destination.arrivalReal ?? destination.arrivalPlanned;
-  const departureDelay = origin.departurePlanned ? getDelay(origin.departurePlanned, origin.departureReal) : undefined;
-  const departureTime = origin.departureReal ?? origin.departurePlanned;
+  // Hidden when the line name already contains it, e.g. "ICE 123"
+  const journeyNumber = checkin.manualJourneyNumber ?? checkin.journeyNumber?.toString();
+  const showJourneyNumber =
+    journeyNumber && journeyNumber !== checkin.lineName && !checkin.lineName.split(/\s+/).includes(journeyNumber);
+
+  const arrivalTiming = getTiming(destination.arrivalPlanned, destination.arrivalReal, checkin.manualArrival);
+  const departureTiming = getTiming(origin.departurePlanned, origin.departureReal, checkin.manualDeparture);
 
   const progressStyles =
     arrival && departure && now < new Date(arrival) ? getProgressStyles(departure, arrival, now) : undefined;
@@ -63,22 +76,26 @@ export const StatusSummary = ({ status }: { status: StatusResource }) => {
 
       {body && <StatusBody body={body} className={styles.body} mentions={bodyMentions} />}
 
-      <ColoredLayer
+      <TintedSurface
         className={styles.trip}
-        color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background ?? 'var(--via-fg-primary)'}
+        color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background}
         radius="1rem"
       >
-        <ColoredLayer.Content className={styles.tripContent}>
+        <TintedSurface.Content className={styles.tripContent}>
           <div className={styles.tripHeader}>
+            <TransportModeIcon height={20} mode={checkin.mode ?? undefined} width={20} />
+
             <LineBadge
               backgroundColor={checkin.routeColor ?? undefined}
               className={styles.lineBadge}
               color={checkin.routeTextColor ?? undefined}
-              journeyNumber={checkin.manualJourneyNumber ?? String(checkin.journeyNumber)}
+              journeyNumber={journeyNumber}
               mode={(checkin.mode ?? undefined) as MotisMode | undefined}
               name={checkin.lineName}
               productName={undefined}
             />
+
+            {showJourneyNumber && <em style={{ whiteSpace: 'nowrap' }}>{journeyNumber}</em>}
 
             <span className={styles.tripFacts}>
               {[formatDistance(checkin.distance), arrival && departure && formatDuration(departure, arrival)]
@@ -88,30 +105,32 @@ export const StatusSummary = ({ status }: { status: StatusResource }) => {
           </div>
 
           <div className={styles.row}>
-            {departureTime && (
+            {departureTiming.time && (
               <div className={styles.timeGroup}>
-                <time className={styles.time} dateTime={departureTime}>
-                  {formatDateTime(departureTime, 'time')}
+                <time className={styles.time} dateTime={departureTiming.time}>
+                  {formatDateTime(departureTiming.time, 'time')}
                 </time>
 
-                {!!departureDelay?.minutes && (
-                  <span className={styles.delayBadge} data-via-delay={departureDelay.status}>
-                    {formatDelay(departureDelay.minutes)}
+                {!!departureTiming.delay?.minutes && (
+                  <span className={styles.delayBadge} data-via-delay={departureTiming.delay.status}>
+                    {departureTiming.icon}
+                    {formatDelay(departureTiming.delay.minutes)}
                   </span>
                 )}
               </div>
             )}
 
-            {arrivalTime && (
+            {arrivalTiming.time && (
               <div className={clsx(styles.timeGroup, styles.arrival)}>
-                {!!arrivalDelay?.minutes && (
-                  <span className={styles.delayBadge} data-via-delay={arrivalDelay.status}>
-                    {formatDelay(arrivalDelay.minutes)}
+                {!!arrivalTiming.delay?.minutes && (
+                  <span className={styles.delayBadge} data-via-delay={arrivalTiming.delay.status}>
+                    {arrivalTiming.icon}
+                    {formatDelay(arrivalTiming.delay.minutes)}
                   </span>
                 )}
 
-                <time className={styles.time} dateTime={arrivalTime}>
-                  {formatDateTime(arrivalTime, 'time')}
+                <time className={styles.time} dateTime={arrivalTiming.time}>
+                  {formatDateTime(arrivalTiming.time, 'time')}
                 </time>
               </div>
             )}
@@ -142,8 +161,8 @@ export const StatusSummary = ({ status }: { status: StatusResource }) => {
               {cleanStationName(destination.station.name)}
             </Marquee>
           </div>
-        </ColoredLayer.Content>
-      </ColoredLayer>
+        </TintedSurface.Content>
+      </TintedSurface>
     </Card>
   );
 };

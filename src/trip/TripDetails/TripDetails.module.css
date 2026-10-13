@@ -58,9 +58,9 @@
   white-space: nowrap;
 }
 
-/* Solid background keeps the delay color readable on any line color. */
+/* The delay colors are tuned for the contrast background */
 .delayBadge {
-  background-color: var(--via-bg-primary);
+  background-color: var(--via-tinted-surface-bg-contrast);
   margin-left: auto;
 }
 
@@ -73,7 +73,7 @@
 }
 
 .platformBadge {
-  background-color: #fff4;
+  background-color: var(--via-tinted-surface-bg-badge);
 }
 
 .stopovers {
@@ -103,18 +103,6 @@
 }
 
 .tripCard {
-  background: linear-gradient(
-    to bottom,
-    oklch(from contrast-color(currentColor) l c h / 0.1),
-    oklch(from currentColor l c h / 0.1)
-  );
-
-  background: linear-gradient(
-    170deg in oklch,
-    oklch(from var(--via-colored-layer-bg) calc(l + 0.06) calc(c * 0.85) h),
-    oklch(from var(--via-colored-layer-bg) calc(l - 0.05) calc(c * 1.25) h) /* l - 0.08 */
-  );
-
   padding: 1rem 1rem 0;
 }
 /*
