@@ -4,6 +4,7 @@ import { createContext, type PropsWithChildren, use, useActionState, useId, useS
 import { submitCheckinAction } from '@/checkin/actions';
 import { useCheckIn } from '@/checkin/useCheckIn';
 import type { Business, StatusVisibility } from '@/lib/traewelling';
+import { useCurrentStatuses } from '@/status/useCurrentStatuses';
 import { useUser } from '@/user/useUser';
 
 type CheckInFormValues = {
@@ -33,6 +34,7 @@ export const CheckInFormProvider = ({ children }: PropsWithChildren) => {
     trip: { boardingStopover },
   } = useCheckIn();
   const { defaultStatusVisibility } = useUser();
+  const { refresh: refreshCurrentStatuses } = useCurrentStatuses();
   const formId = useId();
   const [values, setValues] = useState<CheckInFormValues>(() => ({
     body: '',
@@ -67,6 +69,7 @@ export const CheckInFormProvider = ({ children }: PropsWithChildren) => {
       return result.message;
     }
 
+    refreshCurrentStatuses();
     dispatch({ type: 'reset' });
   }, undefined);
 

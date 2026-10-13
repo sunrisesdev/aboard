@@ -4,7 +4,10 @@ import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { requireSession, signOut } from '@/lib/auth';
 import { createTraewellingClient, getDashboard } from '@/lib/traewelling';
 import { StationSearchDrawer } from '@/station/StationSearchDrawer/StationSearchDrawer';
+import { ActiveStatus } from '@/status/ActiveStatus/ActiveStatus';
 import { Dashboard } from '@/status/Dashboard/Dashboard';
+import { FloatingActiveStatus } from '@/status/FloatingActiveStatus/FloatingActiveStatus';
+import styles from './Dashboard.module.css';
 
 type DashboardPromise = ReturnType<typeof getDashboard>;
 
@@ -41,22 +44,38 @@ export default async function DashboardPage() {
   const dashboardPromise = getDashboard(createTraewellingClient(session.accessToken as string));
 
   return (
-    <PageContent aside={<div>Favoriten</div>}>
-      <h1>Hallo, {session.user.displayName}</h1>
-      <p>@{session.user.username}</p>
-      <StationSearchDrawer />
-      <form
-        action={async () => {
-          'use server';
-          await signOut({ redirectTo: '/' });
-        }}
-      >
-        <button type="submit">Abmelden</button>
-      </form>
+    <>
+      <PageContent
+        aside={
+          <>
+            <Suspense fallback={null}>
+              <ActiveStatus className={styles.asideStatus} />
+            </Suspense>
 
-      <Suspense fallback={<DashboardSkeleton />}>
-        <DashboardLoader dashboardPromise={dashboardPromise} />
+            <div>Favoriten</div>
+          </>
+        }
+      >
+        <h1>Hallo, {session.user.displayName}</h1>
+        <p>@{session.user.username}</p>
+        <StationSearchDrawer />
+        <form
+          action={async () => {
+            'use server';
+            await signOut({ redirectTo: '/' });
+          }}
+        >
+          <button type="submit">Abmelden</button>
+        </form>
+
+        <Suspense fallback={<DashboardSkeleton />}>
+          <DashboardLoader dashboardPromise={dashboardPromise} />
+        </Suspense>
+      </PageContent>
+
+      <Suspense fallback={null}>
+        <FloatingActiveStatus className={styles.floatingStatus} />
       </Suspense>
-    </PageContent>
+    </>
   );
 }

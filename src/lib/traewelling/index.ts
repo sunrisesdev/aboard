@@ -24,6 +24,7 @@ export {
   getStatus,
   getStatusLikes,
   getTripStatuses,
+  getUserStatuses,
   type StatusLike,
   type StatusResource,
 } from './status';

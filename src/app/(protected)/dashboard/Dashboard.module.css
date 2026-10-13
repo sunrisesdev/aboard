@@ -1,0 +1,12 @@
+/* Wide viewports show the active status in the aside, narrow ones float it at the bottom */
+.asideStatus {
+  @media (width < 64em) {
+    display: none;
+  }
+}
+
+.floatingStatus {
+  @media (width >= 64em) {
+    display: none;
+  }
+}

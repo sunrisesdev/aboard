@@ -25,6 +25,15 @@ export async function getDashboard(client: TraewellingClient, page = 1) {
   return { data, nextPage: links.next ? page + 1 : undefined };
 }
 
+// Statuses of a single user ordered by departure, latest first. The user's own statuses include future check-ins.
+export async function getUserStatuses(client: TraewellingClient, username: string, limit = 15) {
+  const { data } = await client
+    .get(`v1/user/${encodeURIComponent(username)}/statuses`, { searchParams: { limit } })
+    .json<{ data: StatusResource[] }>();
+
+  return data;
+}
+
 // All statuses on the trip the current user is allowed to see, including the user's own
 export async function getTripStatuses(client: TraewellingClient, tripId: number) {
   const { data } = await client.get(`v1/trips/${tripId}/statuses`).json<{ data: StatusResource[] }>();

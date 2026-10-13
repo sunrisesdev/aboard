@@ -1,0 +1,11 @@
+/* Matches the padding of PageContent */
+.base {
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  margin: 0 1rem calc(1rem + env(safe-area-inset-bottom, 0px));
+  position: sticky;
+
+  @media (width >= 64em) {
+    bottom: 1.5rem;
+    margin: 0 1.5rem 1.5rem;
+  }
+}

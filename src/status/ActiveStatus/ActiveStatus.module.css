@@ -1,0 +1,30 @@
+.arrow {
+  flex-shrink: 0;
+}
+
+.link {
+  display: block;
+  padding: 1rem;
+}
+
+.next {
+  color: var(--via-tinted-surface-fg-secondary);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.route {
+  align-items: center;
+  display: flex;
+  font-weight: 500;
+  gap: 0.5rem;
+}
+
+.station {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
