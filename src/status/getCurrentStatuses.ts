@@ -1,7 +1,13 @@
 import type { StatusResource } from '@/lib/traewelling';
+import type { getCheckinStopovers } from './getCheckinStopovers';
 import { getCheckinTimes } from './getCheckinTimes';
 
-export type CurrentStatuses = { active?: StatusResource; next?: StatusResource };
+// The stopovers are added by loadCurrentStatuses
+export type CurrentStatuses = {
+  active?: StatusResource;
+  activeStopovers?: ReturnType<typeof getCheckinStopovers>;
+  next?: StatusResource;
+};
 
 // How far ahead an upcoming check-in counts, from now or from the arrival of the active one
 const upcomingWindow = 60 * 60 * 1000;

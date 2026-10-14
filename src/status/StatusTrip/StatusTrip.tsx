@@ -1,7 +1,5 @@
-import { LineBadge } from '@/components/LineBadge/LineBadge';
 import { Marquee } from '@/components/Marquee/Marquee';
 import { TintedSurface } from '@/components/TintedSurface/TintedSurface';
-import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
 import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
 import { formatDateTime } from '@/helpers/formatDateTime';
@@ -11,9 +9,9 @@ import { formatDuration } from '@/helpers/formatDuration';
 import { formatPlatform } from '@/helpers/formatPlatform';
 import { getDelay } from '@/helpers/getDelay';
 import { getLineColors } from '@/helpers/getLineColors';
-import type { MotisMode } from '@/lib/traewelling';
 import type { components } from '@/lib/traewelling/schema';
 import { getCheckinTimes } from '@/status/getCheckinTimes';
+import { StatusTripHeader } from '@/status/StatusTripHeader/StatusTripHeader';
 import styles from './StatusTrip.module.css';
 
 type Stopover = components['schemas']['StopoverResource'];
@@ -123,25 +121,7 @@ export const StatusTrip = ({
   return (
     <TintedSurface color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background} radius="1rem">
       <TintedSurface.Content className={styles.base}>
-        <header className={styles.header}>
-          <TransportModeIcon height={20} mode={checkin.mode ?? undefined} width={20} />
-
-          <LineBadge
-            backgroundColor={checkin.routeColor ?? undefined}
-            className={styles.lineBadge}
-            color={checkin.routeTextColor ?? undefined}
-            journeyNumber={checkin.manualJourneyNumber ?? String(checkin.journeyNumber)}
-            mode={(checkin.mode ?? undefined) as MotisMode | undefined}
-            name={checkin.lineName}
-            productName={undefined}
-          />
-
-          {direction && (
-            <em className={styles.direction}>
-              Richtung <Marquee>{cleanStationName(direction.station.name)}</Marquee>
-            </em>
-          )}
-        </header>
+        <StatusTripHeader checkin={checkin} className={styles.header} direction={direction} />
 
         <div className={styles.trip}>
           <TripLine className={styles.tripLine}>

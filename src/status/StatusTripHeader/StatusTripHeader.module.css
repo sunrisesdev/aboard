@@ -1,0 +1,17 @@
+.base {
+  align-items: center;
+  display: flex;
+  gap: 0.375rem;
+}
+
+.direction {
+  display: inline-flex;
+  gap: 0.5ch;
+  min-width: 0;
+}
+
+.lineBadge {
+  box-shadow:
+    inset 0 0 0 var(--via-bd-width) oklch(from currentColor l c h / 0.5),
+    var(--via-shadow-xs);
+}

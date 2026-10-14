@@ -1,30 +1,182 @@
-.arrow {
-  flex-shrink: 0;
+.cancelledBadge,
+.delayBadge,
+.platformBadge {
+  border-radius: 0.25rem;
+  box-shadow: var(--via-shadow-xs);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0 0.25rem;
+  white-space: nowrap;
+}
+
+/* The status colors are tuned for the contrast background */
+.cancelledBadge,
+.delayBadge {
+  background-color: var(--via-tinted-surface-bg-contrast);
+}
+
+.cancelledBadge {
+  color: var(--via-tinted-surface-delay-late);
+}
+
+.destinationDetails {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  grid-area: destinationDetails;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+
+  .delayBadge {
+    margin-left: auto;
+  }
+}
+
+.destinationStation {
+  display: flex;
+  font-weight: 500;
+  gap: 0.5rem;
+  grid-area: destinationStation;
+  justify-content: space-between;
+  line-height: var(--via-active-status-station-height);
+}
+
+.header {
+  margin-bottom: 0.75rem;
+}
+
+.label {
+  color: var(--via-tinted-surface-fg-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .link {
   display: block;
   padding: 1rem;
+  user-select: none;
 }
 
 .next {
   color: var(--via-tinted-surface-fg-secondary);
   font-size: 0.875rem;
-  margin-top: 0.25rem;
+  margin-top: 0.75rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.route {
+.nextDetails {
+  color: var(--via-tinted-surface-fg-secondary);
+  font-size: 0.875rem;
+  grid-area: nextDetails;
+}
+
+/* Kept subtle, the destination is what matters */
+.nextStation {
   align-items: center;
+  color: var(--via-tinted-surface-fg-secondary);
   display: flex;
-  font-weight: 500;
   gap: 0.5rem;
+  grid-area: nextStation;
+  line-height: var(--via-active-status-station-height);
+
+  & > :first-child {
+    flex-grow: 1;
+  }
+
+  .delayBadge {
+    line-height: normal;
+  }
 }
 
-.station {
+.platformBadge {
+  background-color: var(--via-tinted-surface-bg-badge);
+}
+
+/* Covers the bar from the left, by the share of the trip's time that has passed */
+.progress {
+  animation: progress linear both;
+  background-color: currentColor;
+  height: 100%;
+  transform-origin: left;
+}
+
+@keyframes progress {
+  from {
+    scale: 0 1;
+  }
+
+  to {
+    scale: 1 1;
+  }
+}
+
+.progressBar {
+  background-color: oklch(from currentColor l c h / 0.2);
+  border-radius: 9999rem;
+  height: 0.25rem;
+  margin-top: 1rem;
   overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+.time {
+  font-feature-settings: "tnum";
   white-space: nowrap;
+}
+
+.trip {
+  /* Fixed, so the line can start and end exactly at the stop indicators next to the station names */
+  --via-active-status-station-height: 1.25rem;
+  --via-active-status-stop-size: 0.625rem;
+
+  column-gap: 0.625rem;
+  display: grid;
+  grid-template-areas:
+    ". nextLabel"
+    "nextStop nextStation"
+    ". nextDetails"
+    ". spacer"
+    ". destinationLabel"
+    "destinationStop destinationStation"
+    ". destinationDetails";
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+
+  /* Separates the two stations without a gap between their own rows. Without a next station it leaves room for the
+     line above the destination. */
+  &::before {
+    content: "";
+    grid-area: spacer;
+    height: 0.75rem;
+  }
+
+  /* Nested for a higher specificity than TripLine's own styles */
+  .tripLine {
+    display: contents;
+
+    .previousSegment,
+    .upcomingSegment {
+      grid-column: 1;
+      justify-self: center;
+    }
+
+    /* From the top of the trip to the top edge of the first stop's indicator, the end is set inline */
+    .previousSegment {
+      grid-row-start: 1;
+      mask-image: linear-gradient(to bottom, transparent, black 75%);
+      margin-block: 0 calc((var(--via-active-status-station-height) + var(--via-active-status-stop-size)) / 2 - 1px);
+    }
+
+    /* From the bottom edge of the next stop's indicator to the top edge of the destination's */
+    .upcomingSegment {
+      grid-row: nextStop-start / destinationStop-end;
+      margin-block: calc((var(--via-active-status-station-height) + var(--via-active-status-stop-size)) / 2 - 1px);
+    }
+
+    .stopIndicator {
+      align-self: center;
+      height: var(--via-active-status-stop-size);
+      justify-self: center;
+    }
+  }
 }

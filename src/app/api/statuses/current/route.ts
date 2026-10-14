@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { createTraewellingClient, getUserStatuses } from '@/lib/traewelling';
-import { getCurrentStatuses } from '@/status/getCurrentStatuses';
+import { createTraewellingClient } from '@/lib/traewelling';
+import { loadCurrentStatuses } from '@/status/loadCurrentStatuses';
 
 export async function GET() {
   const session = await auth();
@@ -10,7 +10,6 @@ export async function GET() {
   }
 
   const client = createTraewellingClient(session.accessToken as string);
-  const statuses = await getUserStatuses(client, session.user.username);
 
-  return NextResponse.json(getCurrentStatuses(statuses, new Date()));
+  return NextResponse.json(await loadCurrentStatuses(client, session.user.username));
 }
