@@ -1,0 +1,31 @@
+.base {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.minutes {
+  align-items: center;
+  display: flex;
+  gap: 0.25rem;
+
+  input {
+    width: 4rem;
+  }
+}
+
+.state {
+  color: var(--via-fg-secondary);
+  font-size: 0.875rem;
+}
+
+.status {
+  max-width: 100%;
+}

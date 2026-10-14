@@ -16,14 +16,16 @@ import styles from './StatusTrip.module.css';
 
 type Stopover = components['schemas']['StopoverResource'];
 
-// Renders into the grid areas of StatusTrip, so the stop indicators line up with the station names
+// Renders into the grid areas of StatusTrip, so the stop indicators line up with the station names. `real` includes
+// manual times entered by the user, like getCheckinTimes.
 const StatusTripStation = ({
   area,
   cancelled,
   label,
   mode,
-  platform,
   planned,
+  plannedPlatform,
+  platform,
   real,
   station,
   timePrefix,
@@ -32,13 +34,14 @@ const StatusTripStation = ({
   cancelled?: boolean;
   label: string;
   mode: string | null;
-  platform: string | null;
   planned: string | null;
+  plannedPlatform: string | null;
+  platform: string | null;
   real: string | null;
   station: Stopover['station'];
   timePrefix: string;
 }) => {
-  const formattedPlatform = formatPlatform(platform, mode);
+  const formattedPlatform = formatPlatform(platform, mode, { planned: plannedPlatform });
   const delay = planned ? getDelay(planned, real) : undefined;
   const time = real ?? planned;
 
@@ -136,9 +139,10 @@ export const StatusTrip = ({
             cancelled={origin.cancelled}
             label="von"
             mode={checkin.mode}
-            platform={origin.departurePlatformReal ?? origin.departurePlatformPlanned}
             planned={origin.departurePlanned}
-            real={origin.departureReal}
+            plannedPlatform={origin.departurePlatformPlanned}
+            platform={origin.departurePlatformReal ?? origin.departurePlatformPlanned}
+            real={checkin.manualDeparture ?? origin.departureReal}
             station={origin.station}
             timePrefix="ab"
           />
@@ -170,9 +174,10 @@ export const StatusTrip = ({
             cancelled={destination.cancelled}
             label="nach"
             mode={checkin.mode}
-            platform={destination.arrivalPlatformReal ?? destination.arrivalPlatformPlanned}
             planned={destination.arrivalPlanned}
-            real={destination.arrivalReal}
+            plannedPlatform={destination.arrivalPlatformPlanned}
+            platform={destination.arrivalPlatformReal ?? destination.arrivalPlatformPlanned}
+            real={checkin.manualArrival ?? destination.arrivalReal}
             station={destination.station}
             timePrefix="an"
           />

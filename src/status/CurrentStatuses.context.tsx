@@ -49,13 +49,13 @@ export const CurrentStatusesProvider = ({
     let cancelled = false;
     let timeout: number | undefined;
 
-    currentStatusesPromise.then(({ active }) => {
+    currentStatusesPromise.then(({ active, timeOffset = 0 }) => {
       if (cancelled) return;
 
       const { arrival, departure } = active ? getCheckinTimes(active.checkin) : {};
       const boundaryDelays = [departure, arrival]
         .filter((time) => typeof time === 'string')
-        .map((time) => Date.parse(time) - Date.now() + boundaryBuffer)
+        .map((time) => Date.parse(time) - (Date.now() + timeOffset) + boundaryBuffer)
         .filter((delay) => delay > 0);
 
       timeout = window.setTimeout(refreshIfVisible, Math.min(pollInterval, ...boundaryDelays));

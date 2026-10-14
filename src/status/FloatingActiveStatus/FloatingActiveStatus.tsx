@@ -15,7 +15,7 @@ export const FloatingActiveStatus = ({ className }: { className?: string }) => {
 
   return (
     <div className={clsx(styles.base, className)}>
-      <ActiveStatus />
+      <ActiveStatus compact />
     </div>
   );
 };

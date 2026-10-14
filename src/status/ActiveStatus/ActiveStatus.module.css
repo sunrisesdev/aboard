@@ -33,16 +33,19 @@
 }
 
 .destinationStation {
-  display: flex;
   font-weight: 500;
-  gap: 0.5rem;
   grid-area: destinationStation;
-  justify-content: space-between;
   line-height: var(--via-active-status-station-height);
 }
 
 .header {
   margin-bottom: 0.75rem;
+
+  /* Takes the place of the direction next to the line badge. Nested for a higher specificity than .progressBar. */
+  .headerProgressBar {
+    flex-grow: 1;
+    margin: 0 0 0 0.25rem;
+  }
 }
 
 .label {
@@ -64,12 +67,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.nextDetails {
-  color: var(--via-tinted-surface-fg-secondary);
-  font-size: 0.875rem;
-  grid-area: nextDetails;
 }
 
 /* Kept subtle, the destination is what matters */
@@ -120,9 +117,103 @@
   overflow: hidden;
 }
 
+.single {
+  /* Fixed, so the line can start and end exactly at the stop indicator next to the station name */
+  --via-active-status-station-height: 1.75rem;
+  --via-active-status-stop-size: 0.625rem;
+
+  column-gap: 0.625rem;
+  display: grid;
+  grid-template-areas:
+    ". label"
+    "stop station"
+    ". details";
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+
+  /* Nested for a higher specificity than TripLine's own styles */
+  .tripLine {
+    display: contents;
+
+    .followingSegment,
+    .previousSegment {
+      grid-column: 1;
+      justify-self: center;
+    }
+
+    /* From the bottom edge of the indicator to the end of the details */
+    .followingSegment {
+      grid-row: stop-start / -1;
+      margin-top: calc((var(--via-active-status-station-height) + var(--via-active-status-stop-size)) / 2 - 1px);
+      mask-image: linear-gradient(to top, transparent, black 50%);
+    }
+
+    /* From the top edge of the card, there's no header above, to the top edge of the indicator */
+    .previousSegment {
+      grid-row: 1 / stop-end;
+      margin-block: -1rem calc((var(--via-active-status-station-height) + var(--via-active-status-stop-size)) / 2 - 1px);
+      mask-image: linear-gradient(to bottom, transparent, black 50%);
+    }
+
+    .stopIndicator {
+      align-self: center;
+      height: var(--via-active-status-stop-size);
+      justify-self: center;
+    }
+  }
+
+  /* Without details the line runs into the card's bottom padding, or up to the following line */
+  &:not(:has(.singleDetails)) .tripLine .followingSegment {
+    margin-bottom: -1rem;
+  }
+
+  &:not(:has(.singleDetails)):has(+ .next) .tripLine .followingSegment {
+    margin-bottom: -0.75rem;
+  }
+}
+
+.singleDetails {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  grid-area: details;
+  justify-content: space-between;
+  margin-top: 0.75rem;
+
+  .delayBadge {
+    margin-left: auto;
+  }
+}
+
+.singleStation {
+  font-size: 1.25rem;
+  font-weight: 600;
+  grid-area: station;
+  line-height: var(--via-active-status-station-height);
+}
+
+/* The compact variant puts the badges right after the name, so the timing is pushed to the end separately */
+.stationRow {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+
+  .cancelledBadge,
+  .delayBadge,
+  .platformBadge {
+    line-height: normal;
+  }
+}
+
 .time {
   font-feature-settings: "tnum";
   white-space: nowrap;
+}
+
+.timing {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
 }
 
 .trip {
@@ -135,7 +226,6 @@
   grid-template-areas:
     ". nextLabel"
     "nextStop nextStation"
-    ". nextDetails"
     ". spacer"
     ". destinationLabel"
     "destinationStop destinationStation"
@@ -163,7 +253,7 @@
     /* From the top of the trip to the top edge of the first stop's indicator, the end is set inline */
     .previousSegment {
       grid-row-start: 1;
-      mask-image: linear-gradient(to bottom, transparent, black 75%);
+      mask-image: linear-gradient(to bottom, transparent, black 50%);
       margin-block: 0 calc((var(--via-active-status-station-height) + var(--via-active-status-stop-size)) / 2 - 1px);
     }
 

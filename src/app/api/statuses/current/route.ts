@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { getDebugTimeOffset } from '@/debug/debugTime';
 import { auth } from '@/lib/auth';
 import { createTraewellingClient } from '@/lib/traewelling';
 import { loadCurrentStatuses } from '@/status/loadCurrentStatuses';
@@ -11,5 +12,5 @@ export async function GET() {
 
   const client = createTraewellingClient(session.accessToken as string);
 
-  return NextResponse.json(await loadCurrentStatuses(client, session.user.username));
+  return NextResponse.json(await loadCurrentStatuses(client, session.user.username, await getDebugTimeOffset()));
 }

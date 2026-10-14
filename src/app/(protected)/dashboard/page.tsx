@@ -1,8 +1,10 @@
 import { Suspense } from 'react';
 import { PageContent } from '@/components/PageContent/PageContent';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
+import { DebugTimePanel } from '@/debug/DebugTimePanel/DebugTimePanel';
+import { isDebugTimeEnabled } from '@/debug/debugTime';
 import { requireSession, signOut } from '@/lib/auth';
-import { createTraewellingClient, getDashboard } from '@/lib/traewelling';
+import { createTraewellingClient, getDashboard, getUserStatuses } from '@/lib/traewelling';
 import { StationSearchDrawer } from '@/station/StationSearchDrawer/StationSearchDrawer';
 import { ActiveStatus } from '@/status/ActiveStatus/ActiveStatus';
 import { Dashboard } from '@/status/Dashboard/Dashboard';
@@ -15,6 +17,12 @@ const DashboardLoader = async ({ dashboardPromise }: { dashboardPromise: Dashboa
   const { data: statuses, nextPage } = await dashboardPromise;
 
   return <Dashboard initialNextPage={nextPage} initialStatuses={statuses} />;
+};
+
+const DebugTimePanelLoader = async ({ accessToken, username }: { accessToken: string; username: string }) => {
+  const statuses = await getUserStatuses(createTraewellingClient(accessToken), username);
+
+  return <DebugTimePanel statuses={statuses} />;
 };
 
 const DashboardSkeleton = () => {
@@ -67,6 +75,12 @@ export default async function DashboardPage() {
         >
           <button type="submit">Abmelden</button>
         </form>
+
+        {isDebugTimeEnabled && (
+          <Suspense fallback={null}>
+            <DebugTimePanelLoader accessToken={session.accessToken as string} username={session.user.username} />
+          </Suspense>
+        )}
 
         <Suspense fallback={<DashboardSkeleton />}>
           <DashboardLoader dashboardPromise={dashboardPromise} />

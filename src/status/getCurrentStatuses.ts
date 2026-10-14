@@ -2,11 +2,13 @@ import type { StatusResource } from '@/lib/traewelling';
 import type { getCheckinStopovers } from './getCheckinStopovers';
 import { getCheckinTimes } from './getCheckinTimes';
 
-// The stopovers are added by loadCurrentStatuses
+// The stopovers and the time offset are added by loadCurrentStatuses
 export type CurrentStatuses = {
   active?: StatusResource;
   activeStopovers?: ReturnType<typeof getCheckinStopovers>;
   next?: StatusResource;
+  /** Milliseconds the clock is shifted by for debugging, see getDebugTimeOffset */
+  timeOffset?: number;
 };
 
 // How far ahead an upcoming check-in counts, from now or from the arrival of the active one

@@ -3,17 +3,18 @@ import { LineBadge } from '@/components/LineBadge/LineBadge';
 import { Marquee } from '@/components/Marquee/Marquee';
 import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
 import { cleanStationName } from '@/helpers/cleanStationName';
-import type { Extend, Structure } from '@/helpers/extend';
+import type { Extend, StructureWithChildren } from '@/helpers/extend';
 import type { MotisMode, StopoverResource, TransportResource } from '@/lib/traewelling';
 import styles from './StatusTripHeader.module.css';
 
-// Meant to be placed on a TintedSurface in the line's color
+// Meant to be placed on a TintedSurface in the line's color. Children are appended after the direction.
 export const StatusTripHeader = ({
   checkin,
+  children,
   className,
   direction,
   ...props
-}: Extend<Structure, { checkin: TransportResource; direction?: StopoverResource }>) => (
+}: Extend<StructureWithChildren, { checkin: TransportResource; direction?: StopoverResource }>) => (
   <header className={clsx(styles.base, className)} {...props}>
     <TransportModeIcon height={20} mode={checkin.mode ?? undefined} width={20} />
 
@@ -32,5 +33,7 @@ export const StatusTripHeader = ({
         Richtung <Marquee>{cleanStationName(direction.station.name)}</Marquee>
       </em>
     )}
+
+    {children}
   </header>
 );
