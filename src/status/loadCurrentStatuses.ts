@@ -1,9 +1,10 @@
-import { getStopovers, getUserStatuses, type TraewellingClient } from '@/lib/traewelling';
+import { getStopovers, getUserStatuses, type StatusResource, type TraewellingClient } from '@/lib/traewelling';
 import { getCheckinStopovers } from './getCheckinStopovers';
 import { type CurrentStatuses, getCurrentStatuses } from './getCurrentStatuses';
 
-// Only the active status gets its stopovers, for its direction and next stop. They're optional, so a failure only
-// leaves them out. The time offset is passed on, so the client simulates the same time.
+// The active status gets its stopovers for its direction and next stop, the next status only for its direction. Both
+// come in one request. They're optional, so a failure only leaves them out. The time offset is passed on, so the
+// client simulates the same time.
 export async function loadCurrentStatuses(
   client: TraewellingClient,
   username: string,
@@ -14,14 +15,21 @@ export async function loadCurrentStatuses(
     ...getCurrentStatuses(statuses, new Date(Date.now() + timeOffset)),
     timeOffset: timeOffset || undefined,
   };
-  const { active } = currentStatuses;
+  const { active, next } = currentStatuses;
 
   if (!active) return currentStatuses;
 
-  const activeStopovers = await getStopovers(client, [active.checkin.trip])
-    .then((stopoversByTrip) => stopoversByTrip[active.checkin.trip])
-    .then((tripStopovers) => tripStopovers && getCheckinStopovers(tripStopovers, active.checkin))
-    .catch(() => undefined);
+  const trips = new Set([active.checkin.trip, ...(next ? [next.checkin.trip] : [])]);
+  const stopoversByTrip = await getStopovers(client, [...trips]).catch(() => undefined);
+  const getStopoversOf = ({ checkin }: StatusResource) => {
+    const tripStopovers = stopoversByTrip?.[checkin.trip];
 
-  return { ...currentStatuses, activeStopovers };
+    return tripStopovers && getCheckinStopovers(tripStopovers, checkin);
+  };
+
+  return {
+    ...currentStatuses,
+    activeStopovers: getStopoversOf(active),
+    nextStopovers: next && getStopoversOf(next),
+  };
 }

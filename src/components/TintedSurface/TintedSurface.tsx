@@ -7,19 +7,27 @@ import styles from './TintedSurface.module.css';
 // Equals --via-neutral-100, which can't be used here since the palette needs a parsable color
 export const tintedSurfaceFallbackColor = 'oklch(97% 0 none)';
 
+/**
+ * @param attached The edge another surface is attached to, which loses its rounded corners.
+ */
 const Root = ({
+  attached,
   children,
   className,
   color = tintedSurfaceFallbackColor,
   radius,
   style,
   ...props
-}: Extend<StructureWithChildren, { color?: string; radius?: CSSProperties['borderRadius'] }>) => {
+}: Extend<
+  StructureWithChildren,
+  { attached?: 'bottom' | 'top'; color?: string; radius?: CSSProperties['borderRadius'] }
+>) => {
   const palette = getTintedPalette(color);
 
   return (
     <div
       className={clsx(styles.base, className)}
+      data-via-attached={attached}
       style={
         {
           ...style,

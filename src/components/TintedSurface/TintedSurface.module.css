@@ -19,6 +19,24 @@
   [data-via-delay="late"] {
     color: var(--via-tinted-surface-delay-late);
   }
+
+  &[data-via-attached="bottom"] {
+    &,
+    .content,
+    .content::before {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  &[data-via-attached="top"] {
+    &,
+    .content,
+    .content::before {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  }
 }
 
 .content {

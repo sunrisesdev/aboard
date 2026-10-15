@@ -1,5 +1,6 @@
 'use client';
 
+import { IconAlertTriangleFilled, IconSwitchHorizontal } from '@tabler/icons-react';
 import { clsx } from 'clsx';
 import Link from 'next/link';
 import { use } from 'react';
@@ -12,7 +13,7 @@ import { formatDelay } from '@/helpers/formatDelay';
 import { formatPlatform } from '@/helpers/formatPlatform';
 import { getDelay } from '@/helpers/getDelay';
 import { getLineColors } from '@/helpers/getLineColors';
-import type { StopoverResource } from '@/lib/traewelling';
+import type { StatusResource, StopoverResource } from '@/lib/traewelling';
 import { getCheckinTimes } from '@/status/getCheckinTimes';
 import { getNextStopover } from '@/status/getNextStopover';
 import { StatusTripHeader } from '@/status/StatusTripHeader/StatusTripHeader';
@@ -111,7 +112,13 @@ const alightingWindow = 10 * 60 * 1000;
 // Before departure only the boarding station is shown and shortly before arriving only the destination. In between
 // it's the next stop (if there's one left before the destination) and the destination, plus the trip's progress.
 export const ActiveStatus = ({ className, compact = false }: { className?: string; compact?: boolean }) => {
-  const { active, activeStopovers, next, timeOffset = 0 } = use(useCurrentStatuses().currentStatusesPromise);
+  const {
+    active,
+    activeStopovers,
+    next,
+    nextStopovers,
+    timeOffset = 0,
+  } = use(useCurrentStatuses().currentStatusesPromise);
 
   if (!active) return null;
 
@@ -148,55 +155,171 @@ export const ActiveStatus = ({ className, compact = false }: { className?: strin
     !isBoarding && !nextStation && !!arrival && Date.parse(arrival) - now.getTime() <= alightingWindow;
   const isEnRoute = !isBoarding && !isAlighting;
 
-  // While the trip is running the direction hardly matters, so the compact variant shows the progress in its place
-  const showsHeaderProgress = compact && isEnRoute;
+  // Hardly matters anymore when getting off, and the compact variant leaves it out while the trip is running, so the
+  // line can run into the top of the card instead
+  const showsHeader = !isAlighting && !(compact && isEnRoute);
+
+  const nextDeparture = next && getCheckinTimes(next.checkin).departure;
+  // Worth mentioning when the next status doesn't depart where this one arrives
+  const changesStation = !!next && next.checkin.origin.station.id !== destination.station.id;
 
   return (
+    <div className={clsx(styles.base, compact && styles.isCompact, className)}>
+      {/* The compact variant attaches the next status, so both float as one */}
+      <TintedSurface
+        attached={compact && next ? 'bottom' : undefined}
+        color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background}
+        radius="1rem"
+      >
+        <TintedSurface.Content>
+          <Link className={styles.link} href={`/status/${active.id}`}>
+            {showsHeader && (
+              <StatusTripHeader checkin={checkin} className={styles.header} direction={activeStopovers?.direction} />
+            )}
+
+            {!isEnRoute ? (
+              <SingleStation
+                compact={compact}
+                mode={checkin.mode}
+                station={isBoarding ? boardingStation : destinationStation}
+                variant={isBoarding ? 'boarding' : 'alighting'}
+              />
+            ) : (
+              <EnRoute
+                arrival={arrival}
+                compact={compact}
+                departure={departure}
+                destination={destinationStation}
+                mode={checkin.mode}
+                next={nextStation}
+                now={now}
+              />
+            )}
+          </Link>
+        </TintedSurface.Content>
+      </TintedSurface>
+
+      {!compact && arrival && nextDeparture && (
+        <Transfer arrival={arrival} changesStation={changesStation} departure={nextDeparture} />
+      )}
+
+      {next && (
+        <NextStatus
+          changesStation={changesStation}
+          compact={compact}
+          direction={nextStopovers?.direction}
+          status={next}
+        />
+      )}
+    </div>
+  );
+};
+
+// Runs from one card to the other, next to the time left for the transfer
+const Transfer = ({
+  arrival,
+  changesStation,
+  departure,
+}: {
+  arrival: string;
+  changesStation: boolean;
+  departure: string;
+}) => {
+  const minutes = Math.round((Date.parse(departure) - Date.parse(arrival)) / 60_000);
+
+  return (
+    <div className={styles.transfer}>
+      <div className={styles.transferLine} />
+
+      {minutes >= 0 ? (
+        <span>
+          <IconSwitchHorizontal
+            data-via-icon
+            style={{ fontSize: '1rem', marginRight: '1ch', verticalAlign: 'central' }}
+          />
+          <strong>
+            {minutes} {minutes === 1 ? 'Minute' : 'Minuten'}
+          </strong>
+          , um {changesStation ? 'die Station zu wechseln' : 'umzusteigen'}
+        </span>
+      ) : (
+        <span style={{ color: 'var(--via-fg-error)', fontWeight: 500 }}>
+          <IconAlertTriangleFilled
+            data-via-icon
+            style={{ fontSize: '1rem', marginRight: '1ch', verticalAlign: 'central' }}
+          />
+          Anschluss wahrscheinlich nicht erreichbar
+        </span>
+      )}
+    </div>
+  );
+};
+
+// The status following the active one, with what's needed to catch it: where, which way and when it departs
+const NextStatus = ({
+  changesStation,
+  compact,
+  direction,
+  status,
+}: {
+  changesStation: boolean;
+  compact: boolean;
+  direction?: StopoverResource;
+  status: StatusResource;
+}) => {
+  const { checkin } = status;
+  const { origin } = checkin;
+  const { departure } = getCheckinTimes(checkin);
+  const delay = origin.departurePlanned ? getDelay(origin.departurePlanned, departure) : undefined;
+  const platform = formatPlatform(origin.departurePlatformReal ?? origin.departurePlatformPlanned, checkin.mode, {
+    abbreviate: compact,
+    planned: origin.departurePlatformPlanned,
+  });
+
+  const departureDetails = (
+    <>
+      <div className={styles.nextDirection}>
+        {/* Without the stopovers the trip's direction is unknown, so it falls back to the alighting station */}
+        <span className={styles.direction}>
+          {direction ? 'Richtung' : 'nach'}{' '}
+          <Marquee>{cleanStationName((direction ?? checkin.destination).station.name)}</Marquee>
+        </span>
+
+        {platform && <span className={styles.platformBadge}>{platform}</span>}
+      </div>
+
+      <span className={styles.timing}>
+        {!!delay?.minutes && (
+          <span className={styles.delayBadge} data-via-delay={delay.status}>
+            {formatDelay(delay.minutes)}
+          </span>
+        )}
+
+        {departure && <span className={styles.nextTime}>ab {formatDateTime(departure, 'time')}</span>}
+      </span>
+    </>
+  );
+
+  // The station to change to takes the place next to the line badge, pushing the departure into a row of its own
+  return (
     <TintedSurface
-      className={className}
+      attached={compact ? 'top' : undefined}
       color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background}
       radius="1rem"
     >
       <TintedSurface.Content>
-        <Link className={styles.link} href={`/status/${active.id}`}>
-          {/* Hardly matters anymore when getting off, so the line can run into the top of the card instead */}
-          {!isAlighting && (
-            <StatusTripHeader
-              checkin={checkin}
-              className={styles.header}
-              direction={showsHeaderProgress ? undefined : activeStopovers?.direction}
-            >
-              {showsHeaderProgress && (
-                <ProgressBar arrival={arrival} className={styles.headerProgressBar} departure={departure} now={now} />
-              )}
-            </StatusTripHeader>
-          )}
+        <Link className={clsx(styles.link, styles.nextLink)} href={`/status/${status.id}`}>
+          <StatusTripHeader checkin={checkin}>
+            {changesStation ? (
+              <em className={clsx(styles.label, styles.nextOrigin)}>
+                <Marquee>Weiterfahrt ab {cleanStationName(origin.station.name)}</Marquee>
+              </em>
+            ) : (
+              departureDetails
+            )}
+          </StatusTripHeader>
 
-          {!isEnRoute ? (
-            <SingleStation
-              compact={compact}
-              mode={checkin.mode}
-              station={isBoarding ? boardingStation : destinationStation}
-              variant={isBoarding ? 'boarding' : 'alighting'}
-            />
-          ) : (
-            <EnRoute
-              arrival={arrival}
-              compact={compact}
-              departure={departure}
-              destination={destinationStation}
-              mode={checkin.mode}
-              next={nextStation}
-              now={now}
-            />
-          )}
-
-          {next && (
-            <div className={styles.next}>
-              Danach: {cleanStationName(next.checkin.origin.station.name)} →{' '}
-              {cleanStationName(next.checkin.destination.station.name)}
-            </div>
-          )}
+          {changesStation && <div className={styles.nextDeparture}>{departureDetails}</div>}
         </Link>
       </TintedSurface.Content>
     </TintedSurface>
@@ -224,7 +347,7 @@ const SingleStation = ({
         ) : (
           <TripLine.RouteSegment className={styles.previousSegment} />
         )}
-        <TripLine.StopIndicator className={styles.stopIndicator} style={{ gridArea: 'stop' }} />
+        <TripLine.StopIndicator active className={styles.stopIndicator} style={{ gridArea: 'stop' }} />
       </TripLine>
 
       <em className={styles.label} style={{ gridArea: 'label' }}>
@@ -265,7 +388,7 @@ const EnRoute = ({
 
   return (
     <>
-      <div className={styles.trip}>
+      <div className={clsx(styles.trip, compact && styles.isCompact)}>
         <TripLine className={styles.tripLine}>
           {/* Hints at the part of the trip that's already behind */}
           <TripLine.RouteSegment
@@ -273,17 +396,24 @@ const EnRoute = ({
             style={{ gridRowEnd: next ? 'nextStop-end' : 'destinationStop-end' }}
           />
 
-          {next && <TripLine.StopIndicator className={styles.stopIndicator} style={{ gridArea: 'nextStop' }} />}
+          {/* The stop the vehicle is heading to, which is the destination once there's none left in between */}
+          {next && <TripLine.StopIndicator active className={styles.stopIndicator} style={{ gridArea: 'nextStop' }} />}
           {next && <TripLine.RouteSegment className={styles.upcomingSegment} partial />}
 
-          <TripLine.StopIndicator className={styles.stopIndicator} style={{ gridArea: 'destinationStop' }} />
+          <TripLine.StopIndicator
+            active={!next}
+            className={styles.stopIndicator}
+            style={{ gridArea: 'destinationStop' }}
+          />
         </TripLine>
 
         {next && nextDetails && (
           <>
-            <em className={styles.label} style={{ gridArea: 'nextLabel' }}>
-              {next.label}
-            </em>
+            {!compact && (
+              <em className={styles.label} style={{ gridArea: 'nextLabel' }}>
+                {next.label}
+              </em>
+            )}
 
             <div className={styles.nextStation}>
               <Marquee>
@@ -306,9 +436,12 @@ const EnRoute = ({
           </>
         )}
 
-        <em className={styles.label} style={{ gridArea: 'destinationLabel' }}>
-          {destination.label}
-        </em>
+        {/* Left out by the compact variant, the label rows then collapse */}
+        {!compact && (
+          <em className={styles.label} style={{ gridArea: 'destinationLabel' }}>
+            {destination.label}
+          </em>
+        )}
 
         <StationRow
           compact={compact}
@@ -319,24 +452,13 @@ const EnRoute = ({
         />
       </div>
 
-      {/* The compact variant shows it in the header instead */}
       {!compact && <ProgressBar arrival={arrival} departure={departure} now={now} />}
     </>
   );
 };
 
 // Fills up by CSS animation like the line in StatusTrip, so it keeps progressing without re-rendering
-const ProgressBar = ({
-  arrival,
-  className,
-  departure,
-  now,
-}: {
-  arrival: string | null;
-  className?: string;
-  departure: string | null;
-  now: Date;
-}) => {
+const ProgressBar = ({ arrival, departure, now }: { arrival: string | null; departure: string | null; now: Date }) => {
   if (!arrival || !departure) return null;
 
   const progressStyle = {
@@ -345,7 +467,7 @@ const ProgressBar = ({
   };
 
   return (
-    <div className={clsx(styles.progressBar, className)}>
+    <div className={styles.progressBar}>
       {/* The server renders with a slightly earlier `now` */}
       <div className={styles.progress} style={progressStyle} suppressHydrationWarning />
     </div>

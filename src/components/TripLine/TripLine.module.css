@@ -55,4 +55,26 @@
   & + .route {
     margin-top: -1px;
   }
+
+  &.isActive {
+    animation: stop-pulse 1.5s ease-out infinite;
+  }
+}
+
+/* A ring that grows out of the indicator and fades away */
+@keyframes stop-pulse {
+  from {
+    box-shadow: 0 0 0 0 oklch(from currentColor l c h / 0.5);
+  }
+
+  70%,
+  to {
+    box-shadow: 0 0 0 0.375rem oklch(from currentColor l c h / 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stop.isActive {
+    animation: none;
+  }
 }

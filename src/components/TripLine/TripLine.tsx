@@ -25,8 +25,12 @@ export const TripLineRouteSegment = ({
 
 TripLineRouteSegment.displayName = 'TripLine.RouteSegment';
 
-export const TripLineStopIndicator = ({ className, ...props }: Extend<Structure>) => {
-  return <div className={clsx(styles.stop, className)} {...props} />;
+export const TripLineStopIndicator = ({
+  active = false,
+  className,
+  ...props
+}: Extend<Structure, { active?: boolean }>) => {
+  return <div className={clsx(styles.stop, active && styles.isActive, className)} {...props} />;
 };
 
 TripLineStopIndicator.displayName = 'TripLine.StopIndicator';

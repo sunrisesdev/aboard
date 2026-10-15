@@ -7,6 +7,7 @@ export type CurrentStatuses = {
   active?: StatusResource;
   activeStopovers?: ReturnType<typeof getCheckinStopovers>;
   next?: StatusResource;
+  nextStopovers?: ReturnType<typeof getCheckinStopovers>;
   /** Milliseconds the clock is shifted by for debugging, see getDebugTimeOffset */
   timeOffset?: number;
 };
