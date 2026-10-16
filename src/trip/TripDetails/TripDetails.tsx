@@ -23,9 +23,11 @@ import { isReplacementService } from '@/helpers/isReplacementService';
 import { useLastDefinedValue } from '@/hooks/useLastDefinedValue';
 import type { DepartureResource, MotisMode } from '@/lib/traewelling';
 import { TripStopoverItem } from '@/trip/TripStopoverItem/TripStopoverItem';
+import { useUser } from '@/user/useUser';
 import styles from './TripDetails.module.css';
 
 export const TripDetails = ({ departure, inDrawer = false }: { departure: DepartureResource; inDrawer?: boolean }) => {
+  const { home } = useUser();
   const { dispatch, trip } = useCheckIn();
   const stopovers = useLastDefinedValue(trip.stopovers);
 
@@ -117,6 +119,7 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
                 {stopovers.map((stopover, index) => (
                   <li key={stopover.uuid ?? stopover.id}>
                     <TripStopoverItem
+                      home={!!home && home.id === stopover.station.id}
                       last={index === stopovers.length - 1}
                       mode={departure.line.mode?.toUpperCase() as MotisMode}
                       onSelect={(destination) => dispatch({ type: 'selectDestination', destination })}

@@ -41,10 +41,10 @@ export function StationSearchDrawer({ triggerClassName }: { triggerClassName?: s
     >
       <BottomDrawer.Content className={styles.content}>
         {stationGroups.map((group) => (
-          <div className={styles.group} key={group.id}>
+          <div key={group.id}>
             {group.label && (
               <p className={styles.label}>
-                {group.icon && <group.icon aria-hidden data-via-icon />}
+                {group.icon}
                 {group.label}
               </p>
             )}
@@ -60,6 +60,9 @@ export function StationSearchDrawer({ triggerClassName }: { triggerClassName?: s
         ))}
         {!showsSuggestions && isLoading && <p>Suche läuft…</p>}
         {!showsSuggestions && !isLoading && debouncedQuery && stations?.length === 0 && <p>Keine Treffer.</p>}
+      </BottomDrawer.Content>
+
+      <BottomDrawer.Footer>
         <input
           ref={searchInputRef}
           type="text"
@@ -68,7 +71,7 @@ export function StationSearchDrawer({ triggerClassName }: { triggerClassName?: s
           placeholder="Stationsname"
           className={styles.searchInput}
         />
-      </BottomDrawer.Content>
+      </BottomDrawer.Footer>
     </BottomDrawer>
   );
 }

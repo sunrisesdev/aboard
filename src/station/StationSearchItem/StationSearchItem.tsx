@@ -13,11 +13,11 @@ export const StationSearchItem = ({ className, station, ...props }: Extend<'div'
     <div className={clsx(styles.base, className)} {...props}>
       <Link className={styles.link} href={getStationHref(station)}>
         {station.name}
-        {rilIdentifier && <Badge style={{ marginLeft: '1ch' }}>{rilIdentifier}</Badge>}
+        {rilIdentifier && <Badge>{rilIdentifier}</Badge>}
       </Link>
 
       {!!station.areas?.length && (
-        <div>
+        <div className={styles.areas}>
           {station.areas
             .toSorted((a, b) => b.adminLevel - a.adminLevel)
             .map(({ name }) => name)

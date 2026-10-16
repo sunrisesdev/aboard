@@ -12,6 +12,10 @@
   padding-inline: 1rem;
   width: 100%;
 
+  &.isHome {
+    background: var(--via-bg-hover);
+  }
+
   @media (hover: hover) {
     &:hover {
       background-color: var(--via-bg-accent-subtle);

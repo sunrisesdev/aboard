@@ -1,9 +1,43 @@
 .base {
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: 0.5rem;
   position: relative;
+
+  @media (hover: hover) {
+    &:hover {
+      background: var(--via-bg-hover);
+    }
+  }
+
+  &:active {
+    background: var(--via-bg-active);
+  }
+
+  /* The link covers the whole item, so the item shows its focus */
+  &:has(.link:focus-visible) {
+    background: var(--via-bg-hover);
+    outline: 2px solid var(--via-focus-ring);
+    outline-offset: 2px;
+  }
 }
 
-.link::after {
-  content: "";
-  inset: 0;
-  position: absolute;
+.areas {
+  color: var(--via-fg-tertiary);
+  font-size: 0.875rem;
+}
+
+.link {
+  align-items: center;
+  display: flex;
+  gap: 1ch;
+  outline: none;
+
+  &::after {
+    content: "";
+    inset: 0;
+    position: absolute;
+  }
 }

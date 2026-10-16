@@ -19,31 +19,34 @@
   gap: 0.5rem;
 }
 
-.group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
 .label {
   align-items: center;
   color: var(--via-fg-tertiary);
   display: flex;
-  gap: 0.375rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-style: italic;
+  font-weight: 500;
+  padding-block: 0.5rem 0.25rem;
   user-select: none;
+
+  & > svg {
+    font-size: 1rem;
+  }
 }
 
+/* The items' hover background reaches into the content padding, so their text lines up with the labels */
 .results {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
   list-style: none;
+  margin-inline: -0.5rem;
 }
 
 .searchInput {
+  /* The footer aligns its children to the end, the input spans it instead */
+  flex: 1;
+  min-width: 0;
   height: 2.5rem;
   padding: 0 0.75rem;
   border: var(--via-bd-width) solid var(--via-bd-secondary);
