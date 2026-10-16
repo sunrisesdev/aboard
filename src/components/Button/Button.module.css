@@ -51,10 +51,25 @@
     }
   }
 
+  &[data-via-icon-only] {
+    aspect-ratio: 1;
+    font-size: 1.125rem;
+    padding: 0;
+  }
+
   &[data-via-variant="secondary"] {
     background: var(--via-bg-secondary);
     border: var(--via-bd-width) solid var(--via-bd-secondary);
     color: var(--via-fg-primary);
+  }
+
+  &[data-via-variant="danger"] {
+    --via-button-hover: var(--via-bg-hover-on-accent);
+    --via-button-active: var(--via-bg-active-on-accent);
+
+    /* The light scheme's error color, as the dark one is too light for white text */
+    background: oklch(50.5% 0.213 27.518);
+    color: var(--via-fg-on-accent);
   }
 
   @media (hover: hover) {

@@ -1,38 +1,38 @@
-import { redirect } from "next/navigation";
-import NextAuth, { customFetch } from "next-auth";
-import type { Provider } from "next-auth/providers";
-import type { components } from "@/lib/traewelling/schema";
-import type { TraewellingUser } from "@/lib/traewelling/types";
-import { userAgent } from "@/userAgent";
+import { redirect } from 'next/navigation';
+import NextAuth, { customFetch } from 'next-auth';
+import type { Provider } from 'next-auth/providers';
+import type { components } from '@/lib/traewelling/schema';
+import type { TraewellingUser } from '@/lib/traewelling/types';
+import { userAgent } from '@/userAgent';
 
 type TraewellingToken = TraewellingUser & {
   accessToken?: string;
   refreshToken?: string;
   accessTokenExpiresAt?: number;
-  error?: "RefreshAccessTokenError";
+  error?: 'RefreshAccessTokenError';
 };
 
 const traewelling: Provider = {
-  id: "traewelling",
-  name: "Träwelling",
-  type: "oauth",
+  id: 'traewelling',
+  name: 'Träwelling',
+  type: 'oauth',
   authorization: {
-    url: "https://traewelling.de/oauth/authorize",
+    url: 'https://traewelling.de/oauth/authorize',
     params: {
       scope:
-        "read-statuses read-notifications write-statuses write-likes write-notifications write-follows write-blocks read-settings read-settings-profile read-settings-followers write-followers",
+        'read-statuses read-notifications write-statuses write-likes write-notifications write-follows write-blocks read-settings read-settings-profile read-settings-followers write-followers',
     },
   },
-  token: "https://traewelling.de/oauth/token",
-  userinfo: "https://traewelling.de/api/v1/auth/user",
+  token: 'https://traewelling.de/oauth/token',
+  userinfo: 'https://traewelling.de/api/v1/auth/user',
   clientId: process.env.TRAEWELLING_CLIENT_ID,
   clientSecret: process.env.TRAEWELLING_CLIENT_SECRET,
-  profile(profile: { data: components["schemas"]["UserAuthResource"] }) {
+  profile(profile: { data: components['schemas']['UserAuthResource'] }) {
     return { ...profile.data, id: String(profile.data.id) };
   },
   [customFetch]: (input, init) => {
     const headers = new Headers(init?.headers);
-    headers.set("User-Agent", userAgent);
+    headers.set('User-Agent', userAgent);
 
     return fetch(input, { ...init, headers });
   },
@@ -43,22 +43,20 @@ const refreshBeforeExpiry = 60_000;
 // Laravel Passport redeems refresh tokens at the same `/oauth/token` endpoint
 // used for the initial exchange (grant_type=refresh_token), not a dedicated
 // refresh route.
-async function refreshAccessToken(
-  token: TraewellingToken,
-): Promise<TraewellingToken> {
+async function refreshAccessToken(token: TraewellingToken): Promise<TraewellingToken> {
   if (!token.refreshToken) {
-    return { ...token, error: "RefreshAccessTokenError" };
+    return { ...token, error: 'RefreshAccessTokenError' };
   }
 
   try {
-    const response = await fetch("https://traewelling.de/oauth/token", {
-      method: "POST",
+    const response = await fetch('https://traewelling.de/oauth/token', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "User-Agent": userAgent,
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Agent': userAgent,
       },
       body: new URLSearchParams({
-        grant_type: "refresh_token",
+        grant_type: 'refresh_token',
         refresh_token: token.refreshToken,
         client_id: process.env.TRAEWELLING_CLIENT_ID as string,
         client_secret: process.env.TRAEWELLING_CLIENT_SECRET as string,
@@ -66,9 +64,7 @@ async function refreshAccessToken(
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Refresh failed with status ${response.status}: ${await response.text()}`,
-      );
+      throw new Error(`Refresh failed with status ${response.status}: ${await response.text()}`);
     }
 
     const refreshed: {
@@ -85,9 +81,9 @@ async function refreshAccessToken(
       error: undefined,
     };
   } catch (error) {
-    console.error("Träwelling access token refresh failed", error);
+    console.error('Träwelling access token refresh failed', error);
 
-    return { ...token, error: "RefreshAccessTokenError" };
+    return { ...token, error: 'RefreshAccessTokenError' };
   }
 }
 
@@ -102,21 +98,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           ...current,
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
-          accessTokenExpiresAt: account.expires_at
-            ? account.expires_at * 1000
-            : undefined,
+          accessTokenExpiresAt: account.expires_at ? account.expires_at * 1000 : undefined,
         };
       }
       if (user) {
         Object.assign(current, user);
+      }
+      // Auth.js replaces the profile's id with a random one, the Träwelling id only survives on the account
+      if (account) {
+        current.id = account.providerAccountId;
       }
 
       // A missing expiry (e.g. a session predating this field) is treated as
       // expired rather than valid, so it self-heals on the next request
       // instead of silently keeping a dead access token forever.
       const isExpired =
-        !current.accessTokenExpiresAt ||
-        Date.now() >= current.accessTokenExpiresAt - refreshBeforeExpiry;
+        !current.accessTokenExpiresAt || Date.now() >= current.accessTokenExpiresAt - refreshBeforeExpiry;
       if (!isExpired) {
         return current;
       }
@@ -124,13 +121,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return refreshAccessToken(current);
     },
     session({ session, token }) {
-      const {
-        accessToken,
-        refreshToken,
-        accessTokenExpiresAt,
-        error,
-        ...user
-      } = token as typeof token & TraewellingToken;
+      const { accessToken, refreshToken, accessTokenExpiresAt, error, ...user } = token as typeof token &
+        TraewellingToken;
       session.accessToken = accessToken;
       session.error = error;
       session.user = user as unknown as typeof session.user;
@@ -146,7 +138,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 export async function requireSession() {
   const session = await auth();
   if (!session || session.error) {
-    redirect("/");
+    redirect('/');
   }
   return session;
 }

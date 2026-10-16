@@ -10,8 +10,20 @@ export type StatusLike = Pick<
   'displayName' | 'id' | 'profilePicture' | 'username'
 >;
 
+export type StatusUpdateBody = components['schemas']['StatusUpdateBody'];
+
 export async function getStatus(client: TraewellingClient, statusId: number) {
   const { data } = await client.get(`v1/status/${statusId}`).json<{ data: StatusResource }>();
+
+  return data;
+}
+
+export async function deleteStatus(client: TraewellingClient, statusId: number) {
+  await client.delete(`v1/status/${statusId}`);
+}
+
+export async function updateStatus(client: TraewellingClient, statusId: number, body: StatusUpdateBody) {
+  const { data } = await client.put(`v1/status/${statusId}`, { json: body }).json<{ data: StatusResource }>();
 
   return data;
 }

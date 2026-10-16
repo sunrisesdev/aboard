@@ -1,0 +1,54 @@
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.backdrop {
+  background: var(--via-bg-overlay);
+  inset: 0;
+  min-height: 100dvh;
+  position: fixed;
+  transition: opacity 200ms ease;
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+  }
+}
+
+.description {
+  color: var(--via-fg-secondary);
+}
+
+.popup {
+  background-color: var(--via-bg-surface);
+  border: var(--via-bd-width) solid var(--via-bd-elevated);
+  border-radius: 1rem;
+  box-shadow: var(--via-shadow-md);
+  color: var(--via-fg-primary);
+  left: 50%;
+  max-width: calc(100vw - 2rem);
+  outline: none;
+  padding: 1.5rem;
+  position: fixed;
+  top: 50%;
+  transition:
+    opacity 200ms ease,
+    scale 200ms ease;
+  translate: -50% -50%;
+  width: 26rem;
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}

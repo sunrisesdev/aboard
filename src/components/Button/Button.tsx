@@ -3,9 +3,17 @@ import { clsx } from 'clsx';
 import styles from './Button.module.css';
 
 type ButtonProps = BaseButton.Props & {
-  variant?: 'primary' | 'secondary';
+  iconOnly?: boolean;
+  variant?: 'danger' | 'primary' | 'secondary';
 };
 
-export function Button({ className, variant = 'primary', ...props }: ButtonProps) {
-  return <BaseButton className={clsx(styles.base, className)} data-via-variant={variant} {...props} />;
+export function Button({ className, iconOnly = false, variant = 'primary', ...props }: ButtonProps) {
+  return (
+    <BaseButton
+      className={clsx(styles.base, className)}
+      data-via-icon-only={iconOnly || undefined}
+      data-via-variant={variant}
+      {...props}
+    />
+  );
 }

@@ -25,6 +25,8 @@
 }
 
 .logo {
+  color: var(--via-fg-on-accent);
+  font-weight: 500;
   justify-self: start;
 }
 

@@ -27,7 +27,9 @@ import {
   TraewellingApiError,
 } from '@/lib/traewelling';
 import { getCheckinStopovers } from '@/status/getCheckinStopovers';
+import { getDestinationStopovers } from '@/status/getDestinationStopovers';
 import { getNextStopover } from '@/status/getNextStopover';
+import { StatusActionsMenu } from '@/status/StatusActionsMenu/StatusActionsMenu';
 import { StatusBody } from '@/status/StatusBody/StatusBody';
 import { StatusTrip } from '@/status/StatusTrip/StatusTrip';
 import { businessOptions, visibilityOptions } from '@/status/statusOptions';
@@ -146,7 +148,6 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
       .find((coordinates) => coordinates && coordinates.length >= 2)
     ?? routeMapStops.map(({ coordinates }) => coordinates);
 
-  // Only shown as a card when there's a status text
   const statusContent = (
     <>
       <header className={styles.header}>
@@ -157,6 +158,10 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
         </div>
 
         <span className={styles.pointsBadge}>+{status.checkin.points} Punkte</span>
+
+        {status.user.uuid === session.user.uuid && (
+          <StatusActionsMenu destinationStopovers={getDestinationStopovers(tripStopovers, checkin)} status={status} />
+        )}
       </header>
 
       {body && <StatusBody body={body} className={styles.body} mentions={status.bodyMentions} />}
@@ -234,6 +239,7 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
                         />
                       ))}
                     </div>
+
                     <span className={styles.likeSummaryText}>{likeSummary.text}</span>
                   </div>
 

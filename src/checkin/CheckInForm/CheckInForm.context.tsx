@@ -3,15 +3,12 @@
 import { createContext, type PropsWithChildren, use, useActionState, useId, useState } from 'react';
 import { submitCheckinAction } from '@/checkin/actions';
 import { useCheckIn } from '@/checkin/useCheckIn';
-import type { Business, StatusVisibility } from '@/lib/traewelling';
+import type { StatusVisibility } from '@/lib/traewelling';
+import type { StatusFieldValues } from '@/status/StatusFields/StatusFields';
 import { useCurrentStatuses } from '@/status/useCurrentStatuses';
 import { useUser } from '@/user/useUser';
 
-type CheckInFormValues = {
-  body: string;
-  business: Business;
-  visibility: StatusVisibility;
-};
+type CheckInFormValues = StatusFieldValues;
 
 type CheckInFormContextValue = {
   error: string | undefined;

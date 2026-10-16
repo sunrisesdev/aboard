@@ -4,38 +4,7 @@
   gap: 1rem;
 }
 
-.characterCounter {
-  align-self: flex-end;
-  margin-bottom: -0.25rem;
-  margin-top: 0.75rem;
-}
-
-.divider {
-  border: none;
-  border-bottom: var(--via-bd-width) solid var(--via-bd-secondary);
-  margin: 0.25rem 0.5rem;
-}
-
-.drawerPrivacyCard {
-  background: var(--via-bg-primary);
-  border: var(--via-bd-width) solid var(--via-bd-primary);
-  border-radius: 1rem;
-  box-shadow: var(--via-shadow-xs);
-  padding: 0.5rem;
-}
-
 .error {
   color: var(--via-fg-error);
   font-size: 0.875rem;
-}
-
-.textarea {
-  background-color: var(--via-bg-primary);
-  border: var(--via-bd-width) solid var(--via-bd-secondary);
-  border-radius: 0.5rem;
-  color: var(--via-fg-primary);
-  font: inherit;
-  min-height: 5rem;
-  padding: 0.5rem 0.75rem;
-  resize: vertical;
 }

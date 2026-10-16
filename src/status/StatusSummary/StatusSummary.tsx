@@ -172,9 +172,11 @@ export const StatusSummary = ({ status }: { status: StatusResource }) => {
         </TintedSurface>
       </Link>
 
-      <Button className={styles.likeButton} variant="secondary">
-        <IconHeart data-via-icon /> {status.likes}
-      </Button>
+      {status.isLikable && (
+        <Button className={styles.likeButton} variant="secondary">
+          <IconHeart data-via-icon /> {status.likes}
+        </Button>
+      )}
     </Card>
   );
 };

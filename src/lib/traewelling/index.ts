@@ -20,6 +20,7 @@ export {
   type TravelType,
 } from './stations';
 export {
+  deleteStatus,
   getDashboard,
   getStatus,
   getStatusLikes,
@@ -27,6 +28,8 @@ export {
   getUserStatuses,
   type StatusLike,
   type StatusResource,
+  type StatusUpdateBody,
+  updateStatus,
 } from './status';
 export { getStopovers } from './stopovers';
 export { getTripInfo, type StopoverResource, type TripResource } from './trip';
