@@ -14,7 +14,7 @@
   bottom: 0;
   display: flex;
   flex-direction: column;
-  max-height: 100dvh;
+  max-height: calc(100dvh - var(--via-navbar-height));
   opacity: 0;
   padding-bottom: 1.5rem;
   padding-left: 1.5rem;
@@ -27,9 +27,9 @@
   width: var(--via-trip-side-panel-width);
 
   /*
-   * Limits the panel to the visible part of .base while its top edge is still inside the viewport.
-   * The top padding only keeps the distance to the viewport edge, so it grows in during the last 1.5rem
-   * before .base reaches the top and the content may use that space until then.
+   * Limits the panel to the visible part of .base while its top edge is still below the sticky navbar.
+   * The top padding only keeps the distance to the navbar, so it grows in during the last 1.5rem
+   * before .base reaches the navbar and the content may use that space until then.
    * Longhands on purpose: the shorthand gets expanded with a 0s duration at build time.
    */
   @supports (animation-timeline: view()) {
@@ -38,8 +38,8 @@
     animation-name: panel-max-height, panel-padding-top;
     animation-timing-function: linear;
     animation-range:
-      cover 0% cover 100dvh,
-      cover calc(100dvh - 1.5rem) cover 100dvh;
+      cover 0% cover calc(100dvh - var(--via-navbar-height)),
+      cover calc(100dvh - var(--via-navbar-height) - 1.5rem) cover calc(100dvh - var(--via-navbar-height));
     animation-timeline: --trip-side-panel;
   }
 
@@ -55,7 +55,7 @@
   }
 
   to {
-    max-height: 100dvh;
+    max-height: calc(100dvh - var(--via-navbar-height));
   }
 }
 

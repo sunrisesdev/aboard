@@ -30,6 +30,9 @@
   );
   --via-bg-overlay: light-dark(oklch(0% 0 none / 20%), oklch(0% 0 none / 50%));
 
+  --via-content-max-width: 90rem;
+  --via-navbar-height: 3.5rem;
+
   --via-bd-primary: light-dark(var(--via-neutral-200), var(--via-neutral-800));
   --via-bd-secondary: light-dark(var(--via-neutral-300), var(--via-neutral-700));
   --via-bd-tertiary: #0000002e;

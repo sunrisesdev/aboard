@@ -17,7 +17,7 @@
   /* An implicit column would grow to fit its content's min-content width, e.g. non-wrapping text */
   grid-template-columns: minmax(0, 1fr);
   margin-inline: auto;
-  max-width: 90rem;
+  max-width: var(--via-content-max-width);
   width: 100%;
 
   &.withAside {

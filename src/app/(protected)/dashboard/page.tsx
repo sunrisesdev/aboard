@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { NavbarAttachment } from '@/components/NavbarAttachment/NavbarAttachment';
 import { PageContent } from '@/components/PageContent/PageContent';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { DebugTimePanel } from '@/debug/DebugTimePanel/DebugTimePanel';
@@ -53,6 +54,10 @@ export default async function DashboardPage() {
 
   return (
     <>
+      <NavbarAttachment className={styles.stationSearch}>
+        <StationSearchDrawer triggerClassName={styles.stationSearchTrigger} />
+      </NavbarAttachment>
+
       <PageContent
         aside={
           <>
@@ -66,7 +71,6 @@ export default async function DashboardPage() {
       >
         <h1>Hallo, {session.user.displayName}</h1>
         <p>@{session.user.username}</p>
-        <StationSearchDrawer />
         <form
           action={async () => {
             'use server';

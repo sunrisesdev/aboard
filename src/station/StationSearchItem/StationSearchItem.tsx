@@ -2,6 +2,7 @@ import { clsx } from 'clsx';
 import Link from 'next/link';
 import { Badge } from '@/components/Badge/Badge';
 import type { Extend } from '@/helpers/extend';
+import { getStationHref } from '@/helpers/getStationHref';
 import type { StationResource } from '@/lib/traewelling';
 import styles from './StationSearchItem.module.css';
 
@@ -10,7 +11,7 @@ export const StationSearchItem = ({ className, station, ...props }: Extend<'div'
 
   return (
     <div className={clsx(styles.base, className)} {...props}>
-      <Link className={styles.link} href={`/station/${station.id}?${new URLSearchParams({ name: station.name })}`}>
+      <Link className={styles.link} href={getStationHref(station)}>
         {station.name}
         {rilIdentifier && <Badge style={{ marginLeft: '1ch' }}>{rilIdentifier}</Badge>}
       </Link>

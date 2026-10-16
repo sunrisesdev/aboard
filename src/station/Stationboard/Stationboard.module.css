@@ -51,7 +51,7 @@
   font-weight: 600;
   padding-block: 0.75rem;
   position: sticky;
-  top: 0;
+  top: var(--via-navbar-height);
 }
 
 .nowDivider {

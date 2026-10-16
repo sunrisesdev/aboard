@@ -1,0 +1,124 @@
+.base {
+  position: relative;
+}
+
+.areas {
+  color: var(--via-fg-tertiary);
+  font-size: 0.875rem;
+}
+
+.group + .group {
+  margin-top: 0.25rem;
+}
+
+.icon {
+  color: var(--via-fg-on-accent);
+  left: 0.75rem;
+  opacity: 0.75;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  transition: color 150ms ease;
+
+  .base:focus-within & {
+    color: var(--via-fg-tertiary);
+  }
+}
+
+.input {
+  background: var(--via-bg-hover-on-accent);
+  border: var(--via-bd-width) solid var(--via-bd-highlight);
+  border-radius: 0.5rem;
+  color: var(--via-fg-on-accent);
+  height: 2.5rem;
+  outline: none;
+  padding-inline: 2.25rem 0.75rem;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+  width: 100%;
+
+  &::placeholder {
+    color: var(--via-fg-on-accent);
+    opacity: 0.75;
+  }
+
+  &:focus {
+    background: var(--via-bg-primary);
+    color: var(--via-fg-primary);
+
+    &::placeholder {
+      color: var(--via-fg-placeholder);
+      opacity: 1;
+    }
+  }
+}
+
+.item {
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  outline: none;
+  padding: 0.5rem 0.75rem;
+
+  &[data-highlighted] {
+    background: var(--via-bg-hover);
+  }
+}
+
+.label {
+  align-items: center;
+  color: var(--via-fg-tertiary);
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-style: italic;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem 0.25rem;
+  user-select: none;
+
+  & > svg {
+    font-size: 1rem;
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.name {
+  align-items: center;
+  display: flex;
+  gap: 1ch;
+}
+
+.popup {
+  background: var(--via-bg-primary);
+  border: var(--via-bd-width) solid var(--via-bd-primary);
+  border-radius: 0.75rem;
+  box-shadow: var(--via-shadow-lg);
+  color: var(--via-fg-primary);
+  max-height: min(var(--available-height), 30rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.25rem;
+  width: var(--anchor-width);
+}
+
+.positioner {
+  outline: none;
+}
+
+.status {
+  color: var(--via-fg-tertiary);
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+}

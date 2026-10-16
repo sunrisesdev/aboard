@@ -1,11 +1,35 @@
 .base {
-  align-items: center;
   background: var(--via-bg-accent);
-  display: flex;
-  height: 3.5rem;
   padding-inline: 1rem 0.75rem;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 
   @media (width >= 64em) {
     padding-inline: 1.5rem;
+  }
+}
+
+.content {
+  align-items: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  height: var(--via-navbar-height);
+  margin-inline: auto;
+  max-width: var(--via-content-max-width);
+
+  @media (width >= 64em) {
+    /* Equal outer columns keep the search centered, regardless of what's next to it */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 28rem) minmax(0, 1fr);
+  }
+}
+
+.logo {
+  justify-self: start;
+}
+
+.search {
+  @media (width < 64em) {
+    display: none;
   }
 }

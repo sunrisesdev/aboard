@@ -1,0 +1,23 @@
+.base {
+  /* Extends the navbar down to the middle of the children, whatever their height */
+  background: linear-gradient(var(--via-bg-accent) 50%, transparent 50%);
+  padding-inline: 1rem;
+  /* The transparent lower half must not block the page content beside the children */
+  pointer-events: none;
+  position: sticky;
+  top: var(--via-navbar-height);
+  z-index: 1;
+
+  @media (width >= 64em) {
+    padding-inline: 1.5rem;
+  }
+}
+
+.content {
+  margin-inline: auto;
+  max-width: var(--via-content-max-width);
+
+  > * {
+    pointer-events: auto;
+  }
+}

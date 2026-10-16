@@ -5,6 +5,17 @@
   }
 }
 
+/* Wide viewports search stations in the navbar, narrow ones attach the drawer trigger to it */
+.stationSearch {
+  @media (width >= 64em) {
+    display: none;
+  }
+}
+
+.stationSearchTrigger {
+  box-shadow: var(--via-shadow-md);
+}
+
 .floatingStatus {
   @media (width >= 64em) {
     display: none;

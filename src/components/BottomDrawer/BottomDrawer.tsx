@@ -34,11 +34,7 @@ const Root = ({
           {!nested && <Drawer.Backdrop className={styles.backdrop} />}
 
           <Drawer.Viewport className={styles.viewport}>
-            <Drawer.Popup
-              className={clsx(styles.popup, className)}
-              data-via-snap-points={props.snapPoints?.length ? '' : undefined}
-              initialFocus={initialFocus}
-            >
+            <Drawer.Popup className={clsx(styles.popup, className)} initialFocus={initialFocus}>
               <div aria-hidden className={styles.handle} />
 
               {children}

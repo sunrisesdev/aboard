@@ -26,7 +26,6 @@ export const CheckInBottomDrawer = () => {
       onOpenChange={(open) => {
         if (!open) dispatch({ type: 'clearDestination' });
       }}
-      snapPoints={[0.6, 1]}
     >
       <CheckInForm.Provider>
         <Drawer.Title className={styles.title}>Einchecken</Drawer.Title>
