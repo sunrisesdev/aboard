@@ -24,9 +24,33 @@
   flex-direction: column;
   gap: 0.5rem;
 
-  /* The cards are attached to each other */
+  /* The active status widens and covers the top of the next one, which it's queued up behind. The paddings make up
+     for both, so the content stays in place. Only the extension isn't made up for by the next status, which leaves
+     room for the shadow. */
   &.isCompact {
+    --via-active-status-extension: 0.25rem;
+    --via-active-status-overlap: 1rem;
+
     gap: 0;
+
+    /* Positioned with a z-index, so it and its shadow are painted above the next status */
+    .activeSurface:has(+ .nextSurface) {
+      margin: 0 -0.5rem calc(-1 * (var(--via-active-status-overlap) + var(--via-active-status-extension)));
+      position: relative;
+      z-index: 1;
+
+      .link {
+        padding-inline: 1.5rem;
+      }
+    }
+
+    .nextSurface {
+      box-shadow: var(--via-shadow-xl);
+
+      .nextLink {
+        padding-block: calc(0.75rem + var(--via-active-status-overlap)) 0.75rem;
+      }
+    }
   }
 }
 
@@ -89,10 +113,6 @@
   /* Adds up to 0.5rem towards the timing, together with the gap of the row */
   margin-right: 0.125rem;
   min-width: 0;
-}
-
-.nextLink {
-  padding-block: 0.75rem;
 }
 
 .nextOrigin {

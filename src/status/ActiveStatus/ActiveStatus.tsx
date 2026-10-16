@@ -165,9 +165,9 @@ export const ActiveStatus = ({ className, compact = false }: { className?: strin
 
   return (
     <div className={clsx(styles.base, compact && styles.isCompact, className)}>
-      {/* The compact variant attaches the next status, so both float as one */}
+      {/* The compact variant stacks the next status behind this one, so both float as one */}
       <TintedSurface
-        attached={compact && next ? 'bottom' : undefined}
+        className={styles.activeSurface}
         color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background}
         radius="1rem"
       >
@@ -281,7 +281,7 @@ const NextStatus = ({
       <div className={styles.nextDirection}>
         {/* Without the stopovers the trip's direction is unknown, so it falls back to the alighting station */}
         <span className={styles.direction}>
-          {direction ? 'Richtung' : 'nach'}{' '}
+          {direction ? (compact ? 'Ri.' : 'Richtung') : 'nach'}{' '}
           <Marquee>{cleanStationName((direction ?? checkin.destination).station.name)}</Marquee>
         </span>
 
@@ -303,9 +303,10 @@ const NextStatus = ({
   // The station to change to takes the place next to the line badge, pushing the departure into a row of its own
   return (
     <TintedSurface
-      attached={compact ? 'top' : undefined}
+      className={styles.nextSurface}
       color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background}
-      radius="1rem"
+      // Set in from the wider active status in front of it
+      radius={compact ? '0.75rem' : '1rem'}
     >
       <TintedSurface.Content>
         <Link className={clsx(styles.link, styles.nextLink)} href={`/status/${status.id}`}>
