@@ -42,8 +42,7 @@
 .content {
   /* The palette guarantees the text contrast for an interpolation in OKLab */
   background: linear-gradient(170deg in oklab, var(--via-tinted-surface-bg-from), var(--via-tinted-surface-bg-to));
-  background-position: var(--via-bd-offset);
-  background-size: calc(100% + 2 * var(--via-bd-width));
+  background-origin: border-box;
   border: var(--via-bd-width) solid var(--via-bd-tertiary);
   border-radius: var(--via-tinted-surface-radius);
   box-shadow: var(--via-shadow-skeuomorphic);

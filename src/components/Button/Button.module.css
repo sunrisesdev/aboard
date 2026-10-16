@@ -37,8 +37,7 @@
     --via-button-active: var(--via-bg-active-on-accent);
 
     background: var(--via-bg-brand-gradient);
-    background-position-x: var(--via-bd-offset);
-    background-size: calc(100% + 2 * var(--via-bd-width));
+    background-origin: border-box;
     color: var(--via-fg-on-accent);
 
     &::before {
