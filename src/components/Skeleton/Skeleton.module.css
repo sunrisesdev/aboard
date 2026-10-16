@@ -1,8 +1,17 @@
-.skeleton {
-  display: block;
-  border-radius: 0.25rem;
-  background: color-mix(in srgb, var(--via-fg-primary) 12%, transparent);
+.base {
   animation: pulse 1.4s ease-in-out infinite;
+  /* currentColor, so it adapts to tinted surfaces */
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  border-radius: 0.25rem;
+  display: block;
+  flex-shrink: 0;
+  max-width: 100%;
+}
+
+.text {
+  display: inline-block;
+  height: 0.75em;
+  vertical-align: baseline;
 }
 
 @keyframes pulse {
@@ -10,6 +19,7 @@
   100% {
     opacity: 0.6;
   }
+
   50% {
     opacity: 0.2;
   }

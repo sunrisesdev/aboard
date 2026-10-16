@@ -5,7 +5,6 @@ import type { CSSProperties } from 'react';
 import { useCheckIn } from '@/checkin/useCheckIn';
 import { LineBadge } from '@/components/LineBadge/LineBadge';
 import { Marquee } from '@/components/Marquee/Marquee';
-import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { getTintedPalette } from '@/components/TintedSurface/getTintedPalette';
 import { TintedSurface, tintedSurfaceFallbackColor } from '@/components/TintedSurface/TintedSurface';
 import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
@@ -23,8 +22,11 @@ import { isReplacementService } from '@/helpers/isReplacementService';
 import { useLastDefinedValue } from '@/hooks/useLastDefinedValue';
 import type { DepartureResource, MotisMode } from '@/lib/traewelling';
 import { TripStopoverItem } from '@/trip/TripStopoverItem/TripStopoverItem';
+import { TripStopoverItemSkeleton } from '@/trip/TripStopoverItemSkeleton/TripStopoverItemSkeleton';
 import { useUser } from '@/user/useUser';
 import styles from './TripDetails.module.css';
+
+const skeletonStationWidths = ['16ch', '12ch', '20ch', '14ch', '18ch', '11ch', '15ch', '17ch'];
 
 export const TripDetails = ({ departure, inDrawer = false }: { departure: DepartureResource; inDrawer?: boolean }) => {
   const { home } = useUser();
@@ -35,6 +37,17 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
   const replacementService = isReplacementService(departure);
   const platform = formatPlatform(getDeparturePlatform(departure), departure.line.mode);
   const delay = getDelay(departure.plannedWhen, departure.when);
+
+  // Starts in the text color of the card above, so the line continues seamlessly
+  const connectingLine = (
+    <TripLine className={styles.connectingLine}>
+      <TripLine.RouteSegment
+        style={{
+          background: `linear-gradient(to bottom, ${getTintedPalette(lineColor ?? tintedSurfaceFallbackColor).foreground}, var(--via-trip-details-contrast))`,
+        }}
+      />
+    </TripLine>
+  );
 
   return (
     <div
@@ -67,7 +80,7 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
           <div style={{ display: 'grid', gap: '0.625rem', gridTemplateColumns: '1.25rem minmax(0, 1fr)' }}>
             <TripLine>
               <TripLine.StopIndicator style={{ marginTop: '0.3125rem' }} />
-              {!trip.isLoading && !trip.error && <TripLine.RouteSegment />}
+              {!trip.error && <TripLine.RouteSegment />}
             </TripLine>
 
             <div style={{ paddingBottom: '1rem' }}>
@@ -93,26 +106,30 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
       </TintedSurface>
 
       {trip.isLoading ? (
-        <ul className={styles.stopovers}>
-          {Array.from({ length: 8 }, (_, index) => (
-            <li key={index}>
-              <Skeleton width="100%" height="1.25rem" />
-            </li>
-          ))}
-        </ul>
+        <>
+          {connectingLine}
+
+          <div className={styles.stopoversCard}>
+            <ul className={styles.stopovers}>
+              {skeletonStationWidths.map((stationWidth, index) => (
+                <li key={index}>
+                  <TripStopoverItemSkeleton
+                    last={index === skeletonStationWidths.length - 1}
+                    stationWidth={stationWidth}
+                  />
+                </li>
+              ))}
+            </ul>
+
+            <footer className={styles.footer}>Wähle deine Zielhaltestelle aus dem Fahrtverlauf.</footer>
+          </div>
+        </>
       ) : trip.error ? (
         <p>Die Halte konnten nicht geladen werden.</p>
       ) : (
         stopovers && (
           <>
-            {/* Starts in the text color of the card above, so the line continues seamlessly */}
-            <TripLine className={styles.connectingLine}>
-              <TripLine.RouteSegment
-                style={{
-                  background: `linear-gradient(to bottom, ${getTintedPalette(lineColor ?? tintedSurfaceFallbackColor).foreground}, var(--via-trip-details-contrast))`,
-                }}
-              />
-            </TripLine>
+            {connectingLine}
 
             <div className={styles.stopoversCard}>
               <ul className={styles.stopovers}>

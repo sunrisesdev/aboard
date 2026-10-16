@@ -1,0 +1,10 @@
+/*
+ * The tinted palette is computed for a fixed color and ignores the color scheme, so the content overrides it with
+ * neutral, theme-aware colors. Set here since TintedSurface's inline variables can't be overridden on the surface.
+ */
+.tripContent {
+  --via-tinted-surface-bg-from: var(--via-bg-secondary);
+  --via-tinted-surface-bg-to: var(--via-bg-secondary);
+
+  color: var(--via-fg-primary);
+}

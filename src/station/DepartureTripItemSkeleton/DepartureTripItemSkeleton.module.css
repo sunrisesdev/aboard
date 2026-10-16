@@ -1,0 +1,6 @@
+/* Matches DepartureTripItem's box, without its interactive states */
+.base {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding: 0.5rem;
+}

@@ -1,0 +1,8 @@
+/* Matches TripStopoverItem's box, without its interactive states */
+.base {
+  display: grid;
+  gap: 0.625rem;
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+  min-height: 2.75rem;
+  padding-inline: 1rem;
+}

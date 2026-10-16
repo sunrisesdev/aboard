@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { NavbarAttachment } from '@/components/NavbarAttachment/NavbarAttachment';
 import { PageContent } from '@/components/PageContent/PageContent';
-import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { DebugTimePanel } from '@/debug/DebugTimePanel/DebugTimePanel';
 import { isDebugTimeEnabled } from '@/debug/debugTime';
 import { requireSession, signOut } from '@/lib/auth';
@@ -9,7 +8,9 @@ import { createTraewellingClient, getDashboard, getUserStatuses } from '@/lib/tr
 import { StationSearchDrawer } from '@/station/StationSearchDrawer/StationSearchDrawer';
 import { ActiveStatus } from '@/status/ActiveStatus/ActiveStatus';
 import { Dashboard } from '@/status/Dashboard/Dashboard';
+import statusesStyles from '@/status/Dashboard/Dashboard.module.css';
 import { FloatingActiveStatus } from '@/status/FloatingActiveStatus/FloatingActiveStatus';
+import { StatusSummarySkeleton } from '@/status/StatusSummarySkeleton/StatusSummarySkeleton';
 import styles from './Dashboard.module.css';
 
 type DashboardPromise = ReturnType<typeof getDashboard>;
@@ -28,21 +29,13 @@ const DebugTimePanelLoader = async ({ accessToken, username }: { accessToken: st
 
 const DashboardSkeleton = () => {
   return (
-    <div>
-      {Array.from({ length: 5 }, (_, index) => (
-        <article key={index}>
-          <p>
-            <Skeleton width="8rem" height="1.25rem" />
-          </p>
-          <p>
-            <Skeleton width="4rem" height="1.25rem" />
-          </p>
-          <p>
-            <Skeleton width="16rem" height="1.25rem" />
-          </p>
-        </article>
+    <ul className={statusesStyles.statuses}>
+      {Array.from({ length: 3 }, (_, index) => (
+        <li key={index}>
+          <StatusSummarySkeleton />
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };
 

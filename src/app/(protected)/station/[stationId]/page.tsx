@@ -7,6 +7,7 @@ import { requireSession } from '@/lib/auth';
 import { createTraewellingClient, getDepartures, TraewellingApiError, type TravelType } from '@/lib/traewelling';
 import { Stationboard } from '@/station/Stationboard/Stationboard';
 import { StationboardContextProvider } from '@/station/Stationboard/Stationboard.context';
+import { StationboardSkeleton } from '@/station/StationboardSkeleton/StationboardSkeleton';
 import { StationboardTimePicker } from '@/station/StationboardTimePicker/StationboardTimePicker';
 import { StationboardTravelTypeFilter } from '@/station/StationboardTravelTypeFilter/StationboardTravelTypeFilter';
 import { StationboardPageContent } from './content';
@@ -53,18 +54,6 @@ const StationboardLoader = async ({
       stationId={stationId}
       travelType={travelType}
     />
-  );
-};
-
-const StationboardSkeleton = () => {
-  return (
-    <ul>
-      {Array.from({ length: 8 }, (_, index) => (
-        <li key={index}>
-          <Skeleton width="100%" height="1.25rem" />
-        </li>
-      ))}
-    </ul>
   );
 };
 
