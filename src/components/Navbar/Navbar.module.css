@@ -13,7 +13,7 @@
 .content {
   align-items: center;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto;
   height: var(--via-navbar-height);
   margin-inline: auto;
   max-width: var(--via-content-max-width);

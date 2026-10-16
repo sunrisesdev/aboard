@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { StationSearchAutocomplete } from '@/station/StationSearchAutocomplete/StationSearchAutocomplete';
+import { UserMenu } from '@/user/UserMenu/UserMenu';
 import styles from './Navbar.module.css';
 
 export const Navbar = () => {
@@ -11,6 +12,8 @@ export const Navbar = () => {
         </Link>
 
         <StationSearchAutocomplete className={styles.search} />
+
+        <UserMenu />
       </div>
     </header>
   );

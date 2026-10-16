@@ -3,7 +3,7 @@ import { NavbarAttachment } from '@/components/NavbarAttachment/NavbarAttachment
 import { PageContent } from '@/components/PageContent/PageContent';
 import { DebugTimePanel } from '@/debug/DebugTimePanel/DebugTimePanel';
 import { isDebugTimeEnabled } from '@/debug/debugTime';
-import { requireSession, signOut } from '@/lib/auth';
+import { requireSession } from '@/lib/auth';
 import { createTraewellingClient, getDashboard, getUserStatuses } from '@/lib/traewelling';
 import { StationSearchDrawer } from '@/station/StationSearchDrawer/StationSearchDrawer';
 import { ActiveStatus } from '@/status/ActiveStatus/ActiveStatus';
@@ -57,21 +57,10 @@ export default async function DashboardPage() {
             <Suspense fallback={null}>
               <ActiveStatus className={styles.asideStatus} />
             </Suspense>
-
-            <div>Favoriten</div>
           </>
         }
       >
         <h1>Hallo, {session.user.displayName}</h1>
-        <p>@{session.user.username}</p>
-        <form
-          action={async () => {
-            'use server';
-            await signOut({ redirectTo: '/' });
-          }}
-        >
-          <button type="submit">Abmelden</button>
-        </form>
 
         {isDebugTimeEnabled && (
           <Suspense fallback={null}>
