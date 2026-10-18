@@ -15,6 +15,27 @@
   }
 }
 
+/* Stacked on mobile, where each control spans the full width */
+.controls {
+  display: flex;
+  gap: 1rem;
+
+  @media (width < 64em) {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  @media (width >= 64em) {
+    justify-content: space-between;
+  }
+}
+
 .main {
   min-width: 0;
+}
+
+.title {
+  font-size: 2rem;
+  line-height: 1.25;
+  margin-block: 1.5rem 1rem;
 }

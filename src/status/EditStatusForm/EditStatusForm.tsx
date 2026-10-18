@@ -4,6 +4,8 @@ import { IconClock, IconMapPin } from '@tabler/icons-react';
 import { type ComponentProps, useId } from 'react';
 import { Button } from '@/components/Button/Button';
 import { FieldsetCard } from '@/components/FieldsetCard/FieldsetCard';
+import { Input } from '@/components/Input/Input';
+import { Select } from '@/components/Select/Select';
 import { cleanStationName } from '@/helpers/cleanStationName';
 import { formatDateTime } from '@/helpers/formatDateTime';
 import { StatusFields } from '@/status/StatusFields/StatusFields';
@@ -23,8 +25,8 @@ const Root = ({ inDrawer = false }: { inDrawer?: boolean }) => {
         icon={<IconMapPin data-via-icon />}
         title={<FieldsetCard.Title htmlFor={destinationId}>Ausstieg</FieldsetCard.Title>}
       >
-        <select
-          className={styles.input}
+        <Select
+          className={styles.select}
           id={destinationId}
           onChange={(event) => setValue('destinationKey', event.target.value)}
           value={values.destinationKey}
@@ -39,15 +41,15 @@ const Root = ({ inDrawer = false }: { inDrawer?: boolean }) => {
               </option>
             );
           })}
-        </select>
+        </Select>
       </FieldsetCard>
 
       <FieldsetCard icon={<IconClock data-via-icon />} title={<FieldsetCard.Title>Zeiten</FieldsetCard.Title>}>
         <div className={styles.times}>
           <label className={styles.timeField} htmlFor={departureId}>
             Abfahrt
-            <input
-              className={styles.input}
+            <Input
+              className={styles.timeInput}
               id={departureId}
               onChange={(event) => setValue('departure', event.target.value)}
               type="datetime-local"
@@ -57,8 +59,8 @@ const Root = ({ inDrawer = false }: { inDrawer?: boolean }) => {
 
           <label className={styles.timeField} htmlFor={arrivalId}>
             Ankunft
-            <input
-              className={styles.input}
+            <Input
+              className={styles.timeInput}
               id={arrivalId}
               onChange={(event) => setValue('arrival', event.target.value)}
               type="datetime-local"

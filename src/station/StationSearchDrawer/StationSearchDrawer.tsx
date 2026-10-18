@@ -6,6 +6,7 @@ import ky from 'ky';
 import { useRef, useState } from 'react';
 import useSWR from 'swr';
 import { BottomDrawer } from '@/components/BottomDrawer/BottomDrawer';
+import { Input } from '@/components/Input/Input';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import type { StationResource } from '@/lib/traewelling';
 import { StationSearchItem } from '@/station/StationSearchItem/StationSearchItem';
@@ -63,7 +64,7 @@ export function StationSearchDrawer({ triggerClassName }: { triggerClassName?: s
       </BottomDrawer.Content>
 
       <BottomDrawer.Footer>
-        <input
+        <Input
           ref={searchInputRef}
           type="text"
           value={query}

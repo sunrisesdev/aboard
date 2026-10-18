@@ -1,0 +1,23 @@
+.base {
+  align-items: center;
+  display: inline-grid;
+
+  & > * {
+    grid-area: 1 / 1;
+  }
+}
+
+.icon {
+  color: var(--via-fg-tertiary);
+  justify-self: end;
+  margin-right: 0.75rem;
+  pointer-events: none;
+}
+
+/* Replaces the native picker icon with the chevron */
+.select {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 2.25rem;
+  width: 100%;
+}

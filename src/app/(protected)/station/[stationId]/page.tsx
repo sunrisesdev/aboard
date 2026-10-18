@@ -11,6 +11,7 @@ import { StationboardSkeleton } from '@/station/StationboardSkeleton/Stationboar
 import { StationboardTimePicker } from '@/station/StationboardTimePicker/StationboardTimePicker';
 import { StationboardTravelTypeFilter } from '@/station/StationboardTravelTypeFilter/StationboardTravelTypeFilter';
 import { StationboardPageContent } from './content';
+import styles from './Stationboard.module.css';
 
 const loadDepartures = async (
   accessToken: string,
@@ -33,7 +34,7 @@ type DeparturesPromise = ReturnType<typeof loadDepartures>;
 const StationName = async ({ departuresPromise }: { departuresPromise: DeparturesPromise }) => {
   const { meta } = await departuresPromise;
 
-  return <h1>{meta.station.name}</h1>;
+  return <h1 className={styles.title}>{meta.station.name}</h1>;
 };
 
 const StationboardLoader = async ({
@@ -71,14 +72,24 @@ export default async function StationboardPage({ params, searchParams }: PagePro
   return (
     <CheckInContextProvider>
       <StationboardContextProvider>
-        <Suspense fallback={name ? <h1>{name}</h1> : <Skeleton width="12rem" height="1.5rem" />}>
-          <StationName departuresPromise={departuresPromise} />
-        </Suspense>
-
-        <StationboardTravelTypeFilter />
-        <StationboardTimePicker />
-
         <PageContent>
+          <Suspense
+            fallback={
+              name ? (
+                <h1 className={styles.title}>{name}</h1>
+              ) : (
+                <Skeleton className={styles.title} height="1.25em" text width="12rem" />
+              )
+            }
+          >
+            <StationName departuresPromise={departuresPromise} />
+          </Suspense>
+
+          <div className={styles.controls}>
+            <StationboardTimePicker />
+            <StationboardTravelTypeFilter />
+          </div>
+
           <StationboardPageContent>
             <Suspense fallback={<StationboardSkeleton />}>
               <StationboardLoader

@@ -49,7 +49,7 @@ export const StatusActionsMenu = ({
         </Menu.Trigger>
 
         <Menu.Portal>
-          <Menu.Positioner align="end" className={styles.positioner} sideOffset={4}>
+          <Menu.Positioner align="end" alignOffset={-4} className={styles.positioner} sideOffset={4}>
             <Menu.Popup className={styles.popup}>
               <Menu.Item className={styles.item} onClick={() => setTimeToNow('departure')}>
                 <IconArrowBarRight aria-hidden data-via-icon />

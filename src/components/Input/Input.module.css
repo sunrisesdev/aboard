@@ -1,0 +1,12 @@
+.base {
+  background-color: var(--via-bg-primary);
+  border: var(--via-bd-width) solid var(--via-bd-secondary);
+  border-radius: 0.375rem;
+  box-shadow: 0 1px rgb(0 0 0 / 0.05);
+  color: var(--via-fg-primary);
+  font: inherit;
+  font-size: 1rem;
+  height: 2.5rem;
+  min-width: 0;
+  padding: 0 0.75rem;
+}

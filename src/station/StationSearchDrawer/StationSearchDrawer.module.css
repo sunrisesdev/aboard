@@ -1,7 +1,7 @@
 .trigger {
-  background: var(--via-bg-primary);
+  background-color: light-dark(var(--via-bg-primary), var(--via-bg-surface));
   border-radius: 0.375rem;
-  border: var(--via-bd-width) solid var(--via-bd-secondary);
+  border: var(--via-bd-width) solid var(--via-bd-primary);
   color: var(--via-fg-primary);
   cursor: pointer;
   display: block;
@@ -46,13 +46,4 @@
 .searchInput {
   /* The footer aligns its children to the end, the input spans it instead */
   flex: 1;
-  min-width: 0;
-  height: 2.5rem;
-  padding: 0 0.75rem;
-  border: var(--via-bd-width) solid var(--via-bd-secondary);
-  border-radius: 0.375rem;
-  background: var(--via-bg-primary);
-  color: var(--via-fg-primary);
-  font-family: inherit;
-  font-size: 1rem;
 }

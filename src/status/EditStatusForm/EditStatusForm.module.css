@@ -9,15 +9,11 @@
   font-size: 0.875rem;
 }
 
-.input {
-  background-color: var(--via-bg-primary);
-  border: var(--via-bd-width) solid var(--via-bd-secondary);
-  border-radius: 0.5rem;
-  color: var(--via-fg-primary);
-  font: inherit;
-  height: 2.5rem;
-  min-width: 0;
-  padding: 0 0.75rem;
+.select {
+  width: 100%;
+}
+
+.timeInput {
   width: 100%;
 }
 

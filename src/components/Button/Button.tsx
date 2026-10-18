@@ -4,7 +4,7 @@ import styles from './Button.module.css';
 
 export type ButtonProps = BaseButton.Props & {
   iconOnly?: boolean;
-  variant?: 'danger' | 'neutral' | 'primary' | 'secondary';
+  variant?: 'danger' | 'primary' | 'secondary';
 };
 
 export function Button({ className, iconOnly = false, variant = 'primary', ...props }: ButtonProps) {

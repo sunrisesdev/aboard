@@ -32,8 +32,7 @@
     z-index: -1;
   }
 
-  &[data-via-variant="primary"],
-  &[data-via-variant="neutral"] {
+  &[data-via-variant="primary"] {
     --via-button-hover: var(--via-bg-hover-on-accent);
     --via-button-active: var(--via-bg-active-on-accent);
 
@@ -50,15 +49,6 @@
       pointer-events: none;
       position: absolute;
     }
-  }
-
-  &[data-via-variant="neutral"] {
-    --via-button-hover: var(--via-bg-hover);
-    --via-button-active: var(--via-bg-active);
-
-    background: var(--via-bg-primary);
-    color: var(--via-fg-primary);
-    color: var(--via-focus-ring);
   }
 
   &[data-via-icon-only] {

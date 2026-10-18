@@ -1,5 +1,6 @@
 'use client';
 
+import { IconMapDown } from '@tabler/icons-react';
 import { clsx } from 'clsx';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
@@ -47,7 +48,8 @@ export const RouteMap = ({
       ) : (
         <div className={styles.placeholder}>
           <Button onClick={() => setIsRequested(true)} variant="secondary">
-            Karte laden
+            <IconMapDown aria-hidden data-via-icon />
+            <span>Karte laden</span>
           </Button>
 
           <div className={styles.notice}>Dabei wird deine IP-Adresse an OpenFreeMap übertragen.</div>

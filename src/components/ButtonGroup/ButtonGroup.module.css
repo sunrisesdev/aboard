@@ -16,7 +16,7 @@
     margin-left: calc(-1 * var(--via-bd-width));
   }
 
-  /* The attribute selector outweighs the Button's own rule for the highlight border of the primary and neutral variants */
+  /* The attribute selector outweighs the Button's own rule for the highlight border of the primary variant */
   > :not(:first-child),
   > [data-via-variant]:not(:first-child)::before {
     border-bottom-left-radius: 0;

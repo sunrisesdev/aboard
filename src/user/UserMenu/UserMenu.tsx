@@ -22,7 +22,7 @@ export const UserMenu = ({ className, ...props }: Structure) => {
       </Menu.Trigger>
 
       <Menu.Portal>
-        <Menu.Positioner align="end" className={styles.positioner} sideOffset={8}>
+        <Menu.Positioner align="end" alignOffset={-4} className={styles.positioner} sideOffset={4}>
           <Menu.Popup className={styles.popup}>
             <div className={styles.user}>
               <div className={styles.displayName}>{displayName}</div>
