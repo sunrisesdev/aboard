@@ -35,12 +35,6 @@
   margin-bottom: 1rem;
 }
 
-.lineBadge {
-  box-shadow:
-    inset 0 0 0 var(--via-bd-width) oklch(from currentColor l c h / 0.5),
-    var(--via-shadow-xs);
-}
-
 .platformBadge {
   background-color: var(--via-tinted-surface-bg-badge);
   border-radius: 0.25rem;

@@ -1,0 +1,31 @@
+.base {
+  display: flex;
+
+  > * {
+    flex: 1;
+    min-width: 0;
+
+    /* Keeps the focus ring above the adjacent button */
+    &:focus-visible {
+      z-index: 1;
+    }
+  }
+
+  /* Overlapping by one border width, so adjacent buttons share a single border */
+  > :not(:first-child) {
+    margin-left: calc(-1 * var(--via-bd-width));
+  }
+
+  /* The attribute selector outweighs the Button's own rule for the highlight border of the primary and neutral variants */
+  > :not(:first-child),
+  > [data-via-variant]:not(:first-child)::before {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+  }
+
+  > :not(:last-child),
+  > [data-via-variant]:not(:last-child)::before {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
+}

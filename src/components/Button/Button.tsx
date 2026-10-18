@@ -2,9 +2,9 @@ import { Button as BaseButton } from '@base-ui/react/button';
 import { clsx } from 'clsx';
 import styles from './Button.module.css';
 
-type ButtonProps = BaseButton.Props & {
+export type ButtonProps = BaseButton.Props & {
   iconOnly?: boolean;
-  variant?: 'danger' | 'primary' | 'secondary';
+  variant?: 'danger' | 'neutral' | 'primary' | 'secondary';
 };
 
 export function Button({ className, iconOnly = false, variant = 'primary', ...props }: ButtonProps) {

@@ -1,8 +1,7 @@
-import { IconArrowRight, IconHeart, IconPencilFilled } from '@tabler/icons-react';
+import { IconArrowRight, IconPencilFilled } from '@tabler/icons-react';
 import { clsx } from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button } from '@/components/Button/Button';
 import { Card } from '@/components/Card/Card';
 import { LineBadge } from '@/components/LineBadge/LineBadge';
 import { Marquee } from '@/components/Marquee/Marquee';
@@ -19,6 +18,7 @@ import { getLineColors } from '@/helpers/getLineColors';
 import type { MotisMode, StatusResource } from '@/lib/traewelling';
 import { getCheckinTimes } from '@/status/getCheckinTimes';
 import { StatusBody } from '@/status/StatusBody/StatusBody';
+import { StatusLikeButton } from '@/status/StatusLikeButton/StatusLikeButton';
 import styles from './StatusSummary.module.css';
 
 // The line fills up by CSS animation like in StatusTrip, here split into the halves before and after the arrow
@@ -90,7 +90,6 @@ export const StatusSummary = ({ status }: { status: StatusResource }) => {
 
               <LineBadge
                 backgroundColor={checkin.routeColor ?? undefined}
-                className={styles.lineBadge}
                 color={checkin.routeTextColor ?? undefined}
                 journeyNumber={journeyNumber}
                 mode={(checkin.mode ?? undefined) as MotisMode | undefined}
@@ -172,11 +171,7 @@ export const StatusSummary = ({ status }: { status: StatusResource }) => {
         </TintedSurface>
       </Link>
 
-      {status.isLikable && (
-        <Button className={styles.likeButton} variant="secondary">
-          <IconHeart data-via-icon /> {status.likes}
-        </Button>
-      )}
+      {status.isLikable && <StatusLikeButton className={styles.likeButton} status={status} />}
     </Card>
   );
 };

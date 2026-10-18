@@ -26,9 +26,11 @@ export {
   getStatusLikes,
   getTripStatuses,
   getUserStatuses,
+  likeStatus,
   type StatusLike,
   type StatusResource,
   type StatusUpdateBody,
+  unlikeStatus,
   updateStatus,
 } from './status';
 export { getStopovers } from './stopovers';

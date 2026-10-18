@@ -1,6 +1,6 @@
 'use client';
 
-import { IconHistory, IconHome2 } from '@tabler/icons-react';
+import { IconHomeFilled, IconTimelineEventFilled } from '@tabler/icons-react';
 import ky from 'ky';
 import type { ReactNode } from 'react';
 import useSWR from 'swr';
@@ -26,12 +26,17 @@ export function useStationSuggestions(enabled: boolean) {
   );
 
   const groups: StationGroup[] = [
-    { id: 'home', icon: <IconHome2 aria-hidden data-via-icon />, items: home ? [home] : [], label: 'Heimatstation' },
+    {
+      id: 'home',
+      icon: <IconHomeFilled aria-hidden data-via-icon />,
+      items: home ? [home] : [],
+      label: 'Heimatstation',
+    },
     {
       id: 'history',
-      icon: <IconHistory aria-hidden data-via-icon />,
+      icon: <IconTimelineEventFilled aria-hidden data-via-icon />,
       items: history?.filter(({ id }) => id !== home?.id) ?? [],
-      label: 'Zuletzt verwendet',
+      label: 'Zuletzt besucht',
     },
   ];
 

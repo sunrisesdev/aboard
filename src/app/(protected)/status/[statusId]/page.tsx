@@ -1,10 +1,12 @@
-import { IconArrowRight, IconTags, IconUsers } from '@tabler/icons-react';
+import { IconArrowRight, IconHeartHandshake, IconLocationShare, IconTags, IconUsers } from '@tabler/icons-react';
 import { clsx } from 'clsx';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { Button } from '@/components/Button/Button';
+import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
+import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import { Card } from '@/components/Card/Card';
 import { FieldsetCard } from '@/components/FieldsetCard/FieldsetCard';
 import { KeyValueTag } from '@/components/KeyValueTag/KeyValueTag';
@@ -15,6 +17,7 @@ import { RouteMap } from '@/components/RouteMap/RouteMap';
 import { cleanStationName } from '@/helpers/cleanStationName';
 import { formatDateTime } from '@/helpers/formatDateTime';
 import { getLineColors } from '@/helpers/getLineColors';
+import { getStationHref } from '@/helpers/getStationHref';
 import { requireSession } from '@/lib/auth';
 import {
   createTraewellingClient,
@@ -27,10 +30,12 @@ import {
   TraewellingApiError,
 } from '@/lib/traewelling';
 import { getCheckinStopovers } from '@/status/getCheckinStopovers';
+import { getCheckinTimes } from '@/status/getCheckinTimes';
 import { getDestinationStopovers } from '@/status/getDestinationStopovers';
 import { getNextStopover } from '@/status/getNextStopover';
 import { StatusActionsMenu } from '@/status/StatusActionsMenu/StatusActionsMenu';
 import { StatusBody } from '@/status/StatusBody/StatusBody';
+import { StatusLikeButton } from '@/status/StatusLikeButton/StatusLikeButton';
 import { StatusTrip } from '@/status/StatusTrip/StatusTrip';
 import { businessOptions, visibilityOptions } from '@/status/statusOptions';
 import styles from './Status.module.css';
@@ -177,6 +182,21 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
     <PageContent
       aside={
         <>
+          <ButtonGroup>
+            <Button variant="neutral">
+              <IconHeartHandshake aria-hidden data-via-icon />
+              <span>Fahrt beitreten</span>
+            </Button>
+
+            <ButtonLink
+              href={getStationHref(checkin.destination.station, getCheckinTimes(checkin).arrival)}
+              variant="neutral"
+            >
+              <IconLocationShare aria-hidden data-via-icon />
+              <span>Weiterfahrt planen</span>
+            </ButtonLink>
+          </ButtonGroup>
+
           <FieldsetCard icon={<IconTags data-via-icon />} title={<FieldsetCard.Title>Tags</FieldsetCard.Title>}>
             <div className={styles.tags}>
               {checkin.operator && <KeyValueTag keySlot="Betreiber" valueSlot={checkin.operator.name} />}
@@ -220,8 +240,7 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
           {status.isLikable && (
             <Card>
               <div className={styles.row}>
-                <Button variant={status.liked ? 'primary' : 'secondary'}>Gefällt mir</Button>
-                {status.likes > 0 && <span style={{ fontWeight: 500 }}>{status.likes}</span>}
+                <StatusLikeButton showLabel status={status} />
               </div>
 
               {likes.length > 0 && (

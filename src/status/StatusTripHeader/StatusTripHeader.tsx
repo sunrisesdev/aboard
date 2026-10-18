@@ -20,7 +20,6 @@ export const StatusTripHeader = ({
 
     <LineBadge
       backgroundColor={checkin.routeColor ?? undefined}
-      className={styles.lineBadge}
       color={checkin.routeTextColor ?? undefined}
       journeyNumber={checkin.manualJourneyNumber ?? String(checkin.journeyNumber)}
       mode={(checkin.mode ?? undefined) as MotisMode | undefined}

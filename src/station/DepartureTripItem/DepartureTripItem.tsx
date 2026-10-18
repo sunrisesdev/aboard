@@ -53,6 +53,7 @@ export const DepartureTripItem = ({
       <div className={styles.topLine}>
         <LineBadge
           backgroundColor={departure.line.color ?? undefined}
+          className={styles.lineBadge}
           color={departure.line.textColor ?? undefined}
           journeyNumber={departure.line.fahrtNr}
           mode={departure.line.mode as MotisMode | undefined}

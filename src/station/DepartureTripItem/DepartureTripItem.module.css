@@ -80,6 +80,10 @@
   display: flex;
   gap: 0.625rem;
 
+  .lineBadge {
+    box-shadow: none;
+  }
+
   .statusLine {
     white-space: nowrap;
   }

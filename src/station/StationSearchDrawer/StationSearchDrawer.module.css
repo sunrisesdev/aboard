@@ -1,16 +1,16 @@
 .trigger {
+  background: var(--via-bg-primary);
+  border-radius: 0.375rem;
+  border: var(--via-bd-width) solid var(--via-bd-secondary);
+  color: var(--via-fg-primary);
+  cursor: pointer;
   display: block;
-  width: 100%;
+  font-family: inherit;
+  font-size: 1rem;
   height: 2.5rem;
   padding: 0 0.75rem;
-  border: var(--via-bd-width) solid var(--via-bd-secondary);
-  border-radius: 0.375rem;
-  background: var(--via-bg-primary);
-  color: var(--via-fg-primary);
-  font-family: inherit;
-  font-size: 0.875rem;
   text-align: left;
-  cursor: pointer;
+  width: 100%;
 }
 
 .content {

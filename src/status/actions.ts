@@ -6,8 +6,10 @@ import { auth } from '@/lib/auth';
 import {
   createTraewellingClient,
   deleteStatus,
+  likeStatus,
   type StatusUpdateBody,
   TraewellingApiError,
+  unlikeStatus,
   updateStatus,
 } from '@/lib/traewelling';
 
@@ -43,6 +45,34 @@ export async function updateStatusAction(statusId: number, body: StatusUpdateBod
   refresh();
 
   return { success: true };
+}
+
+export async function setStatusLikeAction(
+  statusId: number,
+  liked: boolean,
+): Promise<{ success: true; likes: number } | { success: false; message: string }> {
+  const session = await auth();
+  if (!session || session.error) {
+    return { success: false, message: 'Nicht angemeldet.' };
+  }
+
+  const client = createTraewellingClient(session.accessToken as string);
+  let likes: number;
+
+  try {
+    likes = await (liked ? likeStatus : unlikeStatus)(client, statusId);
+  } catch (error) {
+    if (error instanceof TraewellingApiError) {
+      return { success: false, message: error.message };
+    }
+
+    throw error;
+  }
+
+  // The status page renders the list of likes on the server
+  refresh();
+
+  return { success: true, likes };
 }
 
 export async function deleteStatusAction(statusId: number): Promise<StatusActionResult> {

@@ -59,3 +59,20 @@ export async function getStatusLikes(client: TraewellingClient, statusId: number
 
   return data;
 }
+
+// Both return the new amount of likes
+export async function likeStatus(client: TraewellingClient, statusId: number) {
+  const { data } = await client
+    .post(`v1/status/${statusId}/like`)
+    .json<operations['addLikeToStatus']['responses']['201']['content']['application/json']>();
+
+  return data.count;
+}
+
+export async function unlikeStatus(client: TraewellingClient, statusId: number) {
+  const { data } = await client
+    .delete(`v1/status/${statusId}/like`)
+    .json<operations['removeLikeFromStatus']['responses']['200']['content']['application/json']>();
+
+  return data.count;
+}
