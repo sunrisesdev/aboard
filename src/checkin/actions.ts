@@ -5,6 +5,7 @@ import {
   type Business,
   createCheckin,
   createTraewellingClient,
+  type StatusResource,
   type StatusVisibility,
   TraewellingApiError,
 } from '@/lib/traewelling';
@@ -21,7 +22,9 @@ export type CheckinRequest = {
   visibility?: StatusVisibility;
 };
 
-export type CheckinResult = { success: true } | { success: false; message: string };
+export type CheckinResult =
+  | { success: true; points: number; status: StatusResource }
+  | { success: false; message: string };
 
 export async function submitCheckinAction(request: CheckinRequest): Promise<CheckinResult> {
   const session = await auth();
@@ -31,8 +34,8 @@ export async function submitCheckinAction(request: CheckinRequest): Promise<Chec
 
   const client = createTraewellingClient(session.accessToken as string);
   try {
-    await createCheckin(client, request);
-    return { success: true };
+    const { points, status } = await createCheckin(client, request);
+    return { success: true, points: points.points, status };
   } catch (error) {
     if (error instanceof TraewellingApiError) {
       return { success: false, message: error.message };

@@ -67,7 +67,7 @@ export const CheckInFormProvider = ({ children }: PropsWithChildren) => {
     }
 
     refreshCurrentStatuses();
-    dispatch({ type: 'reset' });
+    dispatch({ type: 'completeCheckIn', completedCheckIn: { points: result.points, status: result.status } });
   }, undefined);
 
   return (

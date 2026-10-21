@@ -18,7 +18,11 @@ function checkInReducer(state: CheckInState, action: CheckInAction): CheckInStat
       return { ...state, destination: action.destination };
     }
     case 'clearDestination': {
-      return { ...state, destination: undefined };
+      return { ...state, completedCheckIn: undefined, destination: undefined };
+    }
+    // Keeps the departure and destination, so the check-in popup stays open to show the result
+    case 'completeCheckIn': {
+      return { ...state, completedCheckIn: action.completedCheckIn };
     }
     case 'reset': {
       return initialCheckInState;

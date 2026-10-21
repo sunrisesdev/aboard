@@ -8,7 +8,9 @@ export async function createCheckin(
   client: TraewellingClient,
   body: CheckinRequestBody,
 ) {
-  return client
+  // Wrapped in `data` like the other endpoints, although the OpenAPI spec omits it here
+  const { data } = await client
     .post("v1/trains/checkin", { json: body })
-    .json<CheckinSuccessResource>();
+    .json<{ data: CheckinSuccessResource }>();
+  return data;
 }

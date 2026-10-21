@@ -54,9 +54,15 @@
   top: 50%;
   transition:
     opacity 200ms ease,
-    scale 200ms ease;
+    scale 200ms ease,
+    width 200ms ease;
   translate: -50% -50%;
   width: 60rem;
+
+  /* The result needs far less room than the form */
+  &[data-via-completed] {
+    width: 36rem;
+  }
 
   &[data-starting-style],
   &[data-ending-style] {

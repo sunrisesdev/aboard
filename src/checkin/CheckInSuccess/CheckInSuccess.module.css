@@ -1,0 +1,29 @@
+.base {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.5rem 0;
+  text-align: center;
+}
+
+.icon {
+  color: var(--via-bg-accent);
+  height: 3rem;
+  margin-bottom: 0.5rem;
+  width: 3rem;
+}
+
+.message {
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.points {
+  color: var(--via-fg-secondary);
+  font-size: 0.875rem;
+}
+
+.stretch {
+  flex: 1;
+}
