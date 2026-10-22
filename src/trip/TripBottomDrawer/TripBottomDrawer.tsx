@@ -10,13 +10,15 @@ import { TripDetails } from '@/trip/TripDetails/TripDetails';
 export const TripBottomDrawer = () => {
   const {
     dispatch,
-    state: { departure },
+    state: { completedCheckIn, departure },
   } = useCheckIn();
   const displayedDeparture = useLastDefinedValue(departure);
   const isWide = useMediaQuery('(width >= 64em)');
 
   return (
     <BottomDrawer
+      // Only the nested success drawer stays visible after checking in
+      hidden={Boolean(completedCheckIn)}
       open={Boolean(departure) && !isWide}
       onOpenChange={(open) => {
         if (!open) dispatch({ type: 'reset' });

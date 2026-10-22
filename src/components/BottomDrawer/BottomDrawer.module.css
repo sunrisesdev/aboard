@@ -56,6 +56,11 @@
   &[data-ending-style] {
     transform: translateY(100%);
   }
+
+  &[data-via-hidden] {
+    pointer-events: none;
+    transform: translateY(100%);
+  }
 }
 
 .handle {

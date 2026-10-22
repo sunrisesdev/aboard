@@ -9,6 +9,7 @@ import styles from './BottomDrawer.module.css';
 const Root = ({
   children,
   className,
+  hidden = false,
   initialFocus,
   nested = false,
   trigger,
@@ -18,6 +19,8 @@ const Root = ({
   {
     children?: ReactNode;
     className?: string;
+    // Slides the popup out while keeping it open, e.g. to leave only a nested drawer visible.
+    hidden?: boolean;
     initialFocus?: Drawer.Popup.Props['initialFocus'];
     // Nested drawers reuse the backdrop of their parent drawer.
     nested?: boolean;
@@ -34,7 +37,11 @@ const Root = ({
           {!nested && <Drawer.Backdrop className={styles.backdrop} />}
 
           <Drawer.Viewport className={styles.viewport}>
-            <Drawer.Popup className={clsx(styles.popup, className)} initialFocus={initialFocus}>
+            <Drawer.Popup
+              className={clsx(styles.popup, className)}
+              data-via-hidden={hidden ? '' : undefined}
+              initialFocus={initialFocus}
+            >
               <div aria-hidden className={styles.handle} />
 
               {children}
