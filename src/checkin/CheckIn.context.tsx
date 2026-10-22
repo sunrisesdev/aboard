@@ -50,7 +50,14 @@ function useTrip(departure: DepartureResource | undefined) {
     time: departure.plannedWhen,
   });
 
-  return { boardingStopover, error, isLoading, stopovers: remainingStopovers };
+  return {
+    boardingStopover,
+    dataSource: data.dataSource,
+    error,
+    isLoading,
+    operator: data.operator,
+    stopovers: remainingStopovers,
+  };
 }
 
 export const CheckInContext = createContext<CheckInContextValue | null>(null);

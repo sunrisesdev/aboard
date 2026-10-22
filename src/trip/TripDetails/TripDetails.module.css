@@ -6,6 +6,17 @@
   &.inDrawer {
     margin-inline: -0.5rem;
   }
+
+  &.inDrawer .metadata {
+    padding-top: 1rem;
+  }
+}
+
+.attribution {
+  color: var(--via-fg-secondary);
+  font-size: 0.75rem;
+  font-style: italic;
+  text-align: center;
 }
 
 .connectingLine {
@@ -36,6 +47,14 @@
   display: flex;
   gap: 0.625rem;
   margin-bottom: 1rem;
+}
+
+.metadata {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.25rem 1rem 0.75rem;
 }
 
 .origin {

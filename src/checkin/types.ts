@@ -1,5 +1,5 @@
 import type { ActionDispatch } from 'react';
-import type { DepartureResource, StatusResource, StopoverResource } from '@/lib/traewelling';
+import type { DepartureResource, StatusResource, StopoverResource, TripResource } from '@/lib/traewelling';
 
 export type CompletedCheckIn = {
   points: number;
@@ -22,6 +22,8 @@ export type CheckInAction =
 export type CheckInTrip = {
   boardingStopover?: StopoverResource;
   stopovers?: StopoverResource[];
+  operator?: TripResource['operator'];
+  dataSource?: TripResource['dataSource'];
   isLoading: boolean;
   error?: unknown;
 };

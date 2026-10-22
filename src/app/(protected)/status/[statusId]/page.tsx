@@ -313,9 +313,7 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
         />
       </div>
 
-      {checkin.dataSource && (
-        <div className={styles.attribution}>{checkin.dataSource.attribution ?? checkin.dataSource.id}</div>
-      )}
+      {checkin.dataSource && <div className={styles.attribution}>{checkin.dataSource.attribution}</div>}
 
       {status.event && (
         <dl>

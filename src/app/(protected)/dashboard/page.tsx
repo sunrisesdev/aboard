@@ -60,7 +60,7 @@ export default async function DashboardPage() {
           </>
         }
       >
-        <h1>Hallo, {session.user.displayName}</h1>
+        <h1 className={styles.title}>Hallo, {session.user.displayName}</h1>
 
         {isDebugTimeEnabled && (
           <Suspense fallback={null}>

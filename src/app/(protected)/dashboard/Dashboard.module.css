@@ -21,3 +21,10 @@
     display: none;
   }
 }
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 1.5rem;
+}

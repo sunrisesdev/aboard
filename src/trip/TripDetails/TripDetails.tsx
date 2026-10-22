@@ -3,6 +3,7 @@
 import { clsx } from 'clsx';
 import type { CSSProperties } from 'react';
 import { useCheckIn } from '@/checkin/useCheckIn';
+import { KeyValueTag } from '@/components/KeyValueTag/KeyValueTag';
 import { LineBadge } from '@/components/LineBadge/LineBadge';
 import { Marquee } from '@/components/Marquee/Marquee';
 import { getTintedPalette } from '@/components/TintedSurface/getTintedPalette';
@@ -47,6 +48,18 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
         }}
       />
     </TripLine>
+  );
+
+  const hasMetadata = trip.dataSource || trip.operator?.name;
+  const metadata = (
+    <>
+      {trip.operator && <KeyValueTag keySlot="Betreiber" valueSlot={trip.operator.name} />}
+      {trip.dataSource && <div className={styles.attribution}>{trip.dataSource.attribution}</div>}
+    </>
+  );
+  // The drawer has its own title instead
+  const footer = !inDrawer && (
+    <footer className={styles.footer}>Wähle deine Zielhaltestelle aus dem Fahrtverlauf.</footer>
   );
 
   return (
@@ -120,7 +133,7 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
               ))}
             </ul>
 
-            <footer className={styles.footer}>Wähle deine Zielhaltestelle aus dem Fahrtverlauf.</footer>
+            {footer}
           </div>
         </>
       ) : trip.error ? (
@@ -143,10 +156,18 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
                     />
                   </li>
                 ))}
+
+                {hasMetadata && !inDrawer && <li className={styles.metadata}>{metadata}</li>}
               </ul>
 
-              <footer className={styles.footer}>Wähle deine Zielhaltestelle aus dem Fahrtverlauf.</footer>
+              {footer}
             </div>
+
+            {hasMetadata && inDrawer && (
+              <div className={styles.metadata} style={{ padding: '1rem 0.5rem 0' }}>
+                {metadata}
+              </div>
+            )}
           </>
         )
       )}
