@@ -22,11 +22,11 @@ export const StationboardTimePicker = () => {
       />
 
       <Button
+        leadingSlot={<IconRestore aria-hidden data-via-icon />}
         onClick={() => changeRequestedTime(undefined)}
         style={{ flexGrow: 0, minWidth: 'min-content' }}
         variant="secondary"
       >
-        <IconRestore aria-hidden data-via-icon />
         <span>Jetzt</span>
       </Button>
     </ButtonGroup>

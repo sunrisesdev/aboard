@@ -15,7 +15,7 @@
   height: 2.5rem;
   isolation: isolate;
   justify-content: center;
-  padding: 0 1rem;
+  padding: 0 0.75rem;
   position: relative;
   transition: box-shadow 0.2s;
   white-space: nowrap;
@@ -57,6 +57,23 @@
     padding: 0;
   }
 
+  /* &:has(> [data-via-slot="leading"]) {
+    padding-left: 0.625rem;
+  }
+
+  &:has(> [data-via-slot="trailing"]) {
+    padding-right: 0.625rem;
+  } */
+
+  /* Text follows the leading slot, while the trailing slot stays at the far end */
+  &[data-via-align-start] {
+    justify-content: flex-start;
+
+    & > [data-via-slot="trailing"] {
+      margin-left: auto;
+    }
+  }
+
   &[data-via-variant="secondary"] {
     background: var(--via-bg-secondary);
     border: var(--via-bd-width) solid var(--via-bd-secondary);
@@ -92,4 +109,10 @@
   &:not([data-via-icon-only]) > svg {
     font-size: 1rem;
   }
+}
+
+.slot {
+  display: flex;
+  flex-shrink: 0;
+  font-size: 1rem;
 }

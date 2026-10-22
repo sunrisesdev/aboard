@@ -183,16 +183,15 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
       aside={
         <>
           <ButtonGroup>
-            <Button variant="secondary">
-              <IconHeartHandshake aria-hidden data-via-icon />
+            <Button leadingSlot={<IconHeartHandshake aria-hidden data-via-icon />} variant="secondary">
               <span>Fahrt beitreten</span>
             </Button>
 
             <ButtonLink
               href={getStationHref(checkin.destination.station, getCheckinTimes(checkin).arrival)}
+              leadingSlot={<IconLocationShare aria-hidden data-via-icon />}
               variant="secondary"
             >
-              <IconLocationShare aria-hidden data-via-icon />
               <span>Weiterfahrt planen</span>
             </ButtonLink>
           </ButtonGroup>

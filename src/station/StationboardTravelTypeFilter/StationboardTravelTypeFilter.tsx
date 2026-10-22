@@ -49,20 +49,19 @@ export const StationboardTravelTypeFilter = () => {
 
   return (
     <Menu.Root>
-      <Menu.Trigger render={<Button variant="secondary" />}>
-        {travelType ? (
-          <>
-            <TravelTypeIcons travelType={travelType} />
-            <span>{travelTypeLabels[travelType]}</span>
-          </>
-        ) : (
-          <>
-            <IconFilter2 aria-hidden data-via-icon />
-            <span>Verkehrsmittel</span>
-          </>
-        )}
-
-        <IconChevronDown aria-hidden data-via-icon />
+      <Menu.Trigger
+        render={
+          <Button
+            alignStart
+            leadingSlot={
+              travelType ? <TravelTypeIcons travelType={travelType} /> : <IconFilter2 aria-hidden data-via-icon />
+            }
+            trailingSlot={<IconChevronDown aria-hidden data-via-icon />}
+            variant="secondary"
+          />
+        }
+      >
+        <span>{travelType ? travelTypeLabels[travelType] : 'Verkehrsmittel'}</span>
       </Menu.Trigger>
 
       <Menu.Portal>

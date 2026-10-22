@@ -29,15 +29,18 @@ export const CheckInSuccessActions = ({
     <ButtonLink
       className={clsx(stretch && styles.stretch)}
       href={getStationHref(status.checkin.destination.station, getCheckinTimes(status.checkin).arrival)}
+      leadingSlot={<IconLocationShare aria-hidden data-via-icon />}
       variant="secondary"
     >
-      <IconLocationShare aria-hidden data-via-icon />
       <span>Weiterfahrt planen</span>
     </ButtonLink>
 
-    <ButtonLink className={clsx(stretch && styles.stretch)} href={`/status/${status.id}`}>
+    <ButtonLink
+      className={clsx(stretch && styles.stretch)}
+      href={`/status/${status.id}`}
+      trailingSlot={<IconArrowRight aria-hidden data-via-icon />}
+    >
       <span>Zum Status</span>
-      <IconArrowRight aria-hidden data-via-icon />
     </ButtonLink>
   </>
 );

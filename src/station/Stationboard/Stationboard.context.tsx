@@ -5,11 +5,13 @@ import { createContext, type PropsWithChildren, useOptimistic, useTransition } f
 import type { TravelType } from '@/lib/traewelling';
 
 type StationboardFilters = {
+  radius: number | undefined;
   requestedTime: string | undefined;
   travelType: TravelType | undefined;
 };
 
 type StationboardContextValue = StationboardFilters & {
+  changeRadius: (radius: number | undefined) => void;
   changeRequestedTime: (requestedTime: string | undefined) => void;
   changeTravelType: (travelType: TravelType | undefined) => void;
   isPending: boolean;
@@ -23,6 +25,7 @@ export const StationboardContextProvider = ({ children }: PropsWithChildren) => 
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const [filters, setOptimisticFilters] = useOptimistic<StationboardFilters>({
+    radius: searchParams.has('radius') ? Number(searchParams.get('radius')) : undefined,
     requestedTime: searchParams.get('at') ?? undefined,
     travelType: (searchParams.get('travelType') as TravelType | null) ?? undefined,
   });
@@ -30,6 +33,12 @@ export const StationboardContextProvider = ({ children }: PropsWithChildren) => 
   const changeFilters = (changes: Partial<StationboardFilters>) => {
     const nextFilters = { ...filters, ...changes };
     const nextSearchParams = new URLSearchParams(searchParams);
+
+    if (nextFilters.radius !== undefined) {
+      nextSearchParams.set('radius', String(nextFilters.radius));
+    } else {
+      nextSearchParams.delete('radius');
+    }
 
     if (nextFilters.requestedTime) {
       nextSearchParams.set('at', nextFilters.requestedTime);
@@ -56,6 +65,7 @@ export const StationboardContextProvider = ({ children }: PropsWithChildren) => 
     <StationboardContext
       value={{
         ...filters,
+        changeRadius: (radius) => changeFilters({ radius }),
         changeRequestedTime: (requestedTime) => changeFilters({ requestedTime }),
         changeTravelType: (travelType) => changeFilters({ travelType }),
         isPending,

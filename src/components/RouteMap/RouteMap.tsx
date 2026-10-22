@@ -47,8 +47,11 @@ export const RouteMap = ({
         <RouteMapCanvas color={color} coordinates={coordinates} onStatusChange={setStatus} stops={stops} />
       ) : (
         <div className={styles.placeholder}>
-          <Button onClick={() => setIsRequested(true)} variant="secondary">
-            <IconMapDown aria-hidden data-via-icon />
+          <Button
+            leadingSlot={<IconMapDown aria-hidden data-via-icon />}
+            onClick={() => setIsRequested(true)}
+            variant="secondary"
+          >
             <span>Karte laden</span>
           </Button>
 

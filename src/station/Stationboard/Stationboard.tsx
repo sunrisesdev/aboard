@@ -13,10 +13,15 @@ import { type DepartureCursors, useStationboardReducer } from './useStationboard
 
 function fetchDepartures(
   stationId: string,
-  { requestedTime, travelType }: { requestedTime: string; travelType: TravelType | undefined },
+  {
+    radius,
+    requestedTime,
+    travelType,
+  }: { radius: number | undefined; requestedTime: string; travelType: TravelType | undefined },
 ) {
   const searchParams: Record<string, string> = { when: requestedTime };
 
+  if (radius !== undefined) searchParams.radius = String(radius);
   if (travelType) searchParams.travelType = travelType;
 
   return ky.get(`/api/station/${stationId}/departures`, { searchParams }).json<{
@@ -36,11 +41,13 @@ function replaceRequestedTime(requestedTime: string) {
 export const Stationboard = ({
   initialCursors,
   initialDepartures,
+  radius,
   stationId,
   travelType,
 }: {
   initialCursors: DepartureCursors;
   initialDepartures: DepartureResource[];
+  radius: number | undefined;
   stationId: string;
   travelType: TravelType | undefined;
 }) => {
@@ -59,7 +66,7 @@ export const Stationboard = ({
     setLoadingEarlier(true);
 
     try {
-      const { data, meta } = await fetchDepartures(stationId, { requestedTime: previousCursor, travelType });
+      const { data, meta } = await fetchDepartures(stationId, { radius, requestedTime: previousCursor, travelType });
 
       dispatch({ type: 'prepend', cursors: meta.times, departures: data });
       replaceRequestedTime(previousCursor);
@@ -74,7 +81,7 @@ export const Stationboard = ({
     setLoadingLater(true);
 
     try {
-      const { data, meta } = await fetchDepartures(stationId, { requestedTime: nextCursor, travelType });
+      const { data, meta } = await fetchDepartures(stationId, { radius, requestedTime: nextCursor, travelType });
 
       dispatch({ type: 'append', cursors: meta.times, departures: data });
       replaceRequestedTime(nextCursor);

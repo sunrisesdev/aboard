@@ -1,12 +1,14 @@
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { CheckInContextProvider } from '@/checkin/CheckIn.context';
+import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { PageContent } from '@/components/PageContent/PageContent';
 import { Skeleton } from '@/components/Skeleton/Skeleton';
 import { requireSession } from '@/lib/auth';
 import { createTraewellingClient, getDepartures, TraewellingApiError, type TravelType } from '@/lib/traewelling';
 import { Stationboard } from '@/station/Stationboard/Stationboard';
 import { StationboardContextProvider } from '@/station/Stationboard/Stationboard.context';
+import { StationboardRadiusFilter } from '@/station/StationboardRadiusFilter/StationboardRadiusFilter';
 import { StationboardSkeleton } from '@/station/StationboardSkeleton/StationboardSkeleton';
 import { StationboardTimePicker } from '@/station/StationboardTimePicker/StationboardTimePicker';
 import { StationboardTravelTypeFilter } from '@/station/StationboardTravelTypeFilter/StationboardTravelTypeFilter';
@@ -16,10 +18,18 @@ import styles from './Stationboard.module.css';
 const loadDepartures = async (
   accessToken: string,
   stationId: string,
-  { requestedTime, travelType }: { requestedTime: string | undefined; travelType: TravelType | undefined },
+  {
+    radius,
+    requestedTime,
+    travelType,
+  }: { radius: number | undefined; requestedTime: string | undefined; travelType: TravelType | undefined },
 ) => {
   try {
-    return await getDepartures(createTraewellingClient(accessToken), stationId, { when: requestedTime, travelType });
+    return await getDepartures(createTraewellingClient(accessToken), stationId, {
+      radius,
+      when: requestedTime,
+      travelType,
+    });
   } catch (error) {
     if (error instanceof TraewellingApiError && error.status === 404) {
       notFound();
@@ -39,10 +49,12 @@ const StationName = async ({ departuresPromise }: { departuresPromise: Departure
 
 const StationboardLoader = async ({
   departuresPromise,
+  radius,
   stationId,
   travelType,
 }: {
   departuresPromise: DeparturesPromise;
+  radius: number | undefined;
   stationId: string;
   travelType: TravelType | undefined;
 }) => {
@@ -52,6 +64,7 @@ const StationboardLoader = async ({
     <Stationboard
       initialCursors={meta.times}
       initialDepartures={departures}
+      radius={radius}
       stationId={stationId}
       travelType={travelType}
     />
@@ -60,11 +73,12 @@ const StationboardLoader = async ({
 
 export default async function StationboardPage({ params, searchParams }: PageProps<'/station/[stationId]'>) {
   const { stationId } = await params;
-  const { at, name, travelType } = await searchParams;
+  const { at, name, radius, travelType } = await searchParams;
   const session = await requireSession();
 
   // Not awaited: the station name and the departures stream in separately, while the filters are usable right away.
   const departuresPromise = loadDepartures(session.accessToken as string, stationId, {
+    radius: radius ? Number(radius) : undefined,
     requestedTime: at as string | undefined,
     travelType: travelType as TravelType | undefined,
   });
@@ -87,13 +101,18 @@ export default async function StationboardPage({ params, searchParams }: PagePro
 
           <div className={styles.controls}>
             <StationboardTimePicker />
-            <StationboardTravelTypeFilter />
+
+            <ButtonGroup uneven>
+              <StationboardRadiusFilter />
+              <StationboardTravelTypeFilter />
+            </ButtonGroup>
           </div>
 
           <StationboardPageContent>
             <Suspense fallback={<StationboardSkeleton />}>
               <StationboardLoader
                 departuresPromise={departuresPromise}
+                radius={radius ? Number(radius) : undefined}
                 stationId={stationId}
                 travelType={travelType as TravelType | undefined}
               />

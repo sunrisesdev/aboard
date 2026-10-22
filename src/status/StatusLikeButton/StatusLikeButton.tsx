@@ -45,12 +45,13 @@ export const StatusLikeButton = ({
       <Button
         aria-label={`Gefällt mir (${likes})`}
         aria-pressed={liked}
+        leadingSlot={icon}
         onClick={toggleLike}
         title={liked ? 'Like entfernen' : 'Status liken'}
         variant="secondary"
         {...props}
       >
-        {icon} {likes}
+        {likes}
       </Button>
     );
   }
@@ -59,12 +60,12 @@ export const StatusLikeButton = ({
     <>
       <Button
         aria-pressed={liked}
+        leadingSlot={icon}
         onClick={toggleLike}
         title={liked ? 'Like entfernen' : 'Status liken'}
         variant={liked ? 'secondary' : 'primary'}
         {...props}
       >
-        {icon}
         <span>Gefällt {liked ? 'dir' : 'mir'}</span>
       </Button>
       {likes > 0 && <span style={{ fontWeight: 500 }}>{likes}</span>}
