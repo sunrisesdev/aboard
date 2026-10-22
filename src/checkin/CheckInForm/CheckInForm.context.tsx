@@ -77,7 +77,7 @@ export const CheckInFormProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export const useCheckInForm = () => {
+export function useCheckInForm() {
   const context = use(CheckInFormContext);
 
   if (!context) {
@@ -85,4 +85,4 @@ export const useCheckInForm = () => {
   }
 
   return context;
-};
+}

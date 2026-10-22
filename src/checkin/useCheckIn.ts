@@ -3,7 +3,7 @@
 import { use } from 'react';
 import { CheckInContext } from './CheckIn.context';
 
-export const useCheckIn = () => {
+export function useCheckIn() {
   const context = use(CheckInContext);
 
   if (!context) {
@@ -11,4 +11,4 @@ export const useCheckIn = () => {
   }
 
   return context;
-};
+}

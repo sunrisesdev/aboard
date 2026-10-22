@@ -31,26 +31,30 @@ type Station = {
   timePrefix: string;
 };
 
-const getArrivalStation = (stopover: StopoverResource, label: string): Station => ({
-  cancelled: stopover.cancelled,
-  label,
-  planned: stopover.arrivalPlanned,
-  plannedPlatform: stopover.arrivalPlatformPlanned,
-  platform: stopover.arrivalPlatformReal ?? stopover.arrivalPlatformPlanned,
-  real: stopover.arrivalReal,
-  station: stopover.station,
-  timePrefix: 'an',
-});
+function getArrivalStation(stopover: StopoverResource, label: string): Station {
+  return {
+    cancelled: stopover.cancelled,
+    label,
+    planned: stopover.arrivalPlanned,
+    plannedPlatform: stopover.arrivalPlatformPlanned,
+    platform: stopover.arrivalPlatformReal ?? stopover.arrivalPlatformPlanned,
+    real: stopover.arrivalReal,
+    station: stopover.station,
+    timePrefix: 'an',
+  };
+}
 
-const getStationDetails = (
+function getStationDetails(
   { planned, plannedPlatform, platform, real }: Station,
   mode: string | null,
   abbreviate = false,
-) => ({
-  delay: planned ? getDelay(planned, real) : undefined,
-  platform: formatPlatform(platform, mode, { abbreviate, planned: plannedPlatform }),
-  time: real ?? planned,
-});
+) {
+  return {
+    delay: planned ? getDelay(planned, real) : undefined,
+    platform: formatPlatform(platform, mode, { abbreviate, planned: plannedPlatform }),
+    time: real ?? planned,
+  };
+}
 
 // The compact variant has no details row: the platform follows the name and the delay precedes the time
 const StationRow = ({

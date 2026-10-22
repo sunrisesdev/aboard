@@ -28,4 +28,10 @@
       grid-template-columns: minmax(0, 1fr) 28.5rem;
     }
   }
+
+  &.asideStart {
+    @media (width >= 64em) {
+      grid-template-columns: 28.5rem minmax(0, 1fr);
+    }
+  }
 }

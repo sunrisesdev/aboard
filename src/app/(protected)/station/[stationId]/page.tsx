@@ -15,7 +15,7 @@ import { StationboardTravelTypeFilter } from '@/station/StationboardTravelTypeFi
 import { StationboardPageContent } from './content';
 import styles from './Stationboard.module.css';
 
-const loadDepartures = async (
+async function loadDepartures(
   accessToken: string,
   stationId: string,
   {
@@ -23,7 +23,7 @@ const loadDepartures = async (
     requestedTime,
     travelType,
   }: { radius: number | undefined; requestedTime: string | undefined; travelType: TravelType | undefined },
-) => {
+) {
   try {
     return await getDepartures(createTraewellingClient(accessToken), stationId, {
       radius,
@@ -37,7 +37,7 @@ const loadDepartures = async (
 
     throw error;
   }
-};
+}
 
 type DeparturesPromise = ReturnType<typeof loadDepartures>;
 

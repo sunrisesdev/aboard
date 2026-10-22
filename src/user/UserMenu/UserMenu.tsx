@@ -1,11 +1,13 @@
 'use client';
 
 import { Menu } from '@base-ui/react/menu';
-import { IconChevronDown, IconLogout } from '@tabler/icons-react';
+import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons-react';
 import { clsx } from 'clsx';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useTransition } from 'react';
 import type { Structure } from '@/helpers/extend';
+import { getUserHref } from '@/helpers/getUserHref';
 import { signOutAction } from '@/user/actions';
 import { useUser } from '@/user/useUser';
 import styles from './UserMenu.module.css';
@@ -28,6 +30,11 @@ export const UserMenu = ({ className, ...props }: Structure) => {
               <div className={styles.displayName}>{displayName}</div>
               <div className={styles.username}>@{username}</div>
             </div>
+
+            <Menu.LinkItem className={styles.item} render={<Link href={getUserHref(username)} />}>
+              <IconUser aria-hidden data-via-icon />
+              Profil
+            </Menu.LinkItem>
 
             <Menu.Separator className={styles.separator} />
 

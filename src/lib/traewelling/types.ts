@@ -21,6 +21,17 @@ export type StatusVisibility = components['schemas']['StatusVisibility'];
 
 export type TransportResource = components['schemas']['TransportResource'];
 
-export type TraewellingUser =Omit<components['schemas']['UserAuthResource'], 'id'> & {
+// The schema types these fields as unknown
+export type UserProfile = Omit<
+  components['schemas']['UserResource'],
+  'displayName' | 'mastodonUrl' | 'profilePicture' | 'username'
+> & {
+  displayName: string;
+  mastodonUrl: string | null;
+  profilePicture: string;
+  username: string;
+};
+
+export type TraewellingUser = Omit<components['schemas']['UserAuthResource'], 'id'> & {
   id: string;
 };

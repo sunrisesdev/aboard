@@ -35,4 +35,12 @@ export {
 } from './status';
 export { getStopovers } from './stopovers';
 export { getTripInfo, type StopoverResource, type TripResource } from './trip';
-export type { Business, MotisMode, StatusVisibility, TraewellingUser, TransportResource } from './types';
+export type {
+  Business,
+  MotisMode,
+  StatusVisibility,
+  TraewellingUser,
+  TransportResource,
+  UserProfile,
+} from './types';
+export { getUser } from './user';

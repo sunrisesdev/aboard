@@ -31,6 +31,13 @@
   flex-shrink: 0;
 }
 
+/* Flex, so the inline link adds no line-height gap below the image */
+.avatarLink {
+  border-radius: 9999rem;
+  display: flex;
+  flex-shrink: 0;
+}
+
 /* The delay colors are tuned for the contrast background */
 .delayBadge {
   align-items: center;

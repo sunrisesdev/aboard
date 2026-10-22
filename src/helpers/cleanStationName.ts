@@ -15,12 +15,13 @@
 
 type Step = (name: string) => string;
 
-const pipe =
-  (...steps: Step[]): Step =>
-  (name) =>
-    steps.reduce((result, step) => step(result), name);
+function pipe(...steps: Step[]): Step {
+  return (name) => steps.reduce((result, step) => step(result), name);
+}
 
-const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 const replaceUnderscores: Step = (name) => name.replace(/_+/g, ' ');
 

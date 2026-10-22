@@ -3,7 +3,7 @@
 import { use } from 'react';
 import { StationboardContext } from './Stationboard.context';
 
-export const useStationboard = () => {
+export function useStationboard() {
   const context = use(StationboardContext);
 
   if (!context) {
@@ -11,4 +11,4 @@ export const useStationboard = () => {
   }
 
   return context;
-};
+}

@@ -2,6 +2,7 @@ import { IconArrowRight, IconHeartHandshake, IconLocationShare, IconTags, IconUs
 import { clsx } from 'clsx';
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { Button } from '@/components/Button/Button';
@@ -18,6 +19,7 @@ import { cleanStationName } from '@/helpers/cleanStationName';
 import { formatDateTime } from '@/helpers/formatDateTime';
 import { getLineColors } from '@/helpers/getLineColors';
 import { getStationHref } from '@/helpers/getStationHref';
+import { getUserHref } from '@/helpers/getUserHref';
 import { requireSession } from '@/lib/auth';
 import {
   createTraewellingClient,
@@ -62,16 +64,18 @@ const socialStatusLabels: Record<string, string> = {
   open_lets_hang: 'Lass uns abhängen',
 };
 
-const getBusinessLabel = (business: number) =>
-  businessOptions.find((option) => option.value === business)?.label ?? String(business);
+function getBusinessLabel(business: number) {
+  return businessOptions.find((option) => option.value === business)?.label ?? String(business);
+}
 
-const getVisibilityLabel = (visibility: number) =>
-  visibilityOptions.find((option) => option.value === visibility)?.label ?? String(visibility);
+function getVisibilityLabel(visibility: number) {
+  return visibilityOptions.find((option) => option.value === visibility)?.label ?? String(visibility);
+}
 
 const likeListFormat = new Intl.ListFormat('de-DE', { type: 'conjunction' });
 
 // E.g. "Dir, Jonas Weber, Mira K. und 10 weiteren gefällt das", the current user's like always comes first
-const getLikeSummary = (likes: StatusLike[], username: string) => {
+function getLikeSummary(likes: StatusLike[], username: string) {
   const ownLike = likes.find((like) => like.username === username);
   const otherLikes = likes.filter((like) => like !== ownLike);
   const names = otherLikes.slice(0, 2).map(({ displayName }) => displayName);
@@ -88,9 +92,11 @@ const getLikeSummary = (likes: StatusLike[], username: string) => {
     avatarLikes: (ownLike ? [ownLike, ...otherLikes] : otherLikes).slice(0, 5),
     text: `${likeListFormat.format(parts)} gefällt dieser Status.`,
   };
-};
+}
 
-const parseStatusId = (statusId: string) => (/^\d+$/.test(statusId) ? Number(statusId) : notFound());
+function parseStatusId(statusId: string) {
+  return /^\d+$/.test(statusId) ? Number(statusId) : notFound();
+}
 
 // Cached, so generateMetadata and the page share a single request
 const loadStatus = cache(async (accessToken: string, statusId: number) => {
@@ -157,10 +163,10 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
     <>
       <header className={styles.header}>
         <Image alt="" className={styles.avatar} height={40} src={status.user.profilePicture} width={40} />
-        <div>
+        <Link href={getUserHref(status.user.username)}>
           <div className={styles.author}>{status.user.displayName}</div>
           <div className={styles.username}>@{status.user.username}</div>
-        </div>
+        </Link>
 
         <span className={styles.pointsBadge}>+{status.checkin.points} Punkte</span>
 
@@ -221,15 +227,17 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
             >
               <ul className={styles.userList}>
                 {coTravelerStatuses.map(({ checkin, id, user }) => (
-                  <li className={styles.row} key={id}>
-                    <Image alt="" className={styles.avatar} height={32} src={user.profilePicture} width={32} />
-                    <div className={styles.userListText}>
-                      <div className={styles.author}>{user.displayName}</div>
-                      <div className={styles.segment}>
-                        {cleanStationName(checkin.origin.station.name)} <IconArrowRight data-via-icon />{' '}
-                        {cleanStationName(checkin.destination.station.name)}
+                  <li key={id}>
+                    <Link className={styles.row} href={`/status/${id}`}>
+                      <Image alt="" className={styles.avatar} height={32} src={user.profilePicture} width={32} />
+                      <div className={styles.userListText}>
+                        <div className={styles.author}>{user.displayName}</div>
+                        <div className={styles.segment}>
+                          {cleanStationName(checkin.origin.station.name)} <IconArrowRight data-via-icon />{' '}
+                          {cleanStationName(checkin.destination.station.name)}
+                        </div>
                       </div>
-                    </div>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -269,10 +277,12 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
 
                     <ul className={clsx(styles.userList, styles.likes)}>
                       {likes.map((user) => (
-                        <li className={styles.row} key={user.id}>
-                          <Image alt="" className={styles.avatar} height={24} src={user.profilePicture} width={24} />
-                          <span>{user.displayName}</span>
-                          <span className={styles.username}>@{user.username}</span>
+                        <li key={user.id}>
+                          <Link className={styles.row} href={getUserHref(user.username)}>
+                            <Image alt="" className={styles.avatar} height={24} src={user.profilePicture} width={24} />
+                            <span>{user.displayName}</span>
+                            <span className={styles.username}>@{user.username}</span>
+                          </Link>
                         </li>
                       ))}
                     </ul>

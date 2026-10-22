@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [{ protocol: 'https', hostname: 'traewelling.de', pathname: '/**' }],
   },
   reactCompiler: true,
+  rewrites: async () => [{ source: '/@:username', destination: '/user/:username' }],
 };
 
 export default nextConfig;

@@ -31,10 +31,13 @@ type EditStatusFormContextValue = {
 
 const EditStatusFormContext = createContext<EditStatusFormContextValue | undefined>(undefined);
 
-export const getStopoverKey = (stopover: StopoverResource) => stopover.uuid ?? String(stopover.stopoverId);
+export function getStopoverKey(stopover: StopoverResource) {
+  return stopover.uuid ?? String(stopover.stopoverId);
+}
 
-const toIsoString = (datetimeLocalValue: string) =>
-  datetimeLocalValue ? new Date(datetimeLocalValue).toISOString() : null;
+function toIsoString(datetimeLocalValue: string) {
+  return datetimeLocalValue ? new Date(datetimeLocalValue).toISOString() : null;
+}
 
 // Mount it inside the popup so the values reset whenever the popup closes.
 export const EditStatusFormProvider = ({
@@ -127,7 +130,7 @@ export const EditStatusFormProvider = ({
   );
 };
 
-export const useEditStatusForm = () => {
+export function useEditStatusForm() {
   const context = use(EditStatusFormContext);
 
   if (!context) {
@@ -135,4 +138,4 @@ export const useEditStatusForm = () => {
   }
 
   return context;
-};
+}

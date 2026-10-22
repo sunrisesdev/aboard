@@ -15,6 +15,7 @@ import { formatDistance } from '@/helpers/formatDistance';
 import { formatDuration } from '@/helpers/formatDuration';
 import { getDelay } from '@/helpers/getDelay';
 import { getLineColors } from '@/helpers/getLineColors';
+import { getUserHref } from '@/helpers/getUserHref';
 import type { MotisMode, StatusResource } from '@/lib/traewelling';
 import { getCheckinTimes } from '@/status/getCheckinTimes';
 import { StatusBody } from '@/status/StatusBody/StatusBody';
@@ -22,7 +23,7 @@ import { StatusLikeButton } from '@/status/StatusLikeButton/StatusLikeButton';
 import styles from './StatusSummary.module.css';
 
 // The line fills up by CSS animation like in StatusTrip, here split into the halves before and after the arrow
-const getProgressStyles = (departure: string, arrival: string, now: Date) => {
+function getProgressStyles(departure: string, arrival: string, now: Date) {
   const startDelay = new Date(departure).getTime() - now.getTime();
   const halfDuration = (new Date(arrival).getTime() - new Date(departure).getTime()) / 2;
 
@@ -30,10 +31,10 @@ const getProgressStyles = (departure: string, arrival: string, now: Date) => {
     animationDelay: `${delay}ms`,
     animationDuration: `${halfDuration}ms`,
   }));
-};
+}
 
 // Experimental: marks times that differ from the plan because the user entered them manually
-const getTiming = (planned: string | null, real: string | null, manual: string | null | undefined) => {
+function getTiming(planned: string | null, real: string | null, manual: string | null | undefined) {
   const time = manual ?? real ?? planned;
 
   return {
@@ -41,7 +42,7 @@ const getTiming = (planned: string | null, real: string | null, manual: string |
     icon: manual && <IconPencilFilled data-via-icon title="Manuell bearbeitet" />,
     time,
   };
-};
+}
 
 export const StatusSummary = ({ status }: { status: StatusResource }) => {
   const { bodyMentions, checkin, createdAt, user } = status;
@@ -64,11 +65,16 @@ export const StatusSummary = ({ status }: { status: StatusResource }) => {
   return (
     <Card className={styles.base}>
       <header className={styles.header}>
-        <Image alt="" className={styles.avatar} height={40} src={user.profilePicture} width={40} />
+        {/* Hidden from assistive tech and the tab order, since the name next to it links to the same profile */}
+        <Link aria-hidden className={styles.avatarLink} href={getUserHref(user.username)} tabIndex={-1}>
+          <Image alt="" className={styles.avatar} height={40} src={user.profilePicture} width={40} />
+        </Link>
         <div>
           <div>
-            <span className={styles.author}>{user.displayName}</span>
-            <span className={styles.username}>@{user.username}</span>
+            <Link href={getUserHref(user.username)}>
+              <span className={styles.author}>{user.displayName}</span>
+              <span className={styles.username}>@{user.username}</span>
+            </Link>
           </div>
           <time className={styles.meta} dateTime={createdAt}>
             {formatDateTime(createdAt)}

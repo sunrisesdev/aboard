@@ -3,7 +3,9 @@ type Size = { height: number; width: number };
 const gap = 8;
 const margin = 4;
 
-const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(value, max));
+function clamp(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(value, max));
+}
 
 /**
  * Positions a label above or below its point, so that it stays fully within the frame where possible.

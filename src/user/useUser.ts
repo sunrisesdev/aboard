@@ -3,7 +3,7 @@
 import { use } from 'react';
 import { UserContext } from './User.context';
 
-export const useUser = () => {
+export function useUser() {
   const context = use(UserContext);
 
   if (!context) {
@@ -11,4 +11,4 @@ export const useUser = () => {
   }
 
   return context;
-};
+}

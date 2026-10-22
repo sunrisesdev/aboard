@@ -4,7 +4,7 @@ import { use } from 'react';
 import { CurrentStatusesContext } from './CurrentStatuses.context';
 
 // Returns the promise instead of its value, so components that only need `refresh` don't suspend
-export const useCurrentStatuses = () => {
+export function useCurrentStatuses() {
   const context = use(CurrentStatusesContext);
 
   if (!context) {
@@ -12,4 +12,4 @@ export const useCurrentStatuses = () => {
   }
 
   return context;
-};
+}
