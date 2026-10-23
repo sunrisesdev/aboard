@@ -117,7 +117,7 @@ export default async function ProfilePage({ params }: PageProps<'/user/[username
                     }
                     variant={user.following ? 'secondary' : 'primary'}
                   >
-                    Du folgst
+                    {user.following ? 'Du folgst' : 'Folgen'}
                   </Button>
                 )}
               </div>

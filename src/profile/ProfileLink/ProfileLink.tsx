@@ -18,14 +18,20 @@ function formatMastodonHandle(mastodonUrl: string) {
   return url && handle ? `${handle}@${url.hostname}` : mastodonUrl;
 }
 
+function getGenericHandle(href: string, domain: string) {
+  const [_, path] = href.split(domain.endsWith('/') ? domain : `${domain}/`);
+  const [handle] = path.split('?');
+  return handle;
+}
+
 function getLinkContent(type: ProfileLinkType, href: string) {
   switch (type) {
     case 'github':
       return (
         <>
           <IconBrandGithub aria-hidden data-via-icon />
-          <strong>Github</strong>
-          <span>{href.split('github.com/').at(1)}</span>
+          <strong>GitHub</strong>
+          <span>{getGenericHandle(href, 'github.com')}</span>
         </>
       );
     case 'instagram':
@@ -33,7 +39,7 @@ function getLinkContent(type: ProfileLinkType, href: string) {
         <>
           <IconBrandInstagram aria-hidden data-via-icon />
           <strong>Instagram</strong>
-          <span>{href.split('instagram.com/').at(1)}</span>
+          <span>{getGenericHandle(href, 'instagram.com')}</span>
         </>
       );
     case 'mastodon':
