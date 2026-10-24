@@ -13,10 +13,6 @@
   width: 100%;
 }
 
-.timeInput {
-  width: 100%;
-}
-
 .timeField {
   color: var(--via-fg-secondary);
   display: flex;

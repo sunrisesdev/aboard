@@ -8,16 +8,18 @@ import { getCheckinTimes } from '@/status/getCheckinTimes';
 import { isSameStopover } from '@/status/isSameStopover';
 import type { StatusFieldValues } from '@/status/StatusFields/StatusFields';
 
-// Times are datetime-local values, undefined while the user hasn't touched them
+// Times are datetime-local values, undefined while the user hasn't touched them and null once reset to live data
 type EditStatusFormValues = {
-  arrival: string | undefined;
-  departure: string | undefined;
+  arrival: string | null | undefined;
+  departure: string | null | undefined;
   destinationKey: string;
   fields: StatusFieldValues;
 };
 
 type EditStatusFormContextValue = {
   arrival: string;
+  canResetArrival: boolean;
+  canResetDeparture: boolean;
   departure: string;
   destinationStopovers: StopoverResource[];
   error: string | undefined;
@@ -35,7 +37,7 @@ export function getStopoverKey(stopover: StopoverResource) {
   return stopover.uuid ?? String(stopover.stopoverId);
 }
 
-function toIsoString(datetimeLocalValue: string) {
+function toIsoString(datetimeLocalValue: string | null) {
   return datetimeLocalValue ? new Date(datetimeLocalValue).toISOString() : null;
 }
 
@@ -73,11 +75,16 @@ export const EditStatusFormProvider = ({
 
   // A changed destination brings its own arrival time, an earlier manual one belongs to the old destination
   const currentTimes = getCheckinTimes(checkin);
-  const defaultArrival = destinationChanged
-    ? (destination.arrivalReal ?? destination.arrivalPlanned)
-    : currentTimes.arrival;
-  const arrival = values.arrival ?? (defaultArrival ? toDatetimeLocalValue(defaultArrival) : '');
-  const departure = values.departure ?? (currentTimes.departure ? toDatetimeLocalValue(currentTimes.departure) : '');
+  const liveArrival = destination.arrivalReal ?? destination.arrivalPlanned;
+  const liveDeparture = checkin.origin.departureReal ?? checkin.origin.departurePlanned;
+  const fallbackArrival = values.arrival === null || destinationChanged ? liveArrival : currentTimes.arrival;
+  const fallbackDeparture = values.departure === null ? liveDeparture : currentTimes.departure;
+  const arrival = values.arrival ?? (fallbackArrival ? toDatetimeLocalValue(fallbackArrival) : '');
+  const departure = values.departure ?? (fallbackDeparture ? toDatetimeLocalValue(fallbackDeparture) : '');
+
+  const canResetArrival =
+    values.arrival !== null && (values.arrival !== undefined || (!destinationChanged && !!checkin.manualArrival));
+  const canResetDeparture = values.departure !== null && (values.departure !== undefined || !!checkin.manualDeparture);
 
   const [error, formAction, isPending] = useActionState(async (_previousError: string | undefined) => {
     const body: StatusUpdateBody = {
@@ -114,6 +121,8 @@ export const EditStatusFormProvider = ({
     <EditStatusFormContext
       value={{
         arrival,
+        canResetArrival,
+        canResetDeparture,
         departure,
         destinationStopovers,
         error,

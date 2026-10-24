@@ -1,8 +1,9 @@
 'use client';
 
-import { IconClock, IconMapPin } from '@tabler/icons-react';
+import { IconClock, IconMapPin, IconRestore } from '@tabler/icons-react';
 import { type ComponentProps, useId } from 'react';
 import { Button } from '@/components/Button/Button';
+import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { FieldsetCard } from '@/components/FieldsetCard/FieldsetCard';
 import { Input } from '@/components/Input/Input';
 import { Select } from '@/components/Select/Select';
@@ -13,8 +14,19 @@ import { EditStatusFormProvider, getStopoverKey, useEditStatusForm } from './Edi
 import styles from './EditStatusForm.module.css';
 
 const Root = ({ inDrawer = false }: { inDrawer?: boolean }) => {
-  const { arrival, departure, destinationStopovers, error, formAction, formId, setFieldValue, setValue, values } =
-    useEditStatusForm();
+  const {
+    arrival,
+    canResetArrival,
+    canResetDeparture,
+    departure,
+    destinationStopovers,
+    error,
+    formAction,
+    formId,
+    setFieldValue,
+    setValue,
+    values,
+  } = useEditStatusForm();
   const arrivalId = useId();
   const departureId = useId();
   const destinationId = useId();
@@ -46,27 +58,49 @@ const Root = ({ inDrawer = false }: { inDrawer?: boolean }) => {
 
       <FieldsetCard icon={<IconClock data-via-icon />} title={<FieldsetCard.Title>Zeiten</FieldsetCard.Title>}>
         <div className={styles.times}>
-          <label className={styles.timeField} htmlFor={departureId}>
-            Abfahrt
-            <Input
-              className={styles.timeInput}
-              id={departureId}
-              onChange={(event) => setValue('departure', event.target.value)}
-              type="datetime-local"
-              value={departure}
-            />
-          </label>
+          <div className={styles.timeField}>
+            <label htmlFor={departureId}>Abfahrt</label>
+            <ButtonGroup>
+              <Input
+                id={departureId}
+                onChange={(event) => setValue('departure', event.target.value)}
+                type="datetime-local"
+                value={departure}
+              />
+              <Button
+                aria-label="Abfahrt zurücksetzen"
+                disabled={!canResetDeparture}
+                iconOnly
+                onClick={() => setValue('departure', null)}
+                style={{ flex: 'none' }}
+                variant="secondary"
+              >
+                <IconRestore aria-hidden data-via-icon />
+              </Button>
+            </ButtonGroup>
+          </div>
 
-          <label className={styles.timeField} htmlFor={arrivalId}>
-            Ankunft
-            <Input
-              className={styles.timeInput}
-              id={arrivalId}
-              onChange={(event) => setValue('arrival', event.target.value)}
-              type="datetime-local"
-              value={arrival}
-            />
-          </label>
+          <div className={styles.timeField}>
+            <label htmlFor={arrivalId}>Ankunft</label>
+            <ButtonGroup>
+              <Input
+                id={arrivalId}
+                onChange={(event) => setValue('arrival', event.target.value)}
+                type="datetime-local"
+                value={arrival}
+              />
+              <Button
+                aria-label="Ankunft zurücksetzen"
+                disabled={!canResetArrival}
+                iconOnly
+                onClick={() => setValue('arrival', null)}
+                style={{ flex: 'none' }}
+                variant="secondary"
+              >
+                <IconRestore aria-hidden data-via-icon />
+              </Button>
+            </ButtonGroup>
+          </div>
         </div>
       </FieldsetCard>
 

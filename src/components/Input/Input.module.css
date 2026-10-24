@@ -9,4 +9,13 @@
   height: 2.5rem;
   min-width: 0;
   padding: 0 0.75rem;
+
+  &:is([type="date"], [type="time"], [type="datetime-local"]) {
+    appearance: none;
+  }
+
+  &::-webkit-date-and-time-value {
+    margin: 0;
+    text-align: left;
+  }
 }
