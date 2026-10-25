@@ -1,12 +1,11 @@
 const units = [
-  { label: 'J', minutes: 365 * 24 * 60 },
-  { label: 'T', minutes: 24 * 60 },
-  { label: 'h', minutes: 60 },
-  { label: 'min', minutes: 1 },
+  { abbreviation: 'J', label: 'Jahre', minutes: 365 * 24 * 60 },
+  { abbreviation: 'T', label: 'Tage', minutes: 24 * 60 },
+  { abbreviation: 'h', label: 'Stunden', minutes: 60 },
+  { abbreviation: 'min', label: 'Minuten', minutes: 1 },
 ];
 
-// E.g. "45 min", "3 h 5 min" or "1 J 12 T 4 h", leaving out empty units
-export function formatMinutes(minutes: number) {
+export function formatMinutes(minutes: number, { abbreviate = true }: { abbreviate?: boolean } = {}) {
   let remaining = Math.round(minutes);
   const parts: string[] = [];
 
@@ -15,9 +14,9 @@ export function formatMinutes(minutes: number) {
     remaining %= unit.minutes;
 
     if (value) {
-      parts.push(`${value.toLocaleString('de-DE')} ${unit.label}`);
+      parts.push(`${value.toLocaleString('de-DE')} ${abbreviate ? unit.abbreviation : unit.label}`);
     }
   }
 
-  return parts.join(' ') || '0 min';
+  return parts.join(' ') || (abbreviate ? '0 min' : '0 Minuten');
 }

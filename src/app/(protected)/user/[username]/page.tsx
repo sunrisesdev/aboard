@@ -1,11 +1,19 @@
-import { IconChartAreaLineFilled, IconUserCheck, IconUserPlus } from '@tabler/icons-react';
+import {
+  IconChartAreaLineFilled,
+  IconClockHour4Filled,
+  IconNavigationFilled,
+  IconStarsFilled,
+  IconUserCheck,
+  IconUserPlus,
+} from '@tabler/icons-react';
+import { clsx } from 'clsx';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { cache, Suspense } from 'react';
 import { Button } from '@/components/Button/Button';
-import { KeyValueTag } from '@/components/KeyValueTag/KeyValueTag';
 import { PageContent } from '@/components/PageContent/PageContent';
+import { SubtleTintedSurface } from '@/components/TintedSurface/SubtleTintedSurface';
 import { formatDistance } from '@/helpers/formatDistance';
 import { formatMinutes } from '@/helpers/formatMinutes';
 import { requireSession } from '@/lib/auth';
@@ -160,9 +168,44 @@ export default async function ProfilePage({ params }: PageProps<'/user/[username
               Statistiken
             </div>
 
-            <KeyValueTag keySlot="Strecke" valueSlot={formatDistance(user.totalDistance)} />
-            <KeyValueTag keySlot="Reisedauer" valueSlot={formatMinutes(user.totalDuration)} />
-            {user.pointsEnabled && <KeyValueTag keySlot="Punkte" valueSlot={user.points} />}
+            <div
+              style={{ alignItems: 'stretch', display: 'grid', gap: '0.5rem', gridTemplateColumns: 'repeat(2, 1fr)' }}
+            >
+              <SubtleTintedSurface
+                className={clsx(styles.statsSurface, styles.isPrimary)}
+                color="#008754"
+                radius="0.75rem"
+              >
+                <SubtleTintedSurface.Content className={styles.content}>
+                  <div className={styles.value}>{formatDistance(user.totalDistance)}</div>
+                  <em>circa {(user.totalDistance / 40_075_000).toFixed(1)}&times; um die Erde</em>
+                </SubtleTintedSurface.Content>
+                <IconNavigationFilled className={styles.signet} data-via-icon />
+              </SubtleTintedSurface>
+
+              <SubtleTintedSurface
+                className={clsx(styles.statsSurface, !user.pointsEnabled && styles.isPrimary)}
+                color="#992572"
+                radius="0.75rem"
+              >
+                <SubtleTintedSurface.Content className={styles.content}>
+                  <div className={styles.value}>
+                    {user.totalDuration.toLocaleString('de-DE', { style: 'unit', unit: 'minute' })}
+                  </div>
+                  <em>{formatMinutes(user.totalDuration, { abbreviate: false })}</em>
+                  <IconClockHour4Filled className={styles.signet} data-via-icon />
+                </SubtleTintedSurface.Content>
+              </SubtleTintedSurface>
+
+              {user.pointsEnabled && (
+                <SubtleTintedSurface className={styles.statsSurface} color="#EFAF00" radius="0.75rem">
+                  <SubtleTintedSurface.Content className={styles.content}>
+                    <div className={styles.value}>{user.points} Punkte</div>
+                    <IconStarsFilled className={styles.signet} data-via-icon />
+                  </SubtleTintedSurface.Content>
+                </SubtleTintedSurface>
+              )}
+            </div>
           </div>
         </>
       }

@@ -12,7 +12,7 @@ type OklchColor = {
 };
 
 /** Fertige Farbe, deren Messwerte exakt zum CSS-Wert passen. */
-type Color = {
+export type Color = {
   /** CSS-Wert im Format `oklch(L% C h)` */
   css: string;
   /** OKLCH-Lightness, gerundet wie im CSS-Wert */
@@ -130,7 +130,7 @@ const defaultStatusAnchors = {
   },
 };
 
-const lightnessStep = 0.005;
+export const lightnessStep = 0.005;
 const oklchPattern = /^oklch\(\s*(\d*\.?\d+)(%?)\s+(\d*\.?\d+)\s+(none|\d*\.?\d+)(?:deg)?\s*\)$/i;
 const shortHexPattern = /^[0-9a-f]{3}$/i;
 const hexPattern = /^[0-9a-f]{6}$/i;
@@ -148,7 +148,7 @@ function toLinear(channel: number) {
   return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
 }
 
-function linearToOklab([red, green, blue]: Vector3): Vector3 {
+export function linearToOklab([red, green, blue]: Vector3): Vector3 {
   const long = Math.cbrt(0.4122214708 * red + 0.5363325363 * green + 0.0514459929 * blue);
   const medium = Math.cbrt(0.2119034982 * red + 0.6806995451 * green + 0.1073969566 * blue);
   const short = Math.cbrt(0.0883024619 * red + 0.2817188376 * green + 0.6299787005 * blue);
@@ -172,7 +172,7 @@ function oklabToLinear([lightness, a, b]: Vector3): Vector3 {
   ];
 }
 
-function oklabToLch([lightness, a, b]: Vector3): Vector3 {
+export function oklabToLch([lightness, a, b]: Vector3): Vector3 {
   return [lightness, Math.hypot(a, b), ((Math.atan2(b, a) * 180) / Math.PI + 360) % 360];
 }
 
@@ -185,7 +185,7 @@ function isInGamut(rgb: Vector3) {
 }
 
 /** Wandelt `#rgb`, `#rrggbb` oder `oklch(L% C h)` in lineares sRGB um (bei `oklch()` ggf. außerhalb von 0..1). */
-function parseColor(value: string): Vector3 {
+export function parseColor(value: string): Vector3 {
   const trimmedValue = value.trim();
   const oklchMatch = oklchPattern.exec(trimmedValue);
   if (oklchMatch) {
@@ -225,7 +225,7 @@ function getContrastRatio(firstLuminance: number, secondLuminance: number) {
  * @remarks Lightness, Chroma und Hue werden wie im CSS-Wert gerundet, Luminanz und Kontrast beziehen sich auf die
  * gerundeten Werte.
  */
-function createColor(lightness: number, chroma: number, hue: number): Color {
+export function createColor(lightness: number, chroma: number, hue: number): Color {
   const roundedLightness = Math.round(clamp(lightness) * 1e4) / 1e4;
   const roundedHue = Math.round((((hue % 360) + 360) % 360) * 100) / 100;
   const toRgb = (value: number) => oklabToLinear(lchToOklab(roundedLightness, value, roundedHue));
@@ -243,7 +243,7 @@ function createColor(lightness: number, chroma: number, hue: number): Color {
 }
 
 /** Luminanzen entlang des Verlaufs, interpoliert in OKLab (wie `linear-gradient(in oklab, …)`). */
-function getGradientLuminances(from: Color, to: Color, steps = 9) {
+export function getGradientLuminances(from: Color, to: Color, steps = 9) {
   const start = linearToOklab(from.rgb);
   const end = linearToOklab(to.rgb);
 
@@ -256,7 +256,7 @@ function getGradientLuminances(from: Color, to: Color, steps = 9) {
 }
 
 /** Schlechtester Kontrast einer Farbe über alle Luminanzen des Verlaufs. */
-function getWorstContrast(color: Color, luminances: number[]) {
+export function getWorstContrast(color: Color, luminances: number[]) {
   return Math.min(...luminances.map((luminance) => getContrastRatio(color.luminance, luminance)));
 }
 
