@@ -1,21 +1,10 @@
-import {
-  IconChartAreaLineFilled,
-  IconClockHour4Filled,
-  IconNavigationFilled,
-  IconStarsFilled,
-  IconUserCheck,
-  IconUserPlus,
-} from '@tabler/icons-react';
-import { clsx } from 'clsx';
+import { IconUserCheck, IconUserPlus } from '@tabler/icons-react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { cache, Suspense } from 'react';
 import { Button } from '@/components/Button/Button';
 import { PageContent } from '@/components/PageContent/PageContent';
-import { SubtleTintedSurface } from '@/components/TintedSurface/SubtleTintedSurface';
-import { formatDistance } from '@/helpers/formatDistance';
-import { formatMinutes } from '@/helpers/formatMinutes';
 import { requireSession } from '@/lib/auth';
 import {
   createTraewellingClient,
@@ -25,6 +14,7 @@ import {
   type TraewellingClient,
 } from '@/lib/traewelling';
 import { ProfileLink } from '@/profile/ProfileLink/ProfileLink';
+import { ProfileStats } from '@/profile/ProfileStats/ProfileStats';
 import statusesStyles from '@/status/Dashboard/Dashboard.module.css';
 import { StatusSummary } from '@/status/StatusSummary/StatusSummary';
 import { StatusSummarySkeleton } from '@/status/StatusSummarySkeleton/StatusSummarySkeleton';
@@ -131,7 +121,7 @@ export default async function ProfilePage({ params }: PageProps<'/user/[username
               </div>
 
               <div className={styles.content}>
-                <div style={{ marginTop: '0.5rem' }}>
+                <div className={styles.name}>
                   <h1 className={styles.displayName}>{user.displayName}</h1>
                   <div className={styles.username}>@{user.username}</div>
                 </div>
@@ -160,53 +150,7 @@ export default async function ProfilePage({ params }: PageProps<'/user/[username
             </div>
           </div>
 
-          <hr className={styles.cardDivider} />
-
-          <div className={styles.card}>
-            <div className={styles.title}>
-              <IconChartAreaLineFilled aria-hidden data-via-icon />
-              Statistiken
-            </div>
-
-            <div
-              style={{ alignItems: 'stretch', display: 'grid', gap: '0.5rem', gridTemplateColumns: 'repeat(2, 1fr)' }}
-            >
-              <SubtleTintedSurface
-                className={clsx(styles.statsSurface, styles.isPrimary)}
-                color="#008754"
-                radius="0.75rem"
-              >
-                <SubtleTintedSurface.Content className={styles.content}>
-                  <div className={styles.value}>{formatDistance(user.totalDistance)}</div>
-                  <em>circa {(user.totalDistance / 40_075_000).toFixed(1)}&times; um die Erde</em>
-                </SubtleTintedSurface.Content>
-                <IconNavigationFilled className={styles.signet} data-via-icon />
-              </SubtleTintedSurface>
-
-              <SubtleTintedSurface
-                className={clsx(styles.statsSurface, !user.pointsEnabled && styles.isPrimary)}
-                color="#992572"
-                radius="0.75rem"
-              >
-                <SubtleTintedSurface.Content className={styles.content}>
-                  <div className={styles.value}>
-                    {user.totalDuration.toLocaleString('de-DE', { style: 'unit', unit: 'minute' })}
-                  </div>
-                  <em>{formatMinutes(user.totalDuration, { abbreviate: false })}</em>
-                  <IconClockHour4Filled className={styles.signet} data-via-icon />
-                </SubtleTintedSurface.Content>
-              </SubtleTintedSurface>
-
-              {user.pointsEnabled && (
-                <SubtleTintedSurface className={styles.statsSurface} color="#EFAF00" radius="0.75rem">
-                  <SubtleTintedSurface.Content className={styles.content}>
-                    <div className={styles.value}>{user.points} Punkte</div>
-                    <IconStarsFilled className={styles.signet} data-via-icon />
-                  </SubtleTintedSurface.Content>
-                </SubtleTintedSurface>
-              )}
-            </div>
-          </div>
+          <ProfileStats user={user} />
         </>
       }
       asidePosition="start"

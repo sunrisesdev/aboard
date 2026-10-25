@@ -51,16 +51,6 @@
   }
 }
 
-.cardDivider {
-  border: none;
-  border-bottom: var(--via-bd-width) solid var(--via-bd-secondary);
-  margin-top: 0.25rem;
-
-  @media (width >= 64em) {
-    display: none;
-  }
-}
-
 .displayName {
   font-size: 1.5rem;
   font-weight: 600;
@@ -99,66 +89,15 @@
   color: var(--via-fg-secondary);
 }
 
+.name {
+  margin-top: 0.5rem;
+}
+
 .profileLinks {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-inline: -0.25rem;
-}
-
-.statsSurface {
-  box-shadow: var(--via-shadow-sm);
-  overflow: clip;
-  position: relative;
-
-  em {
-    color: var(--via-tinted-surface-fg-secondary);
-  }
-
-  .content {
-    gap: 0.25rem;
-    height: 100%;
-    padding: 0.75rem;
-  }
-
-  .signet {
-    bottom: -2rem;
-    font-size: 7rem;
-    opacity: 0.25;
-    pointer-events: none;
-    position: absolute;
-    right: -1rem;
-    rotate: 20deg;
-  }
-
-  .value {
-    font-size: 1.5rem;
-    font-weight: 700;
-  }
-
-  &.isPrimary {
-    grid-column: span 2;
-
-    .signet {
-      bottom: unset;
-      rotate: -20deg;
-      top: -2.5rem;
-    }
-  }
-}
-
-.title {
-  align-items: center;
-  color: var(--via-fg-secondary);
-  display: flex;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-
-  svg {
-    font-size: 1rem;
-  }
 }
 
 .username {

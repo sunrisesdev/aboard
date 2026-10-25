@@ -1,0 +1,91 @@
+.base {
+  &[open] .showLabel,
+  &:not([open]) .hideLabel {
+    display: none;
+  }
+
+  /* Only collapsible on mobile, desktop shows the content even while closed */
+  @media (width >= 64em) {
+    &::details-content {
+      content-visibility: visible;
+    }
+  }
+}
+
+.toggle {
+  border-radius: 0.25rem;
+  color: var(--via-focus-ring);
+  cursor: pointer;
+  font-weight: 500;
+  list-style: none;
+  width: fit-content;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  @media (width >= 64em) {
+    display: none;
+  }
+}
+
+.stats {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 0.75rem;
+
+  @media (width >= 64em) {
+    margin-top: 0;
+  }
+}
+
+.stat {
+  box-shadow: var(--via-shadow-xs);
+  overflow: clip;
+  position: relative;
+
+  .content {
+    height: 100%;
+    padding: 0.75rem;
+  }
+
+  .description {
+    color: var(--via-tinted-surface-fg-secondary);
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+  }
+
+  .label {
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  .signet {
+    bottom: -2rem;
+    display: flex;
+    font-size: 7rem;
+    opacity: 0.25;
+    pointer-events: none;
+    position: absolute;
+    right: -1rem;
+    rotate: 20deg;
+  }
+
+  .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  &.isWide {
+    grid-column: span 2;
+
+    .signet {
+      bottom: unset;
+      rotate: -20deg;
+      top: -2.5rem;
+    }
+  }
+}
