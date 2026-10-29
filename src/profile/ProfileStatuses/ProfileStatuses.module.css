@@ -1,0 +1,15 @@
+.days {
+  display: grid;
+  gap: 1.5rem;
+
+  @media (width < 64em) {
+    margin-top: 1rem;
+  }
+}
+
+.day {
+  color: var(--via-fg-secondary);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}

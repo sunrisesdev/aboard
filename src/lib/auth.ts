@@ -20,7 +20,7 @@ const traewelling: Provider = {
     url: 'https://traewelling.de/oauth/authorize',
     params: {
       scope:
-        'read-statuses read-notifications write-statuses write-likes write-notifications write-follows write-blocks read-settings read-settings-profile read-settings-followers write-followers',
+        'read-statuses read-notifications write-statuses write-likes write-notifications write-follows write-blocks read-settings read-settings-profile read-settings-followers write-followers read-statistics',
     },
   },
   token: 'https://traewelling.de/oauth/token',

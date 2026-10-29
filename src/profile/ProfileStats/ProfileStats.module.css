@@ -60,7 +60,7 @@
 
   .label {
     font-size: 0.9375rem;
-    font-weight: 500;
+    font-weight: 400;
   }
 
   .signet {
@@ -76,7 +76,7 @@
 
   .value {
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 600;
   }
 
   &.isWide {

@@ -15,8 +15,8 @@ import {
 } from '@/lib/traewelling';
 import { ProfileLink } from '@/profile/ProfileLink/ProfileLink';
 import { ProfileStats } from '@/profile/ProfileStats/ProfileStats';
+import { ProfileStatuses } from '@/profile/ProfileStatuses/ProfileStatuses';
 import statusesStyles from '@/status/Dashboard/Dashboard.module.css';
-import { StatusSummary } from '@/status/StatusSummary/StatusSummary';
 import { StatusSummarySkeleton } from '@/status/StatusSummarySkeleton/StatusSummarySkeleton';
 import freiburg from './freiburg.avif';
 import styles from './Profile.module.css';
@@ -36,21 +36,13 @@ const loadUser = cache(async (accessToken: string, username: string) => {
 
 const UserStatuses = async ({ client, username }: { client: TraewellingClient; username: string }) => {
   try {
-    const statuses = await getUserStatuses(client, username);
+    const { data: statuses, nextPage } = await getUserStatuses(client, username);
 
     if (statuses.length === 0) {
       return <p className={styles.hint}>Noch keine Check-ins.</p>;
     }
 
-    return (
-      <ul className={statusesStyles.statuses}>
-        {statuses.map((status) => (
-          <li key={status.id}>
-            <StatusSummary status={status} />
-          </li>
-        ))}
-      </ul>
-    );
+    return <ProfileStatuses initialNextPage={nextPage} initialStatuses={statuses} username={username} />;
   } catch (error) {
     if (error instanceof TraewellingApiError && error.status === 403) {
       return <p className={styles.hint}>Dieses Profil ist privat.</p>;

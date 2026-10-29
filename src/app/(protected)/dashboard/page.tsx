@@ -22,7 +22,7 @@ const DashboardLoader = async ({ dashboardPromise }: { dashboardPromise: Dashboa
 };
 
 const DebugTimePanelLoader = async ({ accessToken, username }: { accessToken: string; username: string }) => {
-  const statuses = await getUserStatuses(createTraewellingClient(accessToken), username);
+  const { data: statuses } = await getUserStatuses(createTraewellingClient(accessToken), username);
 
   return <DebugTimePanel statuses={statuses} />;
 };

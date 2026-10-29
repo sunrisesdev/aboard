@@ -10,7 +10,7 @@ export async function loadCurrentStatuses(
   username: string,
   timeOffset = 0,
 ): Promise<CurrentStatuses> {
-  const statuses = await getUserStatuses(client, username);
+  const { data: statuses } = await getUserStatuses(client, username);
   const currentStatuses = {
     ...getCurrentStatuses(statuses, new Date(Date.now() + timeOffset)),
     timeOffset: timeOffset || undefined,

@@ -19,6 +19,7 @@ export {
   stationHistory,
   type TravelType,
 } from './stations';
+export { getDailyStatistics } from './statistics';
 export {
   deleteStatus,
   getDashboard,

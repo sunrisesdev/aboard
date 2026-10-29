@@ -31,7 +31,7 @@ export const UserMenu = ({ className, ...props }: Structure) => {
               <div className={styles.username}>@{username}</div>
             </div>
 
-            <Menu.LinkItem className={styles.item} render={<Link href={getUserHref(username)} />}>
+            <Menu.LinkItem className={styles.item} closeOnClick render={<Link href={getUserHref(username)} />}>
               <IconUser aria-hidden data-via-icon />
               Profil
             </Menu.LinkItem>
@@ -40,6 +40,7 @@ export const UserMenu = ({ className, ...props }: Structure) => {
 
             <Menu.Item
               className={styles.item}
+              closeOnClick
               disabled={isPending}
               onClick={() => startTransition(() => signOutAction())}
             >
