@@ -8,7 +8,7 @@ import { formatDateTime } from '@/helpers/formatDateTime';
 import { isIsoDate } from '@/helpers/isIsoDate';
 import { JourneyTimeline } from '@/journey/JourneyTimeline/JourneyTimeline';
 import { requireSession } from '@/lib/auth';
-import { createTraewellingClient, getDailyStatistics, TraewellingApiError } from '@/lib/traewelling';
+import { createTraewellingClient, getDailyStatistics, getStopovers, TraewellingApiError } from '@/lib/traewelling';
 import { getCheckinColor } from '@/status/getCheckinColor';
 
 export async function generateMetadata({ params }: PageProps<'/statistics/daily/[date]'>): Promise<Metadata> {
@@ -30,6 +30,15 @@ export default async function DailyStatisticsPage({ params }: PageProps<'/statis
     throw error;
   });
 
+  // Only needed for the directions, so the timeline is shown without them
+  const stopoversByTrip =
+    statuses.length > 0
+      ? await getStopovers(
+          client,
+          statuses.map(({ checkin }) => checkin.trip),
+        ).catch(() => undefined)
+      : undefined;
+
   const routes = statuses.map(({ checkin, id }) => {
     const polyline = polylines.find(({ properties }) => properties.statusId === id);
 
@@ -47,7 +56,11 @@ export default async function DailyStatisticsPage({ params }: PageProps<'/statis
     <PageContent aside={<RouteMap deferred routes={routes} />}>
       <h1>Fahrten am {formatDateTime(date, 'date')}</h1>
 
-      {statuses.length === 0 ? <p>Keine Fahrten an diesem Tag.</p> : <JourneyTimeline statuses={statuses} />}
+      {statuses.length === 0 ? (
+        <p>Keine Fahrten an diesem Tag.</p>
+      ) : (
+        <JourneyTimeline statuses={statuses} stopoversByTrip={stopoversByTrip} />
+      )}
     </PageContent>
   );
 }

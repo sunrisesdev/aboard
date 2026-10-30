@@ -38,6 +38,7 @@ export { getStopovers } from './stopovers';
 export { getTripInfo, type StopoverResource, type TripResource } from './trip';
 export type {
   Business,
+  HafasTravelType,
   MotisMode,
   StatusVisibility,
   TraewellingUser,

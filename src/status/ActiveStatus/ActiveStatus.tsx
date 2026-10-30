@@ -14,6 +14,7 @@ import { formatPlatform } from '@/helpers/formatPlatform';
 import { getDelay } from '@/helpers/getDelay';
 import { getLineColors } from '@/helpers/getLineColors';
 import type { StatusResource, StopoverResource } from '@/lib/traewelling';
+import { getCheckinMode } from '@/status/getCheckinMode';
 import { getCheckinTimes } from '@/status/getCheckinTimes';
 import { getNextStopover } from '@/status/getNextStopover';
 import { StatusTripHeader } from '@/status/StatusTripHeader/StatusTripHeader';
@@ -46,7 +47,7 @@ function getArrivalStation(stopover: StopoverResource, label: string): Station {
 
 function getStationDetails(
   { planned, plannedPlatform, platform, real }: Station,
-  mode: string | null,
+  mode: string | undefined,
   abbreviate = false,
 ) {
   return {
@@ -66,7 +67,7 @@ const StationRow = ({
 }: {
   compact: boolean;
   detailsClassName: string;
-  mode: string | null;
+  mode: string | undefined;
   rowClassName: string;
   station: Station;
 }) => {
@@ -128,6 +129,7 @@ export const ActiveStatus = ({ className, compact = false }: { className?: strin
 
   const { checkin } = active;
   const { destination, origin } = checkin;
+  const mode = getCheckinMode(checkin);
   const { arrival, departure } = getCheckinTimes(checkin);
 
   // Only updates with each refresh of the current statuses, which happens at least once a minute
@@ -172,7 +174,7 @@ export const ActiveStatus = ({ className, compact = false }: { className?: strin
       {/* The compact variant stacks the next status behind this one, so both float as one */}
       <TintedSurface
         className={styles.activeSurface}
-        color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background}
+        color={getLineColors({ color: checkin.routeColor, mode }).background}
         radius="1rem"
       >
         <TintedSurface.Content>
@@ -184,7 +186,7 @@ export const ActiveStatus = ({ className, compact = false }: { className?: strin
             {!isEnRoute ? (
               <SingleStation
                 compact={compact}
-                mode={checkin.mode}
+                mode={mode}
                 station={isBoarding ? boardingStation : destinationStation}
                 variant={isBoarding ? 'boarding' : 'alighting'}
               />
@@ -194,7 +196,7 @@ export const ActiveStatus = ({ className, compact = false }: { className?: strin
                 compact={compact}
                 departure={departure}
                 destination={destinationStation}
-                mode={checkin.mode}
+                mode={mode}
                 next={nextStation}
                 now={now}
               />
@@ -273,9 +275,10 @@ const NextStatus = ({
 }) => {
   const { checkin } = status;
   const { origin } = checkin;
+  const mode = getCheckinMode(checkin);
   const { departure } = getCheckinTimes(checkin);
   const delay = origin.departurePlanned ? getDelay(origin.departurePlanned, departure) : undefined;
-  const platform = formatPlatform(origin.departurePlatformReal ?? origin.departurePlatformPlanned, checkin.mode, {
+  const platform = formatPlatform(origin.departurePlatformReal ?? origin.departurePlatformPlanned, mode, {
     abbreviate: compact,
     planned: origin.departurePlatformPlanned,
   });
@@ -308,7 +311,7 @@ const NextStatus = ({
   return (
     <TintedSurface
       className={styles.nextSurface}
-      color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background}
+      color={getLineColors({ color: checkin.routeColor, mode }).background}
       // Set in from the wider active status in front of it
       radius={compact ? '0.75rem' : '1rem'}
     >
@@ -340,7 +343,7 @@ const SingleStation = ({
   variant,
 }: {
   compact: boolean;
-  mode: string | null;
+  mode: string | undefined;
   station: Station;
   variant: 'alighting' | 'boarding';
 }) => {
@@ -383,7 +386,7 @@ const EnRoute = ({
   compact: boolean;
   departure: string | null;
   destination: Station;
-  mode: string | null;
+  mode: string | undefined;
   next?: Station;
   now: Date;
 }) => {

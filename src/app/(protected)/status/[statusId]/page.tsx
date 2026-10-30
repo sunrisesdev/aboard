@@ -31,6 +31,7 @@ import {
   type StatusLike,
   TraewellingApiError,
 } from '@/lib/traewelling';
+import { getCheckinMode } from '@/status/getCheckinMode';
 import { getCheckinStopovers } from '@/status/getCheckinStopovers';
 import { getCheckinTimes } from '@/status/getCheckinTimes';
 import { getDestinationStopovers } from '@/status/getDestinationStopovers';
@@ -320,7 +321,8 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
           routes={[
             {
               color:
-                getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background ?? 'var(--via-fg-primary)',
+                getLineColors({ color: checkin.routeColor, mode: getCheckinMode(checkin) }).background
+                ?? 'var(--via-fg-primary)',
               coordinates: routeCoordinates,
             },
           ]}

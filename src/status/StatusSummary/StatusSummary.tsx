@@ -16,7 +16,8 @@ import { formatDuration } from '@/helpers/formatDuration';
 import { getDelay } from '@/helpers/getDelay';
 import { getLineColors } from '@/helpers/getLineColors';
 import { getUserHref } from '@/helpers/getUserHref';
-import type { MotisMode, StatusResource } from '@/lib/traewelling';
+import type { StatusResource } from '@/lib/traewelling';
+import { getCheckinMode } from '@/status/getCheckinMode';
 import { getCheckinTimes } from '@/status/getCheckinTimes';
 import { StatusBody } from '@/status/StatusBody/StatusBody';
 import { StatusLikeButton } from '@/status/StatusLikeButton/StatusLikeButton';
@@ -47,6 +48,7 @@ function getTiming(planned: string | null, real: string | null, manual: string |
 export const StatusSummary = ({ status }: { status: StatusResource }) => {
   const { bodyMentions, checkin, createdAt, user } = status;
   const { destination, origin } = checkin;
+  const mode = getCheckinMode(checkin);
   const body = typeof status.body === 'string' ? status.body : undefined;
   const { arrival, departure } = getCheckinTimes(checkin);
   const now = new Date();
@@ -86,19 +88,19 @@ export const StatusSummary = ({ status }: { status: StatusResource }) => {
 
       <Link href={`/status/${status.id}`} style={{ display: 'flex' }}>
         <TintedSurface
-          color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background}
+          color={getLineColors({ color: checkin.routeColor, mode }).background}
           radius="1rem"
           style={{ width: '100%' }}
         >
           <TintedSurface.Content className={styles.tripContent}>
             <div className={styles.tripHeader}>
-              <TransportModeIcon height={20} mode={checkin.mode ?? undefined} width={20} />
+              <TransportModeIcon height={20} mode={mode} width={20} />
 
               <LineBadge
                 backgroundColor={checkin.routeColor ?? undefined}
                 color={checkin.routeTextColor ?? undefined}
                 journeyNumber={journeyNumber}
-                mode={(checkin.mode ?? undefined) as MotisMode | undefined}
+                mode={mode}
                 name={checkin.lineName}
                 productName={undefined}
               />

@@ -7,6 +7,8 @@ import type { components } from './schema';
  */
 export type Business = components['schemas']['Business'];
 
+export type HafasTravelType = components['schemas']['HafasTravelType'];
+
 export type MotisMode = components['schemas']['MotisCategory'];
 
 /**

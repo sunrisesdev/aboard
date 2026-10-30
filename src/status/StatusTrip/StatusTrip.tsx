@@ -10,6 +10,7 @@ import { formatPlatform } from '@/helpers/formatPlatform';
 import { getDelay } from '@/helpers/getDelay';
 import { getLineColors } from '@/helpers/getLineColors';
 import type { components } from '@/lib/traewelling/schema';
+import { getCheckinMode } from '@/status/getCheckinMode';
 import { getCheckinTimes } from '@/status/getCheckinTimes';
 import { StatusTripHeader } from '@/status/StatusTripHeader/StatusTripHeader';
 import styles from './StatusTrip.module.css';
@@ -33,7 +34,7 @@ const StatusTripStation = ({
   area: 'destination' | 'origin';
   cancelled?: boolean;
   label: string;
-  mode: string | null;
+  mode: string | undefined;
   planned: string | null;
   plannedPlatform: string | null;
   platform: string | null;
@@ -94,6 +95,7 @@ export const StatusTrip = ({
   stopovers?: Stopover[];
 }) => {
   const { destination, origin } = checkin;
+  const mode = getCheckinMode(checkin);
   const { arrival, departure } = getCheckinTimes(checkin);
 
   // The line fills up by CSS animation, so it keeps progressing without re-rendering. A negative delay
@@ -122,7 +124,7 @@ export const StatusTrip = ({
   const distanceInKilometers = checkin.distance / 1000;
 
   return (
-    <TintedSurface color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background} radius="1rem">
+    <TintedSurface color={getLineColors({ color: checkin.routeColor, mode }).background} radius="1rem">
       <TintedSurface.Content className={styles.base}>
         <StatusTripHeader checkin={checkin} className={styles.header} direction={direction} />
 
@@ -138,7 +140,7 @@ export const StatusTrip = ({
             area="origin"
             cancelled={origin.cancelled}
             label="von"
-            mode={checkin.mode}
+            mode={mode}
             planned={origin.departurePlanned}
             plannedPlatform={origin.departurePlatformPlanned}
             platform={origin.departurePlatformReal ?? origin.departurePlatformPlanned}
@@ -173,7 +175,7 @@ export const StatusTrip = ({
             area="destination"
             cancelled={destination.cancelled}
             label="nach"
-            mode={checkin.mode}
+            mode={mode}
             planned={destination.arrivalPlanned}
             plannedPlatform={destination.arrivalPlatformPlanned}
             platform={destination.arrivalPlatformReal ?? destination.arrivalPlatformPlanned}

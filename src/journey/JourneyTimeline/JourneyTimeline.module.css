@@ -2,6 +2,7 @@
    column and the gaps next to it match StatusTrip. */
 .base {
   --via-journey-gap: 0.625rem;
+  --via-journey-stroke: 0.1875rem;
 
   display: grid;
   grid-template-columns: [label] auto [time] auto [line] 1.25rem [content] minmax(0, 1fr);
@@ -34,6 +35,12 @@
   grid-template-columns: subgrid;
   line-height: 1.25rem;
   white-space: nowrap;
+
+  & + & {
+    border-top: var(--via-bd-width) solid var(--via-bd-secondary);
+    margin-top: 0.125rem;
+    padding-top: 0.125rem;
+  }
 }
 
 .timeLabel {
@@ -43,10 +50,14 @@
   font-weight: 500;
   grid-column: 1;
   margin-right: 0.25rem;
+
+  /* Temporär entfernt */
+  display: none;
 }
 
 /* Like the group labels in Stationboard */
 .time {
+  color: var(--via-fg-secondary);
   font-feature-settings: "tnum";
   font-weight: 600;
   grid-column: 2;
@@ -57,23 +68,23 @@
    a plain background wouldn't stand out from the card. */
 .delayBadge {
   background-color: var(--via-journey-delay-color);
-  border-radius: 0.25rem;
+  border-radius: 0.1875rem;
   box-shadow: var(--via-shadow-xs);
   /* Not inherited from the time, like the delays everywhere else */
   font-feature-settings: normal;
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 0.75rem;
+  font-weight: 600;
   line-height: 1.125;
-  padding: 0 0.25rem;
+  padding: 0 0.1875rem;
   position: absolute;
   right: 0;
 
   &[data-via-kind="arrival"] {
-    bottom: calc(100% + 0.125rem);
+    bottom: calc(100% + 0.0625rem);
   }
 
   &[data-via-kind="departure"] {
-    top: calc(100% + 0.125rem);
+    top: calc(100% + 0.0625rem);
   }
 
   /* Overrides the global text colors of the delay statuses */
@@ -108,8 +119,28 @@
 }
 
 /* Nested for a higher specificity than TripLine's own styles */
+.line .route {
+  width: var(--via-journey-stroke);
+}
+
+/* Kept clear of the indicator, since the dots would otherwise run into the ring. Masked instead of shortened by a
+   margin, which would move the indicator. */
+.line .transferRoute {
+  &:has(+ .stopIndicator) {
+    mask: linear-gradient(to top, transparent 0.25rem, #000 0.25rem);
+  }
+
+  .stopIndicator + & {
+    mask: linear-gradient(to bottom, transparent 0.25rem, #000 0.25rem);
+  }
+}
+
+/* Nested for a higher specificity than TripLine's own styles. Grows with the stroke, so the hole keeps TripLine's
+   size. */
 .line .stopIndicator {
+  border-width: var(--via-journey-stroke);
   color: var(--via-journey-departure-color, var(--via-journey-arrival-color));
+  height: calc(0.375rem + 2 * var(--via-journey-stroke));
 
   /* The arrival's color covers the upper half and the departure's the lower one, separated by a 2px gap. Drawn as a
      background masked to the ring, since border colors can only be split diagonally and without a gap. */
@@ -124,7 +155,11 @@
     );
     background-origin: border-box;
     border-color: transparent;
-    mask: radial-gradient(closest-side, transparent calc(100% - 0.125rem), #000 calc(100% - 0.125rem));
+    mask: radial-gradient(
+      closest-side,
+      transparent calc(100% - var(--via-journey-stroke)),
+      #000 calc(100% - var(--via-journey-stroke))
+    );
   }
 }
 
@@ -142,11 +177,14 @@
 
 /* Like the platform badges in StatusTrip */
 .platformBadge {
+  align-items: center;
   background-color: var(--via-bg-tertiary);
   border-radius: 0.25rem;
   box-shadow: var(--via-shadow-xs);
+  display: inline-flex;
   font-size: 0.875rem;
   font-weight: 500;
+  gap: 0.125rem;
   padding: 0 0.25rem;
   white-space: nowrap;
 }
@@ -160,10 +198,43 @@
   padding: 0.75rem 0 0.75rem var(--via-journey-gap);
 }
 
+/* Like the stats in ProfileStats */
+.tripSurface {
+  box-shadow: var(--via-shadow-xs);
+  flex-grow: 1;
+  min-width: 0;
+}
+
+/* The column can shrink below the header's width, so the direction's Marquee overflows instead of the surface */
+.tripContent {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr);
+  padding: 0.75rem;
+}
+
+/* Neutral, since the surface is pale enough for it */
+.body {
+  color: var(--via-fg-primary);
+  line-height: 1.5;
+}
+
 .transfer {
   height: 2.5rem;
 
   &[data-via-short] {
     height: 1.5rem;
+  }
+
+  /* Cuts through the whole card like the group dividers in Stationboard, reaching over the card's padding */
+  &:not([data-via-short]) {
+    align-items: center;
+
+    &::before {
+      border-top: 1.5px solid var(--via-bd-primary);
+      content: "";
+      grid-column: 1 / -1;
+      margin-inline: -1rem;
+    }
   }
 }

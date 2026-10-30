@@ -2,6 +2,16 @@
   white-space: pre-wrap;
 }
 
+/* Spaced like the bio */
+.hasParagraphs {
+  display: grid;
+  gap: 0.5rem;
+
+  p {
+    margin: 0;
+  }
+}
+
 .mention {
   font-weight: 500;
 }

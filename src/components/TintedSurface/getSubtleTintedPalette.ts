@@ -39,7 +39,7 @@ const schemes = {
 };
 
 /** Verschiebt die Lightness in `direction`, bis die Farbe über den gesamten Verlauf den Mindestkontrast erfüllt. */
-function ensureContrast(
+export function ensureContrast(
   lightness: number,
   chroma: number,
   hue: number,
