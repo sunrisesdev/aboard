@@ -2,9 +2,8 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { getVersion, Map as MapLibreMap, setWorkerUrl } from 'maplibre-gl';
 import { useEffect, useRef } from 'react';
 import { resolveCssColor } from '@/helpers/resolveCssColor';
-import { buildRouteMapStyle, type RouteMapColors, type RouteMapStop } from './buildRouteMapStyle';
+import { buildRouteMapStyle, type RouteMapColors, type RouteMapRoute, type RouteMapStop } from './buildRouteMapStyle';
 import { getCoordinatesBounds } from './getCoordinatesBounds';
-import type { Coordinate } from './getPolylineCoordinates';
 import { getRouteMapLabelPosition } from './getRouteMapLabelPosition';
 import styles from './RouteMap.module.css';
 
@@ -13,7 +12,7 @@ export type RouteMapStatus = 'loading' | 'ready' | 'failed';
 // Copied there on install by scripts/copy-maplibre-worker.mjs, since Turbopack can't resolve the worker on its own
 setWorkerUrl(`/vendor/maplibre/${getVersion()}/maplibre-gl-worker.mjs`);
 
-const colorVariables: Record<Exclude<keyof RouteMapColors, 'route'>, string> = {
+const colorVariables: Record<keyof RouteMapColors, string> = {
   boundary: '--via-route-map-boundary',
   casing: '--via-route-map-casing',
   land: '--via-route-map-land',
@@ -25,25 +24,28 @@ const colorVariables: Record<Exclude<keyof RouteMapColors, 'route'>, string> = {
   water: '--via-route-map-water',
 };
 
-// Kept free at the bottom, so the attribution never covers the route or a label
+// Kept free at the bottom, so the attribution never covers the routes or a label
 const attributionHeight = 44;
-const routePadding = 32;
-const fitBoundsOptions = {
-  animate: false,
-  maxZoom: 15,
-  padding: { bottom: routePadding + attributionHeight, left: routePadding, right: routePadding, top: routePadding },
-};
+// Stops need room for their labels, routes without stops only for the line itself
+const stopsPadding = 32;
+const routesPadding = 12;
 const loadTimeout = 8000;
 
+function getFitBoundsOptions(padding: number) {
+  return {
+    animate: false,
+    maxZoom: 15,
+    padding: { bottom: padding + attributionHeight, left: padding, right: padding, top: padding },
+  };
+}
+
 export const RouteMapCanvas = ({
-  color,
-  coordinates,
   onStatusChange,
+  routes,
   stops,
 }: {
-  color: string;
-  coordinates: Coordinate[];
   onStatusChange: (status: RouteMapStatus) => void;
+  routes: RouteMapRoute[];
   stops?: RouteMapStop[];
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -56,16 +58,17 @@ export const RouteMapCanvas = ({
     const getStyle = () => {
       const colors = Object.fromEntries(
         Object.entries(colorVariables).map(([key, variable]) => [key, resolveCssColor(container, `var(${variable})`)]),
-      ) as Omit<RouteMapColors, 'route'>;
+      ) as RouteMapColors;
 
       return buildRouteMapStyle({
-        colors: { ...colors, route: resolveCssColor(container, color) },
-        coordinates,
+        colors,
+        routes: routes.map((route) => ({ ...route, color: resolveCssColor(container, route.color) })),
         stops,
       });
     };
 
-    const bounds = getCoordinatesBounds(coordinates);
+    const bounds = getCoordinatesBounds(routes.flatMap(({ coordinates }) => coordinates));
+    const fitBoundsOptions = getFitBoundsOptions(stops?.length ? stopsPadding : routesPadding);
 
     // A removed map (e.g. by Strict Mode's double mount) may still emit errors for its aborted requests
     let isActive = true;
@@ -144,7 +147,7 @@ export const RouteMapCanvas = ({
       colorScheme.removeEventListener('change', handleColorSchemeChange);
       map.remove();
     };
-  }, [color, coordinates, onStatusChange, stops]);
+  }, [onStatusChange, routes, stops]);
 
   return (
     <>

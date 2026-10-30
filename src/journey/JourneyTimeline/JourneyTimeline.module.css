@@ -1,0 +1,169 @@
+/* Every item spans all columns as a subgrid, so the times of all stops line up and the line runs through. The line's
+   column and the gaps next to it match StatusTrip. */
+.base {
+  --via-journey-gap: 0.625rem;
+
+  display: grid;
+  grid-template-columns: [label] auto [time] auto [line] 1.25rem [content] minmax(0, 1fr);
+  list-style: none;
+}
+
+.stop,
+.trip,
+.transfer {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+}
+
+/* Without height, so two times don't stretch the row, and overflowing evenly around the indicator. Not positioned
+   absolutely, since the times still have to size the columns. */
+.times {
+  align-content: center;
+  align-self: center;
+  display: grid;
+  grid-column: label / line;
+  grid-template-columns: subgrid;
+  height: 0;
+  padding-right: var(--via-journey-gap);
+}
+
+.timeRow {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  line-height: 1.25rem;
+  white-space: nowrap;
+}
+
+.timeLabel {
+  color: var(--via-fg-secondary);
+  font-style: italic;
+  font-size: 0.75rem;
+  font-weight: 500;
+  grid-column: 1;
+  margin-right: 0.25rem;
+}
+
+/* Like the group labels in Stationboard */
+.time {
+  font-feature-settings: "tnum";
+  font-weight: 600;
+  grid-column: 2;
+  position: relative;
+}
+
+/* Positioned absolutely, so it neither widens the column nor moves the time away from the indicator. Inverted, since
+   a plain background wouldn't stand out from the card. */
+.delayBadge {
+  background-color: var(--via-journey-delay-color);
+  border-radius: 0.25rem;
+  box-shadow: var(--via-shadow-xs);
+  /* Not inherited from the time, like the delays everywhere else */
+  font-feature-settings: normal;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.125;
+  padding: 0 0.25rem;
+  position: absolute;
+  right: 0;
+
+  &[data-via-kind="arrival"] {
+    bottom: calc(100% + 0.125rem);
+  }
+
+  &[data-via-kind="departure"] {
+    top: calc(100% + 0.125rem);
+  }
+
+  /* Overrides the global text colors of the delay statuses */
+  &[data-via-delay] {
+    color: var(--via-bg-primary);
+  }
+
+  &[data-via-delay="early"] {
+    --via-journey-delay-color: var(--via-delay-early);
+  }
+
+  &[data-via-delay="onTime"] {
+    --via-journey-delay-color: var(--via-delay-on-time);
+  }
+
+  &[data-via-delay="slight"] {
+    --via-journey-delay-color: var(--via-delay-slight);
+  }
+
+  &[data-via-delay="late"] {
+    --via-journey-delay-color: var(--via-delay-late);
+  }
+}
+
+.line {
+  grid-column: line;
+}
+
+/* Keeps the indicator centered when there's no segment on one side */
+.spacer {
+  flex-grow: 1;
+}
+
+/* Nested for a higher specificity than TripLine's own styles */
+.line .stopIndicator {
+  color: var(--via-journey-departure-color, var(--via-journey-arrival-color));
+
+  /* The arrival's color covers the upper half and the departure's the lower one, separated by a 2px gap. Drawn as a
+     background masked to the ring, since border colors can only be split diagonally and without a gap. */
+  &[data-via-shared] {
+    --via-journey-stop-gap: 1px;
+
+    background-image: linear-gradient(
+      to bottom,
+      var(--via-journey-arrival-color) calc(50% - var(--via-journey-stop-gap)),
+      transparent calc(50% - var(--via-journey-stop-gap)) calc(50% + var(--via-journey-stop-gap)),
+      var(--via-journey-departure-color) calc(50% + var(--via-journey-stop-gap))
+    );
+    background-origin: border-box;
+    border-color: transparent;
+    mask: radial-gradient(closest-side, transparent calc(100% - 0.125rem), #000 calc(100% - 0.125rem));
+  }
+}
+
+/* Like the trip destinations in Stationboard */
+.station {
+  align-items: center;
+  display: flex;
+  font-weight: 600;
+  gap: 0.5rem;
+  grid-column: content;
+  justify-content: space-between;
+  line-height: 1.25rem;
+  padding-left: var(--via-journey-gap);
+}
+
+/* Like the platform badges in StatusTrip */
+.platformBadge {
+  background-color: var(--via-bg-tertiary);
+  border-radius: 0.25rem;
+  box-shadow: var(--via-shadow-xs);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0 0.25rem;
+  white-space: nowrap;
+}
+
+/* High enough for the times and delays reaching in from the stops on both sides */
+.details {
+  align-items: center;
+  grid-column: content;
+  display: flex;
+  min-height: 6.25rem;
+  padding: 0.75rem 0 0.75rem var(--via-journey-gap);
+}
+
+.transfer {
+  height: 2.5rem;
+
+  &[data-via-short] {
+    height: 1.5rem;
+  }
+}

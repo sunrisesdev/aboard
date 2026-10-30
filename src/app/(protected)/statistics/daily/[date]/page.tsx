@@ -1,12 +1,15 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { PageContent } from '@/components/PageContent/PageContent';
+import { getPolylineCoordinates } from '@/components/RouteMap/getPolylineCoordinates';
+import { getRouteMapStop } from '@/components/RouteMap/getRouteMapStop';
+import { RouteMap } from '@/components/RouteMap/RouteMap';
 import { formatDateTime } from '@/helpers/formatDateTime';
 import { isIsoDate } from '@/helpers/isIsoDate';
+import { JourneyTimeline } from '@/journey/JourneyTimeline/JourneyTimeline';
 import { requireSession } from '@/lib/auth';
 import { createTraewellingClient, getDailyStatistics, TraewellingApiError } from '@/lib/traewelling';
-import statusesStyles from '@/status/Dashboard/Dashboard.module.css';
-import { StatusSummary } from '@/status/StatusSummary/StatusSummary';
+import { getCheckinColor } from '@/status/getCheckinColor';
 
 export async function generateMetadata({ params }: PageProps<'/statistics/daily/[date]'>): Promise<Metadata> {
   const { date } = await params;
@@ -21,27 +24,30 @@ export default async function DailyStatisticsPage({ params }: PageProps<'/statis
   const session = await requireSession();
   const client = createTraewellingClient(session.accessToken as string);
 
-  const { statuses = [] } = await getDailyStatistics(client, date).catch((error) => {
+  const { polylines, statuses = [] } = await getDailyStatistics(client, date).catch((error) => {
     if (error instanceof TraewellingApiError && error.status === 400) notFound();
 
     throw error;
   });
 
+  const routes = statuses.map(({ checkin, id }) => {
+    const polyline = polylines.find(({ properties }) => properties.statusId === id);
+
+    return {
+      color: getCheckinColor(checkin),
+      // Falls back to a straight line when Träwelling has no polyline for this status
+      coordinates: (polyline && getPolylineCoordinates(polyline)) ?? [
+        getRouteMapStop(checkin.origin).coordinates,
+        getRouteMapStop(checkin.destination).coordinates,
+      ],
+    };
+  });
+
   return (
-    <PageContent>
+    <PageContent aside={<RouteMap deferred routes={routes} />}>
       <h1>Fahrten am {formatDateTime(date, 'date')}</h1>
 
-      {statuses.length === 0 ? (
-        <p>Keine Fahrten an diesem Tag.</p>
-      ) : (
-        <ul className={statusesStyles.statuses}>
-          {statuses.map((status) => (
-            <li key={status.id}>
-              <StatusSummary status={status} />
-            </li>
-          ))}
-        </ul>
-      )}
+      {statuses.length === 0 ? <p>Keine Fahrten an diesem Tag.</p> : <JourneyTimeline statuses={statuses} />}
     </PageContent>
   );
 }

@@ -316,9 +316,14 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
       <div className={styles.mapCard}>
         <RouteMap
           className={styles.map}
-          color={getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background ?? 'var(--via-fg-primary)'}
-          coordinates={routeCoordinates}
           deferred
+          routes={[
+            {
+              color:
+                getLineColors({ color: checkin.routeColor, mode: checkin.mode }).background ?? 'var(--via-fg-primary)',
+              coordinates: routeCoordinates,
+            },
+          ]}
           stops={routeMapStops}
         />
       </div>

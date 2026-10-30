@@ -11,9 +11,13 @@ export type RouteMapColors = {
   rail: string;
   road: string;
   roadMajor: string;
-  route: string;
   urban: string;
   water: string;
+};
+
+export type RouteMapRoute = {
+  color: string;
+  coordinates: Coordinate[];
 };
 
 export type RouteMapStop = {
@@ -26,22 +30,21 @@ const attribution =
   '<a href="https://openfreemap.org" target="_blank">OpenFreeMap</a> <a href="https://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap</a>';
 
 /**
- * Builds a minimal, label-free MapLibre style based on OpenFreeMap tiles (OpenMapTiles schema) with the route on top.
- * Stops are marked with a dot; without stops, the route's ends are marked instead.
+ * Builds a minimal, label-free MapLibre style based on OpenFreeMap tiles (OpenMapTiles schema) with the routes on top.
+ * Stops are marked with a dot in the first route's color. Routes with less than two coordinates are left out.
  * @remarks Stop names are rendered as HTML by RouteMap, so they can be kept within the frame.
  */
 export function buildRouteMapStyle({
   colors,
-  coordinates,
+  routes,
   stops,
 }: {
   colors: RouteMapColors;
-  coordinates: Coordinate[];
+  routes: RouteMapRoute[];
   stops?: RouteMapStop[];
 }) {
-  const points = stops?.length
-    ? stops.map((stop) => stop.coordinates)
-    : [coordinates[0], coordinates[coordinates.length - 1]];
+  const drawableRoutes = routes.filter(({ coordinates }) => coordinates.length >= 2);
+  const points = (stops ?? []).map((stop) => ({ color: drawableRoutes[0]?.color, coordinates: stop.coordinates }));
 
   return {
     version: 8,
@@ -49,11 +52,25 @@ export function buildRouteMapStyle({
       openmaptiles: { type: 'vector', url: tilesUrl, attribution },
       route: {
         type: 'geojson',
-        data: { type: 'Feature', geometry: { type: 'LineString', coordinates }, properties: {} },
+        data: {
+          type: 'FeatureCollection',
+          features: drawableRoutes.map(({ color, coordinates }) => ({
+            type: 'Feature' as const,
+            geometry: { type: 'LineString' as const, coordinates },
+            properties: { color },
+          })),
+        },
       },
       stops: {
         type: 'geojson',
-        data: { type: 'Feature', geometry: { type: 'MultiPoint', coordinates: points }, properties: {} },
+        data: {
+          type: 'FeatureCollection',
+          features: points.map(({ color, coordinates }) => ({
+            type: 'Feature' as const,
+            geometry: { type: 'Point' as const, coordinates },
+            properties: { color },
+          })),
+        },
       },
     },
     layers: [
@@ -161,7 +178,7 @@ export function buildRouteMapStyle({
         type: 'line',
         source: 'route',
         layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': colors.route, 'line-width': 4 },
+        paint: { 'line-color': ['get', 'color'], 'line-width': 4 },
       },
       {
         id: 'stops',
@@ -170,7 +187,7 @@ export function buildRouteMapStyle({
         paint: {
           'circle-color': colors.casing,
           'circle-radius': 4,
-          'circle-stroke-color': colors.route,
+          'circle-stroke-color': ['get', 'color'],
           'circle-stroke-width': 2.5,
         },
       },
