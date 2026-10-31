@@ -3,7 +3,7 @@
 import { IconMapDown } from '@tabler/icons-react';
 import { clsx } from 'clsx';
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Button } from '@/components/Button/Button';
 import type { Extend, Structure } from '@/helpers/extend';
 import type { RouteMapRoute, RouteMapStop } from './buildRouteMapStyle';
@@ -18,18 +18,38 @@ const RouteMapCanvas = dynamic(() => import('./RouteMapCanvas').then((module) =>
 /**
  * Static, non-interactive map of one or more routes. Hides itself when the map can't be displayed (e.g. no WebGL, tile errors or rate limiting).
  * @param deferred Shows a button instead, so the map (and MapLibre itself) is only loaded on request.
- * @param routes Any CSS color (including variables) and GeoJSON coordinates (`[longitude, latitude]`) per route. Should be referentially stable.
+ * @param highlightedRoute Index of a route that is drawn on top in its highlight color, while the others are dimmed. Changing it doesn't reload the map.
+ * @param routes Any CSS colors (including variables) and GeoJSON coordinates (`[longitude, latitude]`) per route. Should be referentially stable.
  * @param stops Labeled stops, usually origin and destination of a single route. Should be referentially stable.
  */
 export const RouteMap = ({
   className,
   deferred = false,
+  highlightedRoute,
+  onStatusChange,
   routes,
   stops,
   ...props
-}: Extend<Structure, { deferred?: boolean; routes: RouteMapRoute[]; stops?: RouteMapStop[] }>) => {
+}: Extend<
+  Structure,
+  {
+    deferred?: boolean;
+    highlightedRoute?: number;
+    onStatusChange?: (status: RouteMapStatus) => void;
+    routes: RouteMapRoute[];
+    stops?: RouteMapStop[];
+  }
+>) => {
   const [isRequested, setIsRequested] = useState(!deferred);
   const [status, setStatus] = useState<RouteMapStatus>('loading');
+
+  const handleStatusChange = useCallback(
+    (status: RouteMapStatus) => {
+      setStatus(status);
+      onStatusChange?.(status);
+    },
+    [onStatusChange],
+  );
 
   if (!routes.some(({ coordinates }) => coordinates.length >= 2) || status === 'failed') return null;
 
@@ -41,7 +61,12 @@ export const RouteMap = ({
       {...props}
     >
       {isRequested ? (
-        <RouteMapCanvas onStatusChange={setStatus} routes={routes} stops={stops} />
+        <RouteMapCanvas
+          highlightedRoute={highlightedRoute}
+          onStatusChange={handleStatusChange}
+          routes={routes}
+          stops={stops}
+        />
       ) : (
         <div className={styles.placeholder}>
           <Button

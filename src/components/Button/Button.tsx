@@ -8,7 +8,7 @@ export type ButtonProps = BaseButton.Props & {
   iconOnly?: boolean;
   leadingSlot?: ReactNode;
   trailingSlot?: ReactNode;
-  variant?: 'danger' | 'primary' | 'secondary';
+  variant?: 'danger' | 'ghost' | 'primary' | 'secondary';
 };
 
 export function Button({

@@ -75,44 +75,9 @@
   color: var(--via-fg-secondary);
 }
 
-/* Like Card, but without padding, so the map bleeds to the card's edges */
 .mapCard {
-  background: var(--via-bg-primary);
-  border-radius: 1rem;
-  box-shadow: var(--via-shadow-md);
-  overflow: hidden;
-  position: relative;
-
-  /* Drawn on top of the map, since the map's clipped corners would otherwise cover a regular border */
-  &::after {
-    border: var(--via-bd-width) solid var(--via-bd-primary);
-    border-radius: inherit;
-    content: "";
-    inset: 0;
-    pointer-events: none;
-    position: absolute;
-  }
-
-  /* RouteMap renders nothing when the map can't be displayed */
-  &:empty {
-    display: none;
-  }
-
-  /* Nested for a higher specificity than RouteMap's own styles */
-  .map {
-    aspect-ratio: 1;
-    border-radius: 0;
-    /* Keeps MapLibre's controls (e.g. the attribution) below the border */
-    isolation: isolate;
-
-    @media (width >= 64em) {
-      aspect-ratio: 2;
-    }
-
-    &[data-via-status="idle"] {
-      aspect-ratio: unset;
-      height: 10rem;
-    }
+  @media (width >= 64em) {
+    --via-route-map-card-aspect-ratio: 2;
   }
 }
 

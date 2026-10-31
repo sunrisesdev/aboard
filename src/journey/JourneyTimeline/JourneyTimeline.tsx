@@ -1,5 +1,6 @@
-import { IconArrowRight } from '@tabler/icons-react';
+import { IconArrowRight, IconClock, IconHeart, IconRoute } from '@tabler/icons-react';
 import type { CSSProperties } from 'react';
+import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import { Card } from '@/components/Card/Card';
 import { Marquee } from '@/components/Marquee/Marquee';
 import { SubtleTintedSurface } from '@/components/TintedSurface/SubtleTintedSurface';
@@ -7,6 +8,8 @@ import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
 import { formatDateTime } from '@/helpers/formatDateTime';
 import { formatDelay } from '@/helpers/formatDelay';
+import { formatDistance } from '@/helpers/formatDistance';
+import { formatDuration } from '@/helpers/formatDuration';
 import { formatPlatform } from '@/helpers/formatPlatform';
 import { getDelay } from '@/helpers/getDelay';
 import { getLineColors } from '@/helpers/getLineColors';
@@ -14,9 +17,12 @@ import type { StatusResource, StopoverResource } from '@/lib/traewelling';
 import { getCheckinColor } from '@/status/getCheckinColor';
 import { getCheckinMode } from '@/status/getCheckinMode';
 import { getCheckinStopovers } from '@/status/getCheckinStopovers';
+import { getCheckinTimes } from '@/status/getCheckinTimes';
 import { StatusBody } from '@/status/StatusBody/StatusBody';
 import { StatusTripHeader } from '@/status/StatusTripHeader/StatusTripHeader';
+import { businessOptions } from '@/status/statusOptions';
 import { getJourneyTimeline, type JourneyTimelineStop } from '../getJourneyTimeline';
+import { JourneyHighlightButton } from '../JourneyHighlightButton/JourneyHighlightButton';
 import styles from './JourneyTimeline.module.css';
 
 const transferColor = 'var(--via-fg-placeholder)';
@@ -145,12 +151,20 @@ const JourneyStop = ({ arrival, departure, shortTransferAfter, shortTransferBefo
 const JourneyTrip = ({ status, stopovers }: { status: StatusResource; stopovers?: StopoverResource[] }) => {
   const { bodyMentions, checkin } = status;
   const body = typeof status.body === 'string' ? status.body : undefined;
+  const { arrival, departure } = getCheckinTimes(checkin);
+  const business = businessOptions.find(({ value }) => value === status.business);
 
   return (
     <li className={styles.trip}>
       <TripLine className={styles.line}>
         <JourneyLineSegment status={status} />
       </TripLine>
+      {/* Outside of TripLine, which is hidden from assistive tech */}
+      <JourneyHighlightButton
+        className={styles.highlightButton}
+        statusId={status.id}
+        style={{ '--via-journey-line-color': getCheckinColor(checkin) } as CSSProperties}
+      />
 
       <div className={styles.details}>
         <SubtleTintedSurface
@@ -162,8 +176,43 @@ const JourneyTrip = ({ status, stopovers }: { status: StatusResource; stopovers?
             <StatusTripHeader
               checkin={checkin}
               direction={stopovers && getCheckinStopovers(stopovers, checkin).direction}
-            />
+            >
+              <ButtonLink
+                aria-label="Zum Status"
+                className={styles.statusLink}
+                href={`/status/${status.id}`}
+                iconOnly
+                title="Zum Status"
+                variant="ghost"
+              >
+                <IconArrowRight aria-hidden data-via-icon />
+              </ButtonLink>
+            </StatusTripHeader>
+
             {body && <StatusBody body={body} className={styles.body} mentions={bodyMentions} paragraphs />}
+
+            <div className={styles.facts}>
+              <span className={styles.fact} title="Likes">
+                <IconHeart aria-hidden data-via-icon />
+                {status.likes}
+              </span>
+              <span className={styles.fact} title="Entfernung">
+                <IconRoute aria-hidden data-via-icon />
+                {formatDistance(checkin.distance)}
+              </span>
+              {arrival && departure && (
+                <span className={styles.fact} title="Dauer">
+                  <IconClock aria-hidden data-via-icon />
+                  {formatDuration(departure, arrival)}
+                </span>
+              )}
+              {business && (
+                <span className={styles.fact} title="Zweck">
+                  {business.icon}
+                  {business.label}
+                </span>
+              )}
+            </div>
           </SubtleTintedSurface.Content>
         </SubtleTintedSurface>
       </div>

@@ -34,7 +34,15 @@ const loadUser = cache(async (accessToken: string, username: string) => {
   }
 });
 
-const UserStatuses = async ({ client, username }: { client: TraewellingClient; username: string }) => {
+const UserStatuses = async ({
+  client,
+  isCurrentUser,
+  username,
+}: {
+  client: TraewellingClient;
+  isCurrentUser: boolean;
+  username: string;
+}) => {
   try {
     const { data: statuses, nextPage } = await getUserStatuses(client, username);
 
@@ -42,7 +50,14 @@ const UserStatuses = async ({ client, username }: { client: TraewellingClient; u
       return <p className={styles.hint}>Noch keine Check-ins.</p>;
     }
 
-    return <ProfileStatuses initialNextPage={nextPage} initialStatuses={statuses} username={username} />;
+    return (
+      <ProfileStatuses
+        initialNextPage={nextPage}
+        initialStatuses={statuses}
+        isCurrentUser={isCurrentUser}
+        username={username}
+      />
+    );
   } catch (error) {
     if (error instanceof TraewellingApiError && error.status === 403) {
       return <p className={styles.hint}>Dieses Profil ist privat.</p>;
@@ -151,7 +166,11 @@ export default async function ProfilePage({ params }: PageProps<'/user/[username
         <p className={styles.hint}>Dieses Profil ist privat.</p>
       ) : (
         <Suspense fallback={<UserStatusesSkeleton />}>
-          <UserStatuses client={createTraewellingClient(accessToken)} username={user.username} />
+          <UserStatuses
+            client={createTraewellingClient(accessToken)}
+            isCurrentUser={user.uuid === session.user.uuid}
+            username={user.username}
+          />
         </Suspense>
       )}
     </PageContent>

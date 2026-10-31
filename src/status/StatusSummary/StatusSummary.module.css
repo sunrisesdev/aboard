@@ -150,6 +150,12 @@
   margin-bottom: 0.25rem;
 }
 
+/* Rounded like the TintedSurface inside, so the focus ring follows its corners */
+.tripLink {
+  border-radius: 1rem;
+  display: flex;
+}
+
 .username {
   bottom: 0.0625rem;
   color: var(--via-fg-secondary);

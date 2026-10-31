@@ -9,6 +9,8 @@
   --via-route-map-boundary: var(--via-fg-placeholder);
   --via-route-map-casing: var(--via-bg-primary);
   --via-route-map-label: var(--via-fg-primary);
+  /* Neutral route color, lightened in dark mode like --via-focus-ring, since Verkehrsblau would barely stand out */
+  --via-route-map-route: light-dark(var(--verkehrsblau), oklch(70% 0.117 251.3));
 
   aspect-ratio: 16 / 9;
   background-color: var(--via-route-map-land);

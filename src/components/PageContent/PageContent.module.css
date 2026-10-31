@@ -12,6 +12,18 @@
   gap: 1rem;
 }
 
+/* Moved up by `order` on narrow screens, so the tab order of anything focusable in it differs from the visual one */
+.stickyAside {
+  order: -1;
+
+  @media (width >= 64em) {
+    align-self: start;
+    order: 0;
+    position: sticky;
+    top: calc(var(--via-navbar-height) + 1.5rem);
+  }
+}
+
 .content {
   display: grid;
   /* An implicit column would grow to fit its content's min-content width, e.g. non-wrapping text */

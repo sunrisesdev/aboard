@@ -40,16 +40,26 @@ function getFitBoundsOptions(padding: number) {
 }
 
 export const RouteMapCanvas = ({
+  highlightedRoute,
   onStatusChange,
   routes,
   stops,
 }: {
+  highlightedRoute?: number;
   onStatusChange: (status: RouteMapStatus) => void;
   routes: RouteMapRoute[];
   stops?: RouteMapStop[];
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const labelsRef = useRef<HTMLDivElement>(null);
+  // Read through refs, so a changed highlight only updates the style and camera instead of recreating the map
+  const highlightedRouteRef = useRef(highlightedRoute);
+  const updateHighlightRef = useRef<() => void>(undefined);
+
+  useEffect(() => {
+    highlightedRouteRef.current = highlightedRoute;
+    updateHighlightRef.current?.();
+  }, [highlightedRoute]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -62,16 +72,31 @@ export const RouteMapCanvas = ({
 
       return buildRouteMapStyle({
         colors,
-        routes: routes.map((route) => ({ ...route, color: resolveCssColor(container, route.color) })),
+        highlightedRoute: highlightedRouteRef.current,
+        routes: routes.map((route) => ({
+          ...route,
+          color: resolveCssColor(container, route.color),
+          highlightColor: route.highlightColor && resolveCssColor(container, route.highlightColor),
+        })),
         stops,
       });
     };
 
-    const bounds = getCoordinatesBounds(routes.flatMap(({ coordinates }) => coordinates));
+    // Zoomed to the highlighted route, if it can be drawn
+    const getBounds = () => {
+      const highlightedCoordinates = routes[highlightedRouteRef.current ?? -1]?.coordinates;
+
+      return getCoordinatesBounds(
+        highlightedCoordinates && highlightedCoordinates.length >= 2
+          ? highlightedCoordinates
+          : routes.flatMap(({ coordinates }) => coordinates),
+      );
+    };
     const fitBoundsOptions = getFitBoundsOptions(stops?.length ? stopsPadding : routesPadding);
 
     // A removed map (e.g. by Strict Mode's double mount) may still emit errors for its aborted requests
     let isActive = true;
+    let isLoaded = false;
     const setStatus = (status: RouteMapStatus) => {
       if (isActive) onStatusChange(status);
     };
@@ -80,7 +105,7 @@ export const RouteMapCanvas = ({
     try {
       map = new MapLibreMap({
         attributionControl: { compact: true },
-        bounds,
+        bounds: getBounds(),
         canvasContextAttributes: { antialias: true },
         container,
         fitBoundsOptions,
@@ -99,9 +124,11 @@ export const RouteMapCanvas = ({
       setStatus('failed');
     }, loadTimeout);
 
-    const fitRoute = () => {
-      map.fitBounds(bounds, fitBoundsOptions);
+    const fitRoute = (animate = false) => {
+      map.fitBounds(getBounds(), { ...fitBoundsOptions, animate });
+    };
 
+    const positionLabels = () => {
       const labelElements = labelsRef.current?.children;
       if (!stops || !labelElements) return;
 
@@ -125,26 +152,39 @@ export const RouteMapCanvas = ({
     };
 
     map.once('load', () => {
+      isLoaded = true;
       clearTimeout(timeout);
       // The container may have changed its size since the initial fit
       fitRoute();
+      positionLabels();
       setStatus('ready');
     });
-    // Covers style and tile errors, including rate limiting and network failures
+    // Covers style and tile errors, including rate limiting and network failures. Once loaded, a failed tile (e.g.
+    // after zooming to a highlighted route) only leaves a gap, so the map is kept.
     map.on('error', ({ error }) => {
       console.warn('RouteMap failed', error);
-      setStatus('failed');
+      if (!isLoaded) setStatus('failed');
     });
-    map.on('resize', fitRoute);
+    map.on('resize', () => fitRoute());
+    // Keeps the labels on their stops during animated camera changes
+    map.on('move', positionLabels);
+
+    // MapLibre diffs the style, so only the changed layers and sources are updated
+    const updateStyle = () => map.setStyle(getStyle());
+
+    updateHighlightRef.current = () => {
+      updateStyle();
+      fitRoute(!matchMedia('(prefers-reduced-motion: reduce)').matches);
+    };
 
     const colorScheme = matchMedia('(prefers-color-scheme: dark)');
-    const handleColorSchemeChange = () => map.setStyle(getStyle());
-    colorScheme.addEventListener('change', handleColorSchemeChange);
+    colorScheme.addEventListener('change', updateStyle);
 
     return () => {
       isActive = false;
+      updateHighlightRef.current = undefined;
       clearTimeout(timeout);
-      colorScheme.removeEventListener('change', handleColorSchemeChange);
+      colorScheme.removeEventListener('change', updateStyle);
       map.remove();
     };
   }, [onStatusChange, routes, stops]);

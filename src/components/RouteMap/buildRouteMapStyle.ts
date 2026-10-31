@@ -18,6 +18,8 @@ export type RouteMapColors = {
 export type RouteMapRoute = {
   color: string;
   coordinates: Coordinate[];
+  // Used instead of `color` while the route is highlighted
+  highlightColor?: string;
 };
 
 export type RouteMapStop = {
@@ -32,19 +34,27 @@ const attribution =
 /**
  * Builds a minimal, label-free MapLibre style based on OpenFreeMap tiles (OpenMapTiles schema) with the routes on top.
  * Stops are marked with a dot in the first route's color. Routes with less than two coordinates are left out.
+ * @param highlightedRoute Index of a route that is drawn on top in its highlight color, while the others are dimmed.
  * @remarks Stop names are rendered as HTML by RouteMap, so they can be kept within the frame.
  */
 export function buildRouteMapStyle({
   colors,
+  highlightedRoute,
   routes,
   stops,
 }: {
   colors: RouteMapColors;
+  highlightedRoute?: number;
   routes: RouteMapRoute[];
   stops?: RouteMapStop[];
 }) {
-  const drawableRoutes = routes.filter(({ coordinates }) => coordinates.length >= 2);
+  // The index is kept before filtering, so it still matches `highlightedRoute`
+  const drawableRoutes = routes
+    .map((route, index) => ({ ...route, index }))
+    .filter(({ coordinates }) => coordinates.length >= 2);
   const points = (stops ?? []).map((stop) => ({ color: drawableRoutes[0]?.color, coordinates: stop.coordinates }));
+  const routeOpacity = highlightedRoute === undefined ? 1 : 0.35;
+  const highlightFilter = ['==', ['get', 'index'], highlightedRoute ?? -1] as ['==', ['get', string], number];
 
   return {
     version: 8,
@@ -54,10 +64,10 @@ export function buildRouteMapStyle({
         type: 'geojson',
         data: {
           type: 'FeatureCollection',
-          features: drawableRoutes.map(({ color, coordinates }) => ({
+          features: drawableRoutes.map(({ color, coordinates, highlightColor = color, index }) => ({
             type: 'Feature' as const,
             geometry: { type: 'LineString' as const, coordinates },
-            properties: { color },
+            properties: { color, highlightColor, index },
           })),
         },
       },
@@ -171,14 +181,31 @@ export function buildRouteMapStyle({
         type: 'line',
         source: 'route',
         layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': colors.casing, 'line-width': 7 },
+        paint: { 'line-color': colors.casing, 'line-opacity': routeOpacity, 'line-width': 7 },
       },
       {
         id: 'route',
         type: 'line',
         source: 'route',
         layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': ['get', 'color'], 'line-width': 4 },
+        paint: { 'line-color': ['get', 'color'], 'line-opacity': routeOpacity, 'line-width': 4 },
+      },
+      // Separate layers, so the highlighted route lies above the casing of all others
+      {
+        id: 'route-highlight-casing',
+        type: 'line',
+        source: 'route',
+        filter: highlightFilter,
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': colors.casing, 'line-width': 7 },
+      },
+      {
+        id: 'route-highlight',
+        type: 'line',
+        source: 'route',
+        filter: highlightFilter,
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': ['get', 'highlightColor'], 'line-width': 4 },
       },
       {
         id: 'stops',

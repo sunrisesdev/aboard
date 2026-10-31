@@ -80,6 +80,15 @@
     color: var(--via-fg-primary);
   }
 
+  /* Only shows the state overlay, and takes the text color of its surroundings, e.g. on a TintedSurface */
+  &[data-via-variant="ghost"] {
+    --via-button-hover: light-dark(oklch(0% 0 none / 6%), oklch(100% 0 none / 6%));
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: inherit;
+  }
+
   &[data-via-variant="danger"] {
     --via-button-hover: var(--via-bg-hover-on-accent);
     --via-button-active: var(--via-bg-active-on-accent);
@@ -98,7 +107,9 @@
   &:active:not([data-disabled]) {
     --via-button-overlay: var(--via-button-active);
 
-    box-shadow: var(--via-shadow-skeuomorphic);
+    &:not([data-via-variant="ghost"]) {
+      box-shadow: var(--via-shadow-skeuomorphic);
+    }
   }
 
   &[data-disabled] {

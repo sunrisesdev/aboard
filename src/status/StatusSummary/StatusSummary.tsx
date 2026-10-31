@@ -86,7 +86,7 @@ export const StatusSummary = ({ status }: { status: StatusResource }) => {
 
       {body && <StatusBody body={body} mentions={bodyMentions} />}
 
-      <Link href={`/status/${status.id}`} style={{ display: 'flex' }}>
+      <Link className={styles.tripLink} href={`/status/${status.id}`}>
         <TintedSurface
           color={getLineColors({ color: checkin.routeColor, mode }).background}
           radius="1rem"

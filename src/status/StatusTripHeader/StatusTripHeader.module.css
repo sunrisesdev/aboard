@@ -9,3 +9,21 @@
   gap: 0.5ch;
   min-width: 0;
 }
+
+/* Abbreviated on narrow screens, leaving more room for the station */
+.directionLabel {
+  flex-shrink: 0;
+
+  @media (width < 64em) {
+    display: none;
+  }
+}
+
+.directionAbbreviation {
+  flex-shrink: 0;
+  text-decoration: none;
+
+  @media (width >= 64em) {
+    display: none;
+  }
+}

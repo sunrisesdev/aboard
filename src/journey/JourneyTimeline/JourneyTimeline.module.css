@@ -123,6 +123,32 @@
   width: var(--via-journey-stroke);
 }
 
+/* Covers the whole cell of the trip's line, with the icon in the middle of it. Nested for a higher specificity than
+   Button's own styles. */
+.trip > .highlightButton {
+  color: var(--via-journey-line-color);
+  grid-area: 1 / line;
+  height: auto;
+  padding: 0;
+}
+
+/* Explicitly in the first row, since auto-placement would move it below the button */
+.trip > .line {
+  grid-row: 1;
+}
+
+/* Interrupted around the icon, so it sits in the line rather than on top of it */
+.trip:has(> .highlightButton) .route {
+  --via-journey-highlight-gap: 0.75rem;
+
+  mask: linear-gradient(
+    to bottom,
+    #000 calc(50% - var(--via-journey-highlight-gap)),
+    transparent calc(50% - var(--via-journey-highlight-gap)) calc(50% + var(--via-journey-highlight-gap)),
+    #000 calc(50% + var(--via-journey-highlight-gap))
+  );
+}
+
 /* Kept clear of the indicator, since the dots would otherwise run into the ring. Masked instead of shortened by a
    margin, which would move the indicator. */
 .line .transferRoute {
@@ -211,6 +237,37 @@
   gap: 0.75rem;
   grid-template-columns: minmax(0, 1fr);
   padding: 0.75rem;
+}
+
+/* Smaller than usual, like the like button in StatusSummary. Overlapping the header's padding, so it doesn't stretch
+   the header and the icon lines up with the edge. */
+.statusLink {
+  flex-shrink: 0;
+  height: 2rem;
+  margin-block: -0.375rem;
+  margin-left: auto;
+  margin-right: -0.375rem;
+}
+
+.facts {
+  align-items: center;
+  color: var(--via-tinted-surface-fg-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+  font-weight: 500;
+  gap: 0.25rem 0.5rem;
+}
+
+.fact {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.25rem;
+  white-space: nowrap;
+
+  & > svg {
+    font-size: 0.9375rem;
+  }
 }
 
 /* Neutral, since the surface is pale enough for it */

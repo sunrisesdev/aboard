@@ -33,7 +33,11 @@ export const StatusTripHeader = ({
 
       {direction && (
         <em className={styles.direction}>
-          Richtung <Marquee>{cleanStationName(direction.station.name)}</Marquee>
+          <span className={styles.directionLabel}>Richtung</span>
+          <abbr className={styles.directionAbbreviation} title="Richtung">
+            Ri.
+          </abbr>
+          <Marquee>{cleanStationName(direction.station.name)}</Marquee>
         </em>
       )}
 

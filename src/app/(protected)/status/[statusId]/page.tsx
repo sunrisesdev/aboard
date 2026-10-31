@@ -14,7 +14,7 @@ import { KeyValueTag } from '@/components/KeyValueTag/KeyValueTag';
 import { PageContent } from '@/components/PageContent/PageContent';
 import { getPolylineCoordinates } from '@/components/RouteMap/getPolylineCoordinates';
 import { getRouteMapStop } from '@/components/RouteMap/getRouteMapStop';
-import { RouteMap } from '@/components/RouteMap/RouteMap';
+import { RouteMapCard } from '@/components/RouteMap/RouteMapCard';
 import { cleanStationName } from '@/helpers/cleanStationName';
 import { formatDateTime } from '@/helpers/formatDateTime';
 import { getLineColors } from '@/helpers/getLineColors';
@@ -314,21 +314,19 @@ export default async function StatusPage({ params }: PageProps<'/status/[statusI
         stopovers={checkinStopovers?.stopovers}
       />
 
-      <div className={styles.mapCard}>
-        <RouteMap
-          className={styles.map}
-          deferred
-          routes={[
-            {
-              color:
-                getLineColors({ color: checkin.routeColor, mode: getCheckinMode(checkin) }).background
-                ?? 'var(--via-fg-primary)',
-              coordinates: routeCoordinates,
-            },
-          ]}
-          stops={routeMapStops}
-        />
-      </div>
+      <RouteMapCard
+        className={styles.mapCard}
+        deferred
+        routes={[
+          {
+            color:
+              getLineColors({ color: checkin.routeColor, mode: getCheckinMode(checkin) }).background
+              ?? 'var(--via-fg-primary)',
+            coordinates: routeCoordinates,
+          },
+        ]}
+        stops={routeMapStops}
+      />
 
       {checkin.dataSource && <div className={styles.attribution}>{checkin.dataSource.attribution}</div>}
 

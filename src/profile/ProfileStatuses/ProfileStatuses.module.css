@@ -12,4 +12,15 @@
   font-size: 0.9375rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
+
+  a {
+    border-radius: 0.25rem;
+  }
+
+  @media (hover: hover) {
+    a:hover {
+      text-decoration: underline var(--via-bd-width) solid var(--via-focus-ring);
+      text-underline-offset: 0.1875rem;
+    }
+  }
 }
