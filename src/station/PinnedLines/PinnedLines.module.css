@@ -1,0 +1,103 @@
+.base {
+  /* Distance from the board's right edge to the viewport's, matching the padding and max width of PageContent */
+  --via-pinned-lines-bleed: 1rem;
+  --via-pinned-lines-gap: 0.75rem;
+  --via-pinned-lines-shadow-space: 0.5rem;
+
+  display: flex;
+  gap: var(--via-pinned-lines-gap);
+  margin-block: calc(-1 * var(--via-pinned-lines-shadow-space)) 0.5rem;
+  margin-inline: calc(-1 * var(--via-pinned-lines-shadow-space)) calc(-1 * var(--via-pinned-lines-bleed));
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  /* Leaves room for the cards' shadows, which the scroll container would clip otherwise */
+  padding-block: var(--via-pinned-lines-shadow-space);
+  padding-inline: var(--via-pinned-lines-shadow-space) var(--via-pinned-lines-bleed);
+  scroll-padding-inline: var(--via-pinned-lines-shadow-space);
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+
+  @media (width >= 64em) {
+    --via-pinned-lines-bleed: max(1.5rem, (100vw - var(--via-content-max-width)) / 2);
+  }
+
+  /* The trip side panel takes the space to the right */
+  [data-via-trip-selected] & {
+    @media (width >= 64em) {
+      --via-pinned-lines-bleed: 0px;
+    }
+  }
+}
+
+/* A width instead of a flex basis, as otherwise the card grows to fit a long direction */
+.line {
+  flex-shrink: 0;
+  /* Exactly four fit next to the open trip side panel at the max width */
+  width: calc((var(--via-content-max-width) - var(--via-trip-side-panel-width) - 3 * var(--via-pinned-lines-gap)) / 4);
+  scroll-snap-align: start;
+}
+
+.card {
+  padding: 0.75rem;
+  user-select: none;
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.direction {
+  font-weight: 500;
+}
+
+.departures {
+  display: grid;
+  gap: 0.375rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Matches the trip stats on the status page. SubtleTintedSurface has no badge color, so it gets a tint of its text */
+.departure {
+  background-color: var(
+    --via-tinted-surface-bg-badge,
+    color-mix(in oklch, var(--via-tinted-surface-fg-primary) 10%, transparent)
+  );
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: var(--via-shadow-xs);
+  color: var(--via-fg-primary);
+  cursor: pointer;
+  font-feature-settings: "tnum";
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow: hidden;
+  padding: 0.5rem 0.5rem 0.25rem;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @media (hover: hover) {
+    &:hover {
+      background-image: linear-gradient(var(--via-bg-hover), var(--via-bg-hover));
+    }
+  }
+
+  &:active {
+    background-image: linear-gradient(var(--via-bg-active), var(--via-bg-active));
+  }
+
+  &[data-via-cancelled] {
+    opacity: 0.6;
+    text-decoration: line-through;
+  }
+}
+
+.unit {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-left: 0.125rem;
+}

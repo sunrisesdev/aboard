@@ -6,6 +6,7 @@ import { useCheckIn } from '@/checkin/useCheckIn';
 import { Button } from '@/components/Button/Button';
 import type { DepartureResource, TravelType } from '@/lib/traewelling';
 import { DepartureTripItem } from '@/station/DepartureTripItem/DepartureTripItem';
+import { PinnedLines } from '@/station/PinnedLines/PinnedLines';
 import { groupByDepartureTime } from './groupByDepartureTime';
 import styles from './Stationboard.module.css';
 import { useStationboard } from './useStationboard';
@@ -42,12 +43,15 @@ export const Stationboard = ({
   initialCursors,
   initialDepartures,
   radius,
+  requestedTime,
   stationId,
   travelType,
 }: {
   initialCursors: DepartureCursors;
   initialDepartures: DepartureResource[];
   radius: number | undefined;
+  /** As requested from the server, unlike the search param, which follows the times of loaded pages. */
+  requestedTime: string | undefined;
   stationId: string;
   travelType: TravelType | undefined;
 }) => {
@@ -102,6 +106,13 @@ export const Stationboard = ({
 
   return (
     <div className={styles.base}>
+      <PinnedLines
+        departures={departures}
+        onSelect={(departure) => checkInDispatch({ type: 'selectDeparture', departure })}
+        requestedTime={requestedTime}
+        stationId={stationId}
+      />
+
       <Button
         className={styles.loadMore}
         disabled={loadingEarlier}

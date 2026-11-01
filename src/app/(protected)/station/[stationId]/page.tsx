@@ -50,11 +50,13 @@ const StationName = async ({ departuresPromise }: { departuresPromise: Departure
 const StationboardLoader = async ({
   departuresPromise,
   radius,
+  requestedTime,
   stationId,
   travelType,
 }: {
   departuresPromise: DeparturesPromise;
   radius: number | undefined;
+  requestedTime: string | undefined;
   stationId: string;
   travelType: TravelType | undefined;
 }) => {
@@ -65,6 +67,7 @@ const StationboardLoader = async ({
       initialCursors={meta.times}
       initialDepartures={departures}
       radius={radius}
+      requestedTime={requestedTime}
       stationId={stationId}
       travelType={travelType}
     />
@@ -86,7 +89,7 @@ export default async function StationboardPage({ params, searchParams }: PagePro
   return (
     <CheckInContextProvider>
       <StationboardContextProvider>
-        <PageContent>
+        <PageContent className={styles.page}>
           <Suspense
             fallback={
               name ? (
@@ -113,6 +116,7 @@ export default async function StationboardPage({ params, searchParams }: PagePro
               <StationboardLoader
                 departuresPromise={departuresPromise}
                 radius={radius ? Number(radius) : undefined}
+                requestedTime={at as string | undefined}
                 stationId={stationId}
                 travelType={travelType as TravelType | undefined}
               />

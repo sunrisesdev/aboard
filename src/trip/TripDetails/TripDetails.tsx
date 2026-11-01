@@ -1,8 +1,11 @@
 'use client';
 
+import { IconPin, IconPinFilled } from '@tabler/icons-react';
 import { clsx } from 'clsx';
+import { useParams } from 'next/navigation';
 import type { CSSProperties } from 'react';
 import { useCheckIn } from '@/checkin/useCheckIn';
+import { Button } from '@/components/Button/Button';
 import { KeyValueTag } from '@/components/KeyValueTag/KeyValueTag';
 import { LineBadge } from '@/components/LineBadge/LineBadge';
 import { Marquee } from '@/components/Marquee/Marquee';
@@ -22,6 +25,7 @@ import { getLineContrastColor } from '@/helpers/getLineContrastColor';
 import { isReplacementService } from '@/helpers/isReplacementService';
 import { useLastDefinedValue } from '@/hooks/useLastDefinedValue';
 import type { DepartureResource, MotisMode } from '@/lib/traewelling';
+import { usePinnedLines } from '@/station/usePinnedLines';
 import { TripStopoverItem } from '@/trip/TripStopoverItem/TripStopoverItem';
 import { TripStopoverItemSkeleton } from '@/trip/TripStopoverItemSkeleton/TripStopoverItemSkeleton';
 import { useUser } from '@/user/useUser';
@@ -33,6 +37,11 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
   const { home } = useUser();
   const { dispatch, trip } = useCheckIn();
   const stopovers = useLastDefinedValue(trip.stopovers);
+  // The board's station rather than the departure's, which differs when searching within a radius
+  const { stationId } = useParams<{ stationId: string }>();
+  const { isPinned, togglePinnedLine } = usePinnedLines(stationId);
+  const lineName = departure.line.name;
+  const pinned = !!lineName && isPinned(lineName);
 
   const lineColor = getLineColors({ color: departure.line.color, mode: departure.line.mode }).background;
   const replacementService = isReplacementService(departure);
@@ -87,6 +96,19 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
             />
 
             <Marquee className={styles.destination}>{cleanStationName(departure.direction)}</Marquee>
+
+            {lineName && (
+              <Button
+                aria-label={pinned ? 'Linie lösen' : 'Linie anpinnen'}
+                aria-pressed={pinned}
+                className={styles.pinButton}
+                iconOnly
+                onClick={() => togglePinnedLine(lineName)}
+                variant="ghost"
+              >
+                {pinned ? <IconPinFilled data-via-icon /> : <IconPin data-via-icon />}
+              </Button>
+            )}
           </header>
 
           <div style={{ display: 'grid', gap: '0.625rem', gridTemplateColumns: '1.25rem minmax(0, 1fr)' }}>

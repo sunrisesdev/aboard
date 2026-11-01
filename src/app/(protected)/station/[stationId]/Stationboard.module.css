@@ -34,6 +34,11 @@
   min-width: 0;
 }
 
+/* The pinned lines bleed to the viewport edge, which is calculated with 100vw and so includes classic scrollbars */
+.page {
+  overflow-x: clip;
+}
+
 .title {
   font-size: 2rem;
   font-weight: 600;

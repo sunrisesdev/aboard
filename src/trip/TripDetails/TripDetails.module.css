@@ -49,6 +49,16 @@
   margin-bottom: 1rem;
 }
 
+/* Smaller than a regular button and partly overlapping the card's padding, so the header keeps its height */
+.header .pinButton {
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  height: 1.75rem;
+  margin-block: -0.25rem;
+  margin-left: auto;
+  margin-right: -0.375rem;
+}
+
 .metadata {
   align-items: flex-start;
   display: flex;
