@@ -1,0 +1,55 @@
+.base {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.stat {
+  box-shadow: var(--via-shadow-xs);
+  overflow: clip;
+  position: relative;
+
+  .content {
+    height: 100%;
+    padding: 0.75rem;
+  }
+
+  .description {
+    color: var(--via-tinted-surface-fg-secondary);
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+  }
+
+  .label {
+    font-size: 0.9375rem;
+    font-weight: 400;
+  }
+
+  .signet {
+    bottom: -2rem;
+    display: flex;
+    font-size: 7rem;
+    opacity: 0.25;
+    pointer-events: none;
+    position: absolute;
+    right: -1rem;
+    rotate: 20deg;
+  }
+
+  .value {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  &.isWide {
+    grid-column: span 2;
+
+    .signet {
+      bottom: unset;
+      rotate: -20deg;
+      top: -2.5rem;
+    }
+  }
+}

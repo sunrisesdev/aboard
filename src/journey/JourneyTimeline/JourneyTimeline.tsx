@@ -1,4 +1,5 @@
-import { IconArrowRight, IconClock, IconHeart, IconRoute } from '@tabler/icons-react';
+import { IconArrowRight, IconClock, IconHeart, IconRoute, IconWalk } from '@tabler/icons-react';
+import { clsx } from 'clsx';
 import type { CSSProperties } from 'react';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import { Card } from '@/components/Card/Card';
@@ -30,11 +31,13 @@ const transferColor = 'var(--via-fg-placeholder)';
 // `real` includes manual times entered by the user, like getCheckinTimes. The delay is shown above an arrival and
 // below a departure, so it stays clear of the other time at a shared stop.
 const JourneyTime = ({
+  cancelled,
   kind,
   label,
   planned,
   real,
 }: {
+  cancelled?: boolean;
   kind: 'arrival' | 'departure';
   label?: string;
   planned: string | null;
@@ -49,7 +52,9 @@ const JourneyTime = ({
     <div className={styles.timeRow}>
       {label && <span className={styles.timeLabel}>{label}</span>}
       <span className={styles.time}>
-        <time dateTime={time}>{formatDateTime(time, 'time')}</time>
+        <time className={clsx(cancelled && styles.isCancelled)} dateTime={time}>
+          {formatDateTime(time, 'time')}
+        </time>
         {!!delay?.minutes && (
           <span className={styles.delayBadge} data-via-delay={delay.status} data-via-kind={kind}>
             {formatDelay(delay.minutes)}
@@ -74,6 +79,8 @@ const JourneyStop = ({ arrival, departure, shortTransferAfter, shortTransferBefo
   const arrivalStopover = arrival?.checkin.destination;
   const departureStopover = departure?.checkin.origin;
   const isShared = !!arrival && !!departure;
+  // Only marked at the start or end of a single trip, since a shared stop can't be cancelled for both
+  const isCancelled = !isShared && !!(arrivalStopover?.cancelled ?? departureStopover?.cancelled);
 
   const formatPlatforms = (abbreviate: boolean) => [
     arrivalStopover
@@ -96,7 +103,7 @@ const JourneyStop = ({ arrival, departure, shortTransferAfter, shortTransferBefo
   const platform = abbreviatedArrivalPlatform ? (
     <>
       {abbreviatedArrivalPlatform}
-      <IconArrowRight data-via-icon />
+      <IconWalk data-via-icon />
       {abbreviatedDeparturePlatform}
     </>
   ) : (
@@ -113,6 +120,7 @@ const JourneyStop = ({ arrival, departure, shortTransferAfter, shortTransferBefo
       <div className={styles.times}>
         {arrival && arrivalStopover && (
           <JourneyTime
+            cancelled={isCancelled}
             kind="arrival"
             label={isShared ? 'an' : undefined}
             planned={arrivalStopover.arrivalPlanned}
@@ -121,6 +129,7 @@ const JourneyStop = ({ arrival, departure, shortTransferAfter, shortTransferBefo
         )}
         {departure && departureStopover && (
           <JourneyTime
+            cancelled={isCancelled}
             kind="departure"
             label={isShared ? 'ab' : undefined}
             planned={departureStopover.departurePlanned}
@@ -140,7 +149,10 @@ const JourneyStop = ({ arrival, departure, shortTransferAfter, shortTransferBefo
       </TripLine>
 
       <div className={styles.station}>
-        <Marquee>{cleanStationName(station.name)}</Marquee>
+        <Marquee>
+          <span className={clsx(isCancelled && styles.isCancelled)}>{cleanStationName(station.name)}</span>
+          {isCancelled && <span className="visually-hidden">Halt entfällt</span>}
+        </Marquee>
         {platform && <span className={styles.platformBadge}>{platform}</span>}
       </div>
     </li>

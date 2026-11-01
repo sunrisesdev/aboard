@@ -1,0 +1,33 @@
+.header {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+/* Gets its own row on narrow screens, split evenly between both buttons by the ButtonGroup */
+.dayNavigation {
+  flex: none;
+
+  @media (width < 64em) {
+    width: 100%;
+  }
+}
+
+/*
+ * The ButtonGroup's even split would give both buttons half of their combined width, squeezing the wider one
+ * (e.g. next to a disabled button without a date), so they keep their own width next to the title
+ */
+@media (width >= 64em) {
+  .header .dayNavigation > * {
+    flex: none;
+  }
+}

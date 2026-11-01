@@ -6,6 +6,12 @@
   }
 }
 
+.header {
+  margin-bottom: 1rem;
+  margin-inline: auto;
+  max-width: var(--via-content-max-width);
+}
+
 .column {
   display: flex;
   flex-direction: column;

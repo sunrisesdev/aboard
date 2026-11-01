@@ -64,6 +64,25 @@
   position: relative;
 }
 
+/* Struck through by a pseudo-element instead of text-decoration, which can't have a line in the background color
+   below it to separate it from the glyphs */
+.isCancelled {
+  color: var(--via-fg-error);
+  display: inline-block;
+  position: relative;
+
+  &::after {
+    background-color: currentcolor;
+    box-shadow: 0 1px var(--via-bg-primary);
+    content: "";
+    height: 0.0625rem;
+    inset-inline: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+  }
+}
+
 /* Positioned absolutely, so it neither widens the column nor moves the time away from the indicator. Inverted, since
    a plain background wouldn't stand out from the card. */
 .delayBadge {
