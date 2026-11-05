@@ -5,7 +5,7 @@ import { clsx } from 'clsx';
 import type { CompletedCheckIn } from '@/checkin/types';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import { cleanStationName } from '@/helpers/cleanStationName';
-import { getStationHref } from '@/helpers/getStationHref';
+import { getStationHref } from '@/helpers/hrefs';
 import { getCheckinTimes } from '@/status/getCheckinTimes';
 import styles from './CheckInSuccess.module.css';
 

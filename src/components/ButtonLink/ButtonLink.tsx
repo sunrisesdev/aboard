@@ -3,7 +3,7 @@ import Link from 'next/link';
 import type { ComponentProps } from 'react';
 import type { ButtonProps } from '@/components/Button/Button';
 import buttonStyles from '@/components/Button/Button.module.css';
-import type { Extend } from '@/helpers/extend';
+import type { Extend } from '@/types/extend';
 
 // Looks like a Button, but navigates. Base UI's Button would announce a rendered link as a button.
 export const ButtonLink = ({

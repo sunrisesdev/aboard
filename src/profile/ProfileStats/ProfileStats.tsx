@@ -1,10 +1,10 @@
 import { IconClockHour4Filled, IconNavigationFilled, IconStarsFilled } from '@tabler/icons-react';
 import { clsx } from 'clsx';
 import { StatCards } from '@/components/StatCards/StatCards';
-import type { Extend, Structure } from '@/helpers/extend';
+import { formatMinutes } from '@/helpers/duration';
 import { formatDistance } from '@/helpers/formatDistance';
-import { formatMinutes } from '@/helpers/formatMinutes';
 import type { UserProfile } from '@/lib/traewelling';
+import type { Extend, Structure } from '@/types/extend';
 import styles from './ProfileStats.module.css';
 
 // In meters

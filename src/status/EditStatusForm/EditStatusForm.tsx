@@ -8,7 +8,7 @@ import { FieldsetCard } from '@/components/FieldsetCard/FieldsetCard';
 import { Input } from '@/components/Input/Input';
 import { Select } from '@/components/Select/Select';
 import { cleanStationName } from '@/helpers/cleanStationName';
-import { formatDateTime } from '@/helpers/formatDateTime';
+import { formatDateTime } from '@/helpers/dateTime';
 import { StatusFields } from '@/status/StatusFields/StatusFields';
 import { EditStatusFormProvider, getStopoverKey, useEditStatusForm } from './EditStatusForm.context';
 import styles from './EditStatusForm.module.css';

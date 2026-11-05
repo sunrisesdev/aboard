@@ -20,3 +20,7 @@ export function formatMinutes(minutes: number, { abbreviate = true }: { abbrevia
 
   return parts.join(' ') || (abbreviate ? '0 min' : '0 Minuten');
 }
+
+export function formatDuration(start: string, end: string) {
+  return formatMinutes((new Date(end).getTime() - new Date(start).getTime()) / 60_000);
+}

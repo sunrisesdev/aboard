@@ -3,9 +3,9 @@ import { LineBadge } from '@/components/LineBadge/LineBadge';
 import { Marquee } from '@/components/Marquee/Marquee';
 import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
 import { cleanStationName } from '@/helpers/cleanStationName';
-import type { Extend, StructureWithChildren } from '@/helpers/extend';
 import type { StopoverResource, TransportResource } from '@/lib/traewelling';
 import { getCheckinMode } from '@/status/getCheckinMode';
+import type { Extend, StructureWithChildren } from '@/types/extend';
 import styles from './StatusTripHeader.module.css';
 
 // Meant to be placed on a TintedSurface in the line's color. Children are appended after the direction.

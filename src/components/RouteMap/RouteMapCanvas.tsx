@@ -1,11 +1,11 @@
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { getVersion, Map as MapLibreMap, setWorkerUrl } from 'maplibre-gl';
 import { useEffect, useRef } from 'react';
-import { resolveCssColor } from '@/helpers/resolveCssColor';
 import { buildRouteMapStyle, type RouteMapColors, type RouteMapRoute, type RouteMapStop } from './buildRouteMapStyle';
 import { getCoordinatesBounds } from './getCoordinatesBounds';
 import { getRouteMapLabelPosition } from './getRouteMapLabelPosition';
 import styles from './RouteMap.module.css';
+import { resolveCssColor } from './resolveCssColor';
 
 export type RouteMapStatus = 'loading' | 'ready' | 'failed';
 

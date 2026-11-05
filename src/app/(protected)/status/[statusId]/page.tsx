@@ -16,10 +16,9 @@ import { getPolylineCoordinates } from '@/components/RouteMap/getPolylineCoordin
 import { getRouteMapStop } from '@/components/RouteMap/getRouteMapStop';
 import { RouteMapCard } from '@/components/RouteMap/RouteMapCard';
 import { cleanStationName } from '@/helpers/cleanStationName';
-import { formatDateTime } from '@/helpers/formatDateTime';
-import { getLineColors } from '@/helpers/getLineColors';
-import { getStationHref } from '@/helpers/getStationHref';
-import { getUserHref } from '@/helpers/getUserHref';
+import { formatDateTime } from '@/helpers/dateTime';
+import { getStationHref, getUserHref } from '@/helpers/hrefs';
+import { getLineColors } from '@/helpers/lineColors';
 import { requireSession } from '@/lib/auth';
 import {
   createTraewellingClient,
@@ -95,6 +94,11 @@ function getLikeSummary(likes: StatusLike[], username: string) {
   };
 }
 
+// E.g. "Fabians" or "Klaus’": names ending in an s-sound only get an apostrophe
+function formatGenitive(name: string) {
+  return /(s|ß|x|z|ce)$/i.test(name) ? `${name}’` : `${name}s`;
+}
+
 function parseStatusId(statusId: string) {
   return /^\d+$/.test(statusId) ? Number(statusId) : notFound();
 }
@@ -118,7 +122,9 @@ export async function generateMetadata({ params }: PageProps<'/status/[statusId]
   const session = await requireSession();
   const status = await loadStatus(session.accessToken as string, statusId);
 
-  return { title: `Status von ${status.user.displayName}` };
+  return {
+    title: `${formatGenitive(status.user.displayName)} Fahrt nach ${cleanStationName(status.checkin.destination.station.name)}`,
+  };
 }
 
 export default async function StatusPage({ params }: PageProps<'/status/[statusId]'>) {

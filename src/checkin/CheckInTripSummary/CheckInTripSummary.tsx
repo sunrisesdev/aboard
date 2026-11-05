@@ -8,13 +8,11 @@ import { TintedSurface } from '@/components/TintedSurface/TintedSurface';
 import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
 import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
-import { formatDateTime } from '@/helpers/formatDateTime';
-import { formatDuration } from '@/helpers/formatDuration';
+import { formatDateTime } from '@/helpers/dateTime';
+import { getDeparturePlatform, getDepartureTime, isReplacementService } from '@/helpers/departure';
+import { formatDuration } from '@/helpers/duration';
 import { formatPlatform } from '@/helpers/formatPlatform';
-import { getDeparturePlatform } from '@/helpers/getDeparturePlatform';
-import { getDepartureTime } from '@/helpers/getDepartureTime';
-import { getLineColors } from '@/helpers/getLineColors';
-import { isReplacementService } from '@/helpers/isReplacementService';
+import { getLineColors } from '@/helpers/lineColors';
 import type { DepartureResource, MotisMode, StopoverResource } from '@/lib/traewelling';
 import styles from './CheckInTripSummary.module.css';
 

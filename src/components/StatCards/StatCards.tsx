@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import type { ReactNode } from 'react';
-import type { Extend, StructureWithChildren } from '@/helpers/extend';
+import type { Extend, StructureWithChildren } from '@/types/extend';
 import { SubtleTintedSurface } from '../TintedSurface/SubtleTintedSurface';
 import styles from './StatCards.module.css';
 

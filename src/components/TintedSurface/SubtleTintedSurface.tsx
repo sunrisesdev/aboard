@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import type { CSSProperties } from 'react';
-import type { Extend, StructureWithChildren } from '@/helpers/extend';
+import type { Extend, StructureWithChildren } from '@/types/extend';
 import { getSubtleTintedPalette } from './getSubtleTintedPalette';
 import { TintedSurfaceContent, tintedSurfaceFallbackColor } from './TintedSurface';
 import styles from './TintedSurface.module.css';

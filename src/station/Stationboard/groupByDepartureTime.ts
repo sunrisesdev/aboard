@@ -1,5 +1,5 @@
-import { formatDateTime } from '@/helpers/formatDateTime';
-import { getDepartureTime } from '@/helpers/getDepartureTime';
+import { formatDateTime } from '@/helpers/dateTime';
+import { getDepartureTime } from '@/helpers/departure';
 import type { DepartureResource } from '@/lib/traewelling';
 import { groupSplitTrains } from './groupSplitTrains';
 

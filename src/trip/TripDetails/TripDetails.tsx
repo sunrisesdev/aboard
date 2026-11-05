@@ -14,15 +14,11 @@ import { TintedSurface, tintedSurfaceFallbackColor } from '@/components/TintedSu
 import { TransportModeIcon } from '@/components/TransportModeIcon/TransportModeIcon';
 import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
-import { formatDateTime } from '@/helpers/formatDateTime';
-import { formatDelay } from '@/helpers/formatDelay';
+import { formatDateTime } from '@/helpers/dateTime';
+import { formatDelay, getDelay } from '@/helpers/delay';
+import { getDeparturePlatform, getDepartureTime, isReplacementService } from '@/helpers/departure';
 import { formatPlatform } from '@/helpers/formatPlatform';
-import { getDelay } from '@/helpers/getDelay';
-import { getDeparturePlatform } from '@/helpers/getDeparturePlatform';
-import { getDepartureTime } from '@/helpers/getDepartureTime';
-import { getLineColors } from '@/helpers/getLineColors';
-import { getLineContrastColor } from '@/helpers/getLineContrastColor';
-import { isReplacementService } from '@/helpers/isReplacementService';
+import { getLineColors, getLineContrastColors } from '@/helpers/lineColors';
 import { useLastDefinedValue } from '@/hooks/useLastDefinedValue';
 import type { DepartureResource, MotisMode } from '@/lib/traewelling';
 import { usePinnedLines } from '@/station/usePinnedLines';
@@ -74,7 +70,7 @@ export const TripDetails = ({ departure, inDrawer = false }: { departure: Depart
   return (
     <div
       className={clsx(styles.base, inDrawer && styles.inDrawer)}
-      style={{ '--via-trip-details-contrast': getLineContrastColor(lineColor) } as CSSProperties}
+      style={{ '--via-trip-details-contrast': getLineContrastColors(lineColor).neutral } as CSSProperties}
     >
       <TintedSurface color={lineColor} radius="1rem">
         <TintedSurface.Content className={styles.tripCard}>

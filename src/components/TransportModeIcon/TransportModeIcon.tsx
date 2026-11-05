@@ -1,6 +1,6 @@
 import Image, { type ImageProps } from 'next/image';
-import type { Extend, Structure } from '@/helpers/extend';
 import type { MotisMode } from '@/lib/traewelling';
+import type { Extend, Structure } from '@/types/extend';
 
 type TransportModeIcon =
   | 'bikesharing'

@@ -3,9 +3,9 @@
 import { IconHeart, IconHeartFilled } from '@tabler/icons-react';
 import { useOptimistic, useState, useTransition } from 'react';
 import { Button } from '@/components/Button/Button';
-import type { Extend, Structure } from '@/helpers/extend';
 import type { StatusResource } from '@/lib/traewelling';
 import { setStatusLikeAction } from '@/status/actions';
+import type { Extend, Structure } from '@/types/extend';
 
 export const StatusLikeButton = ({
   showLabel = false,

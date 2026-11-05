@@ -3,11 +3,11 @@ import { clsx } from 'clsx';
 import { Marquee } from '@/components/Marquee/Marquee';
 import { TripLine } from '@/components/TripLine/TripLine';
 import { cleanStationName } from '@/helpers/cleanStationName';
-import type { Extend, Structure } from '@/helpers/extend';
-import { formatDateTime } from '@/helpers/formatDateTime';
+import { formatDateTime } from '@/helpers/dateTime';
+import { getDelay } from '@/helpers/delay';
 import { formatPlatform } from '@/helpers/formatPlatform';
-import { getDelay } from '@/helpers/getDelay';
 import type { MotisMode, StopoverResource } from '@/lib/traewelling';
+import type { Extend, Structure } from '@/types/extend';
 import styles from './TripStopoverItem.module.css';
 
 export const TripStopoverItem = ({

@@ -4,7 +4,7 @@ import { IconRestore } from '@tabler/icons-react';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { Input } from '@/components/Input/Input';
-import { toDatetimeLocalValue } from '@/helpers/toDatetimeLocalValue';
+import { toDatetimeLocalValue } from '@/helpers/dateTime';
 import { useStationboard } from '@/station/Stationboard/useStationboard';
 
 export const StationboardTimePicker = () => {

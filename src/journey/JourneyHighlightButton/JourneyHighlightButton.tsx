@@ -2,7 +2,7 @@
 
 import { IconZoomIn, IconZoomOutFilled } from '@tabler/icons-react';
 import { Button } from '@/components/Button/Button';
-import type { Extend, Structure } from '@/helpers/extend';
+import type { Extend, Structure } from '@/types/extend';
 import { useJourneyHighlight } from '../JourneyHighlight.context';
 
 // Only shown once the map is ready, since it's loaded on request

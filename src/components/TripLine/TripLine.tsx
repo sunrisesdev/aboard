@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import type { Extend, Structure, StructureWithChildren } from '@/helpers/extend';
+import type { Extend, Structure, StructureWithChildren } from '@/types/extend';
 import styles from './TripLine.module.css';
 
 const Root = ({

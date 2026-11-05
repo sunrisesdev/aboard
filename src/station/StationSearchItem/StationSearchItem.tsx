@@ -1,9 +1,9 @@
 import { clsx } from 'clsx';
 import Link from 'next/link';
 import { Badge } from '@/components/Badge/Badge';
-import type { Extend } from '@/helpers/extend';
-import { getStationHref } from '@/helpers/getStationHref';
+import { getStationHref } from '@/helpers/hrefs';
 import type { StationResource } from '@/lib/traewelling';
+import type { Extend } from '@/types/extend';
 import styles from './StationSearchItem.module.css';
 
 export const StationSearchItem = ({ className, station, ...props }: Extend<'div', { station: StationResource }>) => {

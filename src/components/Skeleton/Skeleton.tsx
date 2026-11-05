@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import type { CSSProperties } from 'react';
-import type { Extend, Structure } from '@/helpers/extend';
+import type { Extend, Structure } from '@/types/extend';
 import styles from './Skeleton.module.css';
 
 /**

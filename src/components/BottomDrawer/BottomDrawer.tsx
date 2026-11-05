@@ -3,7 +3,7 @@
 import { Drawer } from '@base-ui/react/drawer';
 import { clsx } from 'clsx';
 import type { ReactNode } from 'react';
-import type { Extend } from '@/helpers/extend';
+import type { Extend } from '@/types/extend';
 import styles from './BottomDrawer.module.css';
 
 const Root = ({

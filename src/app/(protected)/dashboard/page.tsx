@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { NavbarAttachment } from '@/components/NavbarAttachment/NavbarAttachment';
 import { PageContent } from '@/components/PageContent/PageContent';
@@ -37,6 +38,10 @@ const DashboardSkeleton = () => {
       ))}
     </ul>
   );
+};
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
 };
 
 export default async function DashboardPage() {

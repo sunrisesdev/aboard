@@ -1,3 +1,5 @@
+import { formatDateTime } from './dateTime';
+
 const lateThresholdInMinutes = 6;
 
 export function getDelay(planned: string, actual?: string | null) {
@@ -13,4 +15,11 @@ export function getDelay(planned: string, actual?: string | null) {
   }
 
   return { minutes, status: minutes > 0 ? 'slight' : 'onTime' } as const;
+}
+
+// E.g. "+5", or "+5 · statt 13:37" with `planned`. Uses a real minus sign for early times.
+export function formatDelay(minutes: number, { planned }: { planned?: string } = {}) {
+  const formattedMinutes = `${minutes > 0 ? '+' : '−'}${Math.abs(minutes)}`;
+
+  return planned ? `${formattedMinutes} · statt ${formatDateTime(planned, 'time')}` : formattedMinutes;
 }

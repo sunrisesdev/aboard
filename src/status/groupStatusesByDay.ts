@@ -1,4 +1,4 @@
-import { formatDateTime } from '@/helpers/formatDateTime';
+import { formatDateTime } from '@/helpers/dateTime';
 import type { StatusResource } from '@/lib/traewelling';
 import { getCheckinTimes } from './getCheckinTimes';
 

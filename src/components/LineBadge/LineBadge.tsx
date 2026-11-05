@@ -1,8 +1,8 @@
 import { clsx } from 'clsx';
 import type { CSSProperties } from 'react';
-import type { Extend, Structure } from '@/helpers/extend';
-import { getLineColors } from '@/helpers/getLineColors';
+import { getLineColors } from '@/helpers/lineColors';
 import type { MotisMode } from '@/lib/traewelling';
+import type { Extend, Structure } from '@/types/extend';
 import styles from './LineBadge.module.css';
 
 const hiddenProductNames = ['Bus', 'Fäh', 'STB', 'STR'];

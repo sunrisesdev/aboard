@@ -8,11 +8,11 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import useSWR from 'swr';
 import { Badge } from '@/components/Badge/Badge';
-import type { Structure } from '@/helpers/extend';
-import { getStationHref } from '@/helpers/getStationHref';
+import { getStationHref } from '@/helpers/hrefs';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import type { StationResource } from '@/lib/traewelling';
 import { type StationGroup, useStationSuggestions } from '@/station/useStationSuggestions';
+import type { Structure } from '@/types/extend';
 import styles from './StationSearchAutocomplete.module.css';
 
 export const StationSearchAutocomplete = ({ className, ...props }: Structure) => {

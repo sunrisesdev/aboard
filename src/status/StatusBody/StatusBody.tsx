@@ -1,8 +1,8 @@
 import { clsx } from 'clsx';
 import Link from 'next/link';
-import type { Extend, Structure } from '@/helpers/extend';
-import { getUserHref } from '@/helpers/getUserHref';
+import { getUserHref } from '@/helpers/hrefs';
 import type { StatusResource } from '@/lib/traewelling';
+import type { Extend, Structure } from '@/types/extend';
 import { getBodyParagraphs, getBodyParts } from './getBodyParts';
 import styles from './StatusBody.module.css';
 

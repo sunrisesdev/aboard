@@ -1,7 +1,7 @@
 import { IconChevronDown } from '@tabler/icons-react';
 import { clsx } from 'clsx';
 import inputStyles from '@/components/Input/Input.module.css';
-import type { Extend } from '@/helpers/extend';
+import type { Extend } from '@/types/extend';
 import styles from './Select.module.css';
 
 // Structural props go to the wrapper, so the select and its chevron are laid out together

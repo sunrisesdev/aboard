@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import type { Extend, Structure } from '@/helpers/extend';
+import type { Extend, Structure } from '@/types/extend';
 import styles from './CharacterCounter.module.css';
 
 export const CharacterCounter = ({

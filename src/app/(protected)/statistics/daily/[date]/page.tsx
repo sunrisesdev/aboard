@@ -7,8 +7,7 @@ import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import { PageContent } from '@/components/PageContent/PageContent';
 import { getPolylineCoordinates } from '@/components/RouteMap/getPolylineCoordinates';
 import { getRouteMapStop } from '@/components/RouteMap/getRouteMapStop';
-import { formatDateTime } from '@/helpers/formatDateTime';
-import { isIsoDate } from '@/helpers/isIsoDate';
+import { formatDateTime } from '@/helpers/dateTime';
 import { JourneyHighlightProvider } from '@/journey/JourneyHighlight.context';
 import { JourneyRouteMap } from '@/journey/JourneyRouteMap/JourneyRouteMap';
 import { JourneyStats } from '@/journey/JourneyStats/JourneyStats';
@@ -17,6 +16,11 @@ import { requireSession } from '@/lib/auth';
 import { createTraewellingClient, getDailyStatistics, getStopovers, TraewellingApiError } from '@/lib/traewelling';
 import { getCheckinColor } from '@/status/getCheckinColor';
 import styles from './DailyStatistics.module.css';
+
+// Only real calendar days in the format YYYY-MM-DD, e.g. no "2026-02-30"
+function isIsoDate(value: string) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value) && new Date(value).toISOString().startsWith(value);
+}
 
 // Disabled without a date, so the other button keeps its place
 const DayLink = ({

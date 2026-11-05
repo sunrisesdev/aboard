@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import type { ReactNode } from 'react';
-import type { Extend, Structure } from '@/helpers/extend';
+import type { Extend, Structure } from '@/types/extend';
 import styles from './KeyValueTag.module.css';
 
 export const KeyValueTag = ({

@@ -1,13 +1,12 @@
 import {
   type Color,
   createColor,
+  ensureContrast,
   getGradientLuminances,
-  getWorstContrast,
-  lightnessStep,
   linearToOklab,
   oklabToLch,
   parseColor,
-} from './getTintedPalette';
+} from '@/helpers/colors';
 
 type SubtleTintedPaletteOptions = {
   /**
@@ -37,24 +36,6 @@ const schemes = {
   dark: { chromaFactor: 0.3, from: 0.29, maxChroma: 0.06, secondaryLightness: 0.78, to: 0.24 },
   light: { chromaFactor: 0.15, from: 0.98, maxChroma: 0.03, secondaryLightness: 0.45, to: 0.95 },
 };
-
-/** Verschiebt die Lightness in `direction`, bis die Farbe über den gesamten Verlauf den Mindestkontrast erfüllt. */
-export function ensureContrast(
-  lightness: number,
-  chroma: number,
-  hue: number,
-  luminances: number[],
-  minContrast: number,
-  direction: number,
-) {
-  let color = createColor(lightness, chroma, hue);
-
-  for (let steps = 1; steps <= 200 && getWorstContrast(color, luminances) < minContrast; steps++) {
-    color = createColor(lightness + direction * steps * lightnessStep, chroma, hue);
-  }
-
-  return color;
-}
 
 /**
  * Gegenstück zu `getTintedPalette`: Die Grundfarbe wird zum Primärtext, der Hintergrund ist im Light Mode ein heller

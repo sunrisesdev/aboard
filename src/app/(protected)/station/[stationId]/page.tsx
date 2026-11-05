@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { CheckInContextProvider } from '@/checkin/CheckIn.context';
@@ -73,6 +74,13 @@ const StationboardLoader = async ({
     />
   );
 };
+
+// Doesn't wait for the departures, so the title is there right away. The name parameter is set by every station link.
+export async function generateMetadata({ searchParams }: PageProps<'/station/[stationId]'>): Promise<Metadata> {
+  const { name } = await searchParams;
+
+  return { title: typeof name === 'string' && name ? name : 'Stationboard' };
+}
 
 export default async function StationboardPage({ params, searchParams }: PageProps<'/station/[stationId]'>) {
   const { stationId } = await params;

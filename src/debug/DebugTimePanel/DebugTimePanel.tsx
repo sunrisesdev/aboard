@@ -5,7 +5,7 @@ import { Button } from '@/components/Button/Button';
 import { Card } from '@/components/Card/Card';
 import { resetDebugTimeAction, setDebugTimeAction } from '@/debug/actions';
 import { cleanStationName } from '@/helpers/cleanStationName';
-import { formatDateTime } from '@/helpers/formatDateTime';
+import { formatDateTime } from '@/helpers/dateTime';
 import type { StatusResource } from '@/lib/traewelling';
 import { getCheckinTimes } from '@/status/getCheckinTimes';
 import { useCurrentStatuses } from '@/status/useCurrentStatuses';

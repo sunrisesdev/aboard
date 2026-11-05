@@ -1,6 +1,11 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { auth, signIn } from '@/lib/auth';
+
+export const metadata: Metadata = {
+  title: 'Anmelden',
+};
 
 function sanitizeRedirectTarget(target: string | undefined): string {
   if (target?.startsWith('/') && !target.startsWith('//')) {

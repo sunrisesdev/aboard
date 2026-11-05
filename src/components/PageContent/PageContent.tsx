@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import type { ReactNode } from 'react';
-import type { Extend, StructureWithChildren } from '@/helpers/extend';
+import type { Extend, StructureWithChildren } from '@/types/extend';
 import styles from './PageContent.module.css';
 
 /**

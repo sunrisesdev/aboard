@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import type { Extend, StructureWithChildren } from '@/helpers/extend';
+import type { Extend, StructureWithChildren } from '@/types/extend';
 import styles from './Badge.module.css';
 
 export const Badge = ({ children, className, ...props }: Extend<StructureWithChildren>) => {

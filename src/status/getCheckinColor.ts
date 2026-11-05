@@ -1,5 +1,4 @@
-import { getContrastingLineColor } from '@/helpers/getContrastingLineColor';
-import { getLineColors } from '@/helpers/getLineColors';
+import { getLineColors, getLineContrastColors } from '@/helpers/lineColors';
 import type { TransportResource } from '@/lib/traewelling';
 import { getCheckinMode } from './getCheckinMode';
 
@@ -7,5 +6,5 @@ import { getCheckinMode } from './getCheckinMode';
 export function getCheckinColor(checkin: TransportResource) {
   const { background } = getLineColors({ color: checkin.routeColor, mode: getCheckinMode(checkin) });
 
-  return background ? getContrastingLineColor(background) : 'var(--via-fg-primary)';
+  return getLineContrastColors(background).tinted;
 }

@@ -2,6 +2,15 @@ import type { DepartureResource, StationResource } from '@/lib/traewelling';
 
 const railLineNamePattern = /^(S|RB|RE|RS|IRE|MEX|FEX|IC|ICE|EC)\s?\d+$/;
 
+export function getDepartureTime(departure: DepartureResource) {
+  return departure.when ?? departure.plannedWhen;
+}
+
+// The actual platform is null without realtime data, so the planned one serves as fallback
+export function getDeparturePlatform(departure: DepartureResource) {
+  return departure.platform ?? departure.plannedPlatform;
+}
+
 // areas and identifiers are typed as required but missing in some API responses.
 function isInGermany(station: StationResource) {
   return (

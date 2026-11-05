@@ -1,6 +1,14 @@
+import type { Metadata } from 'next';
 import { Fira_Sans_Condensed, Inter } from 'next/font/google';
 import './globals.css';
 import { clsx } from 'clsx';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Aboard',
+    template: '%s – Aboard',
+  },
+};
 
 const firaSansCondensed = Fira_Sans_Condensed({
   style: ['italic', 'normal'],

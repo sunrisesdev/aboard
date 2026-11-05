@@ -4,7 +4,7 @@ import { Radio } from '@base-ui/react/radio';
 import { RadioGroup } from '@base-ui/react/radio-group';
 import { clsx } from 'clsx';
 import type { CSSProperties, ReactNode } from 'react';
-import type { Extend, Structure } from '@/helpers/extend';
+import type { Extend, Structure } from '@/types/extend';
 import styles from './SegmentedControl.module.css';
 
 export type SegmentedControlOption<Value> = {
