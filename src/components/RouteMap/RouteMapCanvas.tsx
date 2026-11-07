@@ -31,11 +31,26 @@ const stopsPadding = 32;
 const routesPadding = 12;
 const loadTimeout = 8000;
 
-function getFitBoundsOptions(padding: number) {
+// Registered as lengths in RouteMap.module.css, so they are computed in pixels
+function getInsets(container: HTMLElement) {
+  const style = getComputedStyle(container);
+
+  return {
+    left: Number.parseFloat(style.getPropertyValue('--via-route-map-inset-left')) || 0,
+    right: Number.parseFloat(style.getPropertyValue('--via-route-map-inset-right')) || 0,
+  };
+}
+
+function getFitBoundsOptions(padding: number, insets: { left: number; right: number }) {
   return {
     animate: false,
     maxZoom: 15,
-    padding: { bottom: padding + attributionHeight, left: padding, right: padding, top: padding },
+    padding: {
+      bottom: padding + attributionHeight,
+      left: padding + insets.left,
+      right: padding + insets.right,
+      top: padding,
+    },
   };
 }
 
@@ -92,7 +107,9 @@ export const RouteMapCanvas = ({
           : routes.flatMap(({ coordinates }) => coordinates),
       );
     };
-    const fitBoundsOptions = getFitBoundsOptions(stops?.length ? stopsPadding : routesPadding);
+    // Read on every fit, since the insets may depend on the viewport
+    const getFitBoundsOptionsForContainer = () =>
+      getFitBoundsOptions(stops?.length ? stopsPadding : routesPadding, getInsets(container));
 
     // A removed map (e.g. by Strict Mode's double mount) may still emit errors for its aborted requests
     let isActive = true;
@@ -108,7 +125,7 @@ export const RouteMapCanvas = ({
         bounds: getBounds(),
         canvasContextAttributes: { antialias: true },
         container,
-        fitBoundsOptions,
+        fitBoundsOptions: getFitBoundsOptionsForContainer(),
         interactive: false,
         style: getStyle(),
       });
@@ -125,15 +142,23 @@ export const RouteMapCanvas = ({
     }, loadTimeout);
 
     const fitRoute = (animate = false) => {
-      map.fitBounds(getBounds(), { ...fitBoundsOptions, animate });
+      map.fitBounds(getBounds(), { ...getFitBoundsOptionsForContainer(), animate });
     };
 
     const positionLabels = () => {
       const labelElements = labelsRef.current?.children;
       if (!stops || !labelElements) return;
 
-      const frame = { height: container.clientHeight - attributionHeight, width: container.clientWidth };
-      const points = stops.map((stop) => map.project(stop.coordinates));
+      // Labels are kept out of the insets, just like the route
+      const insets = getInsets(container);
+      const frame = {
+        height: container.clientHeight - attributionHeight,
+        width: container.clientWidth - insets.left - insets.right,
+      };
+      const points = stops.map((stop) => {
+        const { x, y } = map.project(stop.coordinates);
+        return { x: x - insets.left, y };
+      });
       const averageY = points.reduce((sum, point) => sum + point.y, 0) / points.length;
 
       points.forEach((point, index) => {
@@ -147,7 +172,7 @@ export const RouteMapCanvas = ({
           // Places labels on the side facing away from the other stops
           preferAbove: point.y <= averageY,
         });
-        element.style.translate = `${left}px ${top}px`;
+        element.style.translate = `${left + insets.left}px ${top}px`;
       });
     };
 

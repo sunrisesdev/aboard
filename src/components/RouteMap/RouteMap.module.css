@@ -1,3 +1,19 @@
+/*
+ * Areas at the sides that are covered, e.g. by a mask or an overlapping element. The route, the labels and the
+ * attribution are kept out of them. Registered, so RouteMapCanvas reads them in pixels.
+ */
+@property --via-route-map-inset-left {
+  inherits: true;
+  initial-value: 0px;
+  syntax: "<length>";
+}
+
+@property --via-route-map-inset-right {
+  inherits: true;
+  initial-value: 0px;
+  syntax: "<length>";
+}
+
 .base {
   --via-route-map-land: var(--via-bg-secondary);
   --via-route-map-urban: color-mix(in oklch, var(--via-route-map-land), var(--via-fg-primary) 5%);
@@ -26,6 +42,10 @@
 
   &[data-via-status="loading"] :is(.canvas, .labels) {
     opacity: 0;
+  }
+
+  :global(.maplibregl-ctrl-bottom-right) {
+    right: var(--via-route-map-inset-right);
   }
 
   :global(.maplibregl-ctrl-attrib) {

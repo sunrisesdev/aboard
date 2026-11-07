@@ -1,0 +1,255 @@
+.hero,
+.tripRow {
+  /* Fixed, so the trip can be pulled up exactly to the end of its header */
+  --via-status-trip-header-height: 1.25rem;
+  /* The trip's part above the hero's border: its border, padding, header and the header's spacing */
+  --via-status-trip-cut: calc(var(--via-bd-width) + 2rem + var(--via-status-trip-header-height));
+  /* Like PageContent's aside */
+  --via-status-trip-column-width: 28.5rem;
+
+  padding-inline: 1rem;
+
+  @media (width >= 64em) {
+    padding-inline: 1.5rem;
+  }
+}
+
+.hero {
+  --via-status-hero-overlay-fade: 1.5rem;
+
+  border-bottom: var(--via-bd-width) solid var(--via-bd-primary);
+  /* The overlay reaches beyond the content's max width, which would otherwise scroll on narrower screens */
+  overflow-x: clip;
+  position: relative;
+
+  /*
+   * Until the map is ready, the hero and the map's placeholder share a background. Only the background color is
+   * changed, since the map's land color is also used for its tiles.
+   */
+  &:has(> .map:not([data-via-status="ready"])) {
+    background-color: var(--via-bg-primary);
+  }
+
+  > .map:not([data-via-status="ready"]) {
+    background-color: var(--via-bg-primary);
+  }
+
+  /* Nested for a higher specificity than RouteMap's own styles */
+  > .map {
+    aspect-ratio: auto;
+    border-radius: 0;
+    height: 12rem;
+    margin-inline: -1rem;
+
+    /* Behind the whole hero, with the route right of the trip's column and within the content's max width */
+    @media (width >= 64em) {
+      --via-route-map-inset-left: calc(
+        max(1.5rem, (100vw - var(--via-content-max-width)) / 2) +
+        var(--via-status-trip-column-width) +
+        1.5rem
+      );
+      --via-route-map-inset-right: max(1.5rem, (100vw - var(--via-content-max-width)) / 2);
+
+      height: auto;
+      inset: 0;
+      margin-inline: 0;
+      position: absolute;
+
+      /* The load button's placeholder, centered in the area above the title: the trip's part, the gap and the badge */
+      &[data-via-status="idle"] > * {
+        padding-bottom: calc(var(--via-status-trip-cut) + 1.25rem + 2.25rem);
+      }
+    }
+  }
+}
+
+/* Only on wide screens, the trip's own header is enough on narrow ones */
+.heroContent {
+  display: none;
+
+  @media (width >= 64em) {
+    column-gap: 1.5rem;
+    display: grid;
+    grid-template-columns: var(--via-status-trip-column-width) minmax(0, 1fr);
+    margin-inline: auto;
+    max-width: var(--via-content-max-width);
+    min-height: 20rem;
+    /* Keeps the map's load button clickable */
+    pointer-events: none;
+    position: relative;
+  }
+}
+
+/* Leaves room for the trip's part that is pulled up into the hero */
+.heroTitle {
+  align-items: center;
+  align-self: end;
+  display: flex;
+  gap: 0.75rem;
+  isolation: isolate;
+  padding-bottom: calc(var(--via-status-trip-cut) + 1.25rem);
+  position: relative;
+
+  /*
+   * Sets the trip off from the map. Shaped like the trip's pulled-up part, so the shadows follow its rounded corners: a
+   * wide one in the page's background and a smaller glow on top, tinted like SubtleTintedSurface's background.
+   */
+  &::before {
+    background-color: var(--via-bg-surface);
+    border-radius: 1rem 1rem 0 0;
+    bottom: 0;
+    box-shadow:
+      0 0 0.75rem 0.125rem var(--via-status-hero-overlay-color, var(--via-bg-surface)),
+      0 0 var(--via-status-hero-overlay-fade) 0 var(--via-bg-surface);
+    /* Cut off at the bottom, so it doesn't cover the hero's border. The other sides leave room for blur and spread. */
+    clip-path: inset(calc(-2 * var(--via-status-hero-overlay-fade)) calc(-2 * var(--via-status-hero-overlay-fade)) 0);
+    content: "";
+    height: var(--via-status-trip-cut);
+    left: 0;
+    position: absolute;
+    right: 0;
+    z-index: -1;
+  }
+}
+
+/* Nested for a higher specificity than LineBadge's own styles */
+.heroContent .heroTitle > .lineBadge {
+  --via-line-padding: 0.625rem;
+
+  /* LineBadge's own inner border, plus a ring in the page's background that sets it off from the map */
+  box-shadow:
+    inset 0 0 0 var(--via-bd-width) oklch(from currentColor l c h / 0.25),
+    0 0 0 0.0625rem var(--via-bg-surface);
+  font-size: 1.25rem;
+  height: 2.25rem;
+  /* Scaled like LineBadge's own min widths, so rectangles stay square */
+  min-width: calc(2.25rem * 1.75 / 1.25);
+
+  &[data-via-shape="rectangle"] {
+    min-width: 2.25rem;
+  }
+
+  &[data-via-shape="smooth-rectangle"] {
+    border-radius: 0.5rem;
+  }
+}
+
+.direction {
+  align-items: center;
+  display: flex;
+  font-size: 1.5rem;
+  font-weight: 600;
+  gap: 0.5ch;
+  min-width: 0;
+  text-shadow:
+    0 0 0.25rem var(--via-bg-surface),
+    0 0 0.5rem var(--via-bg-surface),
+    0 0 1rem var(--via-bg-surface);
+}
+
+.directionLabel {
+  color: var(--via-fg-secondary);
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+/*
+ * Keeps the text shadow from being clipped by the marquee's overflow. Only padded vertically, since Marquee measures
+ * the overflow against its width including the padding. Horizontally, the clip margin leaves room instead, while the
+ * mask of an overflowing marquee still fades out at its edges. Nested for a higher specificity than Marquee's own styles.
+ */
+.direction > .directionStation {
+  margin-block: -0.75rem;
+  overflow: clip;
+  overflow-clip-margin: 0.75rem;
+  padding-block: 0.75rem;
+}
+
+/* Above the hero, since the trip is pulled up into it */
+.tripRow {
+  position: relative;
+  z-index: 1;
+}
+
+.tripRowContent {
+  margin-inline: auto;
+  max-width: var(--via-content-max-width);
+
+  @media (width >= 64em) {
+    column-gap: 1.5rem;
+    display: grid;
+    grid-template-columns: var(--via-status-trip-column-width) minmax(0, 1fr);
+  }
+}
+
+.trip {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+
+  header {
+    height: var(--via-status-trip-header-height);
+  }
+
+  @media (width >= 64em) {
+    margin-top: calc(-1 * var(--via-status-trip-cut));
+  }
+}
+
+.status {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.message {
+  font-size: 1.25rem;
+  line-height: 1.4;
+
+  @media (width >= 64em) {
+    font-size: 1.5rem;
+  }
+}
+
+.quote {
+  display: block;
+  font-size: 4rem;
+  font-weight: 700;
+  height: 0.5em;
+  line-height: 1;
+}
+
+.details {
+  display: grid;
+  gap: 1.5rem;
+
+  @media (width >= 40em) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Each column and each section within a column is divided from what's above it */
+  > *,
+  .detailsColumn > * + * {
+    border-top: var(--via-bd-width) solid var(--via-bd-primary);
+    padding-top: 1rem;
+  }
+}
+
+.detailsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Like FieldsetCard's header */
+.sectionTitle {
+  align-items: center;
+  color: var(--via-fg-secondary);
+  display: flex;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
